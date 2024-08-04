@@ -1,0 +1,119 @@
+{
+  "last_node_id": 2,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "SDPromptReader",
+      "pos": [
+        750,
+        27
+      ],
+      "size": [
+        315,
+        978
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "POSITIVE",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "NEGATIVE",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "SEED",
+          "type": "INT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "STEPS",
+          "type": "INT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "CFG",
+          "type": "FLOAT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "WIDTH",
+          "type": "INT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "HEIGHT",
+          "type": "INT",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "MODEL_NAME",
+          "type": "*",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "FILENAME",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        },
+        {
+          "name": "SETTINGS",
+          "type": "STRING",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SDPromptReader"
+      },
+      "widgets_values": [
+        "ComfyUI_temp_yomrb_00023_.png",
+        "image",
+        0,
+        "",
+        "worst quality,low quality,normal quality,lowres,bad anatomy,bad hands,normal quality,monochrome,grayscale,watermark,\n(embedding:easynegative:1)\n(embedding:ng_deepnegative_v1_75t:1)",
+        "Steps: (50, 50), Sampler: (dpmpp_2m, dpmpp_2m), CFG scale: (5.0, 5.0), Seed: (457211852013219, 219580459669310), Size: 1318x1840, Model: (xxmix9realistic_v40.safetensors, xxmix9realistic_v40.safetensors), Scheduler: (karras, karras), Denoise: (1.0, 0.5)"
+      ]
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0610764609500014,
+      "offset": [
+        -149.1096243178627,
+        -87.0258525096277
+      ]
+    }
+  },
+  "version": 0.4
+}
