@@ -1,0 +1,36 @@
+img[src="/assets/img/left_login.png"] {
+    height: 100vh;
+    width: 60%;
+    object-fit: cover;
+  }
+  
+  @media (max-width: 480px) {
+    img[src="/assets/img/left_login.png"] {
+      width: 0;
+      height: 0;
+    }
+}
+img[src="/assets/img/left_signup.png"] {
+    height: 100vh;
+    width: 60%;
+    object-fit: cover;
+  }
+  
+  @media (max-width: 480px) {
+    img[src="/assets/img/left_signup.png"] {
+      width: 0;
+      height: 0;
+    }
+}
+img[src="/assets/img/left_auth.png"] {
+  height: 100vh;
+  width: 60%;
+  object-fit: cover;
+}
+
+@media (max-width: 480px) {
+  img[src="/assets/img/left_signup.png"] {
+    width: 0;
+    height: 0;
+  }
+}
