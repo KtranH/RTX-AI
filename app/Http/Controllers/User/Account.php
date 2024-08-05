@@ -151,4 +151,23 @@ class Account extends Controller
             }
         }
     }
+    public function ForgetPass()
+    {
+        return view("User.Account.ForgetPass");
+    }
+    public function SendEmailResetPass(Request $request)
+    {
+        $email = $request->input("input-email");
+
+        if(empty($email))
+        {
+            Session::flash("EmptyEmail","checked");
+            return redirect()->route("forgetpass");
+        }
+        else
+        {
+            Session::put("CodeRestPass",$email);
+            return redirect()->route("sendcodetoemail");
+        }
+    }
 }
