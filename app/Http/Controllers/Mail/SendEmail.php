@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Stmt\Catch_;
 
 class SendEmail extends Controller
 {
@@ -23,54 +24,68 @@ class SendEmail extends Controller
     }
     public function SendEmail()
     {
-        $email = Session::get("email");
-        $name = Session::get("username");
-
-        $verificationCode = rand(100000, 999999);
-        $expiresAt = Carbon::now()->addMinutes(10);
-
-        Session::put('verification_code', $verificationCode);
-        Session::put('verification_code_expires_at', $expiresAt);
-
-        $detail = [
-            'title' => "Mã xác nhận từ RTX-AI",
-            'begin' => "Xin chào " . $name,
-            'body' => "Chúng tôi nhận được lượt đăng ký tài khoản của bạn. Nhập mã dưới đây để hoàn tất xác minh (Lưu ý mã chỉ có khả dụng trong 10 phút)",
-            'code' => $verificationCode
-        ];
-
-        Mail::to($email)->send(new MyTestMail($detail));
-
-        return redirect()->route("showauth");
+        try
+        {
+            $email = Session::get("email");
+            $name = Session::get("username");
+    
+            $verificationCode = rand(100000, 999999);
+            $expiresAt = Carbon::now()->addMinutes(10);
+    
+            Session::put('verification_code', $verificationCode);
+            Session::put('verification_code_expires_at', $expiresAt);
+    
+            $detail = [
+                'title' => "Mã xác nhận từ RTX-AI",
+                'begin' => "Xin chào " . $name,
+                'body' => "Chúng tôi nhận được lượt đăng ký tài khoản của bạn. Nhập mã dưới đây để hoàn tất xác minh (Lưu ý mã chỉ có khả dụng trong 10 phút)",
+                'code' => $verificationCode
+            ];
+    
+            Mail::to($email)->send(new MyTestMail($detail));
+    
+            return redirect()->route("showauth");
+        }
+        catch(Exception $e)
+        {
+            return redirect()->route("showhome");
+        }
     }
     public function ReSendEmail()
     {
-        $email = Session::get("email");
-        $name = Session::get("username");
+        try
+        {
+            $email = Session::get("email");
+            $name = Session::get("username");
 
-        $lastSentAt = Session::get('last_verification_code_sent_at');
+            $lastSentAt = Session::get('last_verification_code_sent_at');
 
-        if ($lastSentAt && Carbon::parse($lastSentAt)->diffInMinutes(Carbon::now()) < 10) {
-            return response()->json(['message' => 'Vui lòng đợi 10 phút để gửi mã mới!']);
+            if ($lastSentAt && Carbon::parse($lastSentAt)->diffInMinutes(Carbon::now()) < 10) {
+                return response()->json(['message' => 'Vui lòng đợi 10 phút để gửi mã mới!']);
+            }
+
+            $verificationCode = rand(100000, 999999);
+            $expiresAt = Carbon::now()->addMinutes(10);
+
+            Session::put('verification_code', $verificationCode);
+            Session::put('verification_code_expires_at', $expiresAt);
+            Session::put('last_verification_code_sent_at', Carbon::now());
+
+            $detail = [
+                'title' => "Mã xác nhận từ RTX-AI",
+                'begin' => "Xin chào " . $name,
+                'body' => "Chúng tôi nhận được lượt đăng ký tài khoản của bạn. Nhập mã dưới đây để hoàn tất xác minh (Lưu ý mã chỉ có khả dụng trong 10 phút)",
+                'code' => $verificationCode
+            ];
+
+            Mail::to($email)->send(new MyTestMail($detail));
+
+            return response()->json(['message' => 'Đã gửi mã xác nhận!']);
         }
-
-        $verificationCode = rand(100000, 999999);
-        $expiresAt = Carbon::now()->addMinutes(10);
-
-        Session::put('verification_code', $verificationCode);
-        Session::put('verification_code_expires_at', $expiresAt);
-        Session::put('last_verification_code_sent_at', Carbon::now());
-
-        $detail = [
-            'title' => "Mã xác nhận từ RTX-AI",
-            'begin' => "Xin chào " . $name,
-            'body' => "Chúng tôi nhận được lượt đăng ký tài khoản của bạn. Nhập mã dưới đây để hoàn tất xác minh (Lưu ý mã chỉ có khả dụng trong 10 phút)",
-            'code' => $verificationCode
-        ];
-
-        Mail::to($email)->send(new MyTestMail($detail));
-
-        return response()->json(['message' => 'Đã gửi mã xác nhận!']);
+        catch(Exception $e)
+        {
+            return redirect()->route("showlogin");
+        }
     }
     public function CheckCode(Request $request)
     {

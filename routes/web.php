@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
 use App\Http\Controllers\User\Account;
 use App\Http\Controllers\User\Home;
+use App\Http\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Route;
 
 /*Route::get('/', function () {
@@ -35,6 +37,9 @@ Route::post('/signupaccount',[Account::class,'NewAccount'])->name("newaccount");
 //Send email
 Route::get('/sendemail', [SendEmail::class, 'SendEmail'])->name("sendemail");
 
+//Send code to email to change password
+Route::get('/sendcodetoemailtochangepass', [SendCodeRestPass::class, 'SendCodeToEmail'])->name("sendcodetoemail")->middleware(ThrottleRequests::class . ':2,1');
+
 //New send email
 Route::get('/resendemail', [SendEmail::class, 'ReSendEmail'])->name("resendemail");
 
@@ -46,3 +51,15 @@ Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode");
 
 //Login account
 Route::post('/loginaccount', [Account::class, 'LoginAccount'])->name("loginaccount");
+
+//Forget password page
+Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass");
+
+//Send email to password
+Route::post('/sendemail&changepass', [Account::class, 'SendEmailResetPass'])->name("sendemailresetpass");
+
+//Input code to change password
+Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass");
+
+//Check code to change password
+Route::post('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass");
