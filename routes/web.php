@@ -12,6 +12,7 @@ use App\Http\Controllers\User\WorkFlow\G3;
 use App\Http\Middleware\CheckCookieLogin;
 use App\Http\Middleware\ThrottleRequests;
 use App\Models\WorkFlow;
+use App\Http\Controllers\Board\Board;
 use Illuminate\Support\Facades\Route;
 
 /*Route::get('/', function () {
@@ -69,6 +70,18 @@ Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChang
 
 //Check code to change password
 Route::post('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
+
+//Access board page
+Route::get('/board', [Board::class, 'ShowBoard'])->name("showboard");
+
+//Change board tab
+Route::get('/board/{tab?}', [Board::class, 'ShowBoard'])->name('changeboard');
+
+//Access album creation page
+Route::get('/create_album', [Board::class, 'CreateAlbum'])->name("createalbum");
+
+//Access account page
+Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
 
 //Show All Workflow
 Route::get('/showallworkflow', [CreateImage::class, 'ShowWorkFlow'])->name("showworkflow");
