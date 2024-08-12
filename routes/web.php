@@ -169,10 +169,3 @@ Route::get('/g19', [G3::class, 'InputDataG3'])->name("g19");
 //Show G20
 Route::get('/g20', [G3::class, 'InputDataG3'])->name("g20");
 });
-
-
-
-
-
-
-
