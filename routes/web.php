@@ -5,6 +5,7 @@ use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
 use App\Http\Controllers\User\Account;
 use App\Http\Controllers\User\Home;
+use App\Http\Controllers\Board\Board;
 use App\Http\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Route;
 
@@ -63,3 +64,15 @@ Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChang
 
 //Check code to change password
 Route::post('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass");
+
+//Access board page
+Route::get('/board', [Board::class, 'ShowBoard'])->name("showboard");
+
+//Change board tab
+Route::get('/board/{tab?}', [Board::class, 'ShowBoard'])->name('changeboard');
+
+//Access album creation page
+Route::get('/create_album', [Board::class, 'CreateAlbum'])->name("createalbum");
+
+//Access account page
+Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");

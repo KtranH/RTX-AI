@@ -46,8 +46,8 @@
           <h1 style="font-size: 30px; font-weight:bold"> RTX-AI </h1>
         </a>
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Trang chủ</a></li>
-          <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Tài khoản</a></li>
+          <li><a href="{{ route("showhome")}}" class="nav-link px-2 link-dark" style="font-weight:600">Trang chủ</a></li>
+          <li><a href="{{ route("showboard")}}" class="nav-link px-2 link-dark" style="font-weight:600">Tài khoản</a></li>
           <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Sáng tạo</a></li>
           <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Tìm kiếm</a></li>
           <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Lịch sử</a></li>
