@@ -51,6 +51,9 @@
       @if (Session::has("ExpiredCode"))
           <p style="color: red; width:100%">Mã không đúng hoặc đã hết hạn!</p>
       @endif
+      @if (Session::has("Manytimes"))
+          <p style="color: red; width:100%">Bạn đã thử quá nhiều lần! Vui lòng thử lại sau ít phút</p>
+      @endif
       <div id="message" style="width:100%"></div>
       <a class="note font-bold" id="sendEmailLink" href="#" href="{{ route("sendemail") }}" style="margin:0 0 0 60% ">Gửi lại mã?</a>
       <script>

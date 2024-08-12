@@ -46,9 +46,9 @@
           <h1 style="font-size: 30px; font-weight:bold"> RTX-AI </h1>
         </a>
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="{{ route("showhome")}}" class="nav-link px-2 link-dark" style="font-weight:600">Trang chủ</a></li>
+          <li><a href="{{ route("showhome") }}" class="nav-link px-2 link-dark" style="font-weight:600">Trang chủ</a></li>
           <li><a href="{{ route("showboard")}}" class="nav-link px-2 link-dark" style="font-weight:600">Tài khoản</a></li>
-          <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Sáng tạo</a></li>
+          <li><a href="{{ route("showworkflow") }}" class="nav-link px-2 link-dark" style="font-weight:600">Sáng tạo</a></li>
           <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Tìm kiếm</a></li>
           <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Lịch sử</a></li>
         </ul>
@@ -58,11 +58,35 @@
           {
             $Avatar = DB::select("SELECT * FROM users WHERE email = ?",[$cookie]);
             ?>
+             <style>
+                .btn_logout
+                {
+                    border-radius: 30px;
+                    font-weight: bold;
+                }
+                .nav_name2
+                {
+                    display: none;
+                }
+                @media only screen and (max-width: 600px) 
+                {
+                    .nav_name
+                    {
+                        display:none;
+                    }
+                    .nav_name2
+                    {
+                        display:block;
+                        color:white;
+                    }
+                }
+             </style>
               <div class="col-md-3 text-end">
-                <div class="flex -space-x-1 overflow-hidden">
-                  <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white mr-1.5" src="{{ $Avatar[0]->avatar_url }}" alt="">
-                  <p class="nav-link px-2 link-dark" style="font-weight:600;margin-top:1%;margin-right:10%">{{ $Avatar[0]->username }}</p>
-                  <a href="{{ route("logout")}}" type="button" class="btn btn-dark" style="border-radius:30px;font-weight:bold;">Đăng xuất</a>
+                <div class="flex -space-x-1 overflow-hidden header_mobile">
+                  <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white mr-1.5 avatar" src="{{ $Avatar[0]->avatar_url }}" alt="">
+                  <p class="nav-link px-2 link-dark nav_name" style="font-weight:600;margin-top:1%;margin-right:10%">{{ $Avatar[0]->username }}</p>
+                  <p class="nav-link px-2 nav_name2" style="font-weight:600;margin-top:1%;">.</p>
+                  <a href="{{ route("logout")}}" class="btn btn-dark btn_logout px-2">Đăng xuất</a>
                 </div>
               </div>
             <?php

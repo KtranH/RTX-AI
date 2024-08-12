@@ -50,6 +50,9 @@
     @if (Session::has("ExpiredCode"))
         <p style="color: red; width:100%">Mã không đúng hoặc đã hết hạn!</p>
     @endif
+    @if (Session::has("Manytimes"))
+        <p style="color: red; width:100%">Bạn đã thử quá nhiều lần! Vui lòng thử lại sau ít phút</p>
+    @endif
     <div class="input_container">
         <label class="input_label" for="password_field">Mật khẩu mới</label>
         <svg fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg" class="icon">
