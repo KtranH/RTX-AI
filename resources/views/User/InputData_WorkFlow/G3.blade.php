@@ -1,0 +1,279 @@
+@extends('User.Container')
+@section('Body')
+<title>RTX-AI: Sáng tạo hình ảnh</title>
+
+<form id="G2" method="POST" enctype="multipart/form-data" action="{{ route("createg3") }}">
+    @csrf
+    <div class="bg-white">
+        <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-16">
+            <div class="space-y-12">
+                <div class="border-b border-gray-900/10 pb-12">
+                    <div style="margin-top:-5%; margin-bottom:2%">
+                        <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ $G->name }}</h2>
+                        <p class="text-xs font-bold tracking-tight">{{ $G->description }}</p>
+                   </div>
+                    <div style="margin-bottom:2%;">
+                        <h2 class="text-base font-semibold leading-7 text-gray-900">
+                            Chi phí: 5 lượt
+                        </h2>
+                    </div>
+
+                    <div class="col-span-full">
+                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Ảnh chính của bạn:</label>
+                        <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 drag-image">
+                            <div class="text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="icon-image">
+                                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
+                                </svg>
+                                <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                                    <div>
+                                        <h6 class="h6_image">Kéo thả ảnh vào đây</h6>
+                                        <span>Hoặc</span>
+                                        <button style="font-weight:bold;color:#631CB3" class="button_image">Chọn ảnh</button>
+                                        <input type="file" class="input_image" hidden>
+                                    </div>
+                                </div>
+                                <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF</p>
+                            </div>
+                        </div>
+                        <input type="file" name = "input" id="input_image" required hidden>
+                    </div>
+                        
+                    <script>
+                        const dropArea = document.querySelector(".drag-image"),
+                        dragText = document.querySelector(".h6_image"),
+                        button = document.querySelector(".button_image"),
+                        input = document.querySelector(".input_image");
+                        let file; 
+
+                        button.onclick = ()=>{
+                            input.click(); 
+                            }
+
+                        input.addEventListener("change", function(){
+                            
+                            file = this.files[0];
+                            dropArea.classList.add("active");
+
+                            var fileInput = document.getElementById('input_image');
+                            var fileList = new DataTransfer();
+                            fileList.items.add(this.files[0]);
+                            fileInput.files = fileList.files;
+
+                            viewfile();
+                            });
+
+                        dropArea.addEventListener("dragover", (event)=>{
+                            event.preventDefault();
+                            dropArea.classList.add("active");
+                            dragText.textContent = "Thả ảnh ra trong đây";
+                            });
+
+
+                         dropArea.addEventListener("dragleave", ()=>{
+                            dropArea.classList.remove("active");
+                            dragText.textContent = "Kéo thả ảnh vào đây";
+                            }); 
+
+                        dropArea.addEventListener("drop", (event)=>{                         
+                            event.preventDefault(); 
+                            file = event.dataTransfer.files[0];
+
+                            PutIntoInput()
+                            viewfile(); 
+                            });
+
+                        function PutIntoInput()
+                        {
+                            var fileInput = document.getElementById('input_image');
+                            var fileList = new DataTransfer();
+                            fileList.items.add(event.dataTransfer.files[0]);
+                            fileInput.files = fileList.files;
+                        }
+                        function viewfile()
+                        {
+                            let fileType = file.type; 
+                            let validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+                            if(validExtensions.includes(fileType)){ 
+                                let fileReader = new FileReader(); 
+                                fileReader.onload = ()=>{
+                                let fileURL = fileReader.result; 
+                                let imgTag = `<img src="${fileURL}" alt="image" style="width: 25%;margin:auto;margin-top:-2%;margin-bottom:2%;border-radius:10px">`;
+                                dropArea.innerHTML = imgTag; 
+                                }
+                                fileReader.readAsDataURL(file);                            
+
+                            }else{
+                                alert("This is not an Image File!");
+                                dropArea.classList.remove("active");
+                                dragText.textContent = "Lỗi không phải là ảnh";
+                            }
+                        }
+                    </script>
+
+                    <div class="col-span-full">
+                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Ảnh bạn muốn theo phong cách:</label>
+                        <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 drag-image2">
+                            <div class="text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="icon-image">
+                                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
+                                </svg>
+                                <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                                    <div>
+                                        <h6 class="h6_image2">Kéo thả ảnh vào đây</h6>
+                                        <span>Hoặc</span>
+                                        <button style="font-weight:bold;color:#631CB3" class="button_image2">Chọn ảnh</button>
+                                        <input type="file" class="input_image2" hidden>
+                                    </div>
+                                </div>
+                                <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF</p>
+                            </div>
+                        </div>
+                        <input type="file" name = "input2" id="input_image2" required hidden>
+                    </div>
+                        
+                    <script>
+                        const dropArea2 = document.querySelector(".drag-image2"),
+                        dragText2 = document.querySelector(".h6_image2"),
+                        button2 = document.querySelector(".button_image2"),
+                        input2 = document.querySelector(".input_image2");
+                        let file2; 
+
+                        button2.onclick = ()=>{
+                            input2.click(); 
+                            }
+
+                        input2.addEventListener("change", function(){
+                            
+                            file2 = this.files[0];
+                            dropArea2.classList.add("active");
+
+                            var fileInput2 = document.getElementById('input_image2');
+                            var fileList2 = new DataTransfer();
+                            fileList2.items.add(this.files[0]);
+                            fileInput2.files = fileList2.files;
+
+                            viewfile2();
+                            });
+
+                        dropArea2.addEventListener("dragover", (event)=>{
+                            event.preventDefault();
+                            dropArea2.classList.add("active");
+                            dragText2.textContent = "Thả ảnh ra trong đây";
+                            });
+
+
+                        dropArea2.addEventListener("dragleave", ()=>{
+                            dropArea2.classList.remove("active");
+                            dragText2.textContent = "Kéo thả ảnh vào đây";
+                            }); 
+
+                        dropArea2.addEventListener("drop", (event)=>{                         
+                            event.preventDefault(); 
+                            file2 = event.dataTransfer.files[0];
+
+                            PutIntoInput2()
+                            viewfile2(); 
+                            });
+
+                        function PutIntoInput2()
+                        {
+                            var fileInput = document.getElementById('input_image2');
+                            var fileList = new DataTransfer();
+                            fileList.items.add(event.dataTransfer.files[0]);
+                            fileInput.files = fileList.files;
+                        }
+                        function viewfile2()
+                        {
+                            let fileType = file2.type; 
+                            let validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+                            if(validExtensions.includes(fileType)){ 
+                                let fileReader = new FileReader(); 
+                                fileReader.onload = ()=>{
+                                let fileURL = fileReader.result; 
+                                let imgTag = `<img src="${fileURL}" alt="image" style="width: 25%;margin:auto;margin-top:-2%;margin-bottom:2%;border-radius:10px">`;
+                                dropArea2.innerHTML = imgTag; 
+                                }
+                                fileReader.readAsDataURL(file2);                            
+
+                            }else{
+                                alert("This is not an Image File!");
+                                dropArea2.classList.remove("active");
+                                dragText2.textContent = "Lỗi không phải là ảnh";
+                            }
+                        }
+                    </script>
+
+                    <div class="col-span-full" style="margin-bottom:2%">
+                        <label for="about" class="block text-sm font-medium leading-6 text-gray-900">Mô tả của bạn:</label>
+                        <div class="mt-2">
+                        <textarea id="about" name="prompt" rows="3" class="p-1 block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required></textarea>
+                        </div>
+                        <p class="mt-3 text-sm leading-6 text-gray-600">Vui lòng không nhập từ khóa nhạy cảm!</p>
+                    </div>
+            
+                <div class="border-b border-gray-900/10 pb-12">
+                    <div class="sm:col-span-3" style="margin-bottom:2%">
+                        <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Thể loại ảnh: </label>
+                        <div class="mt-2">
+                        <select id="country" name="model" autocomplete="country-name" class="block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                            <option>Ảnh thực tế</option>
+                            <option>Ảnh hoạt hình</option>
+                            <option>Ảnh hình 3D</option>
+                        </select>
+                        </div>
+                    </div>    
+
+                    <div class="sm:col-span-3" style="margin-bottom:2%">
+                        <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Thông số Seed:</label>
+                        <div class="mt-2">
+                          <input type="number" name="seed" id="first-name" autocomplete="given-name" class="block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-1" required>
+                          <button id="generate-seed" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Tạo Seed</button>
+                          <p class="mt-3 text-sm leading-6 text-gray-600">Thông số Seed phải thay đổi sau mỗi lượt tạo ảnh nếu không ảnh sẽ không thay đổi</p>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.getElementById('generate-seed').addEventListener('click', function() 
+                        {
+                            event.preventDefault();
+                            const randomSeed = Math.floor(Math.random() * (99999999 - 11111111 + 1)) + 11111111;
+                            document.getElementById('first-name').value = randomSeed;
+                        });
+                    </script>
+
+                    <div>
+                        <h2 class="text-base font-semibold leading-7 text-gray-900">Số lượng tạo ảnh:
+                            {{ $ShowTimes }}
+                        </h2>
+                        <p class="mt-1 text-sm leading-6 text-gray-600">Nếu như hết lượt tạo ảnh bạn không thể tạo được ảnh! Số lượng sẽ được khôi phục vào ngày mai.</p>    
+                    </div> 
+                </div>
+                <img id="loading-image" style="width:30%; margin:auto; display:none" src="/images/loading.gif" alt="Loading...">
+            </div>
+        
+            <div class="mt-6 flex items-center justify-end gap-x-6">
+                <a type="button" id="cancel" href="{{ route("showworkflow") }}" class="text-sm font-semibold leading-6 text-gray-900">Quay lại</a>
+                <button type="submit" id="create" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Tạo ảnh</button>
+            </div>
+            <script>
+                document.getElementById('create').addEventListener('click', function(event) {
+
+                    event.preventDefault();
+                    this.disabled = true;
+
+                    document.getElementById('create').style.cursor = 'not-allowed';
+                    document.getElementById('create').style.backgroundColor = '#6B6B6B';
+                    document.getElementById('loading-image').style.display = 'block';
+                    document.getElementById('G2').submit();
+
+                    const cancelLink = document.getElementById('cancel');
+                    cancelLink.style.pointerEvents = 'none';
+                    cancelLink.style.opacity = '0.5';
+                
+                });
+            </script>
+        </div>
+    </div>
+</form>
+@endsection
