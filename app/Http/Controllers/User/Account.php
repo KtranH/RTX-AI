@@ -170,4 +170,19 @@ class Account extends Controller
             return redirect()->route("sendcodetoemail");
         }
     }
+
+    public function ShowAccount()
+    {
+        $cookie = request()->cookie("token_account");
+        
+        if ($cookie) 
+        {
+            $tab = request()->query('tab', 'saved');
+            return view('User.Account.Account', ['tab' => $tab]);
+        } 
+        else 
+        {
+            return redirect()->route('showlogin');
+        }
+    }
 }
