@@ -8,7 +8,7 @@
                 <h2 class="text-2xl font-bold tracking-tight text-gray-900">Khám phá cùng RTX-AI</h2>
                 <p class="text-xs font-bold tracking-tight">Bắt đầu sáng tạo các hình ảnh bằng AI, và chia sẻ với những người khác.</p>
            </div>
-          <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-2 xl:gap-x-8">
+          <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             @php
                 $count = 0;
             @endphp

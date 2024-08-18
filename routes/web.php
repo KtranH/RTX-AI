@@ -15,10 +15,10 @@ use App\Models\WorkFlow;
 use App\Http\Controllers\Board\Board;
 use Illuminate\Support\Facades\Route;
 
-/*Route::get('/', function () {
+Route::get('/ai', function () {
     return view('generate_image');
 });
-Route::post('/generate-image', [ImageController::class, 'generateImage']);*/
+Route::post('/generate-image', [ImageController::class, 'generateImage']);
 
 //Access home page
 Route::get('/',[Home::class,'ShowHome'])->name("showhome");
@@ -71,6 +71,11 @@ Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChang
 //Check code to change password
 Route::post('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
 
+//Show All Workflow
+Route::get('/showallworkflow', [CreateImage::class, 'ShowWorkFlow'])->name("showworkflow");
+
+Route::middleware([CheckCookieLogin::class])->group(function () {
+  
 //Access board page
 Route::get('/board', [Board::class, 'ShowBoard'])->name("showboard");
 
@@ -83,11 +88,9 @@ Route::get('/create_album', [Board::class, 'CreateAlbum'])->name("createalbum");
 //Access account page
 Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
 
-//Show All Workflow
-Route::get('/showallworkflow', [CreateImage::class, 'ShowWorkFlow'])->name("showworkflow");
+//Add new album
+Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
 
-Route::middleware([CheckCookieLogin::class])->group(function () {
-    
 //Show G1
 Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
 

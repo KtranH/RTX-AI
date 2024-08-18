@@ -117,6 +117,9 @@
                         <textarea id="about" name="prompt" rows="3" class="p-1 block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required></textarea>
                         </div>
                         <p class="mt-3 text-sm leading-6 text-gray-600">Vui lòng không nhập từ khóa nhạy cảm!</p>
+                        @if (Session::has("SensitiveWord"))
+                            <p class="mt-3 text-sm leading-6 text-red-600">Mô tả của bạn chứa từ khóa nhạy cảm! Không thể tạo ảnh</p>
+                        @endif
                     </div>
             
                 <div class="border-b border-gray-900/10 pb-12">
