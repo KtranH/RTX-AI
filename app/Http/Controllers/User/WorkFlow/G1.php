@@ -20,10 +20,10 @@ class G1 extends Controller
 {
     //
     private $url = 'http://127.0.0.1:8188/prompt';
-    private $interrupt = 'http://127.0.0.1:8188/interrupt';
-    private $inputDir = 'D:\AI\SD\ComfyUI_windows_portable\ComfyUI\input';
+    private $interrupt = '';
+    private $inputDir = '';
     private $inputError = 'D:\ProjectPHP\GradioApp\img';
-    private $outputDir = 'D:\AI\SD\ComfyUI_windows_portable\ComfyUI\output';
+    private $outputDir = '';
 
     public function InputDataG1()
     {
@@ -53,10 +53,16 @@ class G1 extends Controller
         
         $process = json_decode(file_get_contents(storage_path('app/Check_Text.json')), true);
 
-        $process["1"]["inputs"]["prompt"] = $translated . ". Are these words sensitive or obscene to children? Just answer yes or no.";
-        $filePath = "D:\AI\SD\ComfyUI_windows_portable\ComfyUI\input\check_text.txt";
+        $process["1"]["inputs"]["prompt"] = $translated . ". Are these words sensitive or obscene? Just answer yes or no.";
         
-        $this->startQueue($process);
+        $answer = $this->check_prompt($process);
+
+        $answer = stripos($answer,"No");
+        if(!$answer)
+        {
+            Session::flash("SensitiveWord","checked");
+            return redirect()->route("g1");
+        }
 
         $process = json_decode(file_get_contents(storage_path('app/G1.json')), true);
 
@@ -78,21 +84,14 @@ class G1 extends Controller
         $process["8"]["inputs"]["text"] = $translated;
         $process["12"]["inputs"]["noise_seed"] = $seed;
 
-        $previousImage = $this->getLatestImage($this->outputDir);
-        $this->startQueue($process);
-
+        //$previousImage = $this->getLatestImage($this->outputDir);
+       
         try 
         {
-            $latestImage = $this->waitForImage($previousImage);
-            $publicPath = $this->moveToPublicDirectory($latestImage);
-            $imageUrl = asset($publicPath);
-            $check = file_get_contents($filePath);
-            $no = stripos($check,"No");
-            if(!$no)
-            {
-                Session::flash("SensitiveWord","checked");
-                return redirect()->route("g1");
-            }
+            //$latestImage = $this->waitForImage($previousImage);
+            //$publicPath = $this->moveToPublicDirectory($latestImage);
+            //$imageUrl = asset($publicPath);
+            $imageUrl = $this->get_image($process);
             Session::put("url",$imageUrl);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
@@ -123,7 +122,7 @@ class G1 extends Controller
             return redirect()->route("showworkflow");
         }
         else
-        {
+        {        
             return view("User.InputData_WorkFlow.ShowG",compact("prompt","seed","url","G","model"));
         }
     }
@@ -143,14 +142,79 @@ class G1 extends Controller
         return redirect()->route("showworkflow");
     }*/
 
-    private function startQueue($prompt)
+    /*private function startQueue($prompt)
     {
         $client = new Client();
         $response = $client->post($this->url, [
             'json' => ['prompt' => $prompt]
         ]);
-    }
+    }*/
+    private function get_image($process)
+    {
+        $client = new Client();
+        $response = $client->post($this->url, [
+            'json' => ['prompt' => $process]
+        ]);
 
+        if ($response->getStatusCode() == 200) 
+        {
+            $body = json_decode($response->getBody(), true);
+            $id = $body['prompt_id'] ?? null;
+        }
+        while(true)
+        {
+            $response = $client->get('http://127.0.0.1:8188/history/' . $id);
+            if ($response->getStatusCode() == 200) 
+            {
+                $takeFileName = json_decode($response->getBody()->getContents(), true);
+                if(!empty($takeFileName))
+                {
+                    $image = 'http://127.0.0.1:8188/view?filename='.$takeFileName[$id]['outputs'][19]['images'][0]['filename'];
+                    break;
+                }
+            }
+            else
+            {
+                break;
+            }
+            sleep(0.5);
+        }
+        return $image;
+    }
+    private function check_prompt($process)
+    {
+        $client = new Client();
+        $response = $client->post($this->url, [
+            'json' => ['prompt' => $process]
+        ]);
+
+        if ($response->getStatusCode() == 200) 
+        {
+            $body = json_decode($response->getBody(), true);
+            $id = $body['prompt_id'] ?? null;
+        }
+
+        while(true)
+        {
+            $response = $client->get('http://127.0.0.1:8188/history/' . $id);
+            if ($response->getStatusCode() == 200) 
+            {
+                $takeFileName = json_decode($response->getBody()->getContents(), true);
+                if(!empty($takeFileName))
+                {
+                    $answer =  $takeFileName[$id]["outputs"][3]["string"][0];
+                    break;
+                }
+            }
+            else
+            {
+                $answer =  "Yes";
+                break;
+            }
+            sleep(0.5);
+        }
+        return $answer;
+    }
     private function waitForImage($previousImage)
     {
         while (true) {

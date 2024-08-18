@@ -21,6 +21,8 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar_url',
+        'following_count',
+        'followers_count',
         'times',
     ];
 

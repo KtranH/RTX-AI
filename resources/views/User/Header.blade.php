@@ -50,7 +50,7 @@
           <li><a href="{{ route("showboard")}}" class="nav-link px-2 link-dark" style="font-weight:600">Tài khoản</a></li>
           <li><a href="{{ route("showworkflow") }}" class="nav-link px-2 link-dark" style="font-weight:600">Sáng tạo</a></li>
           <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Tìm kiếm</a></li>
-          <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Lịch sử</a></li>
+          <li><a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Mua sắm</a></li>
         </ul>
         <?php 
           $cookie = request()->cookie("token_account");

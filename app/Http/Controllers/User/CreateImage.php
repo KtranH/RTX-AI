@@ -11,7 +11,7 @@ class CreateImage extends Controller
     //
     public function ShowWorkFlow()
     {
-        $workflow = WorkFlow::paginate(4);
+        $workflow = WorkFlow::paginate(6);
         return view("User.CreateImage.ShowAllCreateImage", compact("workflow"));
     }
 }
