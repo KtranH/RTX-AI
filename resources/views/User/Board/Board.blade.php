@@ -37,15 +37,118 @@
                         <div class="text-gray-500">
                             {{ $account->email }}
                         </div>
+                        <div style="display:flex; margin-top:1%">
+                            <div class="cursor-pointer no-underline hover:text-[#a000ff]" onclick="openPopup('followers-popup')">
+                                <span style="font-weight:bold">5</span> Theo dõi
+                            </div>
+                            <div class="cursor-pointer no-underline hover:text-[#a000ff] ml-5" onclick="openPopup('following-popup')">
+                                <span style="font-weight:bold">10</span> Đang theo dõi
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="followers-popup" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+            <div class="bg-white p-6 rounded-lg w-11/12 max-w-lg relative">
+                <button onclick="closePopup('followers-popup')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+                <h2 class="text-xl font-bold mb-4">Theo Dõi</h2>
+                <div class="max-h-64 overflow-y-auto">
+                    <ul>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="following-popup" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+            <div class="bg-white p-6 rounded-lg w-11/12 max-w-lg relative">
+                <button onclick="closePopup('following-popup')" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+                <h2 class="text-xl font-bold mb-4">Đang Theo Dõi</h2>
+                <div class="max-h-64 overflow-y-auto">
+                    <ul>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                        <li class="py-2 flex">
+                            <a href="#" class="flex items-center w-full">
+                                <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $account->avatar_url }}" alt="">
+                                <p class="hover:text-[#a000ff] font-semibold">{{ $account->username }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script>
+            function openPopup(popupId) 
+            {
+                document.getElementById(popupId).classList.remove('hidden');
+            }
+            function closePopup(popupId) 
+            {
+                document.getElementById(popupId).classList.add('hidden');
+            }
+        </script>
         <!-- Features  -->
+        @if ($photos != 0)
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                 <div class="font-bold text-3xl">Ảnh Đặc Trưng</div>
-                <div class="mt-2 grid grid-cols-12 gap-2">
+                   <div class="mt-2 grid grid-cols-12 gap-2">
                     <div class="relative col-span-3 row-span-1 aspect-square group">
                         <img src="https://via.placeholder.com/600x800" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-50">
                         <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
@@ -84,6 +187,7 @@
                             </div>
                         </div>
                     </div>
+                   @endif
                 </div>
             </div>
         </div>
@@ -136,92 +240,103 @@
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                 <div class="font-bold text-3xl">Album</div>
-                <div class="mt-2 grid grid-cols-12 gap-2">
-                    <div class="col-span-3 row-span-1 relative group">
-                        <div class="aspect-square">
-                            <img src="https://via.placeholder.com/600x6100" alt="Image 1" class="w-full h-full object-cover rounded-lg">
-                            <div class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                    <i class="fas fa-lock text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                </a>
-                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                    <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                    @if (!$albums)
+                    <div class="mt-2 grid grid-cols-12 gap-2">
+                        <div class="col-span-3 row-span-1 relative group">
+                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
+                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                    @else
+                    <div class="mt-2 grid grid-cols-12 gap-2">
+                        @foreach ($albums as $x)
+                            <div class="col-span-3 row-span-1 relative group">
+                                <a href="{{ route('showalbum', ['id' => $x->id]) }}">
+                                    <div class="aspect-square">
+                                        <img src="{{ $x->cover_image }}" alt="Image 1" class="w-full h-full object-cover rounded-lg">
+                                    </div>
+                                    <div class="mt-2 text-left group-hover:text-[#a000ff]">
+                                        <div class="font-semibold text-lg truncate">{{ $x->title }}</div>
+                                        <div class="text-sm text-gray-500 truncate">{{ $x->description }}</div>
+                                    </div>
+                                    <div class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                            <i class="fas fa-lock text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                        </a>
+                                        <a href="{{ route('editalbum', ['id' => $x->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                            <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                        </a>
+                                    </div>
                                 </a>
                             </div>
-                        </div>
-                        <div class="mt-2 text-left">
-                            <div class="font-semibold text-lg truncate">Tiêu Đề 1</div>
-                            <div class="text-sm text-gray-500 truncate">Bán Tiêu Đề 1</div>
-                        </div>
-                    </div>
-                    <div class="col-span-3 row-span-1 relative group">
-                        <div class="aspect-square">
-                            <img src="https://via.placeholder.com/6100x600" alt="Image 2" class="w-full h-full object-cover rounded-lg">
-                            <div class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                    <i class="fas fa-lock text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                </a>
-                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                    <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="mt-2 text-left">
-                            <div class="font-semibold text-lg truncate">Tiêu Đề 2</div>
-                            <div class="text-sm text-gray-500 truncate">Bán Tiêu Đề 2</div>
+                        @endforeach
+                        <div class="col-span-3 row-span-1 relative group">
+                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
+                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
+                            </a>
                         </div>
                     </div>
-                    <div class="col-span-3 row-span-1 relative group">
-                        <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
-                            <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
-                        </a>
+                        <div style="w-full mt-2">
+                            {{ $albums->links("vendor.pagination.simple-tailwind") }}
+                        </div>
                     </div>
-                </div>
+                    @endif
             </div>
         </div>
         <!-- Gallery -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="font-bold text-3xl">Thư Viện</div>
-                <div class="mt-2 grid grid-cols-12 gap-2">
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 1" class="w-full h-full object-cover">
+                @if ($photos == 0)
+                    <div class="mt-2 grid grid-cols-12 gap-2">
+                        <div class="col-span-3 row-span-1 relative group">
+                            <a href="#" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
+                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 2" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 4" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 1" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 2" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 4" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 1" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 2" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 aspect-square">
-                        <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
-                    </div>
-                    <div class="col-span-3 row-span-1 relative group">
-                        <a href="#" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
-                            <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
-                        </a>
-                    </div>
+                @else
+                    <div class="mt-2 grid grid-cols-12 gap-2">
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 1" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 2" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 4" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 1" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 2" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 4" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 1" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 2" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 aspect-square">
+                            <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
+                        </div>
+                        <div class="col-span-3 row-span-1 relative group">
+                            <a href="#" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
+                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
+                            </a>
+                        </div>
+                @endif
                 </div>
             </div>
         </div>

@@ -12,9 +12,9 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 class ImageController extends Controller
 {
     private $url = 'http://127.0.0.1:8188/prompt';
-    private $inputDir = 'D:\AI\SD\ComfyUI_windows_portable\ComfyUI\input';
-    private $inputError = 'D:\ProjectPHP\GradioApp\img';
-    private $outputDir = 'D:\AI\SD\ComfyUI_windows_portable\ComfyUI\output';
+    private $inputDir = '';
+    private $inputError = '';
+    private $outputDir = '';
 
     public function generateImage(Request $request)
     {
@@ -47,16 +47,46 @@ class ImageController extends Controller
         $prompt["6"]["inputs"]["text"] = $translated;
         $prompt["10"]["inputs"]["vae_name"] = $Load_VAE;
 
-        print_r($prompt);
-
         $previousImage = $this->getLatestImage($this->outputDir);
 
-        $this->startQueue($prompt);
+        $client = new Client();
+        $response = $client->post($this->url, [
+            'json' => ['prompt' => $prompt]
+        ]);
 
+        if ($response->getStatusCode() == 200) 
+        {
+            $body = json_decode($response->getBody(), true);
+            $id = $body['prompt_id'] ?? null;
+        }
+        while(true)
+        {
+            $response = $client->get('http://127.0.0.1:8188/history/' . $id);
+            if ($response->getStatusCode() == 200) 
+            {
+                $takeFileName = json_decode($response->getBody()->getContents(), true);
+                if(!empty($takeFileName))
+                {
+                    dd('http://127.0.0.1:8188/view?filename='.$takeFileName[$id]['outputs'][12]['images'][0]['filename']);
+                }
+            }
+            else
+            {
+                break;
+            }
+            sleep(0.5);
+        }
+            
         try {
             $latestImage = $this->waitForImage($previousImage);
             $publicPath = $this->moveToPublicDirectory($latestImage);
             $imageUrl = asset($publicPath);
+            $response = $client->get('http://127.0.0.1:8188/history/' . $id);
+            if ($response->getStatusCode() == 200) 
+            {
+                $takeFileName = json_decode($response->getBody()->getContents(), true);
+                dd($takeFileName);
+            }
             return view('generate_image', ['imageUrl' => $imageUrl]);
         } catch (Exception $e) {
             $error_image_path = $this->inputError . DIRECTORY_SEPARATOR . "error.jpg";
@@ -76,13 +106,13 @@ class ImageController extends Controller
         return $files ? $files[0] : null;
     }
 
-    private function startQueue($prompt)
+    /*private function startQueue($prompt)
     {
         $client = new Client();
         $response = $client->post($this->url, [
             'json' => ['prompt' => $prompt]
         ]);
-    }
+    }*/
 
     private function waitForImage($previousImage)
     {

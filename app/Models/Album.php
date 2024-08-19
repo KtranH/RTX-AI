@@ -18,10 +18,16 @@ class Album extends Model
         'user_id',
         'title',
         'description',
+        'cover_image',
+        'is_private',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function photos()
+    {
+        return $this->hasMany(Photo::class);
     }
 }
