@@ -22,7 +22,7 @@
                             <i class="fas fa-lock text-[#a000ff] text-xl ml-3"></i>
                         </div>
                         <div class="font-semibold text-xl text-gray-500">
-                            {{ $album->user->username }}
+                            {{ $album->description }}
                         </div>
                     </div>
                 </div>

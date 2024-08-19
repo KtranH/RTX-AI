@@ -144,7 +144,6 @@
             }
         </script>
         <!-- Features  -->
-        @if ($photos != 0)
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                 <div class="font-bold text-3xl">Ảnh Đặc Trưng</div>
@@ -259,6 +258,11 @@
                     </div>
                     @else
                     <div class="mt-2 grid grid-cols-12 gap-2">
+                        <div class="col-span-3 row-span-1 relative group">
+                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
+                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
+                            </a>
+                        </div>
                         @foreach ($albums as $x)
                             <div class="col-span-3 row-span-1 relative group">
                                 <a href="{{ route('showalbum', ['id' => $x->id]) }}">
@@ -278,30 +282,6 @@
                                         </a>
                                     </div>
                                 </a>
-                            </div>
-                        @endforeach
-                        <div class="col-span-3 row-span-1 relative group">
-                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
-                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
-                            </a>
-                        </div>
-                        @foreach ($albums as $x)
-                            <div class="col-span-3 row-span-1 relative group">
-                                <div class="aspect-square">
-                                    <img src="{{ $x->cover_image }}" alt="Image 1" class="w-full h-full object-cover rounded-lg">
-                                    <div class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-lock text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                        </a>
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="mt-2 text-left">
-                                    <div class="font-semibold text-lg truncate">{{ $x->title }}</div>
-                                    <div class="text-sm text-gray-500 truncate">{{ $x->description }}</div>
-                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -370,5 +350,4 @@
             </div>
         </div>
     </main>
-
 @endsection
