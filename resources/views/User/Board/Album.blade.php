@@ -124,7 +124,7 @@
                         </div>
                     </div>
                     <div class="col-span-3 row-span-1 relative group">
-                        <a href="#" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
+                        <a href="{{ route('createimage') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
                             <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                         </a>
                     </div>
