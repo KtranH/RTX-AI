@@ -22,9 +22,21 @@ class Board extends Controller
         $albums = Album::where('user_id',$this->find_id())->paginate(8);
         return view('User.Board.Board', ['tab' => $tab], compact('photos','albums'));
     }
+    public function ShowAlbum($id)
+    {
+        $album = Album::find($id);
+
+        return view('User.Board.Album', compact('album'));
+    }
     public function CreateAlbum()
     {
         return view('User.Board.CreateAlbum');
+    }
+    public function EditAlbum($id)
+    {
+        $album = Album::find($id);
+        
+        return view('User.Board.EditAlbum', compact('album'));
     }
     public function AddAlbum(Request $request)
     {

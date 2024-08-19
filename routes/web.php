@@ -80,10 +80,16 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 Route::get('/board', [Board::class, 'ShowBoard'])->name("showboard");
 
 //Change board tab
-Route::get('/board/{tab?}', [Board::class, 'ShowBoard'])->name('changeboard');
+Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
+
+//Access album page
+Route::get('/album/{id}', [Board::class, 'ShowAlbum'])->name("showalbum");
 
 //Access album creation page
 Route::get('/create_album', [Board::class, 'CreateAlbum'])->name("createalbum");
+
+//Access album edit page
+Route::get('/edit_album/{id}', [Board::class, 'EditAlbum'])->name("editalbum");
 
 //Access account page
 Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
