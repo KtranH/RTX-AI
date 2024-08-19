@@ -4,7 +4,6 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
 use App\Http\Controllers\User\Account;
-use App\Http\Controllers\User\CreateImage;
 use App\Http\Controllers\User\Home;
 use App\Http\Controllers\User\WorkFlow\G1;
 use App\Http\Controllers\User\WorkFlow\G2;
@@ -13,6 +12,7 @@ use App\Http\Middleware\CheckCookieLogin;
 use App\Http\Middleware\ThrottleRequests;
 use App\Models\WorkFlow;
 use App\Http\Controllers\Board\Board;
+use App\Http\Controllers\Image\Image;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/ai', function () {
@@ -72,7 +72,7 @@ Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChang
 Route::post('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
 
 //Show All Workflow
-Route::get('/showallworkflow', [CreateImage::class, 'ShowWorkFlow'])->name("showworkflow");
+Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkflow");
 
 Route::middleware([CheckCookieLogin::class])->group(function () {
   
@@ -93,6 +93,9 @@ Route::get('/edit_album/{id}', [Board::class, 'EditAlbum'])->name("editalbum");
 
 //Access account page
 Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
+
+//Access create image page
+Route::get('/create_image', [Image::class, 'CreateImage'])->name("createimage");
 
 //Add new album
 Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");

@@ -258,11 +258,6 @@
                     </div>
                     @else
                     <div class="mt-2 grid grid-cols-12 gap-2">
-                        <div class="col-span-3 row-span-1 relative group">
-                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
-                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
-                            </a>
-                        </div>
                         @foreach ($albums as $x)
                             <div class="col-span-3 row-span-1 relative group">
                                 <a href="{{ route('showalbum', ['id' => $x->id]) }}">
@@ -284,12 +279,16 @@
                                 </a>
                             </div>
                         @endforeach
+                        <div class="col-span-3 row-span-1 relative group">
+                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
+                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
+                            </a>
+                        </div>
                     </div>
                         <div style="w-full mt-2">
                             {{ $albums->links("vendor.pagination.simple-tailwind") }}
                         </div>
                     </div>
-
                     @endif
             </div>
         </div>
@@ -300,7 +299,7 @@
                 @if ($photos == 0)
                     <div class="mt-2 grid grid-cols-12 gap-2">
                         <div class="col-span-3 row-span-1 relative group">
-                            <a href="#" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
+                            <a href="{{ route('createimage') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
                                 <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                             </a>
                         </div>
@@ -341,7 +340,7 @@
                             <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
                         </div>
                         <div class="col-span-3 row-span-1 relative group">
-                            <a href="#" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
+                            <a href="{{ route('createimage') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
                                 <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                             </a>
                         </div>
