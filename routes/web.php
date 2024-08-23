@@ -100,6 +100,9 @@ Route::get('/create_image', [Image::class, 'CreateImage'])->name("createimage");
 //Add new album
 Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
 
+//Add new image 2 album
+Route::post('/addimage2album', [Image::class, 'AddImage2Album'])->name("addimage2album");
+
 //Show G1
 Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
 

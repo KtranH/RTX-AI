@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Board;
 
 use App\Http\Controllers\Controller;
 use App\Models\Album;
+use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
@@ -25,8 +27,8 @@ class Board extends Controller
     public function ShowAlbum($id)
     {
         $album = Album::find($id);
-
-        return view('User.Board.Album', compact('album'));
+        $photo = Photo::find($album->id);
+        return view('User.Board.Album', compact('album','photo'));
     }
     public function CreateAlbum()
     {
@@ -49,11 +51,13 @@ class Board extends Controller
             'image.max' => 'Dung lượng file không được vượt quá 4MB.',
         ]);
 
+        $Email = Cookie::get("token_account");
+        
         $image = $request->file('cover');
         $title = $request->input('title');
         $description = $request->input('description');
         $filename = time() . '.' . $image->getClientOriginalExtension();
-        Storage::disk('r2')->put("albums/" . $filename, file_get_contents($image));
+        Storage::disk('r2')->put("albums/" . $Email . "/" . "ImageCoverAlbum/" . $filename, file_get_contents($image));
 
         if($request->has('private'))
         {
@@ -71,7 +75,7 @@ class Board extends Controller
                 "user_id" => $id,
                 "title" => $title,
                 "description" =>  $description,
-                "cover_image" =>  "https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/albums/" . $filename,
+                "cover_image" =>  "https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/albums/" . $Email . "/" . "ImageCoverAlbum/" . $filename,
                 "created_at" => now(),
                 "updated_at" => now(),
                 "is_private" => $private,

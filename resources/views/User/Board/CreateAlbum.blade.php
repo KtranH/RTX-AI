@@ -22,7 +22,10 @@
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>
-                        <input type="file" name="cover" id="cover" class="absolute inset-0 opacity-0 cursor-pointer" required>
+                        <input type="file" name="cover" id="cover" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror" required>
+                        @error('cover')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-span-8 row-span-1 p-4 bg-gray-100 rounded-lg shadow-md">
                         <div class="mb-4">
