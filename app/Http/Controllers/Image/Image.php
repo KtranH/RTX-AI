@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Image;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Photo;
 use App\Models\User;
 use App\Models\WorkFlow;
 use Illuminate\Http\Request;
@@ -19,12 +20,13 @@ class Image extends Controller
         return view("User.Image.Creativity", compact("workflow"));
     }
 
-    public function CreateImage()
+    public function CreateImage($id)
     {
         $Category = Category::all();
-        return view("User.Image.CreateImage", compact("Category"));
+        $Id = $id;
+        return view("User.Image.CreateImage", compact("Category","Id"));
     }
-    public function AddImage2Album(Request $request)
+    public function AddImage2Album(Request $request, $id)
     {
         $request->validate([
             'cover' => 'required|image|max:4096',
@@ -41,10 +43,7 @@ class Image extends Controller
             'categories.required' => 'Vui lòng chọn ít nhất một thể loại.',
             'categories.string' => 'Thể loại phải là một chuỗi ký tự.',
         ]);
-
-        $categories = json_decode($request->input('categories'), true);
-        dd($categories);
-
+       
         $Day = Carbon::now()->day;
         $Month = Carbon::now()->month;
         $Year = Carbon::now()->year;
@@ -58,12 +57,27 @@ class Image extends Controller
         $filename = time() . '.' . $image->getClientOriginalExtension();
         Storage::disk('r2')->put("albums/" . $Email . "/" . $folder . "/" . $filename, file_get_contents($image));
 
+        $photos = Photo::create([
+            "album_id" => $id,
+            "title" => $title,
+            "description" => $description,
+            "url" => "https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/albums/" . $Email . "/" . $folder . "/" . $filename,
+            "created_at" => now(),
+            "updated_at" => now(),
+        ]);
 
+        $categories = json_decode($request->input('categories'), true);
+        foreach($categories as $x)
+        {
+            $cateid = $this->find_id_categorie($x);
+            $photos->category()->attach($cateid);
+        }
+
+        return redirect()->route("showalbum",["id" => $id]);
     }
-    private function find_id()
+    private function find_id_categorie($x)
     {
-        $email = request()->cookie("token_account");
-        $id = User::where("email",$email)->first();
+        $id = Category::where("name",$x)->first();
         return $id->id;
     }
 }

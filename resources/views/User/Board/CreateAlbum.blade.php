@@ -15,7 +15,7 @@
         <div class="flex items-center justify-center mb-5">
 
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
-                <form class="grid grid-cols-12 gap-4" method="POST" action="{{ route("addalbum") }}" enctype="multipart/form-data">
+                <form class="grid grid-cols-12 gap-4" id="albumform" method="POST" action="{{ route("addalbum") }}" enctype="multipart/form-data">
                     @csrf
                     <div class="col-span-4 row-span-1 aspect-square relative group">
                         <img id="album-cover" src="/images/image.png" alt="Album Cover" class="w-full h-full object-cover rounded-lg">
@@ -43,6 +43,13 @@
                         <div class="flex justify-center mt-4">
                             <button type="submit" id="create" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Tạo Album</button>
                         </div>
+                        <script>
+                            document.getElementById('albumform').addEventListener('submit', function() {
+                                var submitButton = document.getElementById('create');
+                                submitButton.disabled = true; 
+                                submitButton.innerText = 'Đang thực hiện...'; 
+                            });
+                        </script>                        
                     </div>
                 </form>
             </div>

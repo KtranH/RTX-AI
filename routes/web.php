@@ -95,13 +95,13 @@ Route::get('/edit_album/{id}', [Board::class, 'EditAlbum'])->name("editalbum");
 Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
 
 //Access create image page
-Route::get('/create_image', [Image::class, 'CreateImage'])->name("createimage");
+Route::get('/create_image/{id}', [Image::class, 'CreateImage'])->name("createimage");
 
 //Add new album
 Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
 
 //Add new image 2 album
-Route::post('/addimage2album', [Image::class, 'AddImage2Album'])->name("addimage2album");
+Route::post('/addimage2album/{id}', [Image::class, 'AddImage2Album'])->name("addimage2album");
 
 //Show G1
 Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
@@ -112,26 +112,17 @@ Route::post('/createg1', [G1::class, 'ShowImageG1'])->name("createg1");
 //Cancel Image G1
 /*Route::get('/cancelg1', [G1::class, 'stopQueue'])->name("cancelg1");*/
 
-//Show Image G1
-Route::get('/showg1', [G1::class, 'ImageG1'])->name("showg1");
-
 //Show G2
 Route::get('/g2', [G2::class, 'InputDataG2'])->name("g2");
 
 //Create Image G2
 Route::post('/createg2', [G2::class, 'ShowImageG2'])->name("createg2");
 
-//Show Image G2
-Route::get('/showg2', [G2::class, 'ImageG2'])->name("showg2");
-
 //Show G3
 Route::get('/g3', [G3::class, 'InputDataG3'])->name("g3");
 
 //Create Image G3
 Route::post('/createg3', [G3::class, 'ShowImageG3'])->name("createg3");
-
-//Show Image G3
-Route::get('/showg3', [G3::class, 'ImageG3'])->name("showg3");
 
 //Show G4
 Route::get('/g4', [G3::class, 'InputDataG3'])->name("g4");

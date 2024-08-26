@@ -20,14 +20,14 @@ class Board extends Controller
     {
         $cookie = request()->cookie("token_account");
         $tab = request()->query('tab', 'saved');
-        $photos = DB::table('users')->join('albums','users.id', '=' , 'albums.user_id')->join('photos','albums.id','=','photos.album_id')->where('users.id',$this->find_id())->count();
+        $photos = DB::table('users')->join('albums','users.id', '=' , 'albums.user_id')->join('photos','albums.id','=','photos.album_id')->where('users.id',$this->find_id())->paginate(8);
         $albums = Album::where('user_id',$this->find_id())->paginate(8);
         return view('User.Board.Board', ['tab' => $tab], compact('photos','albums'));
     }
     public function ShowAlbum($id)
     {
         $album = Album::find($id);
-        $photo = Photo::find($album->id);
+        $photo = Photo::where("album_id",$album->id)->paginate(8);
         return view('User.Board.Album', compact('album','photo'));
     }
     public function CreateAlbum()
@@ -36,8 +36,7 @@ class Board extends Controller
     }
     public function EditAlbum($id)
     {
-        $album = Album::find($id);
-        
+        $album = Album::find($id);  
         return view('User.Board.EditAlbum', compact('album'));
     }
     public function AddAlbum(Request $request)

@@ -14,7 +14,7 @@
         <div class="flex items-center justify-center mb-5">
 
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
-                <form class="grid grid-cols-12 gap-4" method="POST" action="{{ route("addimage2album") }}" enctype="multipart/form-data">
+                <form class="grid grid-cols-12 gap-4" id="addimageform" method="POST" action="{{ route("addimage2album",["id" => $Id]) }}" enctype="multipart/form-data">
                     @csrf
                     <div class="col-span-4 row-span-1 aspect-square relative group">
                         <img id="image-cover" src="/images/image.png" alt="Image Cover" class="w-full h-full object-cover">
@@ -37,7 +37,7 @@
                         </div>
                         <div class="mb-4">
                             <label for="description" class="block text-xl font-medium mb-1">Chọn thể loại</label>
-                            <input name="categories"  class="form-control @error('categories') is-invalid @enderror" id="categories" value="" placeholder="Lựa chọn các thể loại cho hình ảnh">
+                            <input name="categories" class="form-control @error('categories') is-invalid @enderror" id="categories" value="" placeholder="Lựa chọn các thể loại cho hình ảnh">
                             @error('categories')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -64,6 +64,13 @@
                         <div class="flex justify-center mt-4">
                             <button type="submit" id="create" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Tạo Ảnh</button>
                         </div>
+                        <script>
+                            document.getElementById('addimageform').addEventListener('submit', function() {
+                                var submitButton = document.getElementById('create');
+                                submitButton.disabled = true; 
+                                submitButton.innerText = 'Đang thực hiện...'; 
+                            });
+                        </script>   
                     </div>
                 </form>
             </div>

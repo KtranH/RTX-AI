@@ -22,6 +22,7 @@
                         <textarea id="about" name="prompt" rows="3" class="p-1 block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required></textarea>
                         </div>
                         <p class="mt-3 text-sm leading-6 text-gray-600">Vui lòng không nhập từ khóa nhạy cảm!</p>
+                        <p class="mt-3 text-sm leading-6 text-gray-400">Chú ý việc mô tả của bạn rất quan trọng. Nếu bạn muốn tạo ra hình ảnh hoạt hình hay 3D hãy đảm bảo trong mô tả của bạn có từ: Anime, 3D...!</p>
                         @if (Session::has("SensitiveWord"))
                             <p class="mt-3 text-sm leading-6 text-red-600">Mô tả của bạn chứa từ khóa nhạy cảm! Không thể tạo ảnh</p>
                         @endif
@@ -31,7 +32,6 @@
                         <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Thể loại ảnh: </label>
                         <div class="mt-2">
                         <select id="country" name="model" autocomplete="country-name" class="block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                            <option>Ảnh thực tế</option>
                             <option>Ảnh hoạt hình</option>
                             <option>Ảnh hình 3D</option>
                         </select>

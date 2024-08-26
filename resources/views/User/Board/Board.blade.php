@@ -146,8 +146,8 @@
         <!-- Features  -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
-                <div class="font-bold text-3xl">Ảnh trong album</div>
-                   @if ($photos == 0)
+                <div class="font-bold text-3xl">Ảnh nổi bật</div>
+                   @if (count($photos) == 0)
                    <div class="mt-2 grid gap-2">
                         <div style="display:flex;margin-top:2%">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:80px; margin-right:1%">
@@ -157,44 +157,36 @@
                         </div>
                    @else
                    <div class="mt-2 grid grid-cols-12 gap-2">
-                    <div class="relative col-span-3 row-span-1 aspect-square group">
-                        <img src="https://via.placeholder.com/600x800" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-50">
-                        <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                            <div class="mt-2 text-left px-2 py-1">
-                                <div class="font-semibold text-lg truncate">Hình 1</div>
-                                <div class="text-sm text-gray-500 h-20 overflow-hidden">Mô Tả 1</div>
-                            </div>    
-                            <div class="flex justify-center p-2">
-                                <div class="flex space-x-2">
-                                    <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                    <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
+                    @php
+                        $count = 0;
+                    @endphp
+                    @foreach ($photos as $x)
+                        @php
+                            $count = $count + 1;
+                        @endphp
+                        @if ($count > 2)
+                            @break
+                        @endif
+                        <div class="relative col-span-3 row-span-1 aspect-square group">
+                            <img src="{{ $x->url }}" alt="Image 1" style="border-radius:10px" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-50">
+                            <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                <div class="mt-2 text-left px-2 py-1">
+                                    <div class="font-semibold text-lg truncate">{{ $x->title }}</div>
+                                    <div class="text-sm text-gray-500 h-20 overflow-hidden">{{ $x->description }}</div>
+                                </div>    
+                                <div class="flex justify-center p-2">
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                            <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                        </a>
+                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                            <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="relative col-span-3 row-span-1 aspect-square group">
-                        <img src="https://via.placeholder.com/800x600" alt="Image 2" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-50">
-                        <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                            <div class="mt-2 text-left px-2 py-1">
-                                <div class="font-semibold text-lg truncate">Hình 2</div>
-                                <div class="text-sm text-gray-500 h-20 overflow-hidden">Mô Tả 2</div>
-                            </div>   
-                            <div class="flex justify-center p-2">
-                                <div class="flex space-x-2">
-                                    <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                    <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                    @endif
                 </div>
             </div>
@@ -251,7 +243,7 @@
                     @if (!$albums)
                     <div class="mt-2 grid grid-cols-12 gap-2">
                         <div class="col-span-3 row-span-1 relative group">
-                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
+                            <a href="{{ route('createalbum') }}" style="border-radius:10px" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
                                 <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                             </a>
                         </div>
@@ -296,7 +288,7 @@
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="font-bold text-3xl">Thư viện</div>
-                @if ($photos == 0)
+                @if (count($photos) == 0)
                     <div class="mt-2 grid gap-2">
                         <div style="display:flex;margin-top:2%">
                             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:80px; margin-right:1%">
@@ -307,44 +299,32 @@
                     </div>
                 @else
                     <div class="mt-2 grid grid-cols-12 gap-2">
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 1" class="w-full h-full object-cover">
+                        @foreach ($photos as $x)
+                        <div class="relative col-span-3 row-span-1 aspect-square group">
+                            <img src="{{ $x->url }}" alt="Image 1" style="border-radius:10px" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-50">
+                            <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                <div class="mt-2 text-left px-2 py-1">
+                                    <div class="font-semibold text-lg truncate">{{ $x->title }}</div>
+                                    <div class="text-sm text-gray-500 h-20 overflow-hidden">{{ $x->description }}</div>
+                                </div>    
+                                <div class="flex justify-center p-2">
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                            <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                        </a>
+                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                            <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 2" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 4" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 1" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 2" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 4" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 1" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 2" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 aspect-square">
-                            <img src="https://via.placeholder.com/600x600" alt="Image 3" class="w-full h-full object-cover">
-                        </div>
-                        <div class="col-span-3 row-span-1 relative group">
-                            <a href="{{ route('createimage') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
-                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
-                            </a>
-                        </div>
+                    @endforeach
+                    </div>
+                    <div style="w-full mt-2">
+                        {{ $photos->links("vendor.pagination.simple-tailwind") }}
+                    </div>
+                </div>
                 @endif
                 </div>
             </div>
