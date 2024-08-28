@@ -259,21 +259,7 @@
                     </div>
                 @else
                     <div class="mt-2 grid grid-cols-12 gap-2">
-                        <div class="col-span-3 row-span-1 relative group">
-                            <a href="" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
-                                <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
-                            </a>
-                        </div>
-                        @php
-                            $count = 0;
-                        @endphp
                         @foreach ($photos as $x)
-                            @php
-                                $count = $count + 1;
-                            @endphp
-                            @if ($count > 2)
-                                @break
-                            @endif
                             <div class="col-span-3 row-span-1 relative group">
                                 <a href="{{ route('showimage', ['id' => $x->id]) }}">
                                     <div class="aspect-square">

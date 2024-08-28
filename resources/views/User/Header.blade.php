@@ -45,7 +45,7 @@
                 $user = \App\Models\User::where('email', $cookie)->first();
             @endphp
             @if($user)
-            <div class="col-md-3 flex justify-end items-center space-x-4">
+            <div class="col-md-4 flex justify-end items-center space-x-4">
                 <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="{{ $user->avatar_url }}" alt="">
                 <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-bold">{{ $user->username }}</a>
                 <div class="relative">
