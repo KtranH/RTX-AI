@@ -13,7 +13,6 @@
         </div>
         <!-- Form -->
         <div class="flex items-center justify-center mb-5">
-
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                 <form class="grid grid-cols-12 gap-4" id="albumform" method="POST" action="{{ route("addalbum") }}" enctype="multipart/form-data">
                     @csrf
