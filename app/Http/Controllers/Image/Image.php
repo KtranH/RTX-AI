@@ -70,7 +70,10 @@ class Image extends Controller
         foreach($categories as $x)
         {
             $cateid = $this->find_id_categorie($x);
-            $photos->category()->attach($cateid);
+            if($cateid != 0)
+            {
+                $photos->category()->attach($cateid);
+            }
         }
 
         return redirect()->route("showalbum",["id" => $id]);
@@ -78,6 +81,13 @@ class Image extends Controller
     private function find_id_categorie($x)
     {
         $id = Category::where("name",$x)->first();
-        return $id->id;
+        if($id != null)
+        {
+            return $id->id;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }

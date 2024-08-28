@@ -31,7 +31,7 @@ class G1 extends Controller
         
         $process = json_decode(file_get_contents(storage_path('app/Check_Text.json')), true);
 
-        $process["1"]["inputs"]["prompt"] = $translated . $this->check_text;
+        $process["1"]["inputs"]["prompt"] = '"' . $translated . '"' . $this->check_text;
         
         $answer = $this->check_prompt($process);
 

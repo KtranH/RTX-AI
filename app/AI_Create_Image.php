@@ -13,8 +13,9 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 trait AI_Create_Image
 {
     //
-    private $check_text = '. Are these words sensitive or obscene? Just answer yes or no.';
+    private $check_text = ' are these words SENSITIVE or OBSCENE? Just answer YES or NO.';
     private $url = 'http://127.0.0.1:8188/prompt';
+    private $url2 = 'http://192.168.1.10:8188/prompt';
     private $interrupt = '';
     private $inputDir = 'D:\AI\SD\ComfyUI_windows_portable\ComfyUI\input';
     private $inputError = 'D:\ProjectPHP\GradioApp\img';
@@ -85,14 +86,14 @@ trait AI_Create_Image
             {
                 break;
             }
-            sleep(0.5);
+            sleep(2);
         }
         return $image;
     }
     private function check_prompt($process)
     {
         $client = new Client();
-        $response = $client->post($this->url, [
+        $response = $client->post($this->url2, [
             'json' => ['prompt' => $process]
         ]);
 
@@ -104,7 +105,7 @@ trait AI_Create_Image
 
         while(true)
         {
-            $response = $client->get('http://127.0.0.1:8188/history/' . $id);
+            $response = $client->get('http://192.168.1.10:8188/history/' . $id);
             if ($response->getStatusCode() == 200) 
             {
                 $takeFileName = json_decode($response->getBody()->getContents(), true);
@@ -116,10 +117,9 @@ trait AI_Create_Image
             }
             else
             {
-                $answer =  "Yes";
                 break;
             }
-            sleep(0.5);
+            sleep(2);
         }
         return $answer;
     }

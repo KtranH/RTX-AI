@@ -51,7 +51,7 @@
                         document.getElementById('generate-seed').addEventListener('click', function() 
                         {
                             event.preventDefault();
-                            const randomSeed = Math.floor(Math.random() * (99999999 - 11111111 + 1)) + 11111111;
+                            const randomSeed = Math.floor(Math.random() * (9999999999 - 1111111111 + 1)) + 1111111111;
                             document.getElementById('first-name').value = randomSeed;
                         });
                     </script>
