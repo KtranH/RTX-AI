@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Image;
 
 use App\Http\Controllers\Controller;
+use App\Models\Album;
 use App\Models\Category;
 use App\Models\Photo;
 use App\Models\User;
@@ -18,6 +19,14 @@ class Image extends Controller
     {
         $workflow = WorkFlow::paginate(6);
         return view("User.Image.Creativity", compact("workflow"));
+    }
+
+    public function ShowImage($id)
+    {
+        $image = Photo::find($id);
+        $album = $image->album;
+        $user = $album->user;
+        return view('User.Image.Image', compact('image', 'album', 'user'));
     }
 
     public function CreateImage($id)

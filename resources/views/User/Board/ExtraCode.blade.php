@@ -7,3 +7,42 @@
         <h3 style="margin-top:30px;font-size:20px;" class="text-gray-500"> Bạn chưa có bất kì ảnh nào. Hãy tạo album và đăng ảnh ngay!</h3>
     </div>
 @else
+
+<style>
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+
+  .btn_logout
+  {
+      border-radius: 30px;
+      font-weight: bold;
+  }
+  .nav_name2
+  {
+      display: none;
+  }
+
+  @media only screen and (max-width: 600px) 
+  {
+      .nav_name
+      {
+          display:none;
+      }
+      .nav_name2
+      {
+          display:block;
+          color:white;
+      }
+  }
+</style>
