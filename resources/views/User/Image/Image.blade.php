@@ -44,7 +44,7 @@
                         </div>
                         <!-- Comment -->
                         <div class="flex flex-col mt-auto">
-                            <div class="flex flex-col overflow-y-auto max-h-40 mb-4">
+                            <div class="flex flex-col overflow-y-auto max-h-60 mb-4">
                                 <div class="space-y-4">
                                     @for ($i = 0; $i <= 15; $i++)
                                         <div class="flex items-start space-x-4">

@@ -33,7 +33,7 @@
         <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
             <a href="{{ route('showhome') }}" class="nav-link px-2 link-dark" style="font-weight:600">Trang chủ</a>
             <a href="{{ route('showworkflow') }}" class="nav-link px-2 link-dark" style="font-weight:600">Sáng tạo</a>
-            <a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Tìm kiếm</a>
+            <a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Khám phá</a>
             <a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Mua sắm</a>
         </div>
         <!-- Account -->
