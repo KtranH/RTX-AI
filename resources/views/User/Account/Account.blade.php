@@ -48,8 +48,32 @@
                     </div>
                     <div class="mb-4">
                         <label for="password" class="block text-xl font-medium mb-1">Mật Khẩu</label>
-                        <input type="password" id="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm" value="Hahahaha">
+                        <input type="password" id="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm" value="YOURPASSS" readonly>
                     </div>
+                    <div style="margin-top:-2%">
+                        <a href="#" id="changepass" class="text-sm text-gray-500 hover:text-[#a000ff]">Đổi mật khẩu</a>
+                    </div>
+                    <script>
+                        document.getElementById('changepass').addEventListener('click', function (e) {
+                            e.preventDefault();
+
+                            Swal.fire({
+                                title: 'Xác nhận thay đổi?',
+                                text: "Bạn sẽ cần phải đăng nhập lại với mật khẩu mới!",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Tiếp tục',
+                                cancelButtonText: 'Hủy',
+                                reverseButtons: true
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "{{ route('changepass') }}"; 
+                                } else {
+                                    Swal.close();
+                                }
+                            });
+                        });
+                    </script>
                     <div class="flex justify-center mt-4">
                         <button type="submit" class="bg-[#a000ff] text-white font-bold px-5 py-2 rounded-md border border-[#a000ff] hover:bg-white hover:text-[#a000ff] hover:!text-[#a000ff] hover:border-[#a000ff] hover:border-![#a000ff]">
                             Lưu

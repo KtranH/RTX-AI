@@ -157,10 +157,10 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 relative border-t">
                 <div class="flex justify-center space-x-4 mt-[-20px]">
                     <button id="saved" onclick="ActivateTab('saved')" class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
-                        Saved
+                        Ảnh tải lên
                     </button>
                     <button id="created" onclick="ActivateTab('created')" class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
-                        Created
+                        Ảnh AI
                     </button>
                 </div>
             </div>

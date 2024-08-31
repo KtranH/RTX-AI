@@ -39,6 +39,10 @@ class Board extends Controller
         $album = Album::find($id);  
         return view('User.Board.EditAlbum', compact('album'));
     }
+    public function UpdateAlbum(Request $request)
+    {
+        
+    }
     public function AddAlbum(Request $request)
     {
         $request->validate([
@@ -82,6 +86,7 @@ class Board extends Controller
 
         return redirect()->route("showboard");
     }
+
     private function find_id()
     {
         $email = request()->cookie("token_account");

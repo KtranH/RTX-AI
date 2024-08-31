@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
@@ -184,5 +185,16 @@ class Account extends Controller
         {
             return redirect()->route('showlogin');
         }
+    }
+    public function ConfirmChangePass()
+    {
+        //This function is used to check the password change confirmation interface
+        return view("User.Account.ConfirmChangePass");
+    }
+    public function ChangePass()
+    {
+        $email = Cookie::get("token_account");
+        Session::put("CodeRestPass",$email);
+        return redirect()->route("sendcodetoemail");
     }
 }

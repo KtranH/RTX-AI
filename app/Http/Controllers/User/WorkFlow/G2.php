@@ -23,6 +23,8 @@ class G2 extends Controller
      {
         ini_set("max_execution_time",3600);
 
+        $Email = Cookie::get("token_account");
+
         $request->validate(['input' => 'image|mimes:jpg,jpeg,png|max:4048',],
         ['input.max' => 'Dung lượng file không được vượt quá 4MB.',]);
 
@@ -81,7 +83,9 @@ class G2 extends Controller
         try 
         {
             $imageUrl = $this->get_image($process,14);
-            Session::put("url",$imageUrl);
+            $takeImageUrl = $this->UploadImageR2($imageUrl);
+            $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
+            Session::put("url",$url);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
             return $this->ImageG(2);

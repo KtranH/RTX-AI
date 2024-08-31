@@ -5,14 +5,19 @@ namespace App;
 use App\Models\User;
 use App\Models\WorkFlow;
 use GuzzleHttp\Client;
+use Illuminate\Session\Store;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
 trait AI_Create_Image
 {
     //
+    private $urlR2 = 'https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/';
     private $check_text = ' are these words SENSITIVE or OBSCENE? Just answer YES or NO.';
     private $url = 'http://127.0.0.1:8188/prompt';
     private $url2 = 'http://192.168.1.10:8188/prompt';
@@ -84,7 +89,7 @@ trait AI_Create_Image
             }
             else
             {
-                break;
+                return null;
             }
             sleep(2);
         }
@@ -175,6 +180,20 @@ trait AI_Create_Image
             $model = "Anime Enhancer XL_v5.safetensors";
         } 
         return $model;
+    }
+    private function UploadImageR2($urlImage)
+    {
+        $response = Http::get($urlImage);
+        $Email = Cookie::get("token_account");
+        $timestamp = Carbon::now()->format('H-i-s');  
+
+        $pathInR2 = "AIimages/{$Email}/{$timestamp}.png";
+
+        if ($response->successful()) {
+            Storage::disk('r2')->put($pathInR2, $response->body());
+            return "{$timestamp}.png";
+        }
+        return null;
     }
     /*public function stopQueue()
     {

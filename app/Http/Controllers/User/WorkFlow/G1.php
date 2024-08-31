@@ -6,6 +6,7 @@ use App\AI_Create_Image;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 
@@ -21,6 +22,8 @@ class G1 extends Controller
     {
         ini_set("max_execution_time",3600);
         
+        $Email = Cookie::get("token_account");
+
         $prompt = $request->input("prompt");
         $seed = $request->input("seed");
         $model = $request->input("model");
@@ -54,7 +57,9 @@ class G1 extends Controller
         try 
         {
             $imageUrl = $this->get_image($process,19);
-            Session::put("url",$imageUrl);
+            $takeImageUrl = $this->UploadImageR2($imageUrl);
+            $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
+            Session::put("url",$url);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
             return $this->ImageG(1);

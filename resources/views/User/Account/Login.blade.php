@@ -13,6 +13,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
   <!-- Link Icons -->
 
   <!-- Google Fonts -->
@@ -24,6 +26,7 @@
   <link rel="stylesheet" href="{{url('assets/css/login.css')}}">
   <link rel="stylesheet" href="{{url('assets/css/side_img.css')}}">
   <!-- JS Files -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <style>
     .form_container {
     width: fit-content;
@@ -219,8 +222,8 @@
   </style>
 </head>
 <body style="display:flex;flex-wrap:wrap">
-  <img src="/assets/img/left_login.png" alt="">
-  <form class="form_container" style="margin:5% auto auto auto;" method="POST" action="{{ route("loginaccount") }}">
+  <img src="/assets/img/left_login.png" alt="" data-aos="flip-right">
+  <form class="form_container" style="margin:5% auto auto auto;" method="POST" action="{{ route("loginaccount") }}" data-aos="zoom-in-up">
     @csrf
     <div class="logo_container">
       <a href="{{route("showhome")}}">
@@ -277,5 +280,13 @@
     </a>
     <a href="{{route("showsignup")}}" class="note">Bạn chưa có tài khoản? Đăng ký ở đây.</a>
 </form>
+<script>
+  AOS.init({
+    duration: 1000, 
+    deplay:800,
+    once: false,
+    offset: 200, 
+  });
+</script>      
 </body>
 </html>

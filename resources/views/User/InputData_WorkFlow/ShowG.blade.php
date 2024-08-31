@@ -13,7 +13,7 @@
                             @if ($url == null)
                                 <img src="/images/loading.gif" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." class="h-full w-full object-cover object-center">
                             @else
-                                <img src="{{ $url }}" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." style="width:400px;border-radius:10px">
+                                <img src="{{ $url }}" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." style="width:400px;border-radius:10px" class="object-cover object-center">
                             @endif
                             <style>
                                 .responsive-div 

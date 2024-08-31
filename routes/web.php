@@ -106,6 +106,12 @@ Route::post('/addimage2album/{id}', [Image::class, 'AddImage2Album'])->name("add
 //Access image page
 Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
 
+//Confirm change password
+Route::get('/confirmpassword', [Account::class, 'ConfirmChangePass'])->name("confirmchangepass");
+
+//Change passsword
+Route::get('/changepassword', [Account::class, 'ChangePass'])->name("changepass");
+
 //Show G1
 Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
 
