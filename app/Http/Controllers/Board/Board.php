@@ -27,8 +27,9 @@ class Board extends Controller
     public function ShowAlbum($id)
     {
         $album = Album::find($id);
+        $user = $album->user;
         $photo = Photo::where("album_id",$album->id)->paginate(8);
-        return view('User.Board.Album', compact('album','photo'));
+        return view('User.Board.Album', compact('album','photo','user'));
     }
     public function CreateAlbum()
     {

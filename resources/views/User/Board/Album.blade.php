@@ -24,6 +24,10 @@
                         <div class="font-semibold text-xl text-gray-500">
                             {{ $album->description }}
                         </div>
+                        <div class="font-semibold text-xl text-gray-500 flex mt-4 cursor-pointer">
+                            <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $user->avatar_url }}" alt="">
+                            <p class="hover:text-[#a000ff] font-semibold">{{ $user->username }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,7 +63,7 @@
                                         <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                         </a>
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                        <a href="{{ route("editimage", ['id' => $x->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                         </a>
                                         <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">

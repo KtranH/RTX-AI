@@ -35,6 +35,15 @@ class Image extends Controller
         $Id = $id;
         return view("User.Image.CreateImage", compact("Category","Id"));
     }
+
+    public function EditImage($id)
+    {
+        $category = Category::all();
+        $image = Photo::find($id);
+        $album = $image->album;
+        return view("User.Image.EditImage", compact("image","album","category"));
+    }
+
     public function AddImage2Album(Request $request, $id)
     {
         $request->validate([

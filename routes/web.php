@@ -112,6 +112,17 @@ Route::get('/confirmpassword', [Account::class, 'ConfirmChangePass'])->name("con
 //Change passsword
 Route::get('/changepassword', [Account::class, 'ChangePass'])->name("changepass");
 
+//Access image page
+Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
+
+//Change theme
+Route::post('/save-theme', function (Illuminate\Http\Request $request) {
+    $theme = $request->input('theme');
+    Session::put('theme', $theme);
+
+    return response()->json(['status' => 'success']);
+});
+
 //Show G1
 Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
 
