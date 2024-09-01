@@ -3,10 +3,10 @@
 
     <title>RTX-AI: Hình Ảnh</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <main class="w-full h-full">
+    <main class="w-full h-full" style="margin-bottom:10%">
         <!-- Image -->
         <div class="flex items-center justify-center">
-            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 bg-gray-100 rounded-lg shadow-md p-5">
+            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 shadow-md p-5"  style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
                 <div class="grid grid-cols-12 gap-4">
                     <!-- Image -->
                     <div class="col-span-6 row-span-1 aspect-square">
@@ -15,6 +15,33 @@
                     <!-- Details -->
                     <div class="col-span-6 row-span-1 flex flex-col">
                         <!-- Title and Description -->
+                        <a
+                            href="javascript:history.back()"
+                            class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group"
+                            style="margin-bottom:10px"
+                            >
+                            <div
+                                class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
+                                style="border-radius: 30px;"
+                            >
+                                <svg
+                                width="25px"
+                                height="25px"
+                                viewBox="0 0 1024 1024"
+                                xmlns="http://www.w3.org/2000/svg"
+                                >
+                                <path
+                                    fill="#ffffff"
+                                    d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
+                                ></path>
+                                <path
+                                    fill="#ffffff"
+                                    d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
+                                ></path>
+                                </svg>
+                            </div>
+                            <p class="translate-x-2" style="margin-top:12px">Quay lại</p>
+                        </a>
                         <div class="mb-4">
                             <h1 class="text-4xl font-bold">{{ $image->title }}</h1>
                             <p class="text-lg text-gray-600">{{ $image->description }}</p>

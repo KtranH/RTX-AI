@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\AI_Create_Image;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
@@ -12,11 +13,13 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
 
 class Account extends Controller
 {
     //
+    use AI_Create_Image;
     public function ShowLogin()
     {
         return view("User.Account.Login");
@@ -196,5 +199,47 @@ class Account extends Controller
         $email = Cookie::get("token_account");
         Session::put("CodeRestPass",$email);
         return redirect()->route("sendcodetoemail");
+    }
+    public function UpdateAccount(Request $request)
+    {
+        $Email = Cookie::get("token_account");
+        $request->validate([
+            'avatar_url' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4048',
+            'username' => 'required|string|max:255',
+        ],[
+            'avatar_url.image' => 'Ảnh đại diện phải là ảnh',
+            'avatar_url.mimes' => 'Ảnh đại diện phải là ảnh',
+            'avatar_url.max' => 'Ảnh đại diện phải nhỏ hơn 4MB',
+            'username.required' => 'Tên người dùng không được để trống',
+            'username.string' => 'Tên người dùng phải là chuỗi',
+            'username.max' => 'Tên người dùng không được quá 255 ký tự',
+        ]);
+        $name = $request->input("username");
+        try 
+        {
+            $image = $request->file("avatar_url");
+            if ($image) 
+            {
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                Storage::disk('r2')->put("AvatarUser/" . $Email . "/" .  $filename, file_get_contents($image));
+            }
+            $user = User::where("email", $Email)->first();
+            if($user)
+            {
+                $user->username = $name;
+                $user->avatar_url = $this->urlR2 . "AvatarUser/" . $Email . "/" .  $filename;
+                $user->save();
+            }
+        }
+        catch(Exception $error)
+        {
+            $user = User::where("email", $Email)->first();
+            if($user)
+            {
+                $user->username = $name;
+                $user->save();
+            }
+        }
+        return redirect()->route("showaccount");
     }
 }

@@ -26,7 +26,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-span-8 row-span-1 p-4 bg-gray-100 rounded-lg shadow-md">
+                    <div class="col-span-8 row-span-1 p-4 shadow-md"  style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px" >
                         <div class="mb-4">
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
                             <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm" placeholder="Nhập tiêu đề" required>

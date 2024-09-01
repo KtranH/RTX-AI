@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Board;
 
+use App\AI_Create_Image;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
 use App\Models\Photo;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Board extends Controller
 {
+    use AI_Create_Image;
     public function ShowBoard()
     {
         $cookie = request()->cookie("token_account");
@@ -40,9 +42,72 @@ class Board extends Controller
         $album = Album::find($id);  
         return view('User.Board.EditAlbum', compact('album'));
     }
-    public function UpdateAlbum(Request $request)
+    public function UpdateAlbum(Request $request, $id)
     {
-        
+        $Email = Cookie::get("token_account");
+        $request->validate([
+            'title' => 'max:255',
+            'description' => 'max:255',
+            'cover' => 'image|max:4096',
+        ],
+        [
+            'title.max' => 'Tiêu đề không được quá 255 ký tự',
+            'description.max' => 'Mô tả không được quá 255 ký tự',
+            'cover.image' => 'Ảnh phải là ảnh',
+            'cover.max' => 'Dung lượng ảnh không được vượt quá 4MB',
+        ]);
+        $title = $request->input('title');
+        $description = $request->input('description');
+        $private = $request->input('private');
+        $image = $request->file('cover');
+
+        $album = Album::find($id);
+
+        if($image && $title && $description)
+        {
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            Storage::disk('r2')->put("albums/" . $Email . "/" . "ImageCoverAlbum/" . $filename, file_get_contents($image));
+            $album->title = $title;
+            $album->description = $description;
+            $album->cover_image = $this->urlR2 . "albums/" . $Email . "/" . "ImageCoverAlbum/" . $filename; 
+        }
+        else if($title)
+        {
+            $album->title = $title;
+        }
+        else if($description)
+        {
+            $album->description = $description;
+        }
+        else if($image)
+        {
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            Storage::disk('r2')->put("albums/" . $Email . "/" . "ImageCoverAlbum/" . $filename, file_get_contents($image));
+            $album->cover_image = $this->urlR2 . "albums/" . $Email . "/" . "ImageCoverAlbum/" . $filename; 
+        }
+        if($private)
+        {
+            $album->is_private = 1;
+        }
+        else
+        {
+            $album->is_private = 0;
+        }
+        $album->save();
+        return redirect()->route("showboard");
+    }
+    public function DeleteAlbum($id)
+    {
+        $album = Album::find($id);
+        foreach($album->photos as $x)
+        {
+            $urlRemove = str_replace("https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/","",$x->url);
+            Storage::disk('r2')->delete($urlRemove);
+        }
+        $urlRemove = str_replace("https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/","",$album->cover_image);
+        Storage::disk('r2')->delete($urlRemove);
+        $album->delete();
+        return redirect()->route("showboard");
     }
     public function AddAlbum(Request $request)
     {

@@ -25,7 +25,7 @@
 <main class="container">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <!-- Logo -->
-        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+        <a href="/" class="d-flex align-items-center col-md-4 mb-2 mb-md-0 text-dark text-decoration-none">
             <img src="/assets/img/icon.png" alt="" style="width:40px;margin-right:10px">
             <h1 style="font-size: 30px; font-weight:bold"> RTX-AI </h1>
         </a>
@@ -45,7 +45,7 @@
                 $user = \App\Models\User::where('email', $cookie)->first();
             @endphp
             @if($user)
-            <div class="col-md-3 flex justify-end items-center space-x-3">
+            <div class="col-md-4 flex justify-end items-center space-x-3">
                 <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="{{ $user->avatar_url }}" alt="">
                 <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-bold">{{ $user->username }}</a>
                 <div class="relative">

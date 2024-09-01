@@ -13,7 +13,9 @@ use App\Http\Middleware\ThrottleRequests;
 use App\Models\WorkFlow;
 use App\Http\Controllers\Board\Board;
 use App\Http\Controllers\Image\Image;
+use App\Http\Middleware\LimitUpdateAccountAccess;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 Route::get('/ai', function () {
     return view('generate_image');
@@ -100,6 +102,12 @@ Route::get('/create_image/{id}', [Image::class, 'CreateImage'])->name("createima
 //Add new album
 Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
 
+//Update album
+Route::post('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum");
+
+//Delete album
+Route::get('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
+
 //Add new image to album
 Route::post('/addimage2album/{id}', [Image::class, 'AddImage2Album'])->name("addimage2album");
 
@@ -114,6 +122,9 @@ Route::get('/changepassword', [Account::class, 'ChangePass'])->name("changepass"
 
 //Access image page
 Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
+
+//Update account
+Route::post('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
 
 //Change theme
 Route::post('/save-theme', function (Illuminate\Http\Request $request) {

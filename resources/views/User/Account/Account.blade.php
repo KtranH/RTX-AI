@@ -27,24 +27,31 @@
         <!-- Form -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-9xl lg:px-16">
-                <form class="bg-gray-100 rounded-lg shadow-md p-4">
+                <form class="shadow-md p-4" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px;margin-bottom:10%" action="{{ route('updateaccount') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <label for="avatar-cover" class="block text-xl font-medium mb-1 text-center">Ảnh Đại Diện</label>
                     <div class="flex justify-center mb-4">
                         <div class="aspect-square relative group w-40 h-40">
-                            <img id="avatar-cover" src="{{ $account->avatar_url }}" alt="Avatar Cover" class="w-full h-full object-cover rounded-lg">
+                            <img id="avatar-cover" name="avatar_url" src="{{ $account->avatar_url }}" alt="Avatar Cover" class="w-full h-full object-cover rounded-lg">
                             <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                                 <i class="fas fa-upload text-gray-700 text-3xl"></i>
                             </label>
-                            <input type="file" id="cover" class="absolute inset-0 opacity-0 cursor-pointer">
+                            <input type="file" id="cover" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror">
+                            @error('cover')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="mb-4">
                         <label for="username" class="block text-xl font-medium mb-1">Tên Người Dùng</label>
-                        <input type="text" id="username" name="username" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm" value="{{ $account->username }}">
+                        <input type="text" id="username" name="username" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('username') is-invalid @enderror" placeholder="{{ $account->username }}" required>
+                        @error('username')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="mb-4">
                         <label for="email" class="block text-xl font-medium mb-1">Email</label>
-                        <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm" value="{{ $account->email }}">
+                        <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm" value="{{ $account->email }}" readonly>
                     </div>
                     <div class="mb-4">
                         <label for="password" class="block text-xl font-medium mb-1">Mật Khẩu</label>
@@ -75,9 +82,45 @@
                         });
                     </script>
                     <div class="flex justify-center mt-4">
-                        <button type="submit" class="bg-[#a000ff] text-white font-bold px-5 py-2 rounded-md border border-[#a000ff] hover:bg-white hover:text-[#a000ff] hover:!text-[#a000ff] hover:border-[#a000ff] hover:border-![#a000ff]">
+                        <button type="submit" id="updateAccount" class="bg-indigo-600 text-white font-bold px-5 py-2 rounded-md border border-[#a000ff] hover:bg-black hover:text-black hover:!text-white hover:border-[#a000ff] hover:border-![#a000ff]">
                             Lưu
                         </button>
+                        @if(Session::has('Manytimes'))
+                            <script>
+                                Swal.fire({
+                                    title: 'Thông báo',
+                                    text: "Bạn chỉ có thể cập nhật tài khoản 1 lần trong 1 tuần.",
+                                    icon: 'warning',
+                                    showCancelButton: false,
+                                })
+                            </script>
+                        @endif
+                        <script>
+                            document.getElementById('updateAccount').addEventListener('click', function (e) {
+                                e.preventDefault(); 
+
+                                Swal.fire({
+                                    title: 'Xác nhận thay đổi?',
+                                    text: "Bạn có muốn lưu thay đổi không?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Tiếp tục',
+                                    cancelButtonText: 'Hủy',
+                                    reverseButtons: true
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.querySelector('form').submit(); 
+                                    } else {
+                                        Swal.close();
+                                    }
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div style="text-align:center;margin-top:10px">
+                        @if (Session::has('Manytimes'))
+                            <p style="color:red">Bạn chỉ có thể cập nhật tài khoản 1 lần trong 1 tuần.</p>
+                        @endif
                     </div>
                 </form>
             </div>

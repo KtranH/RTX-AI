@@ -2,7 +2,7 @@
 @section('Body')
     <title>RTX-AI: Tạo Hình Ảnh</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <main class="w-full h-full">
+    <main class="w-full h-full" style="margin-bottom:10%">
         <!-- Title -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 text-center">
@@ -25,7 +25,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-span-8 row-span-1 p-4 bg-gray-100 rounded-lg shadow-md">
+                    <div class="col-span-8 row-span-1 p-4 shadow-md"  style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
                         <div class="mb-4">
                             <label for="album" class="block text-xl font-medium mb-1">Album</label>
                             <div class="relative">
