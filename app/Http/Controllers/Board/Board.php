@@ -20,20 +20,36 @@ class Board extends Controller
 {
     use AI_Create_Image;
     use FindInformation;
+    public function FeatureImage($id)
+    {
+        $photo = Photo::find($id);
+        if($photo->is_feature == true)
+        {
+            $photo->is_feature = false;
+        }
+        else
+        {
+            $photo->is_feature = true;
+        }
+        $photo->save();
+        return redirect()->back();
+    }
     public function ShowBoard()
     {
         $cookie = request()->cookie("token_account");
         $tab = request()->query('tab', 'saved');
-        $photos = DB::table('users')->join('albums','users.id', '=' , 'albums.user_id')->join('photos','albums.id','=','photos.album_id')->where('users.id',$this->find_id())->paginate(8);
+        $photos = DB::table('users')->join('albums','users.id', '=' , 'albums.user_id')->join('photos','albums.id','=','photos.album_id')->where('users.id',$this->find_id())->paginate(12);
         $albums = Album::where('user_id',$this->find_id())->paginate(8);
-        return view('User.Board.Board', ['tab' => $tab], compact('photos','albums'));
+        $feature = Photo::where("is_feature",true)->get();
+        return view('User.Board.Board', ['tab' => $tab], compact('photos','albums','feature'));
     }
     public function ShowAlbum($id)
     {
         $album = Album::find($id);
         $user = $album->user;
         $photo = Photo::where("album_id",$album->id)->paginate(8);
-        return view('User.Board.Album', compact('album','photo','user'));
+        $countPhoto = Photo::where("album_id",$album->id)->count();
+        return view('User.Board.Album', compact('album','photo','user','countPhoto'));
     }
     public function CreateAlbum()
     {

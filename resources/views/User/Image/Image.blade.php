@@ -3,7 +3,6 @@
 
     <title>RTX-AI: Hình Ảnh</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <main class="w-full h-full">
         <!-- Container -->
         <div class="flex flex-col items-center">
