@@ -10,7 +10,7 @@
                 <div class="grid grid-cols-12 gap-4">
                     <!-- Image -->
                     <div class="col-span-6 row-span-1 aspect-square">
-                        <img src="{{ $image->url }}" alt="Image Cover" class="w-full h-full object-cover">
+                        <img src="{{ $image->url }}" style="border-radius:30px" alt="Image Cover" class="w-full h-full object-cover">
                     </div>
                     <!-- Details -->
                     <div class="col-span-6 row-span-1 flex flex-col">

@@ -17,7 +17,7 @@
                 <form class="grid grid-cols-12 gap-4" id="albumform" method="POST" action="{{ route("addalbum") }}" enctype="multipart/form-data">
                     @csrf
                     <div class="col-span-4 row-span-1 aspect-square relative group">
-                        <img id="album-cover" src="/images/image.png" alt="Album Cover" style="border-radius:10px" class="w-full h-full object-cover rounded-lg">
+                        <img id="album-cover" src="/images/image.png" alt="Album Cover" style="border-radius:30px; border:4px solid#B197FC" class="w-full h-full object-cover rounded-lg">
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>

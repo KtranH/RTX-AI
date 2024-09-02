@@ -121,6 +121,9 @@ Route::post('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateima
 //Delete image
 Route::get('/deleteimage/{id}', [Image::class, 'DeleteImage'])->name("deleteimage");
 
+//Set feature image
+Route::get('/featureimage/{id}', [Board::class, 'FeatureImage'])->name("featureimage");
+
 //Confirm change password
 Route::get('/confirmpassword', [Account::class, 'ConfirmChangePass'])->name("confirmchangepass");
 
