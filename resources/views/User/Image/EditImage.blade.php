@@ -1,8 +1,10 @@
 @extends('User.Container')
 @section('Body')
+
     <title>RTX-AI: Tạo Hình Ảnh</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <main class="w-full h-full" style="margin-bottom:10%">
+
+    <main class="w-full h-full">
         <!-- Title -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 text-center">
@@ -11,38 +13,27 @@
             </div>
         </div>
         <!-- Form -->
-        <div class="flex items-center justify-center mb-5">
-            <a
-                href="{{ route('showimage', ['id' => $image->id]) }}"
-                class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group"
-                >
-                <div
-                    class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
-                    style="border-radius: 30px;"
-                >
-                    <svg
-                    width="25px"
-                    height="25px"
-                    viewBox="0 0 1024 1024"
-                    xmlns="http://www.w3.org/2000/svg"
-                    >
-                    <path
-                        fill="#ffffff"
-                        d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
-                    ></path>
-                    <path
-                        fill="#ffffff"
-                        d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
-                    ></path>
-                    </svg>
-                </div>
-                <p class="translate-x-2" style="margin-top:12px">Quay lại</p>
-            </a>
+        <div class="flex items-center justify-center mb-4">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
-                <form class="grid grid-cols-12 gap-4" id="editimageform" method="POST" action="{{ route('updateimage', $image->id) }}" enctype="multipart/form-data">
+                <form class="grid grid-cols-1 md:grid-cols-12 gap-4" id="editimageform" method="POST" action="{{ route('updateimage', $image->id) }}" enctype="multipart/form-data">
                     @csrf
-                    <div class="col-span-4 row-span-1 aspect-square relative group">
-                        <img id="image-cover" src="{{ $image->url }}" style="border-radius:30px" alt="Image Cover" class="w-full h-full object-cover">
+                    <!-- Return -->
+                    <div class="col-span-1 md:col-span-12">
+                        <div class="flex justify-center">
+                            <a href="{{ route('showimage', ['id' => $image->id]) }}" class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group">
+                                <div class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500 rounded-2xl">
+                                    <svg width="25px" height="25px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill="#ffffff" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
+                                        <path fill="#ffffff" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path>
+                                    </svg>
+                                </div>
+                                <p class="translate-x-2" style="margin-top:12px">Quay lại</p>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Image -->
+                    <div class="col-span-1 md:col-span-4 row-span-1 aspect-square relative group">
+                        <img id="image-cover" src="{{ $image->url }}" style="border-radius:10px" alt="Image Cover" class="w-full h-full object-cover">
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>
@@ -51,7 +42,8 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-span-8 row-span-1 p-4 shadow-md"  style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
+                    <!-- Data -->
+                    <div class="col-span-1 md:col-span-8 row-span-1 p-4 shadow-md" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; border-radius:20px">
                         <div class="mb-4">
                             <label for="album" class="block text-xl font-medium mb-1">Album</label>
                             <div class="relative">
@@ -91,7 +83,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                         <script>
+                        <script>
                             var input = document.querySelector('input[name=categories]');
                             var tagify = new Tagify(input, {
                                 whitelist: @json($category->pluck('name')->toArray()),
@@ -119,11 +111,7 @@
                         </div>
                         @if(Session::has('Manytimes'))
                             <script>
-                                Swal.fire({
-                                    title: 'Thông báo',
-                                    text: "Bạn chỉ có thể cập nhật nội dung 2 lần trong 1 tuần.",
-                                    icon: 'warning',
-                                    showCancelButton: false,
+                                Swal.fire({ title: 'Thông báo', text: "Bạn chỉ có thể cập nhật nội dung 2 lần trong 1 tuần.", icon: 'warning', showCancelButton: false,
                                 });
                             </script>
                             <div class="flex justify-center mt-4">
@@ -131,52 +119,26 @@
                             </div>
                         @endif
                         <script>
-                            document.getElementById('delete').addEventListener('click', function (e) {
-                           e.preventDefault();
-
-                           Swal.fire({
-                               title: 'Chắc chắn xóa ảnh?',
-                               text: "Ảnh sẽ bị xóa và không thể khôi phục!",
-                               icon: 'warning',
-                               showCancelButton: true,
-                               confirmButtonText: 'Tiếp tục',
-                               cancelButtonText: 'Hủy',
-                               reverseButtons: true
-                           }).then((result) => {
-                               if (result.isConfirmed) {
-                                   window.location.href = "{{ route('deleteimage', $image->id) }}"; 
-                               } else {
-                                   Swal.close();
-                               }
-                           });
-                       });
-                       </script>
-                        <script>
-                            document.getElementById('editimageform').addEventListener('submit', function() {
-                                var submitButton = document.getElementById('edit');
-                                submitButton.disabled = true; 
-                                submitButton.innerText = 'Đang thực hiện...'; 
+                            document.getElementById('delete').addEventListener('click', function(event) {
+                                event.preventDefault(); 
+                                Swal.fire({ title: 'Bạn có chắc chắn muốn xóa ảnh này không?', text: "Bạn sẽ không thể khôi phục lại hình ảnh đã xóa!", icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Có, xóa ảnh!', cancelButtonText: 'Hủy bỏ'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        Swal.fire(
+                                            'Đã xóa!',
+                                            'Ảnh của bạn đã được xóa.',
+                                            'success'
+                                        );
+                                        document.getElementById('editimageform').action = "{{ route('deleteimage', $image->id) }}";
+                                        document.getElementById('editimageform').submit();
+                                    }
+                                });
                             });
-                        </script>   
+                        </script>
                     </div>
                 </form>
             </div>
         </div>
-        <script>
-            document.getElementById('cover').addEventListener('change', function(event) 
-            {
-                const file = event.target.files[0];
-                if (file) 
-                {
-                    const reader = new FileReader();
-                    reader.onload = function(e) 
-                    {
-                        document.getElementById('image-cover').src = e.target.result;
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        </script>
     </main>
 
 @endsection

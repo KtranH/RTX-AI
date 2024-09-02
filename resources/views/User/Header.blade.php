@@ -48,9 +48,10 @@
             <div class="col-md-4 flex justify-end items-center space-x-3">
                 <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="{{ $user->avatar_url }}" alt="">
                 <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-bold">{{ $user->username }}</a>
+                <!-- Notification -->
                 <div class="relative">
                     <i class="fas fa-bell cursor-pointer" onclick="toggleBox('notificationBox', 'settingBox')"></i>
-                    <div id="notificationBox" class="hidden absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-80 bg-white border rounded-lg shadow-lg p-4 z-100">
+                    <div id="notificationBox" class="hidden absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-80 bg-white border rounded-lg shadow-lg p-4 z-[9999]">
                         <div class="max-h-64 overflow-y-auto">
                             <ul>
                                 @for ($i = 0; $i <= 5; $i++)
@@ -65,9 +66,10 @@
                         </div>
                     </div>
                 </div>
+                <!-- Settings -->
                 <div class="relative">
                     <i class="fas fa-cog cursor-pointer" onclick="toggleBox('settingBox', 'notificationBox')"></i>
-                    <div id="settingBox" class="hidden absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-80 bg-white border rounded-lg shadow-lg p-4 z-100">
+                    <div id="settingBox" class="hidden absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-80 bg-white border rounded-lg shadow-lg p-4 z-[9999]">
                         <h3 class="text-lg font-semibold mb-3">Select Theme</h3>
                         <select id="themeSelect" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] sm:text-sm" onchange="changeTheme()">
                             <option value="theme-default" {{ session('theme') == 'theme-default' ? 'selected' : '' }}>Default Theme</option>

@@ -3,7 +3,8 @@
 
     <title>RTX-AI: Tạo Album</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <main class="w-full h-full" style="margin-bottom:10%">
+
+    <main class="w-full h-full">
         <!-- Title -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 text-center">
@@ -11,13 +12,26 @@
                 <div class="text-gray-500">Thỏa Sức Sáng Tạo - Truyền Đầy Cảm Hứng</div>
             </div>
         </div>
+        <!-- Return -->
+        <div class="flex justify-center">
+            <a href="{{ route('showboard') }}" class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group">
+                <div class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500 rounded-2xl">
+                    <svg width="25px" height="25px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#ffffff" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
+                        <path fill="#ffffff" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path>
+                    </svg>
+                </div>
+                <p class="translate-x-2" style="margin-top:12px">Quay lại</p>
+            </a>
+        </div>
         <!-- Form -->
         <div class="flex items-center justify-center mb-5">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
-                <form class="grid grid-cols-12 gap-4" id="albumform" method="POST" action="{{ route("addalbum") }}" enctype="multipart/form-data">
+                <form class="grid grid-cols-12 gap-4" id="albumform" method="POST" action="{{ route('addalbum') }}" enctype="multipart/form-data">
                     @csrf
-                    <div class="col-span-4 row-span-1 aspect-square relative group">
-                        <img id="album-cover" src="/images/image.png" alt="Album Cover" style="border-radius:30px; border:4px solid#B197FC" class="w-full h-full object-cover rounded-lg">
+                    <!-- Cover -->
+                    <div class="col-span-12 md:col-span-4 md:row-span-1 aspect-square relative group mb-4 md:mb-0">
+                        <img id="album-cover" src="/images/image.png" alt="Album Cover" style="border-radius:10px" class="w-full h-full object-cover rounded-lg">
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>
@@ -26,7 +40,8 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-span-8 row-span-1 p-4 shadow-md" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
+                    <!-- Data -->
+                    <div class="col-span-12 md:col-span-8 row-span-1 p-4 shadow-md" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
                         <div class="mb-4">
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
                             <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm" placeholder="Nhập tiêu đề" required>
