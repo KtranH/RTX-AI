@@ -16,9 +16,9 @@
                     <div class="col-span-6 row-span-1 flex flex-col">
                         <!-- Title and Description -->
                         <a
-                            href="javascript:history.back()"
+                            href="{{ route('showalbum', ['id' => $image->album_id]) }}"
                             class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group"
-                            style="margin-bottom:10px"
+                            style="margin-bottom:20px"
                             >
                             <div
                                 class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
@@ -44,7 +44,12 @@
                         </a>
                         <div class="mb-4">
                             <h1 class="text-4xl font-bold">{{ $image->title }}</h1>
-                            <p class="text-lg text-gray-600">{{ $image->description }}</p>
+                            <p class="text-lg text-gray-600" style="margin-bottom:10px">{{ $image->description }}</p>
+                            <div style="display:flex;flex-wrap:wrap;gap:10px">
+                                @foreach ($listcate as $item)
+                                    <a href="#" style="background-color:gray;color:white;padding:5px;border-radius:10px;" class="text-sm text-gray-600">{{ $item->name }}</a>
+                                @endforeach
+                            </div>
                         </div>
                         <!-- Owner -->
                         <div class="flex items-center space-x-4 mb-4">
@@ -62,12 +67,33 @@
                             <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                 <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
                             </a>
-                            <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                            <a href="{{ route('editimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                 <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
                             </a>
-                            <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                            <a href="{{ route('deleteimage', $image->id) }}" id="delete" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                 <i class="fas fa-trash text-gray-700 text-xl hover:text-[#a000ff]"></i>
                             </a>
+                            <script>
+                                document.getElementById('delete').addEventListener('click', function (e) {
+                               e.preventDefault();
+    
+                               Swal.fire({
+                                   title: 'Chắc chắn xóa ảnh?',
+                                   text: "Ảnh sẽ bị xóa và không thể khôi phục!",
+                                   icon: 'warning',
+                                   showCancelButton: true,
+                                   confirmButtonText: 'Tiếp tục',
+                                   cancelButtonText: 'Hủy',
+                                   reverseButtons: true
+                               }).then((result) => {
+                                   if (result.isConfirmed) {
+                                       window.location.href = "{{ route('deleteimage', $image->id) }}"; 
+                                   } else {
+                                       Swal.close();
+                                   }
+                               });
+                           });
+                           </script>
                         </div>
                         <!-- Comment -->
                         <div class="flex flex-col mt-auto">

@@ -13,6 +13,7 @@ use App\Http\Middleware\ThrottleRequests;
 use App\Models\WorkFlow;
 use App\Http\Controllers\Board\Board;
 use App\Http\Controllers\Image\Image;
+use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitUpdateAccountAccess;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -103,7 +104,7 @@ Route::get('/create_image/{id}', [Image::class, 'CreateImage'])->name("createima
 Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
 
 //Update album
-Route::post('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum");
+Route::post('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
 
 //Delete album
 Route::get('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
@@ -113,6 +114,12 @@ Route::post('/addimage2album/{id}', [Image::class, 'AddImage2Album'])->name("add
 
 //Access image page
 Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
+
+//Update image
+Route::post('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateimage")->middleware(LimitContentUpdate::class);
+
+//Delete image
+Route::get('/deleteimage/{id}', [Image::class, 'DeleteImage'])->name("deleteimage");
 
 //Confirm change password
 Route::get('/confirmpassword', [Account::class, 'ConfirmChangePass'])->name("confirmchangepass");

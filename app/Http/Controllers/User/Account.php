@@ -206,40 +206,25 @@ class Account extends Controller
         $request->validate([
             'avatar_url' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4048',
             'username' => 'required|string|max:255',
-        ],[
+        ], [
             'avatar_url.image' => 'Ảnh đại diện phải là ảnh',
-            'avatar_url.mimes' => 'Ảnh đại diện phải là ảnh',
             'avatar_url.max' => 'Ảnh đại diện phải nhỏ hơn 4MB',
             'username.required' => 'Tên người dùng không được để trống',
-            'username.string' => 'Tên người dùng phải là chuỗi',
             'username.max' => 'Tên người dùng không được quá 255 ký tự',
         ]);
-        $name = $request->input("username");
-        try 
-        {
-            $image = $request->file("avatar_url");
-            if ($image) 
-            {
+
+        $user = User::where("email", Cookie::get("token_account"))->first();
+        if ($user) {
+            $user->username = $request->input("username");
+            if ($image = $request->file("avatar_url")) {
                 $filename = time() . '.' . $image->getClientOriginalExtension();
-                Storage::disk('r2')->put("AvatarUser/" . $Email . "/" .  $filename, file_get_contents($image));
+                Storage::disk('r2')->put("AvatarUser/{$user->email}/{$filename}", file_get_contents($image));
+                Storage::disk('r2')->delete(str_replace($this->urlR2, "", $user->avatar_url));
+                $user->avatar_url = $this->urlR2 . "AvatarUser/{$user->email}/{$filename}";
             }
-            $user = User::where("email", $Email)->first();
-            if($user)
-            {
-                $user->username = $name;
-                $user->avatar_url = $this->urlR2 . "AvatarUser/" . $Email . "/" .  $filename;
-                $user->save();
-            }
+            $user->update(['username' => $user->username, 'avatar_url' => $user->avatar_url]);
         }
-        catch(Exception $error)
-        {
-            $user = User::where("email", $Email)->first();
-            if($user)
-            {
-                $user->username = $name;
-                $user->save();
-            }
-        }
+
         return redirect()->route("showaccount");
     }
 }

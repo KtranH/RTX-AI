@@ -97,9 +97,6 @@
                                                 <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                             </a>
                                             <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                <i class="fas fa-trash text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                            </a>
-                                            <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                                 <i class="fas fa-sort text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                             </a>
                                         </div>
