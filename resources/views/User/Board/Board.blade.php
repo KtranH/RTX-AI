@@ -15,11 +15,12 @@
     ?>
 
     <title>RTX-AI: Tài Khoản</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <main class="w-full h-full" style="margin-bottom:10%">
         <!-- Account -->
         <div class="flex items-center justify-center">
+            <div class="absolute inset-x-0 -top-5 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-5" aria-hidden="true">
+                <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+            </div>
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                 <div class="flex flex-col items-center lg:flex-row lg:items-center lg:justify-center space-y-6 lg:space-y-0 lg:space-x-6">
                     <!-- Avatar -->
@@ -121,12 +122,25 @@
                                 <div class="relative group">
                                     <a href="{{ route('showimage', ['id' => $x->id]) }}">
                                         <div class="aspect-square">
-                                            <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                            <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius:30px">
                                         </div>
                                         <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                             <div class="mt-2 text-left px-2 py-1">
                                                 <div class="font-semibold text-lg truncate group-hover:text-[#000000]">{{ $x->title }}</div>
                                                 <div class="text-sm text-gray-500 h-20 overflow-hidden">{{ $x->description }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                            <div class="flex space-x-2">
+                                                @if ($x->is_feature)
+                                                    <a href="{{ route('featureimage', ['id' => $x->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                        <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
+                                                    </a>                                                
+                                                @else
+                                                    <a href="{{ route('featureimage', ['id' => $x->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                        <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                                    </a>    
+                                                @endif
                                             </div>
                                         </div>
                                     </a>
@@ -225,14 +239,14 @@
                 <div class="font-bold text-3xl text-left">Album</div>
                 @if (!$albums)
                     <div class="mt-2 flex justify-center">
-                        <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300 w-32 h-32">
+                        <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 w-32 h-32" style="border-radius:30px">
                             <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                         </a>
                     </div>
                 @else
                     <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <div class="relative group">
-                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center rounded-lg group-hover:bg-[#a000ff] transition-colors duration-300">
+                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300" style="border-radius:30px">
                                 <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                             </a>
                         </div>
@@ -240,7 +254,7 @@
                             <div class="relative group">
                                 <a href="{{ route('showalbum', ['id' => $x->id]) }}">
                                     <div class="aspect-square">
-                                        <img src="{{ $x->cover_image }}" alt="Image 1" class="w-full h-full object-cover rounded-lg">
+                                        <img src="{{ $x->cover_image }}" alt="Image 1" class="w-full h-full object-cover" style="border-radius:30px; border:4px solid #B197FC">
                                     </div>
                                     <div class="mt-2 text-left group-hover:text-[#a000ff]">
                                         <div class="font-semibold text-lg truncate">{{ $x->title }}</div>
@@ -269,7 +283,7 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="font-bold text-3xl text-left">Thư viện</div>
                 @if (count($photos) == 0)
-                    <div class="mt-2 flex justify-center items-center">
+                    <div class="mt-2 flex items-center">
                         <div class="flex items-center">
                             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mr-4">
                                 <path d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z" fill="#6563ff"/>

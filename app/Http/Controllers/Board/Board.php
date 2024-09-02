@@ -40,10 +40,13 @@ class Board extends Controller
         $tab = request()->query('tab', 'saved');
         $photos = DB::table('users')->join('albums','users.id', '=' , 'albums.user_id')->join('photos','albums.id','=','photos.album_id')->where('users.id',$this->find_id())->paginate(12);
         $albums = Album::where('user_id',$this->find_id())->paginate(8);
-        $feature = Photo::where("is_feature",true)->get();
+        $feature = Photo::where('is_feature', true)
+            ->whereHas('album', function($query) {
+                $query->where('user_id', $this->find_id());
+            })->get();
         return view('User.Board.Board', ['tab' => $tab], compact('photos','albums','feature'));
     }
-    public function ShowAlbum($id)
+    public function ShowAlbum($id)              
     {
         $album = Album::find($id);
         $user = $album->user;

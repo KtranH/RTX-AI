@@ -4,7 +4,7 @@
     <title>RTX-AI: Chỉnh Album</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <main class="w-full h-full">
+    <main class="w-full h-full" style="margin-bottom:10%">
         <!-- Title -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 text-center">
@@ -31,7 +31,7 @@
                     @csrf
                     <!-- Cover -->
                     <div class="md:col-span-4 aspect-square relative group">
-                        <img id="album-cover" src="{{ $album->cover_image }}" alt="Album Cover" class="w-full h-full object-cover rounded-lg">
+                        <img id="album-cover" src="{{ $album->cover_image }}" alt="Album Cover" class="w-full h-full object-cover" style="border-radius:30px">
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>

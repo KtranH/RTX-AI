@@ -7,13 +7,16 @@
     <main class="w-full h-full" style="margin-bottom:10%">
         <!-- Album -->
         <div class="flex items-center justify-center">
+            <div class="absolute inset-x-0 -top-5 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-5" aria-hidden="true">
+                <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+            </div>
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:space-x-6">
                     <!-- Cover -->
                     <div class="relative text-center lg:text-left w-full lg:w-80 mb-4 lg:mb-0">
-                        <img class="w-full h-full object-cover rounded-lg" src="{{ $album->cover_image }}" alt="Album Cover">
+                        <img class="w-full h-full object-cover rounded-lg" src="{{ $album->cover_image }}" style="border-radius:30px;border:4px solid #B197FC" alt="Album Cover">
                         <div class="absolute inset-0 flex opacity-0 hover:opacity-100 hover:!opacity-100 transition-opacity duration-300">
-                            <a href="{{ route('editalbum', ['id' => $album->id]) }}" class="bg-white p-2 rounded-lg shadow-md w-full h-full border-8 border-[#a000ff] flex items-center justify-center">
+                            <a href="{{ route('editalbum', ['id' => $album->id]) }}" class="bg-white p-2 shadow-md w-full h-full border-8 border-[#a000ff] flex items-center justify-center" style="border-radius:30px">
                                 <i class="fas fa-edit text-gray-700 text-5xl"></i>
                             </a>
                         </div>
@@ -37,7 +40,7 @@
         <!-- Return -->
         <div class="flex justify-center">
             <a href="{{ route('showboard') }}" class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group">
-                <div class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500 rounded-2xl">
+                <div class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500" style="border-radius:30px">
                     <svg width="25px" height="25px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                         <path fill="#ffffff" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
                         <path fill="#ffffff" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path>
@@ -106,7 +109,7 @@
                 <div class="font-bold text-3xl text-left">Thêm Ảnh</div>
                 <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div class="relative group">
-                        <a href="{{ route('createimage', ['id' => $album->id]) }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">
+                        <a href="{{ route('createimage', ['id' => $album->id]) }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300" style="border-radius:30px">
                             <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                         </a>
                     </div>
