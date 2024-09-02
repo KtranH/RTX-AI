@@ -3,6 +3,7 @@
 
     <title>RTX-AI: Chỉnh Album</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <main class="w-full h-full">
         <!-- Title -->
         <div class="flex items-center justify-center">
@@ -11,7 +12,7 @@
                 <div class="text-gray-500">Thỏa Sức Sáng Tạo - Truyền Đầy Cảm Hứng</div>
             </div>
         </div>
-        <!-- Return Button -->
+        <!-- Return -->
         <div class="flex justify-center">
             <a href="{{ route('showalbum', ['id' => $album->id]) }}" class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group">
                 <div class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500 rounded-2xl">
@@ -26,9 +27,10 @@
         <!-- Form -->
         <div class="flex items-center justify-center mb-5">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mb-5">
-                <form class="grid grid-cols-12 gap-4" method="POST" action="{{ route('updatealbum', $album->id) }}" enctype="multipart/form-data">
+                <form class="grid grid-cols-1 md:grid-cols-12 gap-4" method="POST" action="{{ route('updatealbum', $album->id) }}" enctype="multipart/form-data">
                     @csrf
-                    <div class="col-span-4 row-span-1 aspect-square relative group">
+                    <!-- Cover -->
+                    <div class="md:col-span-4 aspect-square relative group">
                         <img id="album-cover" src="{{ $album->cover_image }}" alt="Album Cover" class="w-full h-full object-cover rounded-lg">
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
@@ -38,7 +40,8 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-span-8 row-span-1 p-4 shadow-md"  style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
+                    <!-- Data -->
+                    <div class="md:col-span-8 p-4 shadow-md" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
                         <div class="mb-4">
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
                             <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('title') is-invalid @enderror" value="{{ $album->title }}">
@@ -63,11 +66,7 @@
                         </div>
                         @if(Session::has('Manytimes'))
                             <script>
-                                Swal.fire({
-                                    title: 'Thông báo',
-                                    text: "Bạn chỉ có thể cập nhật nội dung 1 lần trong 1 tuần.",
-                                    icon: 'warning',
-                                    showCancelButton: false,
+                                Swal.fire({ title: 'Thông báo', text: "Bạn chỉ có thể cập nhật nội dung 1 lần trong 1 tuần.", icon: 'warning', showCancelButton: false,
                                 });
                             </script>
                              <div class="flex justify-center mt-4">
@@ -78,14 +77,7 @@
                              document.getElementById('delete').addEventListener('click', function (e) {
                             e.preventDefault();
 
-                            Swal.fire({
-                                title: 'Chắc chắn xóa album?',
-                                text: "Tất cả ảnh trong album sẽ bị xóa và không thể khôi phục!",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonText: 'Tiếp tục',
-                                cancelButtonText: 'Hủy',
-                                reverseButtons: true
+                            Swal.fire({ title: 'Chắc chắn xóa album?', text: "Tất cả ảnh trong album sẽ bị xóa và không thể khôi phục!", icon: 'warning', showCancelButton: true, confirmButtonText: 'Tiếp tục', cancelButtonText: 'Hủy', reverseButtons: true
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     window.location.href = "{{ route('deletealbum', $album->id) }}"; 

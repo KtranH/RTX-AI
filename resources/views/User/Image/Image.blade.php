@@ -3,20 +3,21 @@
 
     <title>RTX-AI: Hình Ảnh</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <main class="w-full h-full" style="margin-bottom:10%">
-        <!-- Image -->
-        <div class="flex items-center justify-center">
-            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 shadow-md p-5"  style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
-                <div class="grid grid-cols-12 gap-4">
-                    <!-- Image -->
-                    <div class="col-span-6 row-span-1 aspect-square">
+
+    <main class="w-full h-full">
+        <!-- Container -->
+        <div class="flex flex-col items-center">
+            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 shadow-md p-5" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; border-radius:20px">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Photo -->
+                    <div class="aspect-square md:col-span-1">
                         <img src="{{ $image->url }}" alt="Image Cover" class="w-full h-full object-cover">
                     </div>
                     <!-- Details -->
-                    <div class="col-span-6 row-span-1 flex flex-col">
+                    <div class="md:col-span-1 flex flex-col">
                         <!-- Return -->
                         <a href="{{ route('showalbum', ['id' => $image->album_id]) }}" class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group">
-                            <div class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500 rounded-2xl" >
+                            <div class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500 rounded-2xl">
                                 <svg width="25px" height="25px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                                     <path fill="#ffffff" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
                                     <path fill="#ffffff" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path>
@@ -61,14 +62,7 @@
                                 document.getElementById('delete').addEventListener('click', function (e) {
                                e.preventDefault();
     
-                               Swal.fire({
-                                   title: 'Chắc chắn xóa ảnh?',
-                                   text: "Ảnh sẽ bị xóa và không thể khôi phục!",
-                                   icon: 'warning',
-                                   showCancelButton: true,
-                                   confirmButtonText: 'Tiếp tục',
-                                   cancelButtonText: 'Hủy',
-                                   reverseButtons: true
+                               Swal.fire({ title: 'Chắc chắn xóa ảnh?', text: "Ảnh sẽ bị xóa và không thể khôi phục!", icon: 'warning', showCancelButton: true, confirmButtonText: 'Tiếp tục', cancelButtonText: 'Hủy', reverseButtons: true
                                }).then((result) => {
                                    if (result.isConfirmed) {
                                        window.location.href = "{{ route('deleteimage', $image->id) }}"; 
@@ -104,9 +98,9 @@
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="font-bold text-3xl">Gợi Ý Ảnh</div>
-                <div class="mt-2 grid grid-cols-12 gap-2">
+                <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2">
                     @for ($i = 0; $i <= 5; $i++)
-                        <div class="col-span-3 row-span-1 relative group">
+                        <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group">
                             <a href="">
                                 <div class="aspect-square">
                                     <img src="https://picsum.photos/200" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15">
