@@ -4,7 +4,7 @@
     <title>RTX-AI: Album</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <main class="w-full h-full">
+    <main class="w-full h-full" style="margin-bottom:10%">
         <!-- Return -->
         <div class="flex justify-center">
             <a href="{{ route('showboard') }}" class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group">
@@ -46,6 +46,7 @@
                     </div>
                 </div>
             </div>
+        </div>
             <!-- Gallery -->
             <div class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
@@ -91,21 +92,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                </a>    
-                                <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div class="flex space-x-2">
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                        </a>
-                                        <a href="{{ route("editimage", ['id' => $x->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                        </a>
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-sort text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                        </a>
-                                    </div>
                                 </div>
-                            </div>
                         @endforeach
                     </div>
                     <div class="w-full mt-4">
@@ -117,7 +104,7 @@
         <!-- Suggestion -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
-                <div class="font-bold text-3xl text-left">Gợi Ý Ảnh</div>
+                <div class="font-bold text-3xl text-left">Thêm Ảnh</div>
                 <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div class="relative group">
                         <a href="{{ route('createimage', ['id' => $album->id]) }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300">

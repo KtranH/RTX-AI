@@ -17,7 +17,7 @@
     <title>RTX-AI: Tài Khoản</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <main class="w-full h-full">
+    <main class="w-full h-full" style="margin-bottom:10%">
         <!-- Account -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
@@ -91,6 +91,7 @@
                     </ul>
                 </div>
             </div>
+        </div>
             <script>
                 function openPopup(popupId) 
                 {
@@ -185,22 +186,8 @@
                             Ảnh AI
                         </button>
                     </div>
-                @endif
-            </div>
-        </div>
-        <!-- Tab -->
-        <div class="flex items-center justify-center mt-5">
-            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 relative border-t">
-                <div class="flex justify-center space-x-4 mt-[-20px]">
-                    <button id="saved" onclick="ActivateTab('saved')" class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
-                        Ảnh tải lên
-                    </button>
-                    <button id="created" onclick="ActivateTab('created')" class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
-                        Ảnh AI
-                    </button>
                 </div>
             </div>
-        </div>
         <script>
             function ChangeApperance(id)
             {
@@ -321,16 +308,6 @@
                                         </div>
                                     </div>
                                 </a>
-                                <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div class="flex space-x-2">
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                        </a>
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         @endforeach
                     </div>
