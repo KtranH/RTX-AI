@@ -110,7 +110,7 @@
             </script>
             @endif
         @else
-            <div class="col-md-3 text-end">
+            <div class="col-md-4 flex justify-end items-center space-x-3">
                 <a href="{{ route('showlogin') }}" type="button" class="btn btn-outline-dark me-2" style="border-radius:30px;font-weight:bold;border:none;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">Đăng nhập</a>
                 <a href="{{ route('showsignup') }}" type="button" class="btn btn-dark" style="border-radius:30px;font-weight:bold">Đăng ký</a>
             </div>

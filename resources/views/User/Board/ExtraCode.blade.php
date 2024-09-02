@@ -78,3 +78,37 @@
     </div>
     <p class="translate-x-2" style="margin-top:12px">Quay lại</p>
 </a>
+
+<div class="flex items-center justify-center">
+                <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
+                    <div class="font-bold text-3xl">Ảnh nổi bật</div>
+                    @if (count($feature) == 0)
+                        <div class="mt-2 grid gap-2">
+                            <div style="display:flex;margin-top:2%">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:80px; margin-right:1%">
+                                    <path d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z" fill="#6563ff"/>
+                                </svg>
+                                <h3 style="margin-top:30px;font-size:20px;" class="text-gray-500">Bạn chưa có ảnh nào được đặt làm ảnh nổi bật!</h3>
+                            </div>
+                        </div>
+                    @else
+                        <div class="mt-2 gap-2 featured-photos">
+                            @foreach ($feature as $x)
+                                <div class="col-span-3 row-span-1 relative group">
+                                    <a href="{{ route('showimage', ['id' => $x->id]) }}">
+                                        <div class="aspect-square">
+                                            <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                        </div>
+                                        <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                            <div class="mt-2 text-left px-2 py-1">
+                                                <div class="font-semibold text-lg truncate group-hover:text-[#000000]">{{ $x->title }}</div>
+                                                <div class="text-sm text-gray-500 h-20 overflow-hidden">{{ $x->description }}</div>
+                                            </div>
+                                        </div>
+                                    </a>    
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+            </div>

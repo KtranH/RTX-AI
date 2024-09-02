@@ -30,9 +30,11 @@
                             <p class="text-lg text-gray-600 truncate hover:overflow-visible hover:whitespace-normal">{{ $image->description }}</p>
                         </div>
                         <!-- Categories -->
-                        <div class="flex flex-wrap space-x-2 mb-4">
+                        <div class="flex flex-wrap justify-center gap-2 mb-4 max-w-screen-sm mx-auto">
                             @foreach ($listcate as $item)
-                                <a href="#" class="text-sm text-white p-2 bg-black hover:!bg-[#a000ff] rounded-xl">{{ $item->name }}</a>
+                                <a href="#" class="text-sm text-white p-2 bg-gray-400 hover:bg-[#a000ff] text-center rounded-xl w-1/3 sm:w-1/4 md:w-auto">
+                                    {{ $item->name }}
+                                </a>
                             @endforeach
                         </div>
                         <!-- Owner -->
