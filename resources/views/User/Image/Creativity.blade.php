@@ -4,9 +4,9 @@
 <main style="with:100%;height:100%">
     <div class="bg-white">
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-16">
-           <div style="margin-top:-5%">
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900">Khám phá cùng RTX-AI</h2>
-                <p class="text-xs font-bold tracking-tight">Bắt đầu sáng tạo các hình ảnh bằng AI, và chia sẻ với những người khác.</p>
+           <div style="margin-top:-5%" class="text-center">
+                <h2 class="text-4xl font-bold tracking-tight text-gray-900">Khám phá cùng RTX-AI</h2>
+                <p class="text-xl text-gray-500 tracking-tight">Bắt đầu sáng tạo các hình ảnh bằng AI, và chia sẻ với những người khác.</p>
            </div>
           <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             @php

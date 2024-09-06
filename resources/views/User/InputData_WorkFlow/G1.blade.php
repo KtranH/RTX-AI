@@ -55,12 +55,31 @@
                             document.getElementById('first-name').value = randomSeed;
                         });
                     </script>
-
                     <div>
                         <h2 class="text-base font-semibold leading-7 text-gray-900">Số lượng tạo ảnh:
                             {{ $ShowTimes }}
                         </h2>
                         <p class="mt-1 text-sm leading-6 text-gray-600">Nếu như hết lượt tạo ảnh bạn không thể tạo được ảnh! Số lượng sẽ được khôi phục vào ngày mai.</p>    
+                    </div> 
+                    <div class="mt-4">
+                        <label for="progress" class="block text-base font-medium leading-6 text-gray-900">Tiến trình:</label>
+                        <div class="relative pt-1">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-teal-600 bg-teal-200">
+                                        0%
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-teal-600 bg-teal-200">
+                                        100%
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex h-2 mb-2 bg-gray-200 rounded">
+                                <div id="progress-bar" class="bg-teal-600 h-full rounded transition-all duration-300 ease-in-out" style="width: 0%;"></div>
+                            </div>
+                        </div>
                     </div> 
                 </div>
                 <img id="loading-image" style="width:30%; margin:auto; display:none" src="/images/loading.gif" alt="Loading...">
@@ -72,19 +91,61 @@
             </div>
             <script>
                 document.getElementById('create').addEventListener('click', function(event) {
-
                     event.preventDefault();
                     this.disabled = true;
 
                     document.getElementById('create').style.cursor = 'not-allowed';
                     document.getElementById('create').style.backgroundColor = '#6B6B6B';
                     document.getElementById('loading-image').style.display = 'block';
-                    document.getElementById('G1').submit();
 
-                    const cancelLink = document.getElementById('cancel');
-                    cancelLink.style.pointerEvents = 'none';
-                    cancelLink.style.opacity = '0.5';
-                
+                    // Hiển thị thanh tiến trình
+                    const progressBar = document.getElementById('progress-bar');
+                    progressBar.style.width = '0%';
+                    let progress = 0;
+
+                    // Gửi yêu cầu AJAX
+                    const formData = new FormData(document.getElementById('G1'));
+                    fetch("{{ route('createg1') }}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Cập nhật thanh tiến trình đến 99%
+                        progress = 99;
+                        progressBar.style.width = progress + '%';
+                        document.querySelector('.text-xs.font-semibold').innerText = progress + '%';
+
+                        // Giả lập một khoảng thời gian trước khi hoàn thành
+                        setTimeout(() => {
+                            if (data.success) {
+                                window.location.href = data.redirect; // Chuyển hướng đến trang mới
+                            } else {
+                                // Xử lý lỗi nếu có
+                                alert(data.message);
+                                this.disabled = false;
+                                document.getElementById('create').style.cursor = 'pointer';
+                                document.getElementById('create').style.backgroundColor = '';
+                                document.getElementById('loading-image').style.display = 'none';
+                            }
+                        }, 1000); // Thời gian giả lập 1 giây
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        this.disabled = false;
+                        document.getElementById('create').style.cursor = 'pointer';
+                        document.getElementById('create').style.backgroundColor = '';
+                        document.getElementById('loading-image').style.display = 'none';
+                    });
+                });
+            </script>
+            <script>
+                window.addEventListener('beforeunload', function (event) {
+                    event.preventDefault();
+                    event.returnValue = 'Bạn có chắc chắn muốn rời khỏi trang này? Dữ liệu sẽ không được lưu!';
                 });
             </script>
         </div>

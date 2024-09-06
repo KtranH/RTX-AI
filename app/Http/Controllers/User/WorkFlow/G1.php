@@ -43,7 +43,7 @@ class G1 extends Controller
         if(!$answer)
         {
             Session::flash("SensitiveWord","checked");
-            return redirect()->route("g1");
+            return response()->json(['success' => false, 'message' => 'Mô tả của bạn chứa từ khóa nhạy cảm! Không thể tạo ảnh']);
         }
 
         $process = json_decode(file_get_contents(storage_path('app/G1.json')), true);
@@ -62,7 +62,7 @@ class G1 extends Controller
             Session::put("url",$url);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
-            return $this->ImageG(1);
+            return response()->json(['success' => true, 'redirect' => route('g1.show')]); 
         } 
         catch (Exception $e) 
         {
@@ -72,7 +72,7 @@ class G1 extends Controller
             Session::put("url",$imageUrl);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
-            return $this->ImageG(1);
+            return response()->json(['success' => true, 'redirect' => route('g1.show')]);
         }
     }
 }

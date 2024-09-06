@@ -34,10 +34,19 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script> 
+        <script src="https://cdn.jsdelivr.net/npm/simple-parallax-js@5.6.2/dist/simpleParallax.min.js"></script>    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jarallax@1.12.0/dist/jarallax.css">
+        <script src="https://cdn.jsdelivr.net/npm/jarallax@1.12.0/dist/jarallax.min.js"></script>
         <!-- Tagify CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.9.5/tagify.css">
         <!-- Tagify JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.9.5/tagify.min.js"></script>
+        <style>
+           body::-webkit-scrollbar
+           {
+                display: none;
+           }
+        </style>
     </head>
 
     <body class="{{ session('theme', 'theme-default') }}">
@@ -47,9 +56,10 @@
         <script>
             AOS.init({
             duration: 1000, 
-            deplay:800,
+            deplay: 500,
             once: false,
-            offset: 200, 
+            offset: 200,
+            easing: 'ease-in-sine',
             });
         </script>      
     </body>
