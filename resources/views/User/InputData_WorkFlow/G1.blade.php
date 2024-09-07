@@ -7,9 +7,9 @@
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-16">
             <div class="space-y-12">
                 <div class="border-b border-gray-900/10 pb-12">
-                    <div style="margin-top:-5%; margin-bottom:2%">
-                        <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ $G->name }}</h2>
-                        <p class="text-xs font-bold tracking-tight">{{ $G->description }}</p>
+                    <div style="margin-top:-5%" class="mb-8">
+                        <h2 class="text-4xl font-bold tracking-tight text-gray-900 mb-2">{{ $G->name }}</h2>
+                        <p class="text-2xs text-gray-500 tracking-tight">{{ $G->description }}</p>
                    </div>
                     <div style="margin-bottom:2%;">
                         <h2 class="text-base font-semibold leading-7 text-gray-900">
@@ -55,55 +55,60 @@
                             document.getElementById('first-name').value = randomSeed;
                         });
                     </script>
+
                     <div>
                         <h2 class="text-base font-semibold leading-7 text-gray-900">Số lượng tạo ảnh:
                             {{ $ShowTimes }}
                         </h2>
                         <p class="mt-1 text-sm leading-6 text-gray-600">Nếu như hết lượt tạo ảnh bạn không thể tạo được ảnh! Số lượng sẽ được khôi phục vào ngày mai.</p>    
                     </div> 
-                    <div class="mt-4">
-                        <label for="progress" class="block text-base font-medium leading-6 text-gray-900">Tiến trình:</label>
-                        <div class="relative pt-1">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-teal-600 bg-teal-200">
-                                        0%
-                                    </span>
-                                </div>
-                                <div>
-                                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-teal-600 bg-teal-200">
-                                        100%
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex h-2 mb-2 bg-gray-200 rounded">
-                                <div id="progress-bar" class="bg-teal-600 h-full rounded transition-all duration-300 ease-in-out" style="width: 0%;"></div>
-                            </div>
-                        </div>
-                    </div> 
                 </div>
                 <img id="loading-image" style="width:30%; margin:auto; display:none" src="/images/loading.gif" alt="Loading...">
             </div>
-        
+            <div class="relative mt-4">
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-indigo-600 rounded-full transition-all duration-300 ease-in-out" style="width: 0%;"></div>
+                </div>
+                <div class="flex justify-between text-xs font-medium text-gray-600 mt-1">
+                    <div id="progress-text" class="mt-1 text-sm text-gray-600">0%</div>
+                    <span class="font-bold text-indigo-600">100%</span>
+                </div>
+            </div>
             <div class="mt-6 flex items-center justify-end gap-x-6">
                 <a type="button" id="cancel" href="{{ route("showworkflow") }}" class="text-sm font-semibold leading-6 text-gray-900">Quay lại</a>
                 <button type="submit" id="create" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Tạo ảnh</button>
             </div>
+
             <script>
                 document.getElementById('create').addEventListener('click', function(event) {
                     event.preventDefault();
+                    
+                    const promptValue = document.getElementById('about').value.trim();
+                    const seedValue = document.getElementById('first-name').value.trim();
+                    
+                    if (!promptValue) {
+                        alert('Vui lòng nhập mô tả của bạn!');
+                        return;
+                    }
+                    
+                    if (!seedValue) {
+                        alert('Vui lòng nhập thông số Seed!');
+                        return;
+                    }
+
                     this.disabled = true;
 
                     document.getElementById('create').style.cursor = 'not-allowed';
                     document.getElementById('create').style.backgroundColor = '#6B6B6B';
                     document.getElementById('loading-image').style.display = 'block';
 
-                    // Hiển thị thanh tiến trình
-                    const progressBar = document.getElementById('progress-bar');
-                    progressBar.style.width = '0%';
-                    let progress = 0;
+                    setTimeout(() => {
+                        const progressBar = document.getElementById('progress-bar');
+                        const progressText = document.getElementById('progress-text');
+                        progressBar.style.width = '50%';
+                        progressText.innerText = '50%';
+                    }, 2000);
 
-                    // Gửi yêu cầu AJAX
                     const formData = new FormData(document.getElementById('G1'));
                     fetch("{{ route('createg1') }}", {
                         method: 'POST',
@@ -114,24 +119,23 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        // Cập nhật thanh tiến trình đến 99%
-                        progress = 99;
-                        progressBar.style.width = progress + '%';
-                        document.querySelector('.text-xs.font-semibold').innerText = progress + '%';
-
-                        // Giả lập một khoảng thời gian trước khi hoàn thành
-                        setTimeout(() => {
-                            if (data.success) {
-                                window.location.href = data.redirect; // Chuyển hướng đến trang mới
-                            } else {
-                                // Xử lý lỗi nếu có
-                                alert(data.message);
-                                this.disabled = false;
-                                document.getElementById('create').style.cursor = 'pointer';
-                                document.getElementById('create').style.backgroundColor = '';
-                                document.getElementById('loading-image').style.display = 'none';
-                            }
-                        }, 1000); // Thời gian giả lập 1 giây
+                        if (data.success) {
+                            const progressBar = document.getElementById('progress-bar');
+                            const progressText = document.getElementById('progress-text');
+                            progressBar.style.width = '80%';
+                            progressText.innerText = '80%';
+                            setTimeout(() => {
+                                progressBar.style.width = '100%';
+                                progressText.innerText = '100%'; 
+                                window.location.href = data.redirect; 
+                            }, 1000); 
+                        } else {
+                            alert(data.message);
+                            this.disabled = false;
+                            document.getElementById('create').style.cursor = 'pointer';
+                            document.getElementById('create').style.backgroundColor = '';
+                            document.getElementById('loading-image').style.display = 'none';
+                        }
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -143,9 +147,11 @@
                 });
             </script>
             <script>
-                window.addEventListener('beforeunload', function (event) {
-                    event.preventDefault();
-                    event.returnValue = 'Bạn có chắc chắn muốn rời khỏi trang này? Dữ liệu sẽ không được lưu!';
+                 window.addEventListener('beforeunload', function (event) {
+                    if (!document.getElementById('create').disabled) {
+                        event.preventDefault();
+                        event.returnValue = 'Bạn có chắc chắn muốn rời khỏi trang này? Dữ liệu sẽ không được lưu!';
+                    }
                 });
             </script>
         </div>

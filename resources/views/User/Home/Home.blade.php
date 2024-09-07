@@ -37,23 +37,23 @@
                     </div>
                 </div>
                 <div style="margin-bottom:100px">
-                    <h2 class="text-4xl font-bold tracking-tight text-gray-900 text-center mb-1" data-aos="fade-up">Khám phá cùng RTX-AI</h2>
-                    <h5 class="text-sxl tracking-tight text-gray-500 text-center mt-2" style="margin-bottom:-60px" data-aos="fade-up" data-aos-delay="300">Chia sẻ và tìm
-                        kiếm những bức ảnh nổi bật</h5>
+                    <h2 class="text-4xl font-bold tracking-tight text-gray-900 text-center mb-2" data-aos="fade-up">Khám phá cùng RTX-AI</h2>
+                    <p class="text-2xs tracking-tight text-gray-500 text-center mt-2" data-aos="fade-up" data-aos-delay="300">Chia sẻ và tìm
+                        kiếm những bức ảnh nổi bật</p>
                 </div>
-                <div data-aos="fade-up" data-aos-delay="300">
+                <div data-aos="fade-up" data-aos-delay="100">
                     <div class="jarallax" data-jarallax data-speed="0.1" style="height:100vh;">
                         <img src="/images/landscape.png" class="jarallax-img" alt="Image 1">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="300">
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
                                     @foreach ($landscape as $x)
                                         <?php echo $x->name; ?>
                                     @endforeach
                                 </h2>
-                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="600">
+                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
                                     @foreach ($landscape as $x)
                                         <?php echo $x->description; ?>
                                     @endforeach
@@ -61,18 +61,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="jarallax" data-jarallax data-speed="0.5" style="height: 100vh;">
+                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
                         <img src="/images/animal.png" class="jarallax-img" alt="Image 2">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="300">
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
                                     @foreach ($animal as $x)
                                         <?php echo $x->name; ?>
                                     @endforeach
                                 </h2>
-                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="600">
+                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
                                     @foreach ($animal as $x)
                                         <?php echo $x->description; ?>
                                     @endforeach
@@ -80,18 +80,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="jarallax" data-jarallax data-speed="0.5" style="height: 100vh;">
+                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
                         <img src="/images/travel.png" class="jarallax-img" alt="Image 2">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="300">
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
                                     @foreach ($travel as $x)
                                         <?php echo $x->name; ?>
                                     @endforeach
                                 </h2>
-                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="600">
+                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
                                     @foreach ($travel as $x)
                                         <?php echo $x->description; ?>
                                     @endforeach
@@ -99,18 +99,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="jarallax" data-jarallax data-speed="0.5" style="height: 100vh;">
+                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
                         <img src="/images/tech.png" class="jarallax-img" alt="Image 2">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="300">
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
                                   @foreach ($tech as $x)
                                       <?php echo $x->name; ?>
                                   @endforeach
                               </h2>
-                              <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="600">
+                              <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
                                   @foreach ($tech as $x)
                                       <?php echo $x->description; ?>
                                   @endforeach
@@ -118,18 +118,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="jarallax" data-jarallax data-speed="0.5" style="height: 100vh;">
+                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
                         <img src="/images/fashion.png" class="jarallax-img" alt="Image 2">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="300">
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="100">
                                   @foreach ($fashion as $x)
                                       <?php echo $x->name; ?>
                                   @endforeach
                               </h2>
-                              <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="600">
+                              <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="200">
                                   @foreach ($fashion as $x)
                                       <?php echo $x->description; ?>
                                   @endforeach
@@ -137,18 +137,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="jarallax" data-jarallax data-speed="0.5" style="height: 100vh;">
+                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
                         <img src="/images/city.png" class="jarallax-img" alt="Image 2">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="300">
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
                                   @foreach ($city as $x)
                                       <?php echo $x->name; ?>
                                   @endforeach
                               </h2>
-                              <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="600">
+                              <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
                                   @foreach ($city as $x)
                                       <?php echo $x->description; ?>
                                   @endforeach
@@ -354,9 +354,9 @@
                         <div>
 
                             <div data-aos="fade-left">
-                                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Sáng tạo ảnh bằng
+                                <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl">Sáng tạo ảnh bằng
                                     AI</h2>
-                                <p class="mt-4 text-gray-500">Chúng tôi cung cấp hơn 20 chức năng tạo ảnh với công nghệ AI
+                                <p class="mt-4 text-2xs text-gray-500">Chúng tôi cung cấp hơn 20 chức năng tạo ảnh với công nghệ AI
                                     tạo sinh hình ảnh mới lạ và độc đáo. Bạn có thể tạo ảnh theo ý muốn và chia sẻ với bạn
                                     bè và người thân.</p>
 
@@ -408,7 +408,7 @@
                             <div class="sm:max-w-lg">
                                 <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Nơi sáng tạo và
                                     chia sẻ</h1>
-                                <p class="mt-4 text-xl text-gray-500">Chúng tôi sẽ biến những ý tưởng, sáng tạo của bạn
+                                <p class="mt-4 text-2xs text-gray-500">Chúng tôi sẽ biến những ý tưởng, sáng tạo của bạn
                                     thành hình ảnh với công nghệ AI tạo sinh hình ảnh.</p>
                             </div>
                             <div>

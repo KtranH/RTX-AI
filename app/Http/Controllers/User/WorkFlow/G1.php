@@ -62,7 +62,7 @@ class G1 extends Controller
             Session::put("url",$url);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
-            return response()->json(['success' => true, 'redirect' => route('g1.show')]); 
+            return response()->json(['success' => true, 'redirect' => route("get_imageg1")]); 
         } 
         catch (Exception $e) 
         {
@@ -72,7 +72,11 @@ class G1 extends Controller
             Session::put("url",$imageUrl);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
-            return response()->json(['success' => true, 'redirect' => route('g1.show')]);
+            return response()->json(['success' => true, 'redirect' => route("get_imageg1")]);
         }
+    }
+    public function get_imageG1()
+    {
+        return $this->ImageG(1);
     }
 }
