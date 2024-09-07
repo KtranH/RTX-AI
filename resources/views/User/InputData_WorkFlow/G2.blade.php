@@ -8,9 +8,9 @@
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-16">
             <div class="space-y-12">
                 <div class="border-b border-gray-900/10 pb-12">
-                    <div style="margin-top:-5%; margin-bottom:2%">
-                        <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ $G->name }}</h2>
-                        <p class="text-xs font-bold tracking-tight">{{ $G->description }}</p>
+                    <div style="margin-top:-5%" class="mb-8">
+                        <h2 class="text-4xl font-bold tracking-tight text-gray-900 mb-2">{{ $G->name }}</h2>
+                        <p class="text-2xs font-gray-500 tracking-tight">{{ $G->description }}</p>
                    </div>
                     <div style="margin-bottom:2%;">
                         <h2 class="text-base font-semibold leading-7 text-gray-900">
@@ -39,7 +39,7 @@
                         @error('input')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <input type="file" name = "input" id="input_image" required hidden>
+                        <input type="file" name="input" id="input_image" required hidden>
                     </div>
                         
                     <script>
@@ -164,28 +164,93 @@
                 </div>
                 <img id="loading-image" style="width:30%; margin:auto; display:none" src="/images/loading.gif" alt="Loading...">
             </div>
-        
+            <div class="relative mt-4">
+                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-indigo-600 rounded-full transition-all duration-300 ease-in-out" style="width: 0%;"></div>
+                </div>
+                <div class="flex justify-between text-xs font-medium text-gray-600 mt-1">
+                    <div id="progress-text" class="mt-1 text-sm text-gray-600">0%</div>
+                    <span class="font-bold text-indigo-600">100%</span>
+                </div>
+            </div>
             <div class="mt-6 flex items-center justify-end gap-x-6">
                 <a type="button" id="cancel" href="{{ route("showworkflow") }}" class="text-sm font-semibold leading-6 text-gray-900">Quay lại</a>
                 <button type="submit" id="create" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Tạo ảnh</button>
             </div>
             <script>
                 document.getElementById('create').addEventListener('click', function(event) {
-
                     event.preventDefault();
+
+                    const fileInput = document.getElementById('input_image');
+                    const promptValue = document.getElementById('about').value.trim();
+                    const seedValue = document.getElementById('first-name').value.trim();
+                    
+                    if (!fileInput.files.length) {
+                        alert('Vui lòng tải ảnh của bạn lên!');
+                        return;
+                    }
+
+                    if (!promptValue) {
+                        alert('Vui lòng nhập mô tả của bạn!');
+                        return;
+                    }
+                    
+                    if (!seedValue) {
+                        alert('Vui lòng nhập thông số Seed!');
+                        return;
+                    }
+
                     this.disabled = true;
 
                     document.getElementById('create').style.cursor = 'not-allowed';
                     document.getElementById('create').style.backgroundColor = '#6B6B6B';
                     document.getElementById('loading-image').style.display = 'block';
-                    document.getElementById('G2').submit();
 
-                    const cancelLink = document.getElementById('cancel');
-                    cancelLink.style.pointerEvents = 'none';
-                    cancelLink.style.opacity = '0.5';
-                
+                    const formData = new FormData(document.getElementById('G2'));
+                    fetch("{{ route('createg2') }}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const progressBar = document.getElementById('progress-bar');
+                            const progressText = document.getElementById('progress-text');
+                            progressBar.style.width = '80%';
+                            progressText.innerText = '80%';
+                            setTimeout(() => {
+                                progressBar.style.width = '100%';
+                                progressText.innerText = '100%'; 
+                                window.location.href = data.redirect; 
+                            }, 1000); 
+                        } else {
+                            alert(data.message);
+                            this.disabled = false;
+                            document.getElementById('create').style.cursor = 'pointer';
+                            document.getElementById('create').style.backgroundColor = '';
+                            document.getElementById('loading-image').style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        this.disabled = false;
+                        document.getElementById('create').style.cursor = 'pointer';
+                        document.getElementById('create').style.backgroundColor = '';
+                        document.getElementById('loading-image').style.display = 'none';
+                    });
                 });
             </script>
+            <script>
+                window.addEventListener('beforeunload', function (event) {
+                   if (!document.getElementById('create').disabled) {
+                       event.preventDefault();
+                       event.returnValue = 'Bạn có chắc chắn muốn rời khỏi trang này? Dữ liệu sẽ không được lưu!';
+                   }
+               });
+           </script>
         </div>
     </div>
 </form>

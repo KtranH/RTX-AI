@@ -18,10 +18,10 @@
     <div class="bg-gray-50 py-24 sm:py-32">
         <div class="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
             <div class="max-w-2xl">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                     Đồ án tốt nghiệp
                 </h2>
-                <p class="mt-6 text-lg leading-8 text-gray-600">
+                <p class="mt-6 text-2xs leading-8 text-gray-600">
                     RTX-AI là nơi lý tưởng để bạn thỏa sức sáng tạo mà không cần bất kỳ kỹ năng thiết kế nào. Với giao diện trực quan và thân thiện, bạn có thể dễ dàng tạo ra những hình ảnh đẹp mắt chỉ trong vài phút.
                 </p>
             </div>

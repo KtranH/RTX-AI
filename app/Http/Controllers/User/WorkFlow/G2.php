@@ -88,7 +88,7 @@ class G2 extends Controller
             Session::put("url",$url);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
-            return $this->ImageG(2);
+            return response()->json(['success' => true, 'redirect' => route("get_imageg2")]); 
         } 
         catch (Exception $e) 
         {
@@ -98,7 +98,12 @@ class G2 extends Controller
             Session::put("url",$imageUrl);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
-            return $this->ImageG(2);
+            return response()->json(['success' => true, 'redirect' => route("get_imageg2")]); 
         }
     }
+    public function get_image()
+    {
+        return $this->ImageG(2);
+    }
+     
 }

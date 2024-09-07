@@ -94,7 +94,7 @@ class G3 extends Controller
            Session::put("url",$url);
            Session::put("seed",$seed);
            Session::put("prompt",$prompt);
-           return $this->ImageG(3);
+           return response()->json(['success' => true, 'redirect' => route("get_imageg3")]); 
        } 
        catch (Exception $e) 
        {
@@ -104,7 +104,11 @@ class G3 extends Controller
            Session::put("url",$imageUrl);
            Session::put("seed",$seed);
            Session::put("prompt",$prompt);
-           return $this->ImageG(3);
+           return response()->json(['success' => true, 'redirect' => route("get_imageg3")]); 
        }
+    }
+    public function get_image()
+    {
+        return $this->ImageG(3);
     }
 }

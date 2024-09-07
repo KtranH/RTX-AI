@@ -153,17 +153,26 @@ Route::post('/createg1', [G1::class, 'ShowImageG1'])->name("createg1");
 //Cancel Image G1
 /*Route::get('/cancelg1', [G1::class, 'stopQueue'])->name("cancelg1");*/
 
+//Show result G1
+Route::get('/resultofg1', [G1::class, 'get_imageG1'])->name("get_imageg1");
+
 //Show G2
 Route::get('/g2', [G2::class, 'InputDataG2'])->name("g2");
 
 //Create Image G2
 Route::post('/createg2', [G2::class, 'ShowImageG2'])->name("createg2");
 
+//Show result G2
+Route::get('/resultofg2', [G2::class, 'get_imageG2'])->name("get_imageg2");
+
 //Show G3
 Route::get('/g3', [G3::class, 'InputDataG3'])->name("g3");
 
 //Create Image G3
 Route::post('/createg3', [G3::class, 'ShowImageG3'])->name("createg3");
+
+//Show result G3
+Route::get('/resultofg3', [G3::class, 'get_imageG3'])->name("get_imageg3");
 
 //Show G4
 Route::get('/g4', [G3::class, 'InputDataG3'])->name("g4");
