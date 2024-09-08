@@ -15,6 +15,7 @@ use App\Http\Controllers\Board\Board;
 use App\Http\Controllers\Image\Image;
 use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitUpdateAccountAccess;
+use App\Http\Middleware\VerifyTurnstileCaptcha;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -27,10 +28,10 @@ Route::post('/generate-image', [ImageController::class, 'generateImage']);
 Route::get('/',[Home::class,'ShowHome'])->name("showhome");
 
 //Access login page
-Route::get('/login',[Account::class,'ShowLogin'])->name("showlogin");
+Route::get('/login',[Account::class,'ShowLogin'])->name("showlogin")->middleware(VerifyTurnstileCaptcha::class);
 
 //Access sign up page
-Route::get('/signup',[Account::class,'ShowSignUp'])->name("showsignup");
+Route::get('/signup',[Account::class,'ShowSignUp'])->name("showsignup")->middleware(VerifyTurnstileCaptcha::class);
 
 //Button login by google
 Route::get('/auth2Google',[Account::class,'loginByGoogle'])->name("loginByGoogle");
@@ -63,13 +64,13 @@ Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode")->m
 Route::post('/loginaccount', [Account::class, 'LoginAccount'])->name("loginaccount");
 
 //Forget password page
-Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass");
+Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass")->middleware(VerifyTurnstileCaptcha::class);
 
 //Send email to password
 Route::post('/sendemail&changepass', [Account::class, 'SendEmailResetPass'])->name("sendemailresetpass");
 
 //Input code to change password
-Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass");
+Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass")->middleware(VerifyTurnstileCaptcha::class);
 
 //Check code to change password
 Route::post('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');

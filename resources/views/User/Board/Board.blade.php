@@ -117,20 +117,20 @@
                             </div>
                         </div>
                     @else
-                        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                        <div class="mt-2 grid-cols-1 gap-2 featured-photos">
                             @foreach ($feature as $x)
                                 <div class="relative group">
                                     <a href="{{ route('showimage', ['id' => $x->id]) }}">
                                         <div class="aspect-square">
                                             <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius:30px">
                                         </div>
-                                        <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                        <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-50 group-hover:!opacity-100 transition-opacity duration-300">
                                             <div class="mt-2 text-left px-2 py-1">
                                                 <div class="font-semibold text-lg truncate group-hover:text-[#000000]">{{ $x->title }}</div>
                                                 <div class="text-sm text-gray-500 h-20 overflow-hidden">{{ $x->description }}</div>
                                             </div>
                                         </div>
-                                        <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                        <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-50 group-hover:!opacity-100 transition-opacity duration-300">
                                             <div class="flex space-x-2">
                                                 @if ($x->is_feature)
                                                     <a href="{{ route('featureimage', ['id' => $x->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
@@ -154,10 +154,31 @@
                 $(document).ready(function(){
                     $('.featured-photos').slick({
                         slidesToShow: 4,    
-                        slidesToScroll: 4,    
-                        infinite: true,       
+                        slidesToScroll: 1,
+                        variableWidth: false,    
+                        infinite: false,       
                         arrows: true,         
-                        dots: false        
+                        dots: false,
+                        responsive: [
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 3,
+                                slidesToScroll: 1,
+                                arrows: true,
+                                dots: false
+                            }
+                        },
+                        {
+                            breakpoint: 480,
+                            settings: {
+                                slidesToShow: 2,
+                                slidesToScroll: 1,
+                                arrows: true,
+                                dots: false
+                            }
+                        }
+                    ]      
                     });
                 });
             </script>
@@ -179,14 +200,16 @@
                 .featured-photos .slick-prev:before,
                 .featured-photos .slick-next:before {
                     font-size: 40px;
-                    color: black;
+                    color: white;
                 }
                 .featured-photos .slick-prev {
-                    left: -50px; 
+                    left: -5px; 
+                    z-index: 1000;
                 }
 
                 .featured-photos .slick-next {
-                    right: -32px; 
+                    right: 15px; 
+                    z-index: 1000;
                 }
             </style>
             <!-- Tab -->

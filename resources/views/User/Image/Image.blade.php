@@ -32,7 +32,7 @@
                         <!-- Categories -->
                         <div class="flex flex-wrap gap-2 mb-4 mt-4 max-w-screen-sm">
                             @foreach ($listcate as $item)
-                                <a href="#" class="text-sm text-white p-2 bg-gray-400 hover:bg-[#a000ff] text-center rounded-xl w-1/3 sm:w-1/4 md:w-auto">
+                                <a href="#" class="text-sm text-white p-2 bg-indigo-600 hover:bg-[#a000ff] text-center rounded-xl w-1/3 sm:w-1/4 md:w-auto">
                                     {{ $item->name }}
                                 </a>
                             @endforeach
@@ -43,7 +43,9 @@
                             <div class="flex-1">
                                 <p class="font-semibold">{{ $user->username }}</p>
                             </div>
-                            <a href="#" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Follow</a>
+                            @if (!Session::has("Owner"))
+                                <a href="#" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Follow</a>
+                            @endif
                         </div>
                         <!-- Action -->
                         <div class="flex justify-center space-x-4 mb-4">

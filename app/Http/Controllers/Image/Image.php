@@ -13,6 +13,7 @@ use App\Models\WorkFlow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Controller
@@ -31,6 +32,14 @@ class Image extends Controller
         $listcate = $image->category()->where("photo_id",$id)->get();
         $album = $image->album;
         $user = $album->user;
+        $idUser = $this->find_id();
+        $idUserAlbum = $album->user_id;
+
+        if($idUser == $idUserAlbum)
+        {
+            Session::put("Owner", "true");
+        }
+        
         return view('User.Image.Image', compact('image', 'album', 'user', 'listcate'));
     }
 
