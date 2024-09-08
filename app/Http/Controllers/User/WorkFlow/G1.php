@@ -56,7 +56,7 @@ class G1 extends Controller
        
         try 
         {
-            $imageUrl = $this->get_image($process,19);
+            $imageUrl = $this->get_image_result($process,19);
             $takeImageUrl = $this->UploadImageR2($imageUrl);
             $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
             Session::put("url",$url);

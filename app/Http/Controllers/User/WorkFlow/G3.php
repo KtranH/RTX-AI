@@ -73,8 +73,8 @@ class G3 extends Controller
        $process["32"]["inputs"]["lora_name"] = $model;
        $process["2"]["inputs"]["text"] = $translated;
        $process["6"]["inputs"]["noise_seed"] = $seed;
-       $process["14"]["inputs"]["image"] = $email . "/" . $main;
-       $process["20"]["inputs"]["image"] = $email . "/" . $other;
+       $process["14"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
+       $process["20"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $other;
 
        $destinationPath = $this->inputDir . '/' . $email;
        
@@ -88,7 +88,7 @@ class G3 extends Controller
 
        try 
        {
-           $imageUrl = $this->get_image($process,13);
+           $imageUrl = $this->get_image_result($process,13);
            $takeImageUrl = $this->UploadImageR2($imageUrl);
            $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
            Session::put("url",$url);
@@ -107,7 +107,7 @@ class G3 extends Controller
            return response()->json(['success' => true, 'redirect' => route("get_imageg3")]); 
        }
     }
-    public function get_image()
+    public function get_imageG3()
     {
         return $this->ImageG(3);
     }

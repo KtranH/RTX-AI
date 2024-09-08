@@ -69,7 +69,7 @@ class G2 extends Controller
         $process["23"]["inputs"]["lora_name"] = $model;
         $process["3"]["inputs"]["text"] = $translated;
         $process["7"]["inputs"]["noise_seed"] = $seed;
-        $process["15"]["inputs"]["image"] = $email . "/" . $main;
+        $process["15"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
 
         $destinationPath = $this->inputDir . '/' . $email;
        
@@ -82,7 +82,7 @@ class G2 extends Controller
  
         try 
         {
-            $imageUrl = $this->get_image($process,14);
+            $imageUrl = $this->get_image_result($process,14);
             $takeImageUrl = $this->UploadImageR2($imageUrl);
             $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
             Session::put("url",$url);
@@ -101,7 +101,7 @@ class G2 extends Controller
             return response()->json(['success' => true, 'redirect' => route("get_imageg2")]); 
         }
     }
-    public function get_image()
+    public function get_imageG2()
     {
         return $this->ImageG(2);
     }
