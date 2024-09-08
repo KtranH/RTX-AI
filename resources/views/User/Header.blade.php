@@ -23,7 +23,7 @@
 </svg>
 
 <main class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="{{ request()->is('/') ? 'position: relative;' : 'position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background-color: white; padding:20px' }}">
         <!-- Logo -->
         <a href="/" class="d-flex align-items-center col-md-4 mb-2 mb-md-0 text-dark text-decoration-none">
             <img src="/assets/img/icon.png" alt="" style="width:40px;margin-right:10px">

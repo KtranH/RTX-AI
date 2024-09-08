@@ -5,7 +5,6 @@ namespace App;
 use App\Models\User;
 use App\Models\WorkFlow;
 use GuzzleHttp\Client;
-use Illuminate\Session\Store;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
@@ -22,8 +21,8 @@ trait AI_Create_Image
     private $url = 'http://127.0.0.1:8188/prompt';
     private $url2 = 'http://192.168.1.10:8188/prompt';
     private $interrupt = '';
-    private $inputDir = 'D:\AI\SD\ComfyUI_windows_portable\ComfyUI\input';
-    private $inputError = 'D:\ProjectPHP\GradioApp\img';
+    private $inputDir = 'D:\ProjectPHP\DO_AN\public\images\INPUT_AI';
+    private $inputError = 'D:\ProjectPHP\DO_AN\public\images';
     private $outputDir = '';
     public function InputData($ListG)
     {
@@ -63,70 +62,45 @@ trait AI_Create_Image
         });
         return $files ? $files[0] : null;
     }
-    private function get_image($process, $numberOutput)
+    private function get_image_result($process, $numberOutput)
     {
         $client = new Client();
-        $response = $client->post($this->url, [
-            'json' => ['prompt' => $process]
-        ]);
+        $response = $client->post($this->url, ['json' => ['prompt' => $process]]);
+        
+        if ($response->getStatusCode() !== 200) return null;
 
-        if ($response->getStatusCode() == 200) 
-        {
-            $body = json_decode($response->getBody(), true);
-            $id = $body['prompt_id'] ?? null;
-        }
-        while(true)
-        {
-            $response = $client->get('http://127.0.0.1:8188/history/' . $id);
-            if ($response->getStatusCode() == 200) 
-            {
+        $id = json_decode($response->getBody(), true)['prompt_id'] ?? null;
+
+        while (true) {
+            $response = $client->get("http://127.0.0.1:8188/history/{$id}");
+            if ($response->getStatusCode() === 200) {
                 $takeFileName = json_decode($response->getBody()->getContents(), true);
-                if(!empty($takeFileName))
-                {
-                    $image = 'http://127.0.0.1:8188/view?filename='.$takeFileName[$id]['outputs'][$numberOutput]['images'][0]['filename'];
-                    break;
+                if (!empty($takeFileName)) {
+                    return 'http://127.0.0.1:8188/view?filename=' . $takeFileName[$id]['outputs'][$numberOutput]['images'][0]['filename'];
                 }
-            }
-            else
-            {
-                return null;
             }
             sleep(2);
         }
-        return $image;
     }
     private function check_prompt($process)
     {
         $client = new Client();
-        $response = $client->post($this->url2, [
-            'json' => ['prompt' => $process]
-        ]);
+        $response = $client->post($this->url2, ['json' => ['prompt' => $process]]);
 
-        if ($response->getStatusCode() == 200) 
-        {
-            $body = json_decode($response->getBody(), true);
-            $id = $body['prompt_id'] ?? null;
-        }
+        if ($response->getStatusCode() !== 200) return null;
 
-        while(true)
-        {
+        $id = json_decode($response->getBody(), true)['prompt_id'] ?? null;
+
+        while (true) {
             $response = $client->get('http://192.168.1.10:8188/history/' . $id);
-            if ($response->getStatusCode() == 200) 
-            {
+            if ($response->getStatusCode() === 200) {
                 $takeFileName = json_decode($response->getBody()->getContents(), true);
-                if(!empty($takeFileName))
-                {
-                    $answer =  $takeFileName[$id]["outputs"][3]["string"][0];
-                    break;
+                if (!empty($takeFileName)) {
+                    return $takeFileName[$id]["outputs"][3]["string"][0];
                 }
-            }
-            else
-            {
-                break;
             }
             sleep(2);
         }
-        return $answer;
     }
     private function waitForImage($previousImage)
     {
@@ -171,15 +145,11 @@ trait AI_Create_Image
     }
     private function ChooseModel($model)
     {
-        if ($model == "Ảnh hình 3D") 
-        {
-            $model = "3DRedmond-3DRenderStyle-3DRenderAF.safetensors";
-        } 
-        else if ($model == "Ảnh hoạt hình") 
-        {
-            $model = "Anime Enhancer XL_v5.safetensors";
-        } 
-        return $model;
+        $models = [
+            "Ảnh hình 3D" => "3DRedmond-3DRenderStyle-3DRenderAF.safetensors",
+            "Ảnh hoạt hình" => "Anime Enhancer XL_v5.safetensors"
+        ];
+        return $models[$model] ?? $model;
     }
     private function UploadImageR2($urlImage)
     {

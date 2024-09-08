@@ -39,6 +39,7 @@
       <span class="subtitle">Chúng tôi sẽ gửi mã xác minh tới tài khoản của bạn.</span>
     </div>
     <br>
+    <x-turnstile-captcha />
     <div class="input_container">
       <label class="input_label" for="email_field">Địa chỉ Email</label>
       <svg fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg" class="icon">

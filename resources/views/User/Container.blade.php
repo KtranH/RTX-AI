@@ -51,7 +51,7 @@
 
     <body class="{{ session('theme', 'theme-default') }}">
         @include('User.Header')
-        @yield('Body')
+        <div class="mt-20">@yield('Body')</div>
         @include('User.Footer')
         <script>
             AOS.init({

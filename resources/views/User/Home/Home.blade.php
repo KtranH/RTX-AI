@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="margin-bottom:100px">
+                <div style="margin-bottom:100px" class="mt-4">
                     <h2 class="text-4xl font-bold tracking-tight text-gray-900 text-center mb-2" data-aos="fade-up">Khám phá cùng RTX-AI</h2>
                     <p class="text-2xs tracking-tight text-gray-500 text-center mt-2" data-aos="fade-up" data-aos-delay="300">Chia sẻ và tìm
                         kiếm những bức ảnh nổi bật</p>

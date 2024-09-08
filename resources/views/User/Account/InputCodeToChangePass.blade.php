@@ -39,6 +39,7 @@
       <span class="subtitle">Chúng tôi đã gửi mã xác minh tới tài khoản của bạn.</span>
     </div>
     <br>
+    <x-turnstile-captcha />
     <div class="input_container">
       <label class="input_label" for="email_field">Mã xác minh</label>
       <img src="/assets/img/select.png" class="icon" alt="">
