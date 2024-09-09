@@ -32,18 +32,18 @@
                         </div>
                     </div>
                     <!-- Image -->
-                    <div class="md:col-span-4 row-span-1 aspect-square relative group">
-                        <img id="image-cover" src="/images/image.png" style="border-radius:10px" alt="Image Cover" class="w-full h-full object-cover">
-                        <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+                    <div class="col-span-1 md:col-span-4 row-span-1 aspect-square relative group">
+                        <img id="image-cover" src="/images/image.png" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
+                        <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>
-                        <input type="file" name="cover" id="cover" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror" required>
+                        <input type="file" name="cover" id="cover" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror">
                         @error('cover')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <!-- Data -->
-                    <div class="md:col-span-8 row-span-1 p-4 shadow-md" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; border-radius:20px">
+                    <div class="md:col-span-8 row-span-1 p-4 rounded-2xl" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px">
                         <div class="mb-4">
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
                             <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] sm:text-sm" placeholder="Nhập tiêu đề" required>

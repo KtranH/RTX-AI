@@ -15,7 +15,7 @@
     ?>
 
     <title>RTX-AI: Tài Khoản</title>
-    <main class="w-full h-full" style="margin-bottom:10%">
+    <main class="w-full h-full">
         <!-- Account -->
         <div class="flex items-center justify-center">
             <div class="absolute inset-x-0 -top-5 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-5" aria-hidden="true">
@@ -122,7 +122,7 @@
                                 <div class="relative group">
                                     <a href="{{ route('showimage', ['id' => $x->id]) }}">
                                         <div class="aspect-square">
-                                            <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius:30px">
+                                            <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15 rounded-2xl">
                                         </div>
                                         <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-50 group-hover:!opacity-100 transition-opacity duration-300">
                                             <div class="mt-2 text-left px-2 py-1">
@@ -262,14 +262,14 @@
                 <div class="font-bold text-3xl text-left">Album</div>
                 @if (!$albums)
                     <div class="mt-2 flex justify-center">
-                        <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 w-32 h-32" style="border-radius:30px">
+                        <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 w-32 h-32 rounded-2xl border-4 border-[#a000ff]">
                             <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                         </a>
                     </div>
                 @else
                     <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <div class="relative group">
-                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300" style="border-radius:30px">
+                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 rounded-2xl border-4 border-[#a000ff]">
                                 <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                             </a>
                         </div>
@@ -277,7 +277,7 @@
                             <div class="relative group">
                                 <a href="{{ route('showalbum', ['id' => $x->id]) }}">
                                     <div class="aspect-square">
-                                        <img src="{{ $x->cover_image }}" alt="Image 1" class="w-full h-full object-cover" style="border-radius:30px; border:4px solid #B197FC">
+                                        <img src="{{ $x->cover_image }}" alt="Image 1" class="w-full h-full object-cover rounded-2xl border-4 border-[#a000ff]">
                                     </div>
                                     <div class="mt-2 text-left group-hover:text-[#a000ff]">
                                         <div class="font-semibold text-lg truncate">{{ $x->title }}</div>
@@ -320,7 +320,7 @@
                             <div class="relative group">
                                 <a href="{{ route('showimage', ['id' => $x->id]) }}">
                                     <div class="aspect-square">
-                                        <img src="{{ $x->url }}" style="border-radius:30px" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                        <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                     </div>
                                     <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                         <div class="mt-2 text-left px-2 py-1">

@@ -13,6 +13,8 @@ use App\Http\Middleware\ThrottleRequests;
 use App\Models\WorkFlow;
 use App\Http\Controllers\Board\Board;
 use App\Http\Controllers\Image\Image;
+use App\Http\Controllers\Creativity\Creativity;
+use App\Http\Controllers\Explore\Explore;
 use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitUpdateAccountAccess;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
@@ -136,6 +138,12 @@ Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
 
 //Update account
 Route::post('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
+
+//Access creativity
+Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcreativity");
+
+//Access explore
+Route::get('/explore', [Explore::class, 'ShowExplore'])->name("showexplore");
 
 //Change theme
 Route::post('/save-theme', function (Illuminate\Http\Request $request) {

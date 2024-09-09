@@ -20,10 +20,11 @@ class Image extends Controller
 {
     use FindInformation;
     use AI_Create_Image;
+
     public function ShowWorkFlow()
     {
         $workflow = WorkFlow::paginate(6);
-        return view("User.Image.Creativity", compact("workflow"));
+        //return view("User.Image.Creativity", compact("workflow"));
     }
 
     public function ShowImage($id)
