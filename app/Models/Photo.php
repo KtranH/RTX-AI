@@ -9,11 +9,13 @@ class Photo extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'album_id',
         'category_id',
         'title',
         'description',
         'url',
+        'is_feature',
     ];
 
     public function album()

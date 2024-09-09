@@ -15,6 +15,7 @@ class Album extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'user_id',
         'title',
         'description',

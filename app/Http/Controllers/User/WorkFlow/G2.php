@@ -2,47 +2,31 @@
 
 namespace App\Http\Controllers\User\WorkFlow;
 
+use App\AI_Create_Image;
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\WorkFlow;
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
-use Intervention\Image\Facades\Image;
-use Stichoza\GoogleTranslate\GoogleTranslate;
-
 
 class G2 extends Controller
 {
      //
-     private $url = 'http://127.0.0.1:8188/prompt';
-     private $interrupt = '';
-     private $inputDir = 'D:\AI\SD\ComfyUI_windows_portable\ComfyUI\input';
-     private $inputError = 'D:\ProjectPHP\GradioApp\img';
-     private $outputDir = '';
- 
+     use AI_Create_Image;
      public function InputDataG2()
      {
-         Session::forget("prompt");
-         Session::forget("seed");
-         Session::forget("url");
- 
-         $cookie = Cookie::get("token_account");
-         $times = User::where("email",$cookie)->first();
-         $ShowTimes = $times->times;
-         $G = WorkFlow::find(2);
-         return view("User.InputData_WorkFlow.G2",compact("ShowTimes","G"));
+         return $this->InputData(2);
      }
  
      public function ShowImageG2(Request $request)
      {
         ini_set("max_execution_time",3600);
 
-        $request->validate(["input" => 'image|mimes:jpg,jpeg,png|max:4048',]);
+        $Email = Cookie::get("token_account");
+
+        $request->validate(['input' => 'image|mimes:jpg,jpeg,png|max:4048',],
+        ['input.max' => 'Dung lượng file không được vượt quá 4MB.',]);
 
         $email = Cookie::get("token_account");
         $pattern = "/[^a-zA-Z0-9]/";
@@ -61,12 +45,11 @@ class G2 extends Controller
             return redirect()->route("showworkflow");
         }
 
-        $translator = new GoogleTranslate();
-        $translated = $translator->setSource('vi')->setTarget('en')->translate($prompt);
+        $translated = $this->Translate2English($prompt);
 
         $process = json_decode(file_get_contents(storage_path('app/Check_Text.json')), true);
 
-        $process["1"]["inputs"]["prompt"] = $translated . ". Are these words sensitive or obscene? Just answer yes or no.";
+        $process["1"]["inputs"]["prompt"] = '"' . $translated . '"' . $this->check_text;
         $answer = $this->check_prompt($process);
 
         $answer = stripos($answer,"No");
@@ -78,27 +61,15 @@ class G2 extends Controller
  
         $process = json_decode(file_get_contents(storage_path('app/G2.json')), true);
  
-        if ($model == "Ảnh thực tế")
-        {
-            $model = "majicmixRealistic_v7.safetensors";
-        } 
-        else if ($model == "Ảnh hình 3D") 
-        {
-            $model = "xxmixunreal_v10.safetensors";
-        } 
-        else if ($model == "Ảnh hoạt hình") 
-        {
-           
-            $model = "chosenMix_chosenMix.ckpt";
-        }
+        $model = $this->ChooseModel($model);
         
         $currentDate = Carbon::now();
         $main = $email . preg_replace($pattern,$replacement,$image->getClientOriginalName()) . "G2" .  $currentDate->format('Y-m-d') . ".png";
  
-        $process["2"]["inputs"]["ckpt_name"] = $model;
+        $process["23"]["inputs"]["lora_name"] = $model;
         $process["3"]["inputs"]["text"] = $translated;
         $process["7"]["inputs"]["noise_seed"] = $seed;
-        $process["15"]["inputs"]["image"] = $email . "/" . $main;
+        $process["15"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
 
         $destinationPath = $this->inputDir . '/' . $email;
        
@@ -109,18 +80,15 @@ class G2 extends Controller
 
         $image->move($destinationPath , $main);
  
-        //$previousImage = $this->getLatestImage($this->outputDir);
- 
         try 
         {
-            //$latestImage = $this->waitForImage($previousImage);
-            //$publicPath = $this->moveToPublicDirectory($latestImage);
-            //$imageUrl = asset($publicPath);
-            $imageUrl = $this->get_image($process);
-            Session::put("url",$imageUrl);
+            $imageUrl = $this->get_image_result($process,14);
+            $takeImageUrl = $this->UploadImageR2($imageUrl);
+            $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
+            Session::put("url",$url);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
-            return redirect()->route("showg2");
+            return response()->json(['success' => true, 'redirect' => route("get_imageg2")]); 
         } 
         catch (Exception $e) 
         {
@@ -130,151 +98,12 @@ class G2 extends Controller
             Session::put("url",$imageUrl);
             Session::put("seed",$seed);
             Session::put("prompt",$prompt);
-            return redirect()->route("showg2");
+            return response()->json(['success' => true, 'redirect' => route("get_imageg2")]); 
         }
-     }
- 
-     public function ImageG2()
-     {
-         $prompt = Session::get("prompt");
-         $model = Session::get("model");
-         $seed = Session::get("seed");
-         $url = Session::get("url");
-         $G = WorkFlow::find(2);
- 
-         if(empty($prompt) || empty($seed))
-         {
-             return redirect()->route("showworkflow");
-         }
-         else
-         {
-             return view("User.InputData_WorkFlow.ShowG",compact("prompt","seed","url","G","model"));
-         }
-     }
-     private function getLatestImage($folder)
-     {
-         $files = array_filter(glob($folder . '/*'), 'is_file');
-         usort($files, function($a, $b) {
-             return filemtime($b) - filemtime($a);
-         });
-         return $files ? $files[0] : null;
-     }
-     /*public function stopQueue()
-     {
-         $client = new Client();
-         $response = $client->post($this->interrupt);
- 
-         return redirect()->route("showworkflow");
-     }*/
- 
-     /*private function startQueue($prompt)
-     {
-         $client = new Client();
-         $response = $client->post($this->url, [
-             'json' => ['prompt' => $prompt]
-         ]);
-     }*/
-
-     private function get_image($process)
-     {
-         $client = new Client();
-         $response = $client->post($this->url, [
-             'json' => ['prompt' => $process]
-         ]);
- 
-         if ($response->getStatusCode() == 200) 
-         {
-             $body = json_decode($response->getBody(), true);
-             $id = $body['prompt_id'] ?? null;
-         }
-         while(true)
-         {
-             $response = $client->get('http://127.0.0.1:8188/history/' . $id);
-             if ($response->getStatusCode() == 200) 
-             {
-                 $takeFileName = json_decode($response->getBody()->getContents(), true);
-                 if(!empty($takeFileName))
-                 {
-                     $image = 'http://127.0.0.1:8188/view?filename='.$takeFileName[$id]['outputs'][14]['images'][0]['filename'];
-                     break;
-                 }
-             }
-             else
-             {
-                 break;
-             }
-             sleep(0.5);
-         }
-         return $image;
-     }
-     private function check_prompt($process)
-     {
-         $client = new Client();
-         $response = $client->post($this->url, [
-             'json' => ['prompt' => $process]
-         ]);
- 
-         if ($response->getStatusCode() == 200) 
-         {
-             $body = json_decode($response->getBody(), true);
-             $id = $body['prompt_id'] ?? null;
-         }
- 
-         while(true)
-         {
-             $response = $client->get('http://127.0.0.1:8188/history/' . $id);
-             if ($response->getStatusCode() == 200) 
-             {
-                 $takeFileName = json_decode($response->getBody()->getContents(), true);
-                 if(!empty($takeFileName))
-                 {
-                     $answer =  $takeFileName[$id]["outputs"][3]["string"][0];
-                     break;
-                 }
-             }
-             else
-             {
-                 $answer =  "Yes";
-                 break;
-             }
-             sleep(0.5);
-         }
-         return $answer;
-     }
- 
-     private function waitForImage($previousImage)
-     {
-         while (true) {
-             $latestImage = $this->getLatestImage($this->outputDir);
-             if ($latestImage != $previousImage) {
-                 return $latestImage;
-             }
-             sleep(3);
-         }
-     }
-     private function moveToPublicDirectory($filePath)
-     {
-         $fileName = basename($filePath);
-         $uniquePrefix = time(); 
-         $uniqueFileName = $uniquePrefix . '_' . $fileName;
-         
-         $publicDirectory = public_path('images');
-         if (!File::exists($publicDirectory)) {
-             File::makeDirectory($publicDirectory, 0755, true);
-         }
-         $destinationPath = $publicDirectory . DIRECTORY_SEPARATOR . $uniqueFileName;
-         File::copy($filePath, $destinationPath);
-         return 'images/' . $uniqueFileName;
-     }
-     private function moveToPublicDirectoryError($filePath)
-     {
-         $fileName = pathinfo($filePath, PATHINFO_BASENAME); 
-         $destinationPath = public_path('images') . DIRECTORY_SEPARATOR . $fileName;
-         if (File::exists($destinationPath)) {
-             File::delete($destinationPath);
-         }
- 
-         File::copy($filePath, $destinationPath);
-         return 'images/' . $fileName;
-     }
+    }
+    public function get_imageG2()
+    {
+        return $this->ImageG(2);
+    }
+     
 }

@@ -13,6 +13,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <!-- Link Icons -->
 
   <!-- Google Fonts -->
@@ -24,6 +25,7 @@
   <link rel="stylesheet" href="{{url('assets/css/login.css')}}">
   <link rel="stylesheet" href="{{url('assets/css/side_img.css')}}">
   <!-- JS Files -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <style>
     .form_container {
     width: fit-content;
@@ -219,7 +221,7 @@
   </style>
 </head>
 <body style="display:flex;flex-wrap:wrap">
-  <form class="form_container" style="margin:auto auto auto auto;" method="POST" action="{{ route("newaccount") }}">
+  <form class="form_container" style="margin:auto auto auto auto;" method="POST" action="{{ route("newaccount") }}" data-aos="zoom-in-down">
     @csrf
     <div class="logo_container">
       <a href="{{route("showhome")}}">
@@ -231,6 +233,7 @@
       <span class="subtitle">Bắt đầu chia sẻ những khoảng khắc và sáng tạo nghệ thuật.</span>
     </div>
     <br>
+    <x-turnstile-captcha />
     <div class="input_container">
         <label class="input_label" for="email_field">Tên tài khoản</label>
         <img src="/assets/img/user.png" class="icon" alt="">
@@ -298,6 +301,14 @@
     </a>
     <a href="{{route("showlogin")}}" class="note">Bạn đã có tài khoản? Đăng nhập ở đây.</a>
 </form>
-<img src="/assets/img/left_signup.png" alt="">
+<img src="/assets/img/left_signup.png" alt="" data-aos="flip-left">
+<script>
+  AOS.init({
+    duration: 1000, 
+    deplay:800,
+    once: false,
+    offset: 200, 
+  });
+</script>      
 </body>
 </html>

@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\User;
 
+use App\AI_Create_Image;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
 
 class Account extends Controller
 {
     //
+    use AI_Create_Image;
     public function ShowLogin()
     {
         return view("User.Account.Login");
@@ -184,5 +188,43 @@ class Account extends Controller
         {
             return redirect()->route('showlogin');
         }
+    }
+    public function ConfirmChangePass()
+    {
+        //This function is used to check the password change confirmation interface
+        return view("User.Account.ConfirmChangePass");
+    }
+    public function ChangePass()
+    {
+        $email = Cookie::get("token_account");
+        Session::put("CodeRestPass",$email);
+        return redirect()->route("sendcodetoemail");
+    }
+    public function UpdateAccount(Request $request)
+    {
+        $Email = Cookie::get("token_account");
+        $request->validate([
+            'avatar_url' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4048',
+            'username' => 'required|string|max:255',
+        ], [
+            'avatar_url.image' => 'Ảnh đại diện phải là ảnh',
+            'avatar_url.max' => 'Ảnh đại diện phải nhỏ hơn 4MB',
+            'username.required' => 'Tên người dùng không được để trống',
+            'username.max' => 'Tên người dùng không được quá 255 ký tự',
+        ]);
+
+        $user = User::where("email", Cookie::get("token_account"))->first();
+        if ($user) {
+            $user->username = $request->input("username");
+            if ($image = $request->file("avatar_url")) {
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                Storage::disk('r2')->put("AvatarUser/{$user->email}/{$filename}", file_get_contents($image));
+                Storage::disk('r2')->delete(str_replace($this->urlR2, "", $user->avatar_url));
+                $user->avatar_url = $this->urlR2 . "AvatarUser/{$user->email}/{$filename}";
+            }
+            $user->update(['username' => $user->username, 'avatar_url' => $user->avatar_url]);
+        }
+
+        return redirect()->route("showaccount");
     }
 }

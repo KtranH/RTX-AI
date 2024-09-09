@@ -13,7 +13,11 @@ use App\Http\Middleware\ThrottleRequests;
 use App\Models\WorkFlow;
 use App\Http\Controllers\Board\Board;
 use App\Http\Controllers\Image\Image;
+use App\Http\Middleware\LimitContentUpdate;
+use App\Http\Middleware\LimitUpdateAccountAccess;
+use App\Http\Middleware\VerifyTurnstileCaptcha;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 Route::get('/ai', function () {
     return view('generate_image');
@@ -24,10 +28,10 @@ Route::post('/generate-image', [ImageController::class, 'generateImage']);
 Route::get('/',[Home::class,'ShowHome'])->name("showhome");
 
 //Access login page
-Route::get('/login',[Account::class,'ShowLogin'])->name("showlogin");
+Route::get('/login',[Account::class,'ShowLogin'])->name("showlogin")->middleware(VerifyTurnstileCaptcha::class);
 
 //Access sign up page
-Route::get('/signup',[Account::class,'ShowSignUp'])->name("showsignup");
+Route::get('/signup',[Account::class,'ShowSignUp'])->name("showsignup")->middleware(VerifyTurnstileCaptcha::class);
 
 //Button login by google
 Route::get('/auth2Google',[Account::class,'loginByGoogle'])->name("loginByGoogle");
@@ -60,13 +64,13 @@ Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode")->m
 Route::post('/loginaccount', [Account::class, 'LoginAccount'])->name("loginaccount");
 
 //Forget password page
-Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass");
+Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass")->middleware(VerifyTurnstileCaptcha::class);
 
 //Send email to password
 Route::post('/sendemail&changepass', [Account::class, 'SendEmailResetPass'])->name("sendemailresetpass");
 
 //Input code to change password
-Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass");
+Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass")->middleware(VerifyTurnstileCaptcha::class);
 
 //Check code to change password
 Route::post('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
@@ -95,10 +99,51 @@ Route::get('/edit_album/{id}', [Board::class, 'EditAlbum'])->name("editalbum");
 Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
 
 //Access create image page
-Route::get('/create_image', [Image::class, 'CreateImage'])->name("createimage");
+Route::get('/create_image/{id}', [Image::class, 'CreateImage'])->name("createimage");
 
 //Add new album
 Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
+
+//Update album
+Route::post('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
+
+//Delete album
+Route::get('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
+
+//Add new image to album
+Route::post('/addimage2album/{id}', [Image::class, 'AddImage2Album'])->name("addimage2album");
+
+//Access image page
+Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
+
+//Update image
+Route::post('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateimage")->middleware(LimitContentUpdate::class);
+
+//Delete image
+Route::get('/deleteimage/{id}', [Image::class, 'DeleteImage'])->name("deleteimage");
+
+//Set feature image
+Route::get('/featureimage/{id}', [Board::class, 'FeatureImage'])->name("featureimage");
+
+//Confirm change password
+Route::get('/confirmpassword', [Account::class, 'ConfirmChangePass'])->name("confirmchangepass");
+
+//Change passsword
+Route::get('/changepassword', [Account::class, 'ChangePass'])->name("changepass");
+
+//Access image page
+Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
+
+//Update account
+Route::post('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
+
+//Change theme
+Route::post('/save-theme', function (Illuminate\Http\Request $request) {
+    $theme = $request->input('theme');
+    Session::put('theme', $theme);
+
+    return response()->json(['status' => 'success']);
+});
 
 //Show G1
 Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
@@ -109,8 +154,8 @@ Route::post('/createg1', [G1::class, 'ShowImageG1'])->name("createg1");
 //Cancel Image G1
 /*Route::get('/cancelg1', [G1::class, 'stopQueue'])->name("cancelg1");*/
 
-//Show Image G1
-Route::get('/showg1', [G1::class, 'ImageG1'])->name("showg1");
+//Show result G1
+Route::get('/resultofg1', [G1::class, 'get_imageG1'])->name("get_imageg1");
 
 //Show G2
 Route::get('/g2', [G2::class, 'InputDataG2'])->name("g2");
@@ -118,8 +163,8 @@ Route::get('/g2', [G2::class, 'InputDataG2'])->name("g2");
 //Create Image G2
 Route::post('/createg2', [G2::class, 'ShowImageG2'])->name("createg2");
 
-//Show Image G2
-Route::get('/showg2', [G2::class, 'ImageG2'])->name("showg2");
+//Show result G2
+Route::get('/resultofg2', [G2::class, 'get_imageG2'])->name("get_imageg2");
 
 //Show G3
 Route::get('/g3', [G3::class, 'InputDataG3'])->name("g3");
@@ -127,8 +172,8 @@ Route::get('/g3', [G3::class, 'InputDataG3'])->name("g3");
 //Create Image G3
 Route::post('/createg3', [G3::class, 'ShowImageG3'])->name("createg3");
 
-//Show Image G3
-Route::get('/showg3', [G3::class, 'ImageG3'])->name("showg3");
+//Show result G3
+Route::get('/resultofg3', [G3::class, 'get_imageG3'])->name("get_imageg3");
 
 //Show G4
 Route::get('/g4', [G3::class, 'InputDataG3'])->name("g4");

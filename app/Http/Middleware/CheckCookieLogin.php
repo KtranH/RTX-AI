@@ -17,7 +17,6 @@ class CheckCookieLogin
     public function handle(Request $request, Closure $next): Response
     {
         if (!Cookie::get('token_account')) {
-            // Nếu cookie không tồn tại, chuyển hướng đến trang đăng nhập
             return redirect()->route('showlogin');
         }
 
