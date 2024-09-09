@@ -13,7 +13,7 @@
             </div>
         </div>
         <!-- Search -->
-        <div class="flex items-center justify-center sticky top-0 z-50 bg-white">
+        <div class="flex items-center justify-center sticky z-50 bg-white">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="relative w-full">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
