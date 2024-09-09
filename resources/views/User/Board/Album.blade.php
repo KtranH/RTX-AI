@@ -4,7 +4,7 @@
     <title>RTX-AI: Album</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <main class="w-full h-full" style="margin-bottom:10%">
+    <main class="w-full h-full">
         <!-- Album -->
         <div class="flex items-center justify-center">
             <div class="absolute inset-x-0 -top-5 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-5" aria-hidden="true">
@@ -14,9 +14,9 @@
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:space-x-6">
                     <!-- Cover -->
                     <div class="relative text-center lg:text-left w-full lg:w-80 mb-4 lg:mb-0">
-                        <img class="w-full h-full object-cover rounded-lg" src="{{ $album->cover_image }}" style="border-radius:30px;border:4px solid #B197FC" alt="Album Cover">
+                        <img class="w-full h-full object-cover rounded-2xl border-8 border-[#a000ff]" src="{{ $album->cover_image }}" alt="Album Cover">
                         <div class="absolute inset-0 flex opacity-0 hover:opacity-100 hover:!opacity-100 transition-opacity duration-300">
-                            <a href="{{ route('editalbum', ['id' => $album->id]) }}" class="bg-white p-2 shadow-md w-full h-full border-8 border-[#a000ff] flex items-center justify-center" style="border-radius:30px">
+                            <a href="{{ route('editalbum', ['id' => $album->id]) }}" class="bg-white p-2 shadow-md w-full h-full border-8 border-[#a000ff] flex items-center justify-center rounded-2xl">
                                 <i class="fas fa-edit text-gray-700 text-5xl"></i>
                             </a>
                         </div>
@@ -40,7 +40,7 @@
         <!-- Return -->
         <div class="flex justify-center">
             <a href="{{ route('showboard') }}" class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group">
-                <div class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500" style="border-radius:30px">
+                <div class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500 rounded-2xl">
                     <svg width="25px" height="25px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                         <path fill="#ffffff" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
                         <path fill="#ffffff" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path>
@@ -66,7 +66,7 @@
                             <div class="relative group">
                                 <a href="{{ route('showimage', ['id' => $x->id]) }}">
                                     <div class="aspect-square">
-                                        <img src="{{ $x->url }}" style="border-radius:30px" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                        <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                     </div>
                                     <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                         <div class="mt-2 text-left px-2 py-1">
@@ -109,7 +109,7 @@
                 <div class="font-bold text-3xl text-left">Thêm Ảnh</div>
                 <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <div class="relative group">
-                        <a href="{{ route('createimage', ['id' => $album->id]) }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300" style="border-radius:30px">
+                        <a href="{{ route('createimage', ['id' => $album->id]) }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 rounded-2xl">
                             <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                         </a>
                     </div>

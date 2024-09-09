@@ -4,7 +4,7 @@
     <title>RTX-AI: Chỉnh Album</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <main class="w-full h-full" style="margin-bottom:10%">
+    <main class="w-full h-full">
         <!-- Title -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 text-center">
@@ -31,7 +31,7 @@
                     @csrf
                     <!-- Cover -->
                     <div class="md:col-span-4 aspect-square relative group">
-                        <img id="album-cover" src="{{ $album->cover_image }}" alt="Album Cover" class="w-full h-full object-cover" style="border-radius:30px">
+                        <img id="album-cover" src="{{ $album->cover_image }}" alt="Album Cover" class="w-full h-full object-cover rounded-2xl border-4 border-[#a000ff]">
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>
@@ -41,7 +41,7 @@
                         @enderror
                     </div>
                     <!-- Data -->
-                    <div class="md:col-span-8 p-4 shadow-md" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
+                    <div class="md:col-span-8 p-4 rounded-2xl" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px">
                         <div class="mb-4">
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
                             <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('title') is-invalid @enderror" value="{{ $album->title }}">
