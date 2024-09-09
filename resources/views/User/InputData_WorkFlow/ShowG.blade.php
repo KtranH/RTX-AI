@@ -32,8 +32,8 @@
                                 }
                             </style>
                             <div class="responsive-div">
-                                <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ $G->name }}</h2>
-                                <p class="text-xs font-bold tracking-tight">{{ $G->description }}</p>
+                                <h2 class="text-4xl font-bold tracking-tight text-gray-900 mb-2">{{ $G->name }}</h2>
+                                <p class="text-2xs text-gray-500 tracking-tight mb-2">{{ $G->description }}</p>
                                 <p class="text-xl font-semibold text-gray-900" style="margin-top:5%">Mô tả:</p>
                                 <textarea style="margin-top:1%" id="about" name="prompt" rows="3" class="p-1 block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" readonly>{{ $prompt }}</textarea>
                                 <p class="text-xl font-semibold text-gray-900" style="margin-top:1%">Mô hình:</p>

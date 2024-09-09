@@ -233,7 +233,6 @@
       <span class="subtitle">Bắt đầu chia sẻ những khoảng khắc và sáng tạo nghệ thuật.</span>
     </div>
     <br>
-    <x-turnstile-captcha />
     <div class="input_container">
         <label class="input_label" for="email_field">Tên tài khoản</label>
         <img src="/assets/img/user.png" class="icon" alt="">
@@ -300,6 +299,7 @@
       Đăng nhập bằng Google
     </a>
     <a href="{{route("showlogin")}}" class="note">Bạn đã có tài khoản? Đăng nhập ở đây.</a>
+    <x-turnstile-captcha />
 </form>
 <img src="/assets/img/left_signup.png" alt="" data-aos="flip-left">
 <script>
