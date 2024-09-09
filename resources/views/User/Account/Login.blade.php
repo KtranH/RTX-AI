@@ -235,7 +235,6 @@
       <span class="subtitle">Bắt đầu chia sẻ những khoảng khắc và sáng tạo nghệ thuật.</span>
     </div>
     <br>
-    <x-turnstile-captcha />
     <div class="input_container">
       <label class="input_label" for="email_field">Địa chỉ Email</label>
       <svg fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg" class="icon">
@@ -281,6 +280,7 @@
       Đăng nhập bằng Google
     </a>
     <a href="{{route("showsignup")}}" class="note">Bạn chưa có tài khoản? Đăng ký ở đây.</a>
+    <x-turnstile-captcha />
 </form>
 <script>
   AOS.init({

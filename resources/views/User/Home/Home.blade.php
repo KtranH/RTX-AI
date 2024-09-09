@@ -467,8 +467,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button><span class="text" style="font-weight: bold">Tạo ảnh ngay</span><span
-                                            style="font-weight: bold">Bắt đầu!</span></button>
+                                    <button class="btn-12"><span>Bắt đầu!</span></button>
                                     <script>
                                         document.querySelector('button').addEventListener('click', function() {
                                             window.location.href = "{{ route('showworkflow') }}";

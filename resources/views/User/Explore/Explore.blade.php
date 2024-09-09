@@ -8,8 +8,8 @@
         <!-- Title -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 text-center">
-                <div class="font-bold text-3xl">Khám Phá</div>
-                <div class="text-gray-500">Thỏa Sức Sáng Tạo - Truyền Đầy Cảm Hứng</div>
+                <div class="font-bold text-4xl">Khám Phá</div>
+                <div class="text-gray-500 text-2xs">Thỏa Sức Sáng Tạo - Truyền Đầy Cảm Hứng</div>
             </div>
         </div>
         <!-- Search -->
@@ -19,12 +19,12 @@
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <i id="search-icon" class="fas fa-search text-gray-500"></i>
                     </span>
-                    <input id="search-bar" type="text" placeholder="Search..." class="w-full border-2 border-gray-500 rounded-lg pl-10 pr-10 py-2 focus:border-[#a000ff] focus:outline-none" 
-                        oninput="toggleCloseIcon()" onfocus="toggleCloseIcon()" onblur="checkCloseIcon()" onclick="toggleExtension(event)" />
+                    <input id="search-bar" type="text" placeholder="Search..." class="w-full bg-gray-100 rounded-lg pl-10 pr-10 py-3 focus:outline-none" 
+                        oninput="toggleCloseIcon()" onfocus="toggleCloseIcon()" onblur="checkCloseIcon()" onclick="toggleExtension(event)" style="border-radius: 30px;" />
                     <span id="close-icon" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden" onclick="clearSearchBar()">
                         <i class="text-xl fas fa-times"></i>
                     </span>
-                    <div id="search-extension" class="absolute mt-2 w-full max-h-48 sm:max-h-64 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden z-50" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px">
+                    <div id="search-extension" class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden z-50" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;" onclick="event.stopPropagation();">
                         <!-- Search History -->
                         <div id="search-history-title" class="text-lg font-semibold mb-2 hidden">Lịch Sử</div>
                         <div id="search-history" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4"></div>
@@ -41,7 +41,7 @@
                             @for ($i = 0; $i <= 5; $i++)
                                 <div class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
                                     <img src="https://picsum.photos/200" alt="Category Image" class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-xl text-black group-hover:!text-white leading-tight">Category Lorem Lorem Lorem {{ $i }}</div>
+                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Category Lorem Lorem Lorem {{ $i }}</div>
                                 </div>
                             @endfor
                         </div>
@@ -51,11 +51,12 @@
                             @for ($i = 0; $i <= 5; $i++)
                                 <div class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
                                     <img src="https://picsum.photos/200" alt="Category Image" class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-xl text-black group-hover:!text-white leading-tight">Suggestion {{ $i }}</div>
+                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Suggestion {{ $i }}</div>
                                 </div>
                             @endfor
                         </div>
                     </div>
+                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40"></div>
                 </div>
             </div>
         </div>
@@ -66,7 +67,10 @@
             {
                 event.stopPropagation();
                 const extension = document.getElementById('search-extension');
+                const overlay = document.getElementById('overlay');
                 extension.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+                overlay.classList.add('opacity-50');
             }
 
             function toggleCloseIcon()
@@ -170,9 +174,11 @@
             {
                 const searchBar = document.getElementById('search-bar');
                 const extension = document.getElementById('search-extension');
+                const overlay = document.getElementById('overlay');
 
                 if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
                     extension.classList.add('hidden');
+                    overlay.classList.add('hidden');
                 }
             });
 
@@ -196,10 +202,10 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2">
                     @for ($i = 0; $i <= 30; $i++)
-                        <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group">
+                        <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
                             <a href="">
                                 <div class="aspect-square">
-                                    <img src="https://picsum.photos/200" alt="Image 1" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                    <img src="https://picsum.photos/200" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
                                 </div>
                                 <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                     <div class="mt-2 text-left px-2 py-1">

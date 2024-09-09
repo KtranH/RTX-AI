@@ -50,7 +50,14 @@
     </head>
 
     <body class="{{ session('theme', 'theme-default') }}">
-        @include('User.Header')
+        <style>
+             @media (max-width: 480px) {
+            .header-mobile {
+                margin-bottom: 150px;
+            }
+        }
+        </style>
+        <div style="height:80px;" class="header-mobile">@include('User.Header')</div>
         <div class="mt-10 mb-10">@yield('Body')</div>
         @include('User.Footer')
         <script>
@@ -58,7 +65,7 @@
             duration: 1000, 
             deplay: 500,
             once: false,
-            offset: 200,
+            offset: 150,
             easing: 'ease-in-sine',
             });
         </script>      
