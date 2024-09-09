@@ -22,8 +22,44 @@
     </symbol>
 </svg>
 
+<style>
+    .nav-link 
+    {
+        position: relative;
+        text-decoration: none;
+        transition: font-size 0.3s ease;
+    }
+
+    .nav-link::after
+     {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 100%;
+        height: 3px;
+        background-color: #a000ff;
+        transition: all 0.3s ease;
+        transform: scaleX(0);
+        transform-origin: bottom right;
+    }
+
+    .nav-link:hover,
+    .nav-link.active 
+    {
+        font-size: 1.1rem;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after 
+    {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
+</style>
+
 <main class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="{{ request()->is('/') ? 'position: relative;' : 'position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background-color: white; padding:20px' }}">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 border-bottom">
         <!-- Logo -->
         <a href="/" class="d-flex align-items-center col-md-4 mb-2 mb-md-0 text-dark text-decoration-none">
             <img src="/assets/img/icon.png" alt="" style="width:40px;margin-right:10px">
@@ -31,10 +67,30 @@
         </a>
         <!-- Links -->
         <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <a href="#" class="nav-link px-2 link-dark" style="font-weight:600">Khám phá</a>
-            <a href="{{ route('showhome') }}" class="nav-link px-2 link-dark" style="font-weight:bold">TRANG CHỦ</a>
-            <a href="{{ route('showworkflow') }}" class="nav-link px-2 link-dark" style="font-weight:600">Sáng tạo</a>
+            <a href="{{ route('showexplore') }}" class="nav-link px-2 link-dark nav-explore" style="font-weight:600">Khám phá</a>
+            <a href="{{ route('showhome') }}" class="nav-link px-2 link-dark nav-home" style="font-weight:bold">TRANG CHỦ</a>
+            <a href="{{ route('showcreativity') }}" class="nav-link px-2 link-dark nav-creativity" style="font-weight:600">Sáng tạo</a>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () 
+            {
+                const currentPath = window.location.pathname;
+                
+                const links = 
+                {
+                    '/': 'nav-home',
+                    '/explore': 'nav-explore',
+                    '/creativity': 'nav-creativity'
+                };
+                
+                for (const [path, className] of Object.entries(links)) {
+                    if (currentPath === path || (path === '/' && currentPath === '')) 
+                    {
+                        document.querySelector(`.${className}`).classList.add('active');
+                    }
+                }
+            });
+        </script>
         <!-- Account -->
         @php
             $cookie = request()->cookie("token_account");

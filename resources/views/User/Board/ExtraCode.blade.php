@@ -112,3 +112,5 @@
                     @endif
                 </div>
             </div>
+
+<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="{{ request()->is('/') ? 'position: relative;' : 'position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background-color: white; padding:20px' }}"></header>

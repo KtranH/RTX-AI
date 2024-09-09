@@ -31,7 +31,7 @@
                     @csrf
                     <!-- Cover -->
                     <div class="col-span-12 md:col-span-4 md:row-span-1 aspect-square relative group mb-4 md:mb-0">
-                        <img id="album-cover" src="/images/image.png" alt="Album Cover" style="border-radius:10px" class="w-full h-full object-cover rounded-lg">
+                        <img id="album-cover" src="/images/image.png" alt="Album Cover" class="w-full h-full object-cover rounded-2xl border-4 border-[#a000ff]">
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>
@@ -41,7 +41,7 @@
                         @enderror
                     </div>
                     <!-- Data -->
-                    <div class="col-span-12 md:col-span-8 row-span-1 p-4 shadow-md" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px">
+                    <div class="col-span-12 md:col-span-8 row-span-1 p-4 rounded-2xl" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px">
                         <div class="mb-4">
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
                             <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm" placeholder="Nhập tiêu đề" required>
