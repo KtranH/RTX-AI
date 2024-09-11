@@ -6,14 +6,17 @@ use App\AI_Create_Image;
 use App\FindInformation;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
+use App\Models\HistoryImageAI;
 use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class Board extends Controller
@@ -23,28 +26,26 @@ class Board extends Controller
     public function FeatureImage($id)
     {
         $photo = Photo::find($id);
-        if($photo->is_feature == true)
-        {
-            $photo->is_feature = false;
-        }
-        else
-        {
-            $photo->is_feature = true;
-        }
+        $photo->is_feature = !$photo->is_feature;
         $photo->save();
         return redirect()->back();
     }
     public function ShowBoard()
     {
         $cookie = request()->cookie("token_account");
+        $userId = $this->find_id();
+        $imagesAI = HistoryImageAI::where('user_id', $userId)->paginate(12);
         $tab = request()->query('tab', 'saved');
+        if ($tab == 'created') {
+            return view('User.Board.Board', ['tab' => $tab], compact('imagesAI'));
+        }
         $photos = DB::table('users')->join('albums','users.id', '=' , 'albums.user_id')->join('photos','albums.id','=','photos.album_id')->where('users.id',$this->find_id())->paginate(12);
         $albums = Album::where('user_id',$this->find_id())->paginate(8);
         $feature = Photo::where('is_feature', true)
             ->whereHas('album', function($query) {
                 $query->where('user_id', $this->find_id());
             })->get();
-        return view('User.Board.Board', ['tab' => $tab], compact('photos','albums','feature'));
+        return view('User.Board.Board', ['tab' => $tab], compact('photos','albums','feature','imagesAI'));
     }
     public function ShowAlbum($id)              
     {

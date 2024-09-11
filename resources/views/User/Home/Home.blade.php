@@ -1,9 +1,101 @@
 @extends('User.Container')
 @section('Body')
+    <style>
+        .btn-12,
+        .btn-12 *,
+        .btn-12 :after,
+        .btn-12 :before,
+        .btn-12:after,
+        .btn-12:before {
+            border: 0 solid;
+            box-sizing: border-box;
+        }
+
+        .btn-12 {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: button;
+            background-color: #000;
+            background-image: none;
+            color: #fff;
+            cursor: pointer;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+                Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+            font-size: 100%;
+            font-weight: 900;
+            line-height: 1.5;
+            margin: 0;
+            -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
+            padding: 0;
+            text-transform: uppercase;
+        }
+
+        .btn-12:disabled {
+            cursor: default;
+        }
+
+        .btn-12:-moz-focusring {
+            outline: auto;
+        }
+
+        .btn-12 svg {
+            display: block;
+            vertical-align: middle;
+        }
+
+        .btn-12 [hidden] {
+            display: none;
+        }
+
+        .btn-12 {
+            border-radius: 99rem;
+            border-width: 2px;
+            overflow: hidden;
+            padding: 0.8rem 3rem;
+            position: relative;
+        }
+
+        .btn-12 span {
+            mix-blend-mode: difference;
+        }
+
+        .btn-12:after,
+        .btn-12:before {
+            background: linear-gradient(90deg,
+                    #fff 25%,
+                    transparent 0,
+                    transparent 50%,
+                    #fff 0,
+                    #fff 75%,
+                    transparent 0);
+            content: "";
+            inset: 0;
+            position: absolute;
+            transform: translateY(var(--progress, 100%));
+            transition: transform 0.2s ease;
+        }
+
+        .btn-12:after {
+            --progress: -100%;
+            background: linear-gradient(90deg,
+                    transparent 0,
+                    transparent 25%,
+                    #fff 0,
+                    #fff 50%,
+                    transparent 0,
+                    transparent 75%,
+                    #fff 0);
+            z-index: -1;
+        }
+
+        .btn-12:hover:after,
+        .btn-12:hover:before {
+            --progress: 0;
+        }
+    </style>
     <title>
         RTX-AI: Trang chủ
     </title>
-    <link rel="stylesheet" href="{{ url('assets/css/homeButton.css') }}">
     <main>
         <div class="bg-white">
             <div class="relative isolate px-6 pt-14 lg:px-8">
@@ -15,8 +107,8 @@
                 </div>
                 <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
                     <div class="hidden sm:mb-8 sm:flex sm:justify-center">
-                        <div
-                            class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20" data-aos="zoom-out-up">
+                        <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+                            data-aos="zoom-out-up">
                             Chào mừng bạn đến với. <a href="#" class="font-semibold text-indigo-600"><span
                                     class="absolute inset-0" aria-hidden="true"></span>RTX-AI<span
                                     aria-hidden="true">&rarr;</span></a>
@@ -29,16 +121,19 @@
                             người thân. Khám phá những khoảnh khắc tuyệt vời của cuộc sống.</p>
                         <div class="mt-10 flex items-center justify-center gap-x-6">
                             <a href="{{ route('showboard') }}"
-                                class="rounded-md bg-black px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" data-aos="zoom-in-up" data-aos-delay="300">Bắt
+                                class="rounded-md bg-black px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                data-aos="zoom-in-up" data-aos-delay="300">Bắt
                                 đầu</a>
-                            <a href="#" class="text-sm font-semibold leading-6 text-gray-900" data-aos="zoom-in-up" data-aos-delay="600">Khám phá <span
-                                    aria-hidden="true">→</span></a>
+                            <a href="#" class="text-sm font-semibold leading-6 text-gray-900" data-aos="zoom-in-up"
+                                data-aos-delay="600">Khám phá <span aria-hidden="true">→</span></a>
                         </div>
                     </div>
                 </div>
                 <div style="margin-bottom:100px" class="mt-4">
-                    <h2 class="text-4xl font-bold tracking-tight text-gray-900 text-center mb-2" data-aos="fade-up">Khám phá cùng RTX-AI</h2>
-                    <p class="text-2xs tracking-tight text-gray-500 text-center mt-2" data-aos="fade-up" data-aos-delay="300">Chia sẻ và tìm
+                    <h2 class="text-4xl font-bold tracking-tight text-gray-900 text-center mb-2" data-aos="fade-up">Khám phá
+                        cùng RTX-AI</h2>
+                    <p class="text-2xs tracking-tight text-gray-500 text-center mt-2" data-aos="fade-up"
+                        data-aos-delay="300">Chia sẻ và tìm
                         kiếm những bức ảnh nổi bật</p>
                 </div>
                 <div data-aos="fade-up" data-aos-delay="100">
@@ -48,7 +143,8 @@
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
+                                    data-aos-delay="200">
                                     @foreach ($landscape as $x)
                                         <?php echo $x->name; ?>
                                     @endforeach
@@ -67,7 +163,8 @@
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
+                                    data-aos-delay="200">
                                     @foreach ($animal as $x)
                                         <?php echo $x->name; ?>
                                     @endforeach
@@ -86,7 +183,8 @@
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
+                                    data-aos-delay="200">
                                     @foreach ($travel as $x)
                                         <?php echo $x->name; ?>
                                     @endforeach
@@ -105,16 +203,17 @@
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
-                                  @foreach ($tech as $x)
-                                      <?php echo $x->name; ?>
-                                  @endforeach
-                              </h2>
-                              <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
-                                  @foreach ($tech as $x)
-                                      <?php echo $x->description; ?>
-                                  @endforeach
-                              </p>
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
+                                    data-aos-delay="200">
+                                    @foreach ($tech as $x)
+                                        <?php echo $x->name; ?>
+                                    @endforeach
+                                </h2>
+                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
+                                    @foreach ($tech as $x)
+                                        <?php echo $x->description; ?>
+                                    @endforeach
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -124,16 +223,17 @@
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="100">
-                                  @foreach ($fashion as $x)
-                                      <?php echo $x->name; ?>
-                                  @endforeach
-                              </h2>
-                              <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="200">
-                                  @foreach ($fashion as $x)
-                                      <?php echo $x->description; ?>
-                                  @endforeach
-                              </p>
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
+                                    data-aos-delay="100">
+                                    @foreach ($fashion as $x)
+                                        <?php echo $x->name; ?>
+                                    @endforeach
+                                </h2>
+                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="200">
+                                    @foreach ($fashion as $x)
+                                        <?php echo $x->description; ?>
+                                    @endforeach
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -143,16 +243,17 @@
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up" data-aos-delay="200">
-                                  @foreach ($city as $x)
-                                      <?php echo $x->name; ?>
-                                  @endforeach
-                              </h2>
-                              <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
-                                  @foreach ($city as $x)
-                                      <?php echo $x->description; ?>
-                                  @endforeach
-                              </p>
+                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
+                                    data-aos-delay="200">
+                                    @foreach ($city as $x)
+                                        <?php echo $x->name; ?>
+                                    @endforeach
+                                </h2>
+                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
+                                    @foreach ($city as $x)
+                                        <?php echo $x->description; ?>
+                                    @endforeach
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -356,7 +457,8 @@
                             <div data-aos="fade-left">
                                 <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl">Sáng tạo ảnh bằng
                                     AI</h2>
-                                <p class="mt-4 text-2xs text-gray-500">Chúng tôi cung cấp hơn 20 chức năng tạo ảnh với công nghệ AI
+                                <p class="mt-4 text-2xs text-gray-500">Chúng tôi cung cấp hơn 20 chức năng tạo ảnh với công
+                                    nghệ AI
                                     tạo sinh hình ảnh mới lạ và độc đáo. Bạn có thể tạo ảnh theo ý muốn và chia sẻ với bạn
                                     bè và người thân.</p>
 
@@ -424,7 +526,7 @@
                                                         $count = 1;
                                                         $images = range($count, $count + 6);
                                                     @endphp
-                                                      <div
+                                                    <div
                                                         class="h-64 w-44 overflow-hidden rounded-lg sm:opacity-0 lg:opacity-100">
                                                         @php
                                                             $count = 1;
@@ -463,7 +565,7 @@
                                                             class="h-full w-full object-cover object-center">
                                                     </div>
                                                     <div class="h-64 w-44 overflow-hidden rounded-lg">
-                                                        <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/AI_home/{{ $count + 6}}.png"
+                                                        <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/AI_home/{{ $count + 6 }}.png"
                                                             alt=""
                                                             class="h-full w-full object-cover object-center">
                                                     </div>

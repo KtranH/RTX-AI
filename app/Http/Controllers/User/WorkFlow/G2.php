@@ -42,7 +42,7 @@ class G2 extends Controller
 
          $process = json_decode(file_get_contents(storage_path('app/G2.json')), true);
          $model = $this->ChooseModel($request->input("model"));
-         $main = $email . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input")->getClientOriginalName()) . "G2" . Carbon::now()->format('Y-m-d') . ".png";
+         $main = $email . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input")->getClientOriginalName()) . "G2" . ".png";
 
          $process["21"]["inputs"]["lora_name"] = $model;
          $process["3"]["inputs"]["text"] = $translated;

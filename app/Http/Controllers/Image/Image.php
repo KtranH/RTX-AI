@@ -36,11 +36,7 @@ class Image extends Controller
         $idUser = $this->find_id();
         $idUserAlbum = $album->user_id;
 
-        if($idUser == $idUserAlbum)
-        {
-            Session::put("Owner", "true");
-        }
-        
+        Session::put("Owner", $idUser == $idUserAlbum ? "true" : null);
         return view('User.Image.Image', compact('image', 'album', 'user', 'listcate'));
     }
 

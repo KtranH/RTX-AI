@@ -4,7 +4,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+        <meta property="og:image" content="{{ asset('images/imageWeb.png') }}">
+        <meta property="og:title" content="RTX_AI: Sáng tạo và chia sẻ hình ảnh">
+        <meta property="og:description" content="RTX_AI là một trang web cho phép người dùng tạo ra những hình ảnh bằng AI tạo sinh đẹp mắt và chia sẻ chúng với bạn bè và gia đình.">
+        
         <!-- Icon -->
         <link rel="icon" href="/assets/img/icon.png" type="image/png">
 
@@ -26,7 +29,8 @@
         <link rel="stylesheet" href="{{url('assets/css/header.css')}}">
         <link rel="stylesheet" href="{{url('assets/css/login.css')}}">
         <link rel="stylesheet" href="{{url('assets/css/theme.css')}}">
-        <!-- JS Files -->
+        <link rel="stylesheet" href="{{ url('assets/css/homeButton.css') }}">
+        <!-- JS link -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://kit.fontawesome.com/a076d05399.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
