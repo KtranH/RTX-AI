@@ -13,6 +13,19 @@
             </div>
         </div>
         <!-- Search -->
+        <style>
+        ::-webkit-scrollbar {
+            width: 12px; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #a00fff;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 10px; 
+        }
+        </style>
         <div class="flex items-center justify-center sticky z-50 bg-white">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="relative w-full">
@@ -24,7 +37,7 @@
                     <span id="close-icon" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden" onclick="clearSearchBar()">
                         <i class="text-xl fas fa-times"></i>
                     </span>
-                    <div id="search-extension" class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden z-50" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;" onclick="event.stopPropagation();">
+                    <div id="search-extension" class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-xl bg-white shadow-lg p-4 hidden z-50" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;" onclick="event.stopPropagation();">
                         <!-- Search History -->
                         <div id="search-history-title" class="text-lg font-semibold mb-2 hidden">Lịch Sử</div>
                         <div id="search-history" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4"></div>

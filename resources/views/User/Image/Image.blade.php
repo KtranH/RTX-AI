@@ -9,7 +9,7 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 rounded-2xl p-5" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Photo -->
-                    <div class="aspect-square md:col-span-1">
+                    <div class="md:col-span-1">
                         <img src="{{ $image->url }}" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
                     </div>
                     <!-- Details -->
@@ -87,9 +87,10 @@
                            </script>
                         </div>
                         <!-- Comment -->
+                        <h3 class="font-semibold text-xl mb-2">Bình luận: </h3>
                         <div class="flex flex-col mt-auto">
-                            <div class="flex flex-col overflow-y-auto overflow-x-hidden max-h-44 mb-4">
-                                <div class="space-y-4">
+                            <div class="flex flex-col overflow-y-auto overflow-x-hidden mb-4" style="max-height: 450px;">
+                                <div class="space-y-6">
                                     @for ($i = 0; $i <= 15; $i++)
                                         <div class="flex items-start space-x-4">
                                             <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar" class="w-10 h-10 rounded-full">
