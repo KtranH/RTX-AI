@@ -7,13 +7,13 @@ use App\Models\HistoryImageAI;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-trait FindInformation
+trait QueryDatabase
 {
     //
     private function find_id()
     {
         $email = request()->cookie("token_account");
-        $id = User::where("email",$email)->first();
+        $id = User::where("email",$email)->firstOrFail();
         return $id->id;
     }
     private function find_id_categorie($x)

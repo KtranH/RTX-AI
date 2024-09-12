@@ -3,29 +3,23 @@
 namespace App\Http\Controllers\Board;
 
 use App\AI_Create_Image;
-use App\FindInformation;
+use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
 use App\Models\HistoryImageAI;
 use App\Models\Photo;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class Board extends Controller
 {
     use AI_Create_Image;
-    use FindInformation;
+    use QueryDatabase;
     public function FeatureImage($id)
     {
-        $photo = Photo::find($id);
+        $photo = Photo::findOrFail($id);
         $photo->is_feature = !$photo->is_feature;
         $photo->save();
         return redirect()->back();
@@ -49,7 +43,7 @@ class Board extends Controller
     }
     public function ShowAlbum($id)              
     {
-        $album = Album::find($id);
+        $album = Album::findOrFail($id);
         $user = $album->user;
         $photo = Photo::where("album_id",$album->id)->paginate(8);
         $countPhoto = Photo::where("album_id",$album->id)->count();
@@ -61,7 +55,7 @@ class Board extends Controller
     }
     public function EditAlbum($id)
     {
-        $album = Album::find($id);  
+        $album = Album::findOrFail($id);  
         return view('User.Board.EditAlbum', compact('album'));
     }
     public function UpdateAlbum(Request $request, $id)
@@ -102,7 +96,7 @@ class Board extends Controller
     }
     public function DeleteAlbum($id)
     {
-        $album = Album::find($id);
+        $album = Album::findOrFail($id);
         foreach($album->photos as $x)
         {
             $urlRemove = str_replace($this->urlR2,"",$x->url);

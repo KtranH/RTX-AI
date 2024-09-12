@@ -52,9 +52,15 @@
                             <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                 <i class="fas fa-heart text-gray-700 text-xl hover:text-[#a000ff]"></i>
                             </a>
-                            <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                            </a>
+                            @if($image->is_feature == true)
+                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
+                                </a>
+                            @else
+                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                </a>    
+                            @endif
                             @if(!Session::has("Owner"))
                                 <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                     <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
@@ -95,7 +101,7 @@
                                     @endfor
                                 </div>
                             </div>
-                            <textarea class="text-base w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] resize-none" rows="1" placeholder="Add a comment..."></textarea>
+                            <textarea class="text-base w-full p-2 bg-gray-100 shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] resize-none" style="border-radius:30px;" rows="1" placeholder="Thêm bình luận..."></textarea>
                         </div>
                     </div>
                 </div>

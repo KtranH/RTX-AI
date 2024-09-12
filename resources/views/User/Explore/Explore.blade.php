@@ -19,7 +19,7 @@
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <i id="search-icon" class="fas fa-search text-gray-500"></i>
                     </span>
-                    <input id="search-bar" type="text" placeholder="Search..." class="w-full bg-gray-100 rounded-lg pl-10 pr-10 py-3 focus:outline-none" 
+                    <input id="search-bar" type="text" placeholder="Tìm kiếm ảnh..." class="w-full bg-gray-100 rounded-lg pl-10 pr-10 py-3 focus:outline-none" 
                         oninput="toggleCloseIcon()" onfocus="toggleCloseIcon()" onblur="checkCloseIcon()" onclick="toggleExtension(event)" style="border-radius: 30px;" />
                     <span id="close-icon" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden" onclick="clearSearchBar()">
                         <i class="text-xl fas fa-times"></i>
@@ -202,7 +202,7 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2">
                     @for ($i = 0; $i <= 30; $i++)
-                        <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
+                        <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group">
                             <a href="">
                                 <div class="aspect-square">
                                     <img src="https://picsum.photos/200" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
