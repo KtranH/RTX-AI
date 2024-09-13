@@ -34,41 +34,26 @@ class Account extends Controller
     }
     public function callBackGoogle()
     {
-        try
-        {
+        try {
             $user = Socialite::driver("google")->user();
             $email = $user->getEmail();
             $name = $user->getName();
             $avatar = $user->getAvatar();
 
-            $checkUser = User::where("email",$email)->exists();
-            if(!$checkUser)
-            {
-                DB::table("users")->insert([
+            $existingUser = User::where("email", $email)->first();
+            if (!$existingUser) {
+                User::create([
                     "username" => $name,
                     "email" => $email,
-                    "password" =>  Hash::make("20012158840792030230440707349054"),
-                    "avatar_url" =>  $avatar,
+                    "password" => Hash::make("20012158840792030230440707349054"),
+                    "avatar_url" => $avatar,
                     "created_at" => now(),
                     "updated_at" => now(),
                 ]);
-                $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
-                return redirect()->route("showhome")->withCookie($cookie);
-            }
-            else
-            {
-                $user = User::find($email);
-                if($user)
-                {
-                    $user->avatar_url = $avatar;
-                    $user->save();
-                }
-                $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
-                return redirect()->route("showhome")->withCookie($cookie);
-            }
-        }
-        catch(Exception $e)
-        {
+            } 
+            $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
+            return redirect()->route("showhome")->withCookie($cookie);
+        } catch (Exception $e) {
             return redirect()->route("showlogin");
         }
     }

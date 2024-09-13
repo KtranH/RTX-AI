@@ -15,6 +15,7 @@ use App\Http\Controllers\Board\Board;
 use App\Http\Controllers\Image\Image;
 use App\Http\Controllers\Creativity\Creativity;
 use App\Http\Controllers\Explore\Explore;
+use App\Http\Controllers\User\WorkFlow\G4;
 use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitUpdateAccountAccess;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
@@ -76,6 +77,12 @@ Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChang
 
 //Check code to change password
 Route::post('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
+
+//Access creativity
+Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcreativity");
+
+//Access explore
+Route::get('/explore', [Explore::class, 'ShowExplore'])->name("showexplore");
 
 //Show All Workflow
 Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkflow");
@@ -139,12 +146,6 @@ Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
 //Update account
 Route::post('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
 
-//Access creativity
-Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcreativity");
-
-//Access explore
-Route::get('/explore', [Explore::class, 'ShowExplore'])->name("showexplore");
-
 //Change theme
 Route::post('/save-theme', function (Illuminate\Http\Request $request) {
     $theme = $request->input('theme');
@@ -184,7 +185,13 @@ Route::post('/createg3', [G3::class, 'ShowImageG3'])->name("createg3");
 Route::get('/resultofg3', [G3::class, 'get_imageG3'])->name("get_imageg3");
 
 //Show G4
-Route::get('/g4', [G3::class, 'InputDataG3'])->name("g4");
+Route::get('/g4', [G4::class, 'InputDataG4'])->name("g4");
+
+//Create Image G4
+Route::post('/createg4', [G4::class, 'ShowImageG4'])->name("createg4");
+
+//Show result G4
+Route::get('/resultofg4', [G4::class, 'get_imageG4'])->name("get_imageg4");
 
 //Show G5
 Route::get('/g5', [G3::class, 'InputDataG3'])->name("g5");

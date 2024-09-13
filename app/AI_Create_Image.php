@@ -16,6 +16,7 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 trait AI_Create_Image
 {
     //
+    use QueryDatabase;
     private $urlR2 = 'https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/';
     private $check_text = ' are these words SENSITIVE or OBSCENE? Just answer YES or NO.';
     private $url = 'http://127.0.0.1:8188/prompt';
@@ -50,8 +51,9 @@ trait AI_Create_Image
             return redirect()->route("showworkflow");
         }
         else
-        {        
-            return view("User.InputData_WorkFlow.ShowG",compact("prompt","seed","url","G","model"));
+        {    
+            $this->storeImageHistory($url, $this->find_id());
+            return view("User.InputData_WorkFlow.ShowG", compact("prompt", "seed", "url", "G", "model"));
         }
     }
     private function getLatestImage($folder)

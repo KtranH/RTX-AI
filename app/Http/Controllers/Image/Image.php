@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Image;
 
 use App\AI_Create_Image;
-use App\FindInformation;
+use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
 use App\Models\Category;
 use App\Models\Photo;
-use App\Models\User;
 use App\Models\WorkFlow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -18,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Image extends Controller
 {
-    use FindInformation;
+    use QueryDatabase;
     use AI_Create_Image;
 
     public function ShowWorkFlow()
@@ -29,18 +28,14 @@ class Image extends Controller
 
     public function ShowImage($id)
     {
-        $image = Photo::find($id);
+        $image = Photo::findOrFail($id);
         $listcate = $image->category()->where("photo_id",$id)->get();
         $album = $image->album;
         $user = $album->user;
         $idUser = $this->find_id();
         $idUserAlbum = $album->user_id;
 
-        if($idUser == $idUserAlbum)
-        {
-            Session::put("Owner", "true");
-        }
-        
+        Session::put("Owner", $idUser == $idUserAlbum ? "true" : null);
         return view('User.Image.Image', compact('image', 'album', 'user', 'listcate'));
     }
 
@@ -54,7 +49,7 @@ class Image extends Controller
     public function EditImage($id)
     {
         $category = Category::all();
-        $image = Photo::find($id);
+        $image = Photo::findOrFail($id);
         $listcate = $image->category()->where("photo_id",$id)->get();
         $album = $image->album;
         $idUser = $this->find_id();
@@ -110,7 +105,7 @@ class Image extends Controller
     }
     public function DeleteImage($id)
     {
-        $photo = Photo::find($id);
+        $photo = Photo::findOrFail($id);
         Storage::disk('r2')->delete(str_replace($this->urlR2, "", $photo->url));
         $idAlbum = $photo->album_id;
         $photo->delete();

@@ -9,7 +9,7 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 rounded-2xl p-5" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Photo -->
-                    <div class="aspect-square md:col-span-1">
+                    <div class="md:col-span-1">
                         <img src="{{ $image->url }}" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
                     </div>
                     <!-- Details -->
@@ -52,12 +52,20 @@
                             <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                 <i class="fas fa-heart text-gray-700 text-xl hover:text-[#a000ff]"></i>
                             </a>
-                            <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                            </a>
-                            <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                            </a>
+                            @if($image->is_feature == true)
+                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
+                                </a>
+                            @else
+                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                </a>    
+                            @endif
+                            @if(!Session::has("Owner"))
+                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                </a>
+                            @endif
                             <a href="{{ route('editimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                 <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
                             </a>
@@ -79,9 +87,10 @@
                            </script>
                         </div>
                         <!-- Comment -->
+                        <h3 class="font-semibold text-xl mb-2">Bình luận: </h3>
                         <div class="flex flex-col mt-auto">
-                            <div class="flex flex-col overflow-y-auto overflow-x-hidden max-h-44 mb-4">
-                                <div class="space-y-4">
+                            <div class="flex flex-col overflow-y-auto overflow-x-hidden mb-4" style="max-height: 450px;">
+                                <div class="space-y-6">
                                     @for ($i = 0; $i <= 15; $i++)
                                         <div class="flex items-start space-x-4">
                                             <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar" class="w-10 h-10 rounded-full">
@@ -93,7 +102,7 @@
                                     @endfor
                                 </div>
                             </div>
-                            <textarea class="text-base w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] resize-none" rows="1" placeholder="Add a comment..."></textarea>
+                            <textarea class="text-base w-full p-2 bg-gray-100 shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] resize-none" style="border-radius:30px;" rows="1" placeholder="Thêm bình luận..."></textarea>
                         </div>
                     </div>
                 </div>
