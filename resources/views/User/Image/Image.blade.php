@@ -70,7 +70,7 @@
                                Swal.fire({ title: 'Chắc chắn xóa ảnh?', text: "Ảnh sẽ bị xóa và không thể khôi phục!", icon: 'warning', showCancelButton: true, confirmButtonText: 'Tiếp tục', cancelButtonText: 'Hủy', reverseButtons: true
                                }).then((result) => {
                                    if (result.isConfirmed) {
-                                       window.location.href = "{{ route('deleteimage', $image->id) }}"; 
+                                       window.location.href = "{{ route('deleteimage', $image->id) }}";
                                    } else {
                                        Swal.close();
                                    }
@@ -116,7 +116,7 @@
                                         <div class="text-sm text-gray-500 h-20 overflow-hidden truncate">Description 1</div>
                                     </div>
                                 </div>
-                            </a>    
+                            </a>
                             <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                 <div class="flex space-x-2">
                                     <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
