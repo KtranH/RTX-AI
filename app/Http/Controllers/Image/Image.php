@@ -12,7 +12,6 @@ use App\Models\WorkFlow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Controller
@@ -29,32 +28,34 @@ class Image extends Controller
     public function ShowImage($id)
     {
         $image = Photo::findOrFail($id);
-        $listcate = $image->category()->where("photo_id",$id)->get();
+        $listcate = $image->category()->where("photo_id", $id)->get();
         $album = $image->album;
         $user = $album->user;
-        $idUser = $this->find_id();
-        $idUserAlbum = $album->user_id;
 
-        Session::put("Owner", $idUser == $idUserAlbum ? "true" : null);
-        return view('User.Image.Image', compact('image', 'album', 'user', 'listcate'));
+        $photos = Photo::query()
+            ->limit(5)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('User.Image.Image', compact('image', 'album', 'user', 'listcate', 'photos'));
     }
 
     public function CreateImage($id)
     {
         $Category = Category::all();
         $Id = $id;
-        return view("User.Image.CreateImage", compact("Category","Id"));
+        return view("User.Image.CreateImage", compact("Category", "Id"));
     }
 
     public function EditImage($id)
     {
         $category = Category::all();
         $image = Photo::findOrFail($id);
-        $listcate = $image->category()->where("photo_id",$id)->get();
+        $listcate = $image->category()->where("photo_id", $id)->get();
         $album = $image->album;
         $idUser = $this->find_id();
-        $allAlbum = Album::where("user_id",$idUser)->get();
-        return view("User.Image.EditImage", compact("image","album","category","listcate","allAlbum"));
+        $allAlbum = Album::where("user_id", $idUser)->get();
+        return view("User.Image.EditImage", compact("image", "album", "category", "listcate", "allAlbum"));
     }
 
     public function UpdateImage(Request $request, $id)
@@ -90,18 +91,17 @@ class Image extends Controller
         $dataToUpdate = $request->only(['title', 'description', 'album']);
         $dataToUpdate = array_filter($dataToUpdate);
         $photo->update($dataToUpdate);
-        
+
         $categories = json_decode($request->input('categories'), true);
         if (is_array($categories)) {
-            foreach($categories as $x)
-            {
+            foreach ($categories as $x) {
                 $cateid = $this->find_id_categorie($x);
                 if ($cateid != 0) {
                     $photo->category()->syncWithoutDetaching($cateid);
                 }
             }
         }
-        return redirect()->route("showimage",["id" => $id]);
+        return redirect()->route("showimage", ["id" => $id]);
     }
     public function DeleteImage($id)
     {
@@ -109,30 +109,32 @@ class Image extends Controller
         Storage::disk('r2')->delete(str_replace($this->urlR2, "", $photo->url));
         $idAlbum = $photo->album_id;
         $photo->delete();
-        return redirect()->route("showalbum",["id" => $idAlbum]);
+        return redirect()->route("showalbum", ["id" => $idAlbum]);
     }
     public function AddImage2Album(Request $request, $id)
     {
-        $request->validate([
-            'cover' => 'required|image|max:4096',
-        ],
-        [
-            'cover.required' => 'Vui lòng chọn một file ảnh.',
-            'cover.image' => 'File được chọn phải là ảnh (jpeg, png, bmp, gif, svg, webp).',
-            'cover.max' => 'Dung lượng file không được vượt quá 4MB.',
-        ]);
+        $request->validate(
+            [
+                'cover' => 'required|image|max:4096',
+            ],
+            [
+                'cover.required' => 'Vui lòng chọn một file ảnh.',
+                'cover.image' => 'File được chọn phải là ảnh (jpeg, png, bmp, gif, svg, webp).',
+                'cover.max' => 'Dung lượng file không được vượt quá 4MB.',
+            ]
+        );
 
         $request->validate([
-            'categories' => 'required|string', 
+            'categories' => 'required|string',
         ], [
             'categories.required' => 'Vui lòng chọn ít nhất một thể loại.',
             'categories.string' => 'Thể loại phải là một chuỗi ký tự.',
         ]);
-       
+
         $Day = Carbon::now()->day;
         $Month = Carbon::now()->month;
         $Year = Carbon::now()->year;
-        
+
         $folder = $Day . "_" . $Month . "_" . $Year;
         $Email = Cookie::get("token_account");
 
@@ -152,14 +154,12 @@ class Image extends Controller
         ]);
 
         $categories = json_decode($request->input('categories'), true);
-        foreach($categories as $x)
-        {
+        foreach ($categories as $x) {
             $cateid = $this->find_id_categorie($x);
-            if($cateid != 0)
-            {
+            if ($cateid != 0) {
                 $photos->category()->attach($cateid);
             }
         }
-        return redirect()->route("showalbum",["id" => $id]);
+        return redirect()->route("showalbum", ["id" => $id]);
     }
 }
