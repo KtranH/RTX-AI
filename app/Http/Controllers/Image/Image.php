@@ -33,7 +33,7 @@ class Image extends Controller
         $user = $album->user;
 
         $photos = Photo::query()
-            ->limit(5)
+            ->limit(4)
             ->orderBy('created_at', 'desc')
             ->get();
 
