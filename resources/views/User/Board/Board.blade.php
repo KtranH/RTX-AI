@@ -339,7 +339,7 @@
                             @foreach ($photos as $x)
                                 <div class="relative group">
                                     <a href="{{ route('showimage', ['id' => $x->id]) }}">
-                                        <div class="">
+                                        <div class="aspect-square">
                                             <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                         </div>
                                         <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">

@@ -12,5 +12,6 @@ class WorkFlow extends Model
         'name',
         'description',
         'image',
+        'Price',
     ];
 }

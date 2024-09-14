@@ -21,6 +21,12 @@ class G4 extends Controller
     public function ShowImageG4(Request $request)
     {
         ini_set("max_execution_time", 3600);
+
+        if($this->checkTimes(4) == false)
+        {
+            return response()->json(['success' => false, 'message' => 'Bạn đã hết lượt tạo ảnh, vui lòng mua thêm lượt hoặc đợi ngày mai']);
+        }
+
         $email = Cookie::get("token_account");
 
         $request->validate(['input' => 'image|mimes:jpg,jpeg,png|max:4048'], 

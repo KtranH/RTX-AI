@@ -109,7 +109,14 @@
             </style>
             <div class="col-md-4 flex justify-end items-center space-x-3 account-mobile">
                 <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="{{ $user->avatar_url }}" alt="">
-                <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-bold">{{ $user->username }}</a>
+                <div>
+                    <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-bold">{{ $user->username }}</a>
+                    @if ($user->times > 0)
+                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-green-600 font-bold">{{ $user->times}}</span></p>
+                    @else
+                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-red-600 font-bold">{{ $user->times}}</span></p>
+                    @endif
+                </div>
                 <!-- Notification -->
                 <div class="relative">
                     <i class="fas fa-bell cursor-pointer" onclick="toggleBox('notificationBox', 'settingBox')"></i>

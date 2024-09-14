@@ -94,7 +94,7 @@
         }
     </style>
     <title>
-        RTX-AI: Trang chủ
+        RTX-AI: Trang chủ 
     </title>
     <main>
         <div class="bg-white">
@@ -160,7 +160,7 @@
                     <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
                         <img src="/images/animal.png" class="jarallax-img" alt="Image 2">
                         <div class="content"
-                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); ">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
                                 class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
                                 <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"

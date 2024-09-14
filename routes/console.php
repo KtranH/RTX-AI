@@ -17,3 +17,13 @@ Artisan::command('images:delete-old', function ()
         HistoryImageAI::where('user_id', $user->id)->where('created_at', '<', now()->subDays(10))->delete();
     }
 })->daily();
+
+Artisan::command('addMoreTimes', function ()
+{
+    $users = User::all();
+    foreach ($users as $user) 
+    {
+        $user->times = $user->times + 10;
+        $user->save();
+    }
+})->daily();

@@ -13,7 +13,7 @@
                    </div>
                     <div style="margin-bottom:2%;">
                         <h2 class="text-base font-semibold leading-7 text-gray-900">
-                            Chi phí: 1 lượt
+                            Chi phí: {{$Price}} lượt
                         </h2>
                     </div>
                     <div class="col-span-full" style="margin-bottom:2%">
@@ -57,8 +57,12 @@
                     </script>
 
                     <div>
-                        <h2 class="text-base font-semibold leading-7 text-gray-900">Số lượng tạo ảnh:
-                            {{ $ShowTimes }}
+                        <h2 class="text-base font-semibold leading-7 text-gray-900">Số lượt tạo ảnh:
+                            @if ($ShowTimes > 0)
+                                <span>{{ $ShowTimes }}</span>
+                            @else
+                                <span class="text-red-600">{{ $ShowTimes }}</span>
+                            @endif
                         </h2>
                         <p class="mt-1 text-sm leading-6 text-gray-600">Nếu như hết lượt tạo ảnh bạn không thể tạo được ảnh! Số lượng sẽ được khôi phục vào ngày mai.</p>    
                     </div> 
@@ -130,11 +134,26 @@
                                 window.location.href = data.redirect; 
                             }, 1000); 
                         } else {
-                            alert(data.message);
-                            this.disabled = false;
-                            document.getElementById('create').style.cursor = 'pointer';
-                            document.getElementById('create').style.backgroundColor = '';
-                            document.getElementById('loading-image').style.display = 'none';
+                            if(data.message.includes('hết lượt'))
+                            {
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Thông báo',
+                                text: data.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => { 
+                                if (result.isConfirmed) {
+                                    location.reload();  
+                                }});
+                            }
+                            else
+                            {
+                                alert(data.message);
+                                this.disabled = false;
+                                document.getElementById('create').style.cursor = 'pointer';
+                                document.getElementById('create').style.backgroundColor = '';
+                                document.getElementById('loading-image').style.display = 'none';
+                            }
                         }
                     })
                     .catch(error => {
