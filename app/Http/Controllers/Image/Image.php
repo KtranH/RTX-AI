@@ -14,6 +14,7 @@ use App\Models\WorkFlow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Controller
@@ -43,7 +44,7 @@ class Image extends Controller
         $idUserAlbum = $album->user_id;
         $checkUserLikedImage = $this->checkLike($id,$idUser);
         Session::put("Owner", $idUser == $idUserAlbum ? "true" : null);
-        return view('User.Image.Image', compact('image', 'album', 'user', 'listcate' , 'listUserLiked' ,'checkUserLikedImage'));
+        return view('User.Image.Image', compact('image', 'photos', 'album', 'user', 'listcate' , 'listUserLiked' ,'checkUserLikedImage'));
     }
 
     public function CreateImage($id)

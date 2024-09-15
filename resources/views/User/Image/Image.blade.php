@@ -53,7 +53,7 @@
                                 <img src="{{ $user->avatar_url }}" alt="Owner Avatar" class="w-10 h-10 rounded-full">
                                 <p class="font-semibold group-hover:!text-[#a000ff]">{{ $user->username }}</p>
                             </a>
-                            @if (auth()->user()->id != $album->user_id)
+                            @if (!Session::Has("Owner"))
                                 <a href="#"
                                     class="rounded-md bg-[#a00fff] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Follow</a>
                             @endif

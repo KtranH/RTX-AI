@@ -29,11 +29,12 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="relative w-full">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <i id="search-icon" class="fas fa-search text-gray-500"></i>
+                        <i id="search-icon" class="fas fa-search text-gray-700"></i> 
                     </span>
-                    <input id="search-bar" type="text" placeholder="Search..."
-                        class="w-full bg-gray-100 rounded-lg pl-10 pr-10 py-3 focus:outline-none"
-                        oninput="toggleCloseIcon()" onfocus="toggleCloseIcon()" onblur="checkCloseIcon()"
+                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40"></div>         
+                    <input id="search-bar" type="text" placeholder="Tìm kiếm..."
+                        class="w-full bg-white border-2 border-gray-300 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
+                        oninput="toggleCloseIcon()" onfocus="toggleOverlay(true)" onblur="toggleOverlay(false)"
                         onclick="toggleExtension(event)" style="border-radius: 30px;" />
                     <span id="close-icon"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden"
@@ -50,7 +51,7 @@
                         <div class="text-lg font-semibold mb-2">Thể Loại</div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
                             @for ($i = 0; $i <= 10; $i++)
-                                <div class="text-sm text-white p-2 bg-indigo-600 hover:bg-gray-400 text-center rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal">Category {{ $i }}</div>
+                                <div class="text-sm text-white p-2 bg-indigo-600 hover:bg-indigo-400 text-center rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal">Category {{ $i }}</div>
                             @endfor
                         </div>
                         <!-- Categories -->
@@ -61,8 +62,7 @@
                                     class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
                                     <img src="https://picsum.photos/200" alt="Category Image"
                                         class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Category
-                                        Lorem Lorem Lorem {{ $i }}</div>
+                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Category Lorem Lorem Lorem {{ $i }}</div>
                                 </div>
                             @endfor
                         </div>
@@ -74,14 +74,12 @@
                                     class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
                                     <img src="https://picsum.photos/200" alt="Category Image"
                                         class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Suggestion
-                                        {{ $i }}</div>
+                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Suggestion {{ $i }}</div>
                                 </div>
                             @endfor
                         </div>
                     </div>
-                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40"></div>
-                </div>
+                </div>       
             </div>
         </div>
         <script>
@@ -90,10 +88,7 @@
             function toggleExtension(event) {
                 event.stopPropagation();
                 const extension = document.getElementById('search-extension');
-                const overlay = document.getElementById('overlay');
                 extension.classList.remove('hidden');
-                overlay.classList.remove('hidden');
-                overlay.classList.add('opacity-50');
             }
 
             function toggleCloseIcon() {
@@ -180,11 +175,9 @@
             document.addEventListener('click', function(event) {
                 const searchBar = document.getElementById('search-bar');
                 const extension = document.getElementById('search-extension');
-                const overlay = document.getElementById('overlay');
 
                 if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
                     extension.classList.add('hidden');
-                    overlay.classList.add('hidden');
                 }
             });
 
@@ -222,19 +215,15 @@
                                             {{ $photo->description }} </div>
                                     </div>
                                 </div>
+                                <div class="flex justify-start space-x-3 account-mobile mt-4">
+                                    <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="{{ $photo->album->user->avatar_url }}" alt="">
+                                    <div>
+                                        <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-bold">{{ $photo->album->user->username }}</a>
+                                    </div>
+                                </div>
                             </a>
                             <div
                                 class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('showimage', ['id' => $photo->id]) }}"
-                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                    <a href="{{ route('showimage', ['id' => $photo->id]) }}"
-                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     @endforeach

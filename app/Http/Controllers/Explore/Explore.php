@@ -11,6 +11,9 @@ class Explore extends Controller
     public function ShowExplore(Request $request)
     {
         $query = Photo::query();
+
+        
+
         if ($request->has('q')) {
             $query->where('title', 'like', '%' . $request->q . '%');
         }
