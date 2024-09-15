@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -50,7 +51,7 @@ class Account extends Controller
                     "created_at" => now(),
                     "updated_at" => now(),
                 ]);
-            } 
+            }
             $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
             return redirect()->route("showhome")->withCookie($cookie);
         } catch (Exception $e) {
@@ -60,6 +61,7 @@ class Account extends Controller
     public function Logout()
     {
         Cookie::queue(Cookie::forget("token_account"));
+        Auth::logout();
         return redirect()->route("showhome");
     }
     public function NewAccount(Request $request)
@@ -136,6 +138,7 @@ class Account extends Controller
             else
             {
                 $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
+                Auth::attempt(["email" => $email, "password" => $pass], true);
                 return redirect()->route("showhome")->withCookie($cookie);
             }
         }
@@ -163,13 +166,13 @@ class Account extends Controller
     public function ShowAccount()
     {
         $cookie = request()->cookie("token_account");
-        
-        if ($cookie) 
+
+        if ($cookie)
         {
             $tab = request()->query('tab', 'saved');
             return view('User.Account.Account', ['tab' => $tab]);
-        } 
-        else 
+        }
+        else
         {
             return redirect()->route('showlogin');
         }

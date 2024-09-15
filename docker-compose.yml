@@ -1,32 +1,11 @@
 services:
-    nginx:
-        image: nginx:latest
-        ports:
-            - "9090:80"
-        volumes:
-            - ./:/var/www/html
-            - ./docker/nginx:/etc/nginx/conf.d
-
-    mysql:
-        image: mysql
-        volumes:
-            - ./docker/mysql:/var/lib/mysql
-        environment:
-            MYSQL_DATABASE: laravel_docker
-            MYSQL_ROOT_PASSWORD: root
-
-    phpmyadmin:
-      image: phpmyadmin/phpmyadmin:latest
-      environment:
-        PMA_HOST: mysql
-        PMA_PORT: 3306
-        UPLOAD_LIMIT: 200M
-      ports:
-        - "9091:80"
-
-    php:
-        build:
-            context: .
-        volumes:
-            - ./:/var/www/html
-
+  app:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    ports:
+      - "8000:80"
+    volumes:
+      - ./.docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - .:/var/www/html
+    env_file: .env
