@@ -34,9 +34,10 @@ trait AI_Create_Image
         $cookie = Cookie::get("token_account");
         $times = User::where("email",$cookie)->first();
         $ShowTimes = $times->times;
+        $Price = WorkFlow::find($ListG)->Price;
         $G = WorkFlow::find($ListG);
         $NameG = "G" . $ListG;
-        return view("User.InputData_WorkFlow." . $NameG ,compact("ShowTimes","G"));
+        return view("User.InputData_WorkFlow." . $NameG ,compact("ShowTimes","G" ,"Price"));
     }
     public function ImageG($ListG)
     {
@@ -166,6 +167,19 @@ trait AI_Create_Image
             return "{$timestamp}.png";
         }
         return null;
+    }
+    private function checkTimes($price)
+    {
+        $user = User::find($this->find_id());
+        if($user->times - $price < 0)
+        {
+            return false;
+        }
+        else
+        {
+            $user->update(['times' => $user->times - $price]);
+            return true;
+        }
     }
     /*public function stopQueue()
     {

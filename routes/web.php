@@ -131,6 +131,9 @@ Route::post('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateima
 //Delete image
 Route::get('/deleteimage/{id}', [Image::class, 'DeleteImage'])->name("deleteimage");
 
+//Like image
+Route::get('/likeimage/{id}', [Image::class, 'LikeImage'])->name("likeimage");
+
 //Set feature image
 Route::get('/featureimage/{id}', [Board::class, 'FeatureImage'])->name("featureimage");
 

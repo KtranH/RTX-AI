@@ -7,7 +7,9 @@ use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
 use App\Models\Category;
+use App\Models\Like;
 use App\Models\Photo;
+use App\Models\User;
 use App\Models\WorkFlow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -28,16 +30,20 @@ class Image extends Controller
     public function ShowImage($id)
     {
         $image = Photo::findOrFail($id);
-        $listcate = $image->category()->where("photo_id", $id)->get();
-        $album = $image->album;
-        $user = $album->user;
-
         $photos = Photo::query()
             ->limit(4)
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return view('User.Image.Image', compact('image', 'album', 'user', 'listcate', 'photos'));
+        $idUser = $this->find_id();
+        $listcate = $image->category()->where("photo_id",$id)->get();
+        $likedImage = Like::where("photo_id", $id)->pluck('user_id'); 
+        $listUserLiked = User::whereIn('id', $likedImage)->get();
+        $album = $image->album;
+        $user = $album->user;
+        $idUserAlbum = $album->user_id;
+        $checkUserLikedImage = $this->checkLike($id,$idUser);
+        Session::put("Owner", $idUser == $idUserAlbum ? "true" : null);
+        return view('User.Image.Image', compact('image', 'album', 'user', 'listcate' , 'listUserLiked' ,'checkUserLikedImage'));
     }
 
     public function CreateImage($id)
@@ -161,5 +167,25 @@ class Image extends Controller
             }
         }
         return redirect()->route("showalbum", ["id" => $id]);
+    }
+    public function LikeImage($idImage)
+    {
+        $UserID = $this->find_id();
+        $check = $this->checkLike($idImage, $UserID);
+        if($check)
+        {
+            $check->delete();
+            return redirect()->back();
+        }
+       else
+       {
+        Like::insert([
+            "user_id" => $UserID,
+            "photo_id" => $idImage,
+            "created_at" => now(),
+            "updated_at" => now(),
+        ]);
+        return redirect()->back();
+       }
     }
 }

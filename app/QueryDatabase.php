@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Category;
 use App\Models\HistoryImageAI;
+use App\Models\Like;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -32,5 +33,9 @@ trait QueryDatabase
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+    }
+    private function checkLike($id, $userId)
+    {
+        return Like::where('photo_id', $id)->where('user_id', $userId)->first();
     }
 }

@@ -9,9 +9,13 @@
                 style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Photo -->
-                    <div class="md:col-span-1">
+                    <div class="relative md:col-span-1 aspect-square group">
                         <img src="{{ $image->url }}" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
-                    </div>
+                        <a href="{{ $image->url }}" target="_blank" class="absolute top-4 left-4 text-black bg-white px-4 py-2 font-semibold text-xl rounded-lg hidden group-hover:flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-chevron-right"></i>
+                            <span>Mở ảnh</span>
+                        </a>
+                    </div>                                       
                     <!-- Details -->
                     <div class="md:col-span-1 flex flex-col">
                         <!-- Return -->
@@ -28,19 +32,17 @@
                                     </path>
                                 </svg>
                             </div>
-                            <p class="translate-x-2" style="margin-top:12px">Quay lại</p>
+                            <p class="translate-x-2 relative" style="margin-top:12px">Quay lại</p>             
                         </a>
                         <!-- Title and Description -->
                         <div class="mb-4">
                             <h1 class="text-4xl font-bold truncate overflow-visible">{{ $image->title }}</h1>
-                            <p class="text-lg text-gray-600 truncate hover:overflow-visible hover:whitespace-normal">
-                                {{ $image->description }}</p>
+                            <p class="text-lg mt-2 text-gray-600 truncate hover:overflow-visible hover:whitespace-normal">{{ $image->description }}</p>
                         </div>
                         <!-- Categories -->
                         <div class="flex flex-wrap gap-2 mb-4 max-w-screen-sm">
                             @foreach ($listcate as $item)
-                                <a href="#"
-                                    class="text-sm text-white p-2 bg-[#a00fff] hover:bg-gray-400 text-center rounded-xl w-1/3 sm:w-1/4 md:w-auto">
+                                <a href="#" class="text-sm text-white p-2 bg-indigo-600 hover:bg-gray-400 text-center rounded-xl w-1/3 sm:w-1/4 md:w-auto">
                                     {{ $item->name }}
                                 </a>
                             @endforeach
@@ -55,38 +57,89 @@
                                 <a href="#"
                                     class="rounded-md bg-[#a00fff] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Follow</a>
                             @endif
-                        </div>
                         <!-- Action -->
                         <div class="flex justify-center space-x-4 mb-4">
-                            <a href="#"
-                                class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                            @if($checkUserLikedImage != null)
+                            <a href="#" data-id="{{ $image->id }}" class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                <i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i>
+                            </a>
+                            @else
+                            <a href="#" data-id="{{ $image->id }}" class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                 <i class="fas fa-heart text-gray-700 text-xl hover:text-[#a000ff]"></i>
                             </a>
-                            @if ($image->is_feature == true)
-                                <a href="#"
-                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                    <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
+                            @endif
+                            <script>
+                                $(document).ready(function() {
+                                    $('.like-button').click(function(e) {
+                                        e.preventDefault(); 
+                            
+                                        var imageId = $(this).data('id');
+                            
+                                        $.ajax({
+                                            url: '{{ route('likeimage', ['id' => '__id__']) }}'.replace('__id__', imageId), 
+                                            type: 'GET',
+                                            success: function(response) {
+                                                var icon = $('.like-button i');
+                                                if (icon.hasClass('text-red-500')) {
+                                                    icon.removeClass('text-red-500').addClass('text-gray-700');
+                                                } else {
+                                                    icon.removeClass('text-gray-700').addClass('text-red-500');
+                                                }
+                                                var statusSpan = $('#like-status');
+                                                var text = statusSpan.html().trim();
+
+                                                if (text === 'Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.') {
+                                                    statusSpan.html('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn');
+                                                } else {
+                                                    if (text.includes('Bạn')) {
+                                                        text = text.replace('Bạn', '').trim();
+                                                        if(text !== 'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :')
+                                                        {
+                                                            statusSpan.html(text);
+                                                        }
+                                                        else
+                                                        {
+                                                            statusSpan.html('Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.');
+                                                        }
+                                                    } else {
+                                                        text = 'Bạn ' + text;
+                                                        statusSpan.html(text);
+                                                    }
+                                                }
+                                            },
+                                            error: function(xhr) {
+                                                console.error('Đã xảy ra lỗi: ' + xhr.responseText);
+                                            }
+                                        });
+                                    });
+                                });
+                            </script>
+                                       
+                            @if(Session::has("Owner"))
+                                @if($image->is_feature == true)
+                                    <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                        <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
+                                    </a>
+                                @else
+                                    <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                        <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                    </a>
+
+                                @endif
+                                <a href="{{ route('editimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                </a>
+                                <a href="{{ route('deleteimage', $image->id) }}" id="delete" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <i class="fas fa-trash text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                 </a>
                             @else
-                                <a href="#"
-                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                    <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <i class="fa-solid fa-flag text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                 </a>
-                            @endif
-                            @if (auth()->user()->id != $user->user_id)
-                                <a href="#"
-                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                     <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                 </a>
                             @endif
-                            <a href="{{ route('editimage', ['id' => $image->id]) }}"
-                                class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                            </a>
-                            <a href="{{ route('deleteimage', $image->id) }}" id="delete"
-                                class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                <i class="fas fa-trash text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                            </a>
                             <script>
                                 document.getElementById('delete').addEventListener('click', function(e) {
                                     e.preventDefault();
@@ -108,12 +161,36 @@
                                 });
                             </script>
                         </div>
+                    </div>
+                        <!-- Number of likes -->
+                        @php
+                            $count = count($listUserLiked);
+                        @endphp
+                        @if($count == 0)
+                            <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.</span>
+                        @elseif ($count <= 2 && $count > 0)
+                            <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
+                            @if($checkUserLikedImage != null) Bạn
+                                @foreach ($listUserLiked as $l)
+                                    @if($l->name != $user->name)
+                                    {
+                                        {{ $l->name }}, 
+                                    }
+                                    @endif
+                                @endforeach 
+                            @endif</span>
+                        @else
+                            <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
+                                @if($checkUserLikedImage != null) 
+                                    Bạn và {{ $count }} người khác.
+                                @endif</span>
+                        @endif
                         <!-- Comment -->
                         <h3 class="font-semibold text-xl mb-2">Bình luận: </h3>
                         <div class="flex flex-col mt-auto">
                             <div class="flex flex-col overflow-y-auto overflow-x-hidden mb-4" style="max-height: 450px;">
                                 <div class="space-y-6">
-                                    @for ($i = 0; $i <= 15; $i++)
+                                    @for ($i = 0; $i <= 1; $i++)
                                         <div class="flex items-start space-x-4">
                                             <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Avatar"
                                                 class="w-10 h-10 rounded-full">

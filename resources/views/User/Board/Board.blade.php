@@ -282,7 +282,7 @@
                     <div class="font-bold text-3xl text-left">Album</div>
                     @if (!$albums)
                         <div class="mt-2 flex justify-center">
-                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 w-32 h-32 rounded-2xl border-4 border-[#a000ff]">
+                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 w-32 h-32 rounded-2xl border-4 border-indigo-600">
                                 <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                             </a>
                         </div>
@@ -339,7 +339,7 @@
                             @foreach ($photos as $x)
                                 <div class="relative group">
                                     <a href="{{ route('showimage', ['id' => $x->id]) }}">
-                                        <div class="">
+                                        <div class="aspect-square">
                                             <img src="{{ $x->url }}" alt="Image 1" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                         </div>
                                         <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
@@ -412,12 +412,15 @@
             </div>
         </div>
         <!-- Modal for Image -->
-        <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
-            <div class="relative">
-                <button onclick="closeImageModal()" class="absolute right-[-100px] top-1/2 transform -translate-y-1/2 text-white text-2xl"><p class="text-xl bg-black p-2 rounded-lg">Tắt ảnh</p></button>
-                <img id="modal-image" class="max-w-full max-h-full" src="" alt="Modal Image">
+        <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50" onclick="closeImageModal()">
+            <div class="relative" onclick="event.stopPropagation();" style="margin-top: 8%; width:30%;">
+                <button onclick="closeImageModal()" class="absolute right-0 top-0 text-white text-2xl p-2" style="transform: translate(50%, -50%);">
+                    <p class="text-xl bg-black text-white p-2 rounded-full">X</p>
+                </button>
+                <img id="modal-image" src="" alt="Modal Image">
             </div>
         </div>
+        
         <script>
             function openImageModal(imageUrl) {
                 document.getElementById('modal-image').src = imageUrl;
@@ -426,7 +429,7 @@
             function closeImageModal() {
                 document.getElementById('image-modal').classList.add('hidden');
             }
-        </script>
+        </script>  
     </main>
     
 @endsection

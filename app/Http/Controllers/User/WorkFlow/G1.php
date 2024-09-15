@@ -21,7 +21,12 @@ class G1 extends Controller
     public function ShowImageG1(Request $request)
     {
         ini_set("max_execution_time", 3600);
-        
+
+        if($this->checkTimes(1) == false)
+        {
+            return response()->json(['success' => false, 'message' => 'Bạn đã hết lượt tạo ảnh, vui lòng mua thêm lượt hoặc đợi ngày mai']);
+        }
+
         $Email = Cookie::get("token_account");
         $prompt = $request->input("prompt");
         $seed = $request->input("seed");
