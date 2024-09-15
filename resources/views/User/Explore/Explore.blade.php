@@ -33,7 +33,7 @@
                     </span>
                     <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40"></div>         
                     <input id="search-bar" type="text" placeholder="Tìm kiếm..."
-                        class="w-full bg-white border-2 border-gray-300 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
+                        class="w-full bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
                         oninput="toggleCloseIcon()" onfocus="toggleOverlay(true)" onblur="toggleOverlay(false)"
                         onclick="toggleExtension(event)" style="border-radius: 30px;" />
                     <span id="close-icon"
@@ -215,10 +215,20 @@
                                             {{ $photo->description }} </div>
                                     </div>
                                 </div>
-                                <div class="flex justify-start space-x-3 account-mobile mt-4">
-                                    <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="{{ $photo->album->user->avatar_url }}" alt="">
-                                    <div>
-                                        <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-bold">{{ $photo->album->user->username }}</a>
+                                <div class="flex space-x-3 account-mobile mt-4 mb-1">
+                                    <div class="flex justify-start">
+                                        <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="{{ $photo->album->user->avatar_url }}" alt="">
+                                        <div>
+                                            <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-semibold ml-2">{{ $photo->album->user->username }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow"></div>
+                                    @php
+                                        $Likes = DB::select("SELECT 1 FROM likes WHERE photo_id = ?", [$photo->id]);
+                                        $Count = count($Likes);
+                                    @endphp
+                                    <div style="cursor: none">
+                                        <span><i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i> <span class="font-bold">{{ $Count }}</span></span>
                                     </div>
                                 </div>
                             </a>

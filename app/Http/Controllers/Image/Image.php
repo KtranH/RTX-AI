@@ -35,16 +35,18 @@ class Image extends Controller
             ->limit(4)
             ->orderBy('created_at', 'desc')
             ->get();
-        $idUser = $this->find_id();
-        $listcate = $image->category()->where("photo_id",$id)->get();
-        $likedImage = Like::where("photo_id", $id)->pluck('user_id'); 
-        $listUserLiked = User::whereIn('id', $likedImage)->get();
         $album = $image->album;
         $user = $album->user;
+        $idUser = $this->find_id();
+        $checkUserNow = User::findOrFail($idUser);
+
+        $listcate = $image->category()->where("photo_id",$id)->get();
+        $listUserLiked = Like::where("photo_id", $id)->get(); 
+
         $idUserAlbum = $album->user_id;
         $checkUserLikedImage = $this->checkLike($id,$idUser);
         Session::put("Owner", $idUser == $idUserAlbum ? "true" : null);
-        return view('User.Image.Image', compact('image', 'photos', 'album', 'user', 'listcate' , 'listUserLiked' ,'checkUserLikedImage'));
+        return view('User.Image.Image', compact('image', 'photos', 'album', 'user', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'checkUserNow'));
     }
 
     public function CreateImage($id)

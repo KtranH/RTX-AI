@@ -12,8 +12,6 @@ class Explore extends Controller
     {
         $query = Photo::query();
 
-        
-
         if ($request->has('q')) {
             $query->where('title', 'like', '%' . $request->q . '%');
         }
