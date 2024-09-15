@@ -12,7 +12,7 @@ class Home extends Controller
     public function ShowHome()
     {
         $landscape = Category::where("name","like","%". "Phong cảnh". "%")->get();
-        $animal = Category::where("name","like","%". "Động vật". "%")->get();
+        $animal = Category::where("name","=","Động vật")->get();
         $fashion = Category::where("name","like","%". "Thời trang". "%")->get();
         $city = Category::where("name","like","%". "Thành phố". "%")->get();
         $travel = Category::where("name","like","%". "Du lịch". "%")->get();

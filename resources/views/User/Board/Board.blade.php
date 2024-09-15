@@ -412,12 +412,15 @@
             </div>
         </div>
         <!-- Modal for Image -->
-        <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
-            <div class="relative">
-                <button onclick="closeImageModal()" class="absolute right-[-100px] top-1/2 transform -translate-y-1/2 text-white text-2xl"><p class="text-xl bg-black p-2 rounded-lg">Tắt ảnh</p></button>
-                <img id="modal-image" class="max-w-full max-h-full" src="" alt="Modal Image">
+        <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50" onclick="closeImageModal()">
+            <div class="relative" onclick="event.stopPropagation();" style="margin-top: 8%; width:30%;">
+                <button onclick="closeImageModal()" class="absolute right-0 top-0 text-white text-2xl p-2" style="transform: translate(50%, -50%);">
+                    <p class="text-xl bg-black text-white p-2 rounded-full">X</p>
+                </button>
+                <img id="modal-image" src="" alt="Modal Image">
             </div>
         </div>
+        
         <script>
             function openImageModal(imageUrl) {
                 document.getElementById('modal-image').src = imageUrl;
@@ -426,7 +429,7 @@
             function closeImageModal() {
                 document.getElementById('image-modal').classList.add('hidden');
             }
-        </script>
+        </script>  
     </main>
     
 @endsection
