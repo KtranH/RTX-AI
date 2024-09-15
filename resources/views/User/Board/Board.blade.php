@@ -282,7 +282,7 @@
                     <div class="font-bold text-3xl text-left">Album</div>
                     @if (!$albums)
                         <div class="mt-2 flex justify-center">
-                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 w-32 h-32 rounded-2xl border-4 border-[#a000ff]">
+                            <a href="{{ route('createalbum') }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 w-32 h-32 rounded-2xl border-4 border-indigo-600">
                                 <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                             </a>
                         </div>

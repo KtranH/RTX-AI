@@ -18,7 +18,7 @@
             width: 12px; 
         }
         ::-webkit-scrollbar-thumb {
-            background-color: #a00fff;
+            background-color: #3949AB;
             border-radius: 10px;
         }
         ::-webkit-scrollbar-track {
@@ -45,7 +45,7 @@
                         <div class="text-lg font-semibold mb-2">Thể Loại</div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
                             @for ($i = 0; $i <= 10; $i++)
-                                <div class="text-sm text-white p-2 bg-[#a00fff] hover:bg-gray-400 text-center rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal">Category {{ $i }}</div>
+                                <div class="text-sm text-white p-2 bg-indigo-600 hover:bg-gray-400 text-center rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal">Category {{ $i }}</div>
                             @endfor
                         </div>
                         <!-- Categories -->
