@@ -79,14 +79,25 @@
                                                     icon.removeClass('text-gray-700').addClass('text-red-500');
                                                 }
                                                 var statusSpan = $('#like-status');
-                                                var text = statusSpan.html();
+                                                var text = statusSpan.html().trim();
 
-                                                if (text.includes('Bạn')) {
-                                                    text = text.replace('Bạn', '').trim();
-                                                    statusSpan.html(text);
+                                                if (text === 'Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.') {
+                                                    statusSpan.html('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn');
                                                 } else {
-                                                    text = 'Bạn ' + text;
-                                                    statusSpan.html(text);
+                                                    if (text.includes('Bạn')) {
+                                                        text = text.replace('Bạn', '').trim();
+                                                        if(text !== 'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :')
+                                                        {
+                                                            statusSpan.html(text);
+                                                        }
+                                                        else
+                                                        {
+                                                            statusSpan.html('Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.');
+                                                        }
+                                                    } else {
+                                                        text = 'Bạn ' + text;
+                                                        statusSpan.html(text);
+                                                    }
                                                 }
                                             },
                                             error: function(xhr) {
