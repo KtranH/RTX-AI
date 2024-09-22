@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -34,47 +35,33 @@ class Account extends Controller
     }
     public function callBackGoogle()
     {
-        try
-        {
+        try {
             $user = Socialite::driver("google")->user();
             $email = $user->getEmail();
             $name = $user->getName();
             $avatar = $user->getAvatar();
 
-            $checkUser = User::where("email",$email)->exists();
-            if(!$checkUser)
-            {
-                DB::table("users")->insert([
+            $existingUser = User::where("email", $email)->first();
+            if (!$existingUser) {
+                User::create([
                     "username" => $name,
                     "email" => $email,
-                    "password" =>  Hash::make("20012158840792030230440707349054"),
-                    "avatar_url" =>  $avatar,
+                    "password" => Hash::make("20012158840792030230440707349054"),
+                    "avatar_url" => $avatar,
                     "created_at" => now(),
                     "updated_at" => now(),
                 ]);
-                $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
-                return redirect()->route("showhome")->withCookie($cookie);
             }
-            else
-            {
-                $user = User::find($email);
-                if($user)
-                {
-                    $user->avatar_url = $avatar;
-                    $user->save();
-                }
-                $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
-                return redirect()->route("showhome")->withCookie($cookie);
-            }
-        }
-        catch(Exception $e)
-        {
+            $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
+            return redirect()->route("showhome")->withCookie($cookie);
+        } catch (Exception $e) {
             return redirect()->route("showlogin");
         }
     }
     public function Logout()
     {
         Cookie::queue(Cookie::forget("token_account"));
+        Auth::logout();
         return redirect()->route("showhome");
     }
     public function NewAccount(Request $request)
@@ -151,6 +138,7 @@ class Account extends Controller
             else
             {
                 $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
+                Auth::attempt(["email" => $email, "password" => $pass], true);
                 return redirect()->route("showhome")->withCookie($cookie);
             }
         }
@@ -178,13 +166,13 @@ class Account extends Controller
     public function ShowAccount()
     {
         $cookie = request()->cookie("token_account");
-        
-        if ($cookie) 
+
+        if ($cookie)
         {
             $tab = request()->query('tab', 'saved');
             return view('User.Account.Account', ['tab' => $tab]);
-        } 
-        else 
+        }
+        else
         {
             return redirect()->route('showlogin');
         }

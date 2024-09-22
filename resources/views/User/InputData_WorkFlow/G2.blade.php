@@ -14,7 +14,7 @@
                    </div>
                     <div style="margin-bottom:2%;">
                         <h2 class="text-base font-semibold leading-7 text-gray-900">
-                            Chi phí: 2 lượt
+                            Chi phí: {{$Price}} lượt
                         </h2>
                     </div>
 
@@ -156,7 +156,7 @@
                     </script>
 
                     <div>
-                        <h2 class="text-base font-semibold leading-7 text-gray-900">Số lượng tạo ảnh:
+                        <h2 class="text-base font-semibold leading-7 text-gray-900">Số lượt tạo ảnh:
                             {{ $ShowTimes }}
                         </h2>
                         <p class="mt-1 text-sm leading-6 text-gray-600">Nếu như hết lượt tạo ảnh bạn không thể tạo được ảnh! Số lượng sẽ được khôi phục vào ngày mai.</p>    
@@ -205,6 +205,13 @@
                     document.getElementById('create').style.cursor = 'not-allowed';
                     document.getElementById('create').style.backgroundColor = '#6B6B6B';
                     document.getElementById('loading-image').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        const progressBar = document.getElementById('progress-bar');
+                        const progressText = document.getElementById('progress-text');
+                        progressBar.style.width = '50%';
+                        progressText.innerText = '50%';
+                    }, 2000);
 
                     const formData = new FormData(document.getElementById('G2'));
                     fetch("{{ route('createg2') }}", {

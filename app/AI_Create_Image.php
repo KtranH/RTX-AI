@@ -16,6 +16,7 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 trait AI_Create_Image
 {
     //
+    use QueryDatabase;
     private $urlR2 = 'https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/';
     private $check_text = ' are these words SENSITIVE or OBSCENE? Just answer YES or NO.';
     private $url = 'http://127.0.0.1:8188/prompt';
@@ -33,9 +34,10 @@ trait AI_Create_Image
         $cookie = Cookie::get("token_account");
         $times = User::where("email",$cookie)->first();
         $ShowTimes = $times->times;
+        $Price = WorkFlow::find($ListG)->Price;
         $G = WorkFlow::find($ListG);
         $NameG = "G" . $ListG;
-        return view("User.InputData_WorkFlow." . $NameG ,compact("ShowTimes","G"));
+        return view("User.InputData_WorkFlow." . $NameG ,compact("ShowTimes","G" ,"Price"));
     }
     public function ImageG($ListG)
     {
@@ -50,8 +52,9 @@ trait AI_Create_Image
             return redirect()->route("showworkflow");
         }
         else
-        {        
-            return view("User.InputData_WorkFlow.ShowG",compact("prompt","seed","url","G","model"));
+        {    
+            $this->storeImageHistory($url, $this->find_id());
+            return view("User.InputData_WorkFlow.ShowG", compact("prompt", "seed", "url", "G", "model"));
         }
     }
     private function getLatestImage($folder)
@@ -164,6 +167,19 @@ trait AI_Create_Image
             return "{$timestamp}.png";
         }
         return null;
+    }
+    private function checkTimes($price)
+    {
+        $user = User::find($this->find_id());
+        if($user->times - $price < 0)
+        {
+            return false;
+        }
+        else
+        {
+            $user->update(['times' => $user->times - $price]);
+            return true;
+        }
     }
     /*public function stopQueue()
     {
