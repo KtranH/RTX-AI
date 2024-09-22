@@ -13,25 +13,27 @@
         </div>
         <!-- Search -->
         <style>
-        ::-webkit-scrollbar {
-            width: 12px; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background-color: #3949AB;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-            border-radius: 10px; 
-        }
+            ::-webkit-scrollbar {
+                width: 12px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background-color: #3949AB;
+                border-radius: 10px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
         </style>
         <div class="flex items-center justify-center sticky z-50 bg-white">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="relative w-full">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <i id="search-icon" class="fas fa-search text-gray-700"></i> 
+                        <i id="search-icon" class="fas fa-search text-gray-700"></i>
                     </span>
-                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40"></div>         
+                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40"></div>
                     <input id="search-bar" type="text" placeholder="Tìm kiếm..."
                         class="w-full bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
                         oninput="toggleCloseIcon()" onfocus="toggleOverlay(true)" onblur="toggleOverlay(false)"
@@ -50,9 +52,14 @@
                         <!-- Text-Only Categories -->
                         <div class="text-lg font-semibold mb-2">Thể Loại</div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
-                            @for ($i = 0; $i <= 10; $i++)
-                                <div class="text-sm text-white p-2 bg-indigo-600 hover:bg-indigo-400 text-center rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal">Category {{ $i }}</div>
-                            @endfor
+                            @foreach ($categories as $each)
+                                <div
+                                    class="text-sm text-white p-2 bg-indigo-600 hover:bg-indigo-400 text-center rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal">
+                                    <a href="/explore/?category={{ $each->id }}">
+                                        {{ $each->name }}
+                                    </a>
+                                </div>
+                            @endforeach
                         </div>
                         <!-- Categories -->
                         <div class="text-lg font-semibold mb-2">Thể Loại</div>
@@ -62,7 +69,8 @@
                                     class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
                                     <img src="https://picsum.photos/200" alt="Category Image"
                                         class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Category Lorem Lorem Lorem {{ $i }}</div>
+                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Category
+                                        Lorem Lorem Lorem {{ $i }}</div>
                                 </div>
                             @endfor
                         </div>
@@ -74,12 +82,13 @@
                                     class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
                                     <img src="https://picsum.photos/200" alt="Category Image"
                                         class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Suggestion {{ $i }}</div>
+                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Suggestion
+                                        {{ $i }}</div>
                                 </div>
                             @endfor
                         </div>
                     </div>
-                </div>       
+                </div>
             </div>
         </div>
         <script>
@@ -196,50 +205,104 @@
         <!-- Library -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
-                <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2">
-                    @foreach ($photos as $photo)
-                        <div
-                            class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
-                            <a href="{{ route('showimage', ['id' => $photo->id]) }}">
-                                <div class="aspect-square">
-                                    <img src="{{ $photo->url }}" alt="Image 1"
-                                        class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15"
-                                        style="border-radius: 30px;">
-                                </div>
-                                <div
-                                    class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                    <div class="mt-2 text-left px-2 py-1">
-                                        <div class="font-semibold text-lg truncate group-hover:text-[#000000]">
-                                            {{ $photo->title }} </div>
-                                        <div class="text-sm text-gray-500 h-20 overflow-hidden truncate">
-                                            {{ $photo->description }} </div>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-3 account-mobile mt-4 mb-1">
-                                    <div class="flex justify-start">
-                                        <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="{{ $photo->album->user->avatar_url }}" alt="">
-                                        <div>
-                                            <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-semibold ml-2">{{ $photo->album->user->username }}</a>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow"></div>
-                                    @php
-                                        $Likes = DB::select("SELECT 1 FROM likes WHERE photo_id = ?", [$photo->id]);
-                                        $Count = count($Likes);
-                                    @endphp
-                                    <div style="cursor: none">
-                                        <span><i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i> <span class="font-bold">{{ $Count }}</span></span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                                class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                            </div>
-                        </div>
-                    @endforeach
+                <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2" id="main-content">
                 </div>
             </div>
         </div>
 
     </main>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainContent = document.getElementById('main-content');
+            let currentPage = 1;
+            let isLoading = false;
+            let lastPage = false;
+
+            // const urlParams = new URLSearchParams(window.location.search);
+            // const category = urlParams.get('category');
+
+            function loadPhotos(page) {
+                if (isLoading || lastPage) return;
+
+                isLoading = true;
+
+                fetch(`{{ route('indexApi') }}?page=${page}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.last_page == currentPage) {
+                            lastPage = true;
+                        }
+                        renderPhotos(data.data);
+                        currentPage++;
+                        isLoading = false;
+                    })
+                    .catch(error => {
+                        console.error("Error loading photos:", error);
+                        isLoading = false;
+                    });
+            }
+
+            function renderPhotos(photos) {
+                let html = '';
+                photos.forEach(photo => {
+                    html += `
+                <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
+                    <a href="/image/${photo.id}">
+                        <div class="aspect-square">
+                            <img src="${photo.url}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
+                        </div>
+                        <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="mt-2 text-left px-2 py-1">
+                                <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
+                                <div class="text-sm text-gray-500 h-20 overflow-hidden truncate">${photo.description}</div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-3 account-mobile mt-4 mb-1">
+                            <div class="flex justify-start">
+                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="${photo.avatar_user}" alt="">
+                                <div>
+                                    <a href="/board" class="nav-link link-dark nav_name font-semibold ml-2">${photo.name_user}</a>
+                                </div>
+                            </div>
+                            <div class="flex-grow"></div>
+                            <div style="cursor: none">
+                                <span><i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i> <span class="font-bold">${photo.count_like}</span></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `;
+                });
+                mainContent.insertAdjacentHTML('beforeend', html);
+            }
+
+            loadPhotos(currentPage);
+
+            function debounce(func, wait = 100) {
+                let timeout;
+                return function(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            window.addEventListener('scroll', debounce(() => {
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 750) {
+                    loadPhotos(currentPage);
+                }
+            }, 200));
+        });
+    </script>
 @endsection
