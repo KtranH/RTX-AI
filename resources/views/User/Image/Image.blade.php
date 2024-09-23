@@ -98,9 +98,10 @@
                                                 if (text === 'Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.') {
                                                     statusSpan.html('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn');
                                                 } else {
-                                                    if (text.includes('Bạn,')) {
-                                                        text = text.replace('Bạn,', '').trim();
-                                                        if(text !== 'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :')
+                                                    if (text.includes('Bạn,') || text.includes('Bạn')) {
+                                                        text = text.replace('Bạn', '').trim();
+                                                        text = text.replace(',', '').trim();
+                                                        if(text.endsWith('.'))
                                                         {
                                                             statusSpan.html(text);
                                                         }

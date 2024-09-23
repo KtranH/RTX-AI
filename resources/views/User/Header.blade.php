@@ -70,7 +70,7 @@
         <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 text-2xl">
             <a href="{{ route('showexplore') }}" class="nav-link px-4 link-dark nav-explore" style="font-weight:600" title="Khám phá"><i class="fa-solid fa-icons"></i></a>
             <a href="{{ route('showboard') }}" class="nav-link px-4 link-dark nav-board" style="font-weight:bold" title="Trang chủ"><i class="fa-solid fa-id-badge"></i></a>
-            <a href="{{ route('showcreativity') }}" class="nav-link px-4 link-dark nav-creativity" style="font-weight:600" title="Sáng tạo"><i class="fa-solid fa-circle-plus"></i></i></a>
+            <a href="{{ route('showcreativity') }}" class="nav-link px-4 link-dark nav-creativity" style="font-weight:600" title="Sáng tạo"><i class="fa-solid fa-pencil"></i></a>
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function () 
