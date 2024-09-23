@@ -12,5 +12,5 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-Schedule::command('delete:imageAI')->daily();
-Schedule::command('update:times')->daily();
+Schedule::command('delete:imageAI')->dailyAt('00:00');
+Schedule::command('update:times')->dailyAt('00:00');

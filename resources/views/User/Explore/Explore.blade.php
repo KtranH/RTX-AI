@@ -54,13 +54,28 @@
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
                             @foreach ($categories as $each)
                                 <div
-                                    class="text-sm text-white p-2 bg-indigo-600 hover:bg-indigo-400 text-center rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal">
-                                    <a href="/explore/?category={{ $each->id }}">
+                                    class="text-sm text-white p-2 bg-indigo-600 hover:bg-indigo-400 text-center cursor-pointer truncate hover:overflow-visible hover:whitespace-normal" style="border-radius: 30px">
+                                    <a class="font-semibold" href="/explore/?category={{ $each->id }}">
                                         {{ $each->name }}
                                     </a>
                                 </div>
                             @endforeach
                         </div>
+                        <!-- More categories -->
+                        <div class="text-center" style="cursor: pointer">
+                            <a href="{{ route("morecategories") }}" class="text-2xs text-gray-500 font-semibold mb-2 hover:text-indigo-600 more_categories">
+                                Xem thêm <i class="fa-solid fa-caret-down"></i>
+                            </a>
+                        </div>
+                        <style>
+                            .more_categories i {
+                                transition: transform 0.3s ease;
+                            }
+                        
+                            .more_categories:hover i {
+                                transform: rotate(180deg);
+                            }
+                        </style>
                         <!-- Categories -->
                         <div class="text-lg font-semibold mb-2">Thể Loại</div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">

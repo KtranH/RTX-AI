@@ -85,6 +85,9 @@ Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcrea
 Route::get('/explore', [Explore::class, 'ShowExplore'])->name("showexplore");
 Route::get('/api/explore', [Explore::class, 'indexApi'])->name("indexApi");
 
+//See more categories
+Route::get('/morecategories', [Explore::class, 'MoreCategory'])->name("morecategories");
+
 //Show All Workflow
 Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkflow");
 

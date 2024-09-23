@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Explore extends Controller
 {
     public function ShowExplore(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::take(18)->get();
 
         return view("User.Explore.Explore", compact('categories'));
     }
@@ -35,5 +36,21 @@ class Explore extends Controller
         });
 
         return response()->json($photos);
+    }
+    public function MoreCategory()
+    {
+        $ResultABC = [];
+
+        foreach (range('A', 'Z') as $letter) {
+            $queryResult = DB::table('categories')
+                ->where(DB::raw('LOWER(SUBSTRING(name, 1, 1))'), strtolower($letter))
+                ->get();
+
+            if ($queryResult->isNotEmpty()) {
+                $results[$letter] = $queryResult;
+            }
+        }
+
+        return view('User.Explore.MoreCategory', compact('results'));
     }
 }
