@@ -53,6 +53,7 @@ class Account extends Controller
                 ]);
             }
             $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
+            Auth::attempt(["email" => $email, "password" => "123"], true);
             return redirect()->route("showhome")->withCookie($cookie);
         } catch (Exception $e) {
             return redirect()->route("showlogin");
@@ -70,22 +71,12 @@ class Account extends Controller
        $email = $request->input("input-email");
        $password = $request->input("input-pass");
        $password2 = $request->input("input-pass2");
-       if(empty($name))
-       {
-            Session::flash("EmptyName","checked");
-       }
-       else if(empty($email))
-       {
-            Session::flash("EmptyEmail","checked");
-       }
-       else if(empty($password))
-       {
-            Session::flash("EmptyPass","checked");
-       }
-       else if(empty($password2))
-       {
-            Session::flash("EmptyPass2","checked");
-       }
+
+       if (empty($name)) Session::flash("EmptyName", "checked");
+       if (empty($email)) Session::flash("EmptyEmail", "checked");
+       if (empty($password)) Session::flash("EmptyPass", "checked");
+       if (empty($password2)) Session::flash("EmptyPass2", "checked");
+       
        else
        {
             $errorName = User::where("username",$name)->exists();
@@ -137,7 +128,7 @@ class Account extends Controller
             }
             else
             {
-                $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
+                $cookie = Cookie::make("token_account", $email, minutes: 3600 * 24 * 30);
                 Auth::attempt(["email" => $email, "password" => $pass], true);
                 return redirect()->route("showhome")->withCookie($cookie);
             }

@@ -231,7 +231,7 @@
       </a>
     </div>
     <div class="title_container">
-      <p class="title">Đăng nhập bằng tài khoản của bạn</p>
+      <p class="title text-center">Đăng nhập bằng tài khoản của bạn</p>
       <span class="subtitle">Bắt đầu chia sẻ những khoảng khắc và sáng tạo nghệ thuật.</span>
     </div>
     <br>

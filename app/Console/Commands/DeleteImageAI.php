@@ -29,10 +29,13 @@ class DeleteImageAI extends Command
     {
         //
         info("Delete images running at ". now());
-
-        $users = User::all();
-        foreach ($users as $user) {
-            HistoryImageAI::where('user_id', $user->id)->where('created_at', '<', now()->subDays(10))->delete();
+        $historyImage = HistoryImageAI::all();
+        foreach ($historyImage as $h)
+        {
+            if($h->created_at < now()->subDays(10))
+            {
+                $h->delete();
+            }
         }
     }
 }

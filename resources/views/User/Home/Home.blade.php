@@ -114,7 +114,7 @@
                                     aria-hidden="true">&rarr;</span></a>
                         </div>
                     </div>
-                    <div class="text-center" data-aos="zoom-out-up" data-aos-delay="300">
+                    <div class="text-center" data-aos="zoom-out-up" data-aos-delay="300" style="height: 50vh">
                         <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Sáng tạo và chia sẻ hình ảnh
                             của bạn</h1>
                         <p class="mt-6 text-lg leading-8 text-gray-600">Tạo các bộ album hình ảnh để chia sẻ với bạn bè và
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="margin-bottom:100px" class="mt-4">
+                <div style="margin-bottom:100px">
                     <h2 class="text-4xl font-bold tracking-tight text-gray-900 text-center mb-2" data-aos="fade-up">Khám phá
                         cùng RTX-AI</h2>
                     <p class="text-2xs tracking-tight text-gray-500 text-center mt-2" data-aos="fade-up"
@@ -137,7 +137,7 @@
                         kiếm những bức ảnh nổi bật</p>
                 </div>
                 <div data-aos="fade-up" data-aos-delay="100">
-                    <div class="jarallax" data-jarallax data-speed="0.1" style="height:100vh;">
+                    <div class="jarallax" data-jarallax data-speed="0.5" style="height:100vh;">
                         <img src="/images/landscape.png" class="jarallax-img" alt="Image 1">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
@@ -576,7 +576,7 @@
                                     <button class="btn-12"><span>Bắt đầu!</span></button>
                                     <script>
                                         document.querySelector('button').addEventListener('click', function() {
-                                            window.location.href = "{{ route('showworkflow') }}";
+                                            window.location.href = "{{ route('showcreativity') }}";
                                         });
                                     </script>
                                 </div>
