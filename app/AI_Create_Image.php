@@ -19,8 +19,8 @@ trait AI_Create_Image
     use QueryDatabase;
     private $urlR2 = 'https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/';
     private $check_text = ' are these words SENSITIVE or OBSCENE? Just answer YES or NO.';
-    private $url = 'http://127.0.0.1:8188/prompt';
-    private $url2 = 'http://192.168.1.10:8188/prompt';
+    private $url = 'http://127.0.0.1:8188/api/prompt';
+    private $url2 = 'http://192.168.1.11:8188/api/prompt';
     private $interrupt = '';
     private $inputDir = 'D:\ProjectPHP\DO_AN\public\images\INPUT_AI';
     private $inputError = 'D:\ProjectPHP\DO_AN\public\images';
@@ -75,11 +75,11 @@ trait AI_Create_Image
         $id = json_decode($response->getBody(), true)['prompt_id'] ?? null;
 
         while (true) {
-            $response = $client->get("http://127.0.0.1:8188/history/{$id}");
+            $response = $client->get("http://127.0.0.1:8188/api/history/{$id}");
             if ($response->getStatusCode() === 200) {
                 $takeFileName = json_decode($response->getBody()->getContents(), true);
                 if (!empty($takeFileName)) {
-                    return 'http://127.0.0.1:8188/view?filename=' . $takeFileName[$id]['outputs'][$numberOutput]['images'][0]['filename'];
+                    return 'http://127.0.0.1:8188/api/view?filename=' . $takeFileName[$id]['outputs'][$numberOutput]['images'][0]['filename'];
                 }
             }
             sleep(2);
@@ -95,7 +95,7 @@ trait AI_Create_Image
         $id = json_decode($response->getBody(), true)['prompt_id'] ?? null;
 
         while (true) {
-            $response = $client->get('http://192.168.1.10:8188/history/' . $id);
+            $response = $client->get('http://192.168.1.11:8188/api/history/' . $id);
             if ($response->getStatusCode() === 200) {
                 $takeFileName = json_decode($response->getBody()->getContents(), true);
                 if (!empty($takeFileName)) {

@@ -47,8 +47,9 @@ class G1 extends Controller
         $process["8"]["inputs"]["text"] = $translated;
         $process["12"]["inputs"]["noise_seed"] = $seed;
 
+        $imageUrl = $this->get_image_result($process, 19);
+
         try {
-            $imageUrl = $this->get_image_result($process, 19);
             $takeImageUrl = $this->UploadImageR2($imageUrl);
             $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
 
