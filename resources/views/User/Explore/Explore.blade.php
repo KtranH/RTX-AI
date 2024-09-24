@@ -33,7 +33,7 @@
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <i id="search-icon" class="fas fa-search text-gray-700"></i>
                     </span>
-                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40"></div>
+                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40 transition-opacity"></div>
                     <input id="search-bar" type="text" placeholder="Tìm kiếm..."
                         class="w-full bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
                         oninput="toggleCloseIcon()" onfocus="toggleOverlay(true)" onblur="toggleOverlay(false)"
@@ -109,13 +109,41 @@
         <script>
             const MAX_HISTORY = 10;
 
-            function toggleExtension(event) {
+            function toggleExtension(event) 
+            {
                 event.stopPropagation();
                 const extension = document.getElementById('search-extension');
-                extension.classList.remove('hidden');
+                const overlay = document.getElementById('overlay');
+
+                if (extension.classList.contains('hidden')) 
+                {
+                    extension.classList.remove('hidden');
+                    overlay.classList.remove('hidden');
+                    overlay.classList.add('opacity-50');
+                } 
+                else 
+                {
+                    extension.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('opacity-50');
+                }
             }
 
-            function toggleCloseIcon() {
+            document.addEventListener('click', function (event) 
+            {
+                const searchBar = document.getElementById('search-bar');
+                const extension = document.getElementById('search-extension');
+                const overlay = document.getElementById('overlay');
+
+                if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
+                    extension.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('opacity-50');
+                }
+            });
+
+            function toggleCloseIcon() 
+            {
                 const searchBar = document.getElementById('search-bar');
                 const closeIcon = document.getElementById('close-icon');
 
@@ -126,7 +154,8 @@
                 }
             }
 
-            function checkCloseIcon() {
+            function checkCloseIcon() 
+            {
                 const searchBar = document.getElementById('search-bar');
                 const closeIcon = document.getElementById('close-icon');
 
@@ -135,18 +164,22 @@
                 }
             }
 
-            function clearSearchBar() {
+            function clearSearchBar() 
+            {
                 const searchBar = document.getElementById('search-bar');
                 searchBar.value = "";
                 checkCloseIcon();
                 searchBar.focus();
             }
 
-            function addSearchHistory(term) {
+            function addSearchHistory(term) 
+            {
                 let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-                if (!history.includes(term)) {
+                if (!history.includes(term)) 
+                {
                     history.unshift(term);
-                    if (history.length > MAX_HISTORY) {
+                    if (history.length > MAX_HISTORY) 
+                    {
                         history.pop();
                     }
                     localStorage.setItem('searchHistory', JSON.stringify(history));
@@ -154,14 +187,16 @@
                 }
             }
 
-            function removeSearchHistory(index) {
+            function removeSearchHistory(index)
+            {
                 let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
                 history.splice(index, 1);
                 localStorage.setItem('searchHistory', JSON.stringify(history));
                 renderSearchHistory();
             }
 
-            function renderSearchHistory() {
+            function renderSearchHistory() 
+            {
                 const historyContainer = document.getElementById('search-history');
                 const historyTitle = document.getElementById('search-history-title');
                 historyContainer.innerHTML = '';
@@ -188,7 +223,8 @@
                 }
             }
 
-            function handleSearch() {
+            function handleSearch() 
+            {
                 const searchBar = document.getElementById('search-bar');
                 const term = searchBar.value.trim();
                 if (term) {
@@ -196,22 +232,15 @@
                 }
             }
 
-            document.addEventListener('click', function(event) {
-                const searchBar = document.getElementById('search-bar');
-                const extension = document.getElementById('search-extension');
-
-                if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
-                    extension.classList.add('hidden');
-                }
-            });
-
-            document.getElementById('search-extension').addEventListener('click', function(event) {
+            document.getElementById('search-extension').addEventListener('click', function(event) 
+            {
                 event.stopPropagation();
             });
 
             renderSearchHistory();
 
-            document.getElementById('search-bar').addEventListener('keyup', function(event) {
+            document.getElementById('search-bar').addEventListener('keyup', function(event) 
+            {
                 if (event.key === 'Enter') {
                     handleSearch();
                 }
@@ -224,9 +253,7 @@
                 </div>
             </div>
         </div>
-
     </main>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
