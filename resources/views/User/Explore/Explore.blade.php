@@ -27,24 +27,25 @@
                 border-radius: 10px;
             }
         </style>
-        <div class="flex items-center justify-center sticky z-50 bg-white">
+
+        <div class="flex items-center justify-center sticky z-20 bg-white">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
+                <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden transition-opacity"></div>
                 <div class="relative w-full">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <i id="search-icon" class="fas fa-search text-gray-700"></i>
                     </span>
-                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40 transition-opacity"></div>
                     <input id="search-bar" type="text" placeholder="Tìm kiếm..."
-                        class="w-full bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
+                        class="w-full rounded-2xl bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
                         oninput="toggleCloseIcon()" onfocus="toggleOverlay(true)" onblur="toggleOverlay(false)"
-                        onclick="toggleExtension(event)" style="border-radius: 30px;" />
+                        onclick="toggleExtension(event)" />
                     <span id="close-icon"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden"
                         onclick="clearSearchBar()">
                         <i class="text-xl fas fa-times"></i>
                     </span>
                     <div id="search-extension"
-                        class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden z-50"
+                        class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden"
                         style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;" onclick="event.stopPropagation();">
                         <!-- Search History -->
                         <div id="search-history-title" class="text-lg font-semibold mb-2 hidden">Lịch Sử</div>
@@ -112,6 +113,7 @@
             function toggleExtension(event) 
             {
                 event.stopPropagation();
+                const searchBar = document.getElementById('search-bar');
                 const extension = document.getElementById('search-extension');
                 const overlay = document.getElementById('overlay');
 
@@ -135,7 +137,8 @@
                 const extension = document.getElementById('search-extension');
                 const overlay = document.getElementById('overlay');
 
-                if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
+                if (!searchBar.contains(event.target) && !extension.contains(event.target)) 
+                {
                     extension.classList.add('hidden');
                     overlay.classList.add('hidden');
                     overlay.classList.remove('opacity-50');
