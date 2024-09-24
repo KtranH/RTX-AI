@@ -27,24 +27,25 @@
                 border-radius: 10px;
             }
         </style>
-        <div class="flex items-center justify-center sticky z-50 bg-white">
+
+        <div class="flex items-center justify-center sticky z-20 bg-white">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
+                <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden transition-opacity"></div>
                 <div class="relative w-full">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                         <i id="search-icon" class="fas fa-search text-gray-700"></i>
                     </span>
-                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40"></div>
                     <input id="search-bar" type="text" placeholder="Tìm kiếm..."
-                        class="w-full bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
+                        class="w-full rounded-2xl bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
                         oninput="toggleCloseIcon()" onfocus="toggleOverlay(true)" onblur="toggleOverlay(false)"
-                        onclick="toggleExtension(event)" style="border-radius: 30px;" />
+                        onclick="toggleExtension(event)" />
                     <span id="close-icon"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden"
                         onclick="clearSearchBar()">
                         <i class="text-xl fas fa-times"></i>
                     </span>
                     <div id="search-extension"
-                        class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden z-50"
+                        class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden"
                         style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;" onclick="event.stopPropagation();">
                         <!-- Search History -->
                         <div id="search-history-title" class="text-lg font-semibold mb-2 hidden">Lịch Sử</div>
@@ -109,13 +110,43 @@
         <script>
             const MAX_HISTORY = 10;
 
-            function toggleExtension(event) {
+            function toggleExtension(event) 
+            {
                 event.stopPropagation();
+                const searchBar = document.getElementById('search-bar');
                 const extension = document.getElementById('search-extension');
-                extension.classList.remove('hidden');
+                const overlay = document.getElementById('overlay');
+
+                if (extension.classList.contains('hidden')) 
+                {
+                    extension.classList.remove('hidden');
+                    overlay.classList.remove('hidden');
+                    overlay.classList.add('opacity-50');
+                } 
+                else 
+                {
+                    extension.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('opacity-50');
+                }
             }
 
-            function toggleCloseIcon() {
+            document.addEventListener('click', function (event) 
+            {
+                const searchBar = document.getElementById('search-bar');
+                const extension = document.getElementById('search-extension');
+                const overlay = document.getElementById('overlay');
+
+                if (!searchBar.contains(event.target) && !extension.contains(event.target)) 
+                {
+                    extension.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('opacity-50');
+                }
+            });
+
+            function toggleCloseIcon() 
+            {
                 const searchBar = document.getElementById('search-bar');
                 const closeIcon = document.getElementById('close-icon');
 
@@ -126,7 +157,8 @@
                 }
             }
 
-            function checkCloseIcon() {
+            function checkCloseIcon() 
+            {
                 const searchBar = document.getElementById('search-bar');
                 const closeIcon = document.getElementById('close-icon');
 
@@ -135,18 +167,22 @@
                 }
             }
 
-            function clearSearchBar() {
+            function clearSearchBar() 
+            {
                 const searchBar = document.getElementById('search-bar');
                 searchBar.value = "";
                 checkCloseIcon();
                 searchBar.focus();
             }
 
-            function addSearchHistory(term) {
+            function addSearchHistory(term) 
+            {
                 let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-                if (!history.includes(term)) {
+                if (!history.includes(term)) 
+                {
                     history.unshift(term);
-                    if (history.length > MAX_HISTORY) {
+                    if (history.length > MAX_HISTORY) 
+                    {
                         history.pop();
                     }
                     localStorage.setItem('searchHistory', JSON.stringify(history));
@@ -154,14 +190,16 @@
                 }
             }
 
-            function removeSearchHistory(index) {
+            function removeSearchHistory(index)
+            {
                 let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
                 history.splice(index, 1);
                 localStorage.setItem('searchHistory', JSON.stringify(history));
                 renderSearchHistory();
             }
 
-            function renderSearchHistory() {
+            function renderSearchHistory() 
+            {
                 const historyContainer = document.getElementById('search-history');
                 const historyTitle = document.getElementById('search-history-title');
                 historyContainer.innerHTML = '';
@@ -188,7 +226,8 @@
                 }
             }
 
-            function handleSearch() {
+            function handleSearch() 
+            {
                 const searchBar = document.getElementById('search-bar');
                 const term = searchBar.value.trim();
                 if (term) {
@@ -196,22 +235,15 @@
                 }
             }
 
-            document.addEventListener('click', function(event) {
-                const searchBar = document.getElementById('search-bar');
-                const extension = document.getElementById('search-extension');
-
-                if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
-                    extension.classList.add('hidden');
-                }
-            });
-
-            document.getElementById('search-extension').addEventListener('click', function(event) {
+            document.getElementById('search-extension').addEventListener('click', function(event) 
+            {
                 event.stopPropagation();
             });
 
             renderSearchHistory();
 
-            document.getElementById('search-bar').addEventListener('keyup', function(event) {
+            document.getElementById('search-bar').addEventListener('keyup', function(event) 
+            {
                 if (event.key === 'Enter') {
                     handleSearch();
                 }
@@ -224,9 +256,7 @@
                 </div>
             </div>
         </div>
-
     </main>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
