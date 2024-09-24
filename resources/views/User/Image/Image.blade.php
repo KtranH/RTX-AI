@@ -182,11 +182,11 @@
                         @elseif ($count <= 2 && $count > 0)
                             <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
                             @if($checkUserLikedImage != null) 
-                                Bạn,
+                                Bạn
                             @endif
                             @foreach ($listUserLiked as $l)
                                 @if($l->user->username != $checkUserNow->username)
-                                    {{ $l->user->username }}{{ $loop->last ? '.' : ', ' }}
+                                    {{ ", " . $l->user->username }}{{ $loop->last ? '.' : ', ' }}
                                 @endif
                             @endforeach 
                             </span>
