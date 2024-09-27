@@ -98,9 +98,11 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Change board tab
     Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
+    Route::get('/api/board/{tab}', [Board::class, 'ShowBoardApi'])->name('ShowBoardApi');
 
     //Access album page
     Route::get('/album/{id}', [Board::class, 'ShowAlbum'])->name("showalbum");
+    Route::get('/api/album/{id}', [Board::class, 'ShowAlbumApi'])->name("ShowAlbumApi");
 
     //Access album creation page
     Route::get('/create_album', [Board::class, 'CreateAlbum'])->name("createalbum");

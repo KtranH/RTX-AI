@@ -28,34 +28,59 @@ class Board extends Controller
     {
         $cookie = request()->cookie("token_account");
         $userId = $this->find_id();
+
         $imagesAI = HistoryImageAI::where('user_id', $userId)->paginate(12);
         $tab = request()->query('tab', 'saved');
         if ($tab == 'created') {
             return view('User.Board.Board', ['tab' => $tab], compact('imagesAI'));
         }
-        $photos = DB::table('users')->join('albums','users.id', '=' , 'albums.user_id')->join('photos','albums.id','=','photos.album_id')->where('users.id',$this->find_id())->paginate(12);
-        $albums = Album::where('user_id',$this->find_id())->paginate(8);
+
+        $albums = Album::where('user_id', $this->find_id())->paginate(8);
         $feature = Photo::where('is_feature', true)
-            ->whereHas('album', function($query) {
+            ->whereHas('album', function ($query) {
                 $query->where('user_id', $this->find_id());
             })->get();
-        return view('User.Board.Board', ['tab' => $tab], compact('photos','albums','feature','imagesAI'));
+        return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'imagesAI'));
     }
-    public function ShowAlbum($id)              
+
+    public function ShowBoardApi()
+    {
+        $userId = auth()->user()->id;
+        $photos = DB::table('users')
+            ->join('albums', 'users.id', '=', 'albums.user_id')
+            ->join('photos', 'albums.id', '=', 'photos.album_id')
+            ->where('users.id', $userId)
+            ->paginate(12);
+        return response()->json([
+            'photos' => $photos,
+        ]);
+    }
+
+    public function ShowAlbum($id)
     {
         $album = Album::findOrFail($id);
         $user = $album->user;
-        $photo = Photo::where("album_id",$album->id)->paginate(8);
-        $countPhoto = Photo::where("album_id",$album->id)->count();
-        return view('User.Board.Album', compact('album','photo','user','countPhoto'));
+        $photo = Photo::where("album_id", $album->id)->paginate(8);
+        $countPhoto = Photo::where("album_id", $album->id)->count();
+        return view('User.Board.Album', compact('album', 'photo', 'user', 'countPhoto'));
     }
+
+    public function ShowAlbumApi($id)
+    {
+        $album = Album::findOrFail($id);
+        $photos = Photo::where("album_id", $album->id)->paginate(8);
+        return response()->json([
+            'photos' => $photos,
+        ]);
+    }
+
     public function CreateAlbum()
     {
         return view('User.Board.CreateAlbum');
     }
     public function EditAlbum($id)
     {
-        $album = Album::findOrFail($id);  
+        $album = Album::findOrFail($id);
         return view('User.Board.EditAlbum', compact('album'));
     }
     public function UpdateAlbum(Request $request, $id)
@@ -75,7 +100,7 @@ class Board extends Controller
         ]);
 
         $album = Album::findOrFail($id);
-        
+
         if ($request->hasFile('cover')) {
             $image = $request->file('cover');
             $filename = time() . '.' . $image->getClientOriginalExtension();
@@ -97,12 +122,11 @@ class Board extends Controller
     public function DeleteAlbum($id)
     {
         $album = Album::findOrFail($id);
-        foreach($album->photos as $x)
-        {
-            $urlRemove = str_replace($this->urlR2,"",$x->url);
+        foreach ($album->photos as $x) {
+            $urlRemove = str_replace($this->urlR2, "", $x->url);
             Storage::disk('r2')->delete($urlRemove);
         }
-        $urlRemove = str_replace($this->urlR2,"",$album->cover_image);
+        $urlRemove = str_replace($this->urlR2, "", $album->cover_image);
         Storage::disk('r2')->delete($urlRemove);
         $album->delete();
         return redirect()->route("showboard");

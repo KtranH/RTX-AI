@@ -19,22 +19,23 @@ class Explore extends Controller
 
     public function indexApi(Request $request)
     {
-        $query = Photo::query();
+        // DB::listen(function ($query) {
+        //     \Log::info('SQL Query: ' . $query->sql);
+        //     \Log::info('Bindings: ' . implode(', ', $query->bindings));
+        //     \Log::info('Time: ' . $query->time . 'ms');
+        // });
+
+        $query = Photo::query()
+            ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
+            ->leftJoin('users', 'users.id', '=', 'albums.user_id')
+            ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user')
+            ->withCount('likes');
 
         if ($request->has('q')) {
-            $query->where('title', 'like', '%' . $request->q . '%');
+            $query->where('photos.title', 'like', '%' . $request->q . '%');
         }
 
-        $query->with('album.user', 'likes');
         $photos = $query->paginate($request->limit ?? 10);
-
-        $photos->transform(function ($each) {
-            $each->avatar_user = $each->album->user->avatar_url;
-            $each->name_user = $each->album->user->username;
-            $each->count_like = $each->likes->count();
-            return $each;
-        });
-
         return response()->json($photos);
     }
     public function MoreCategory()
