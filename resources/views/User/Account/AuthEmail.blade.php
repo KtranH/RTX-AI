@@ -43,11 +43,11 @@
       <div class="input_container">
         <label class="input_label" for="email_field">Mã xác minh</label>
         <img src="/assets/img/select.png" class="icon" alt="">
-        <input placeholder="123456" title="Inpit title" name="input-code" type="number" class="input_field" id="email_field" minlength="6" required>
+        <input placeholder="123456" title="Inpit title" name="input-code" type="number" class="input_field form-control @error('input-code') is-invalid @enderror" id="email_field" minlength="6" required>
       </div>
-      @if (Session::has("EmptyCode"))
-          <p style="color: red; width:100%">Vui lòng nhập mã xác nhận!</p>
-      @endif
+      @error('input-code')
+        <div class="text-danger">{{ $message }}</div>
+      @enderror
       @if (Session::has("ExpiredCode"))
           <p style="color: red; width:100%">Mã không đúng hoặc đã hết hạn!</p>
       @endif

@@ -67,71 +67,76 @@ class Account extends Controller
     }
     public function NewAccount(Request $request)
     {
+        $request->validate([
+            'input-name' => 'required|string|max:255',
+            'input-email' => 'required|string|email|max:255|unique:users',
+            'input-pass' => 'required|string|min:8',
+            'input-pass2' => 'required|string|min:8',
+        ], [
+            'input-name.required' => 'Vui lòng nhập tên người dùng',
+            'input-name.max' => 'Tên người dùng phải nhỏ hơn 255 ký tự',
+            'input-email.required' => 'Vui lòng nhập email',
+            'input-email.email' => 'Email phải là email',
+            'input-email.max' => 'Email phải nhỏ hơn 255 ký tự',
+            'input-email.unique' => 'Email đã tồn tại',
+            'input-pass.required' => 'Vui lòng nhập Password',
+            'input-pass.min' => 'Password phải nhiều hơn 8 ký tự',
+            'input-pass2.required' => 'Vui lòng nhập lại Password',
+            'input-pass2.min' => 'Password phải nhiều hơn 8 ký tự',
+        ]);
+
        $name = $request->input("input-name");
        $email = $request->input("input-email");
        $password = $request->input("input-pass");
        $password2 = $request->input("input-pass2");
 
-       if (empty($name)) Session::flash("EmptyName", "checked");
-       if (empty($email)) Session::flash("EmptyEmail", "checked");
-       if (empty($password)) Session::flash("EmptyPass", "checked");
-       if (empty($password2)) Session::flash("EmptyPass2", "checked");
-       
+       $errorName = User::where("username",$name)->exists();
+       $errorEmail = User::where("email",$email)->exists();
+       if($errorName)
+       {
+           Session::flash("ErrorName","checked");
+       }
+       else if($errorEmail)
+       {
+           Session::flash("ErrorEmail","checked");
+       }
+       else if($password != $password2)
+       {
+           Session::flash("ErrorPass","checked");
+       }
        else
        {
-            $errorName = User::where("username",$name)->exists();
-            $errorEmail = User::where("email",$email)->exists();
-            if($errorName)
-            {
-                Session::flash("ErrorName","checked");
-            }
-            else if($errorEmail)
-            {
-                Session::flash("ErrorEmail","checked");
-            }
-            else if($password != $password2)
-            {
-                Session::flash("ErrorPass","checked");
-            }
-            else
-            {
-               Session::put("username",$name);
-               Session::put("email",$email);
-               Session::put("password",$password);
-               return redirect()->route("sendemail");
-            }
-        }
-        return redirect()->route("showsignup");
+          Session::put("username",$name);
+          Session::put("email",$email);
+          Session::put("password",$password);
+          return redirect()->route("sendemail");
+       }
     }
     public function LoginAccount(Request $request)
     {
+        $request->validate([
+            'input-email' => 'required|string|email|max:255',
+            'input-pass' => 'required|string|min:8',
+        ], [
+            'input-email.required' => 'Vui lòng nhập Email',
+            'input-email.email' => 'Email phải là email',
+            'input-email.max' => 'Email phải nhỏ hơn 255 ký tự',
+            'input-pass.required' => 'Vui lòng nhập Password',
+            'input-pass.min' => 'Password phải nhiều hơn 8 ký tự',
+        ]);
         $email = $request->input("input-email");
         $pass = $request->input("input-pass");
-
-        if(empty($email))
+        $CheckEmail = User::where("email",$email)->first();
+        if($CheckEmail == null || !Hash::check($pass,$CheckEmail->password))
         {
-            Session::flash("EmptyEmail","checked");
-            return redirect()->route("showlogin");
-        }
-        else if(empty($pass))
-        {
-            Session::flash("EmptyPass","checked");
+            Session::flash("ErrorAccount","checked");
             return redirect()->route("showlogin");
         }
         else
         {
-            $CheckEmail = User::where("email",$email)->first();
-            if($CheckEmail == null || !Hash::check($pass,$CheckEmail->password))
-            {
-                Session::flash("ErrorAccount","checked");
-                return redirect()->route("showlogin");
-            }
-            else
-            {
-                $cookie = Cookie::make("token_account", $email, minutes: 3600 * 24 * 30);
-                Auth::attempt(["email" => $email, "password" => $pass], true);
-                return redirect()->route("showhome")->withCookie($cookie);
-            }
+            $cookie = Cookie::make("token_account", $email, minutes: 3600 * 24 * 30);
+            Auth::attempt(["email" => $email, "password" => $pass], true);
+            return redirect()->route("showhome")->withCookie($cookie);
         }
     }
     public function ForgetPass()
@@ -140,18 +145,16 @@ class Account extends Controller
     }
     public function SendEmailResetPass(Request $request)
     {
+        $request->validate([
+            'input-email' => 'required|string|email|max:255',
+        ], [
+            'input-email.required' => 'Vui lòng nhập Email',
+            'input-email.email' => 'Email phải là email',
+            'input-email.max' => 'Email phải nhỏ hơn 255 ký tự',
+        ]);
         $email = $request->input("input-email");
-
-        if(empty($email))
-        {
-            Session::flash("EmptyEmail","checked");
-            return redirect()->route("forgetpass");
-        }
-        else
-        {
-            Session::put("CodeRestPass",$email);
-            return redirect()->route("sendcodetoemail");
-        }
+        Session::put("CodeRestPass",$email);
+        return redirect()->route("sendcodetoemail");
     }
 
     public function ShowAccount()

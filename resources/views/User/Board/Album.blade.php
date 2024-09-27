@@ -49,6 +49,19 @@
                 <p class="translate-x-2" style="margin-top:12px">Quay lại</p>
             </a>
         </div>
+         <!-- Suggestion -->
+         <div class="flex items-center justify-center">
+            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
+                <div class="font-bold text-3xl text-left">Thêm Ảnh</div>
+                <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div class="relative group">
+                        <a href="{{ route('createimage', ['id' => $album->id]) }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 rounded-2xl">
+                            <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Gallery -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
@@ -101,19 +114,6 @@
                         {{ $photo->links("vendor.pagination.simple-tailwind") }}
                     </div>
                 @endif
-            </div>
-        </div>
-        <!-- Suggestion -->
-        <div class="flex items-center justify-center">
-            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
-                <div class="font-bold text-3xl text-left">Thêm Ảnh</div>
-                <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <div class="relative group">
-                        <a href="{{ route('createimage', ['id' => $album->id]) }}" class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 rounded-2xl">
-                            <i class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     </main>
