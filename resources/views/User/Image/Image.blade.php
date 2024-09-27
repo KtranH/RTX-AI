@@ -19,7 +19,7 @@
                     <!-- Details -->
                     <div class="md:col-span-1 flex flex-col">
                         <!-- Return -->
-                        <a href="{{ route('showalbum', ['id' => $image->album_id]) }}"
+                        <a href="#" onclick="Back()"
                             class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group"
                             style="margin-bottom:10px">
                             <div
@@ -34,6 +34,11 @@
                             </div>
                             <p class="translate-x-2 relative" style="margin-top:12px">Quay lại</p>             
                         </a>
+                        <script>
+                            function Back() {
+                                window.history.back();
+                            }
+                        </script>
                         <!-- Title and Description -->
                         <div class="mb-4">
                             <h1 class="text-4xl font-bold truncate overflow-visible">{{ $image->title }}</h1>
@@ -48,17 +53,19 @@
                             @endforeach
                         </div>
                         <!-- Owner -->
-                        <div class="flex items-center space-x-2 mb-4">
-                            <a href="#" class="flex items-center space-x-2 flex-grow group">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <a href="#" class="flex items-center space-x-2 group">
                                 <img src="{{ $user->avatar_url }}" alt="Owner Avatar" class="w-10 h-10 rounded-full">
                                 <p class="font-semibold group-hover:!text-[#a000ff]">{{ $user->username }}</p>
                             </a>
-                            @if (auth()->user()->id != $album->user_id)
+                            @if (!Session::Has("Owner"))
                                 <a href="#"
-                                    class="rounded-md bg-[#a00fff] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Follow</a>
+                                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Theo dõi
+                                </a>
                             @endif
+                            <div class="flex-grow"></div>
                         <!-- Action -->
-                        <div class="flex justify-center space-x-4 mb-4">
+                        <div class="flex justify-center space-x-4 mb-4 mt-2">
                             @if($checkUserLikedImage != null)
                             <a href="#" data-id="{{ $image->id }}" class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                 <i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i>
@@ -91,9 +98,10 @@
                                                 if (text === 'Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.') {
                                                     statusSpan.html('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn');
                                                 } else {
-                                                    if (text.includes('Bạn')) {
+                                                    if (text.includes('Bạn,') || text.includes('Bạn')) {
                                                         text = text.replace('Bạn', '').trim();
-                                                        if(text !== 'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :')
+                                                        text = text.replace(',', '').trim();
+                                                        if(text.endsWith('.'))
                                                         {
                                                             statusSpan.html(text);
                                                         }
@@ -102,7 +110,10 @@
                                                             statusSpan.html('Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.');
                                                         }
                                                     } else {
-                                                        text = 'Bạn ' + text;
+                                                        if(text.includes('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :'))
+                                                        {
+                                                            text = text.replace('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :', 'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn, ');
+                                                        }
                                                         statusSpan.html(text);
                                                     }
                                                 }
@@ -170,15 +181,15 @@
                             <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.</span>
                         @elseif ($count <= 2 && $count > 0)
                             <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
-                            @if($checkUserLikedImage != null) Bạn
-                                @foreach ($listUserLiked as $l)
-                                    @if($l->name != $user->name)
-                                    {
-                                        {{ $l->name }}, 
-                                    }
-                                    @endif
-                                @endforeach 
-                            @endif</span>
+                            @if($checkUserLikedImage != null) 
+                                Bạn
+                            @endif
+                            @foreach ($listUserLiked as $l)
+                                @if($l->user->username != $checkUserNow->username)
+                                    {{ ", " . $l->user->username }}{{ $loop->last ? '.' : ', ' }}
+                                @endif
+                            @endforeach 
+                            </span>
                         @else
                             <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
                                 @if($checkUserLikedImage != null) 

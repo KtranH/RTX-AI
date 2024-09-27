@@ -28,25 +28,25 @@ Route::get('/ai', function () {
 Route::post('/generate-image', [ImageController::class, 'generateImage']);
 
 //Access home page
-Route::get('/',[Home::class,'ShowHome'])->name("showhome");
+Route::get('/', [Home::class, 'ShowHome'])->name("showhome");
 
 //Access login page
-Route::get('/login',[Account::class,'ShowLogin'])->name("showlogin")->middleware(VerifyTurnstileCaptcha::class);
+Route::get('/login', [Account::class, 'ShowLogin'])->name("showlogin")->middleware(VerifyTurnstileCaptcha::class);
 
 //Access sign up page
-Route::get('/signup',[Account::class,'ShowSignUp'])->name("showsignup")->middleware(VerifyTurnstileCaptcha::class);
+Route::get('/signup', [Account::class, 'ShowSignUp'])->name("showsignup")->middleware(VerifyTurnstileCaptcha::class);
 
 //Button login by google
-Route::get('/auth2Google',[Account::class,'loginByGoogle'])->name("loginByGoogle");
+Route::get('/auth2Google', [Account::class, 'loginByGoogle'])->name("loginByGoogle");
 
 //Data from Google
-Route::get('/callBackGoogle',[Account::class,'callBackGoogle'])->name("callBackGoogle");
+Route::get('/callBackGoogle', [Account::class, 'callBackGoogle'])->name("callBackGoogle");
 
 //Button logout
-Route::get('/logout',[Account::class,'Logout'])->name("logout");
+Route::get('/logout', [Account::class, 'Logout'])->name("logout");
 
 //Active sign up account
-Route::post('/signupaccount',[Account::class,'NewAccount'])->name("newaccount");
+Route::post('/signupaccount', [Account::class, 'NewAccount'])->name("newaccount");
 
 //Send email
 Route::get('/sendemail', [SendEmail::class, 'SendEmail'])->name("sendemail");
@@ -83,164 +83,170 @@ Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcrea
 
 //Access explore
 Route::get('/explore', [Explore::class, 'ShowExplore'])->name("showexplore");
+Route::get('/api/explore', [Explore::class, 'indexApi'])->name("indexApi");
+
+//See more categories
+Route::get('/morecategories', [Explore::class, 'MoreCategory'])->name("morecategories");
 
 //Show All Workflow
 Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkflow");
 
 Route::middleware([CheckCookieLogin::class])->group(function () {
-  
-//Access board page
-Route::get('/board', [Board::class, 'ShowBoard'])->name("showboard");
 
-//Change board tab
-Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
+    //Access board page
+    Route::get('/board', [Board::class, 'ShowBoard'])->name("showboard");
 
-//Access album page
-Route::get('/album/{id}', [Board::class, 'ShowAlbum'])->name("showalbum");
+    //Change board tab
+    Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
+    Route::get('/api/board/{tab}', [Board::class, 'ShowBoardApi'])->name('ShowBoardApi');
 
-//Access album creation page
-Route::get('/create_album', [Board::class, 'CreateAlbum'])->name("createalbum");
+    //Access album page
+    Route::get('/album/{id}', [Board::class, 'ShowAlbum'])->name("showalbum");
+    Route::get('/api/album/{id}', [Board::class, 'ShowAlbumApi'])->name("ShowAlbumApi");
 
-//Access album edit page
-Route::get('/edit_album/{id}', [Board::class, 'EditAlbum'])->name("editalbum");
+    //Access album creation page
+    Route::get('/create_album', [Board::class, 'CreateAlbum'])->name("createalbum");
 
-//Access account page
-Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
+    //Access album edit page
+    Route::get('/edit_album/{id}', [Board::class, 'EditAlbum'])->name("editalbum");
 
-//Access create image page
-Route::get('/create_image/{id}', [Image::class, 'CreateImage'])->name("createimage");
+    //Access account page
+    Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
 
-//Add new album
-Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
+    //Access create image page
+    Route::get('/create_image/{id}', [Image::class, 'CreateImage'])->name("createimage");
 
-//Update album
-Route::post('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
+    //Add new album
+    Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
 
-//Delete album
-Route::get('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
+    //Update album
+    Route::post('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
 
-//Add new image to album
-Route::post('/addimage2album/{id}', [Image::class, 'AddImage2Album'])->name("addimage2album");
+    //Delete album
+    Route::get('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
 
-//Access image page
-Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
+    //Add new image to album
+    Route::post('/addimage2album/{id}', [Image::class, 'AddImage2Album'])->name("addimage2album");
 
-//Update image
-Route::post('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateimage")->middleware(LimitContentUpdate::class);
+    //Access image page
+    Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
 
-//Delete image
-Route::get('/deleteimage/{id}', [Image::class, 'DeleteImage'])->name("deleteimage");
+    //Update image
+    Route::post('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateimage")->middleware(LimitContentUpdate::class);
 
-//Like image
-Route::get('/likeimage/{id}', [Image::class, 'LikeImage'])->name("likeimage");
+    //Delete image
+    Route::get('/deleteimage/{id}', [Image::class, 'DeleteImage'])->name("deleteimage");
 
-//Set feature image
-Route::get('/featureimage/{id}', [Board::class, 'FeatureImage'])->name("featureimage");
+    //Like image
+    Route::get('/likeimage/{id}', [Image::class, 'LikeImage'])->name("likeimage");
 
-//Confirm change password
-Route::get('/confirmpassword', [Account::class, 'ConfirmChangePass'])->name("confirmchangepass");
+    //Set feature image
+    Route::get('/featureimage/{id}', [Board::class, 'FeatureImage'])->name("featureimage");
 
-//Change passsword
-Route::get('/changepassword', [Account::class, 'ChangePass'])->name("changepass");
+    //Confirm change password
+    Route::get('/confirmpassword', [Account::class, 'ConfirmChangePass'])->name("confirmchangepass");
 
-//Access image page
-Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
+    //Change passsword
+    Route::get('/changepassword', [Account::class, 'ChangePass'])->name("changepass");
 
-//Update account
-Route::post('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
+    //Access image page
+    Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
 
-//Change theme
-Route::post('/save-theme', function (Illuminate\Http\Request $request) {
-    $theme = $request->input('theme');
-    Session::put('theme', $theme);
+    //Update account
+    Route::post('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
 
-    return response()->json(['status' => 'success']);
-});
+    //Change theme
+    Route::post('/save-theme', function (Illuminate\Http\Request $request) {
+        $theme = $request->input('theme');
+        Session::put('theme', $theme);
 
-//Show G1
-Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
+        return response()->json(['status' => 'success']);
+    });
 
-//Create Image G1
-Route::post('/createg1', [G1::class, 'ShowImageG1'])->name("createg1");
+    //Show G1
+    Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
 
-//Cancel Image G1
-/*Route::get('/cancelg1', [G1::class, 'stopQueue'])->name("cancelg1");*/
+    //Create Image G1
+    Route::post('/createg1', [G1::class, 'ShowImageG1'])->name("createg1");
 
-//Show result G1
-Route::get('/resultofg1', [G1::class, 'get_imageG1'])->name("get_imageg1");
+    //Cancel Image G1
+    /*Route::get('/cancelg1', [G1::class, 'stopQueue'])->name("cancelg1");*/
 
-//Show G2
-Route::get('/g2', [G2::class, 'InputDataG2'])->name("g2");
+    //Show result G1
+    Route::get('/resultofg1', [G1::class, 'get_imageG1'])->name("get_imageg1");
 
-//Create Image G2
-Route::post('/createg2', [G2::class, 'ShowImageG2'])->name("createg2");
+    //Show G2
+    Route::get('/g2', [G2::class, 'InputDataG2'])->name("g2");
 
-//Show result G2
-Route::get('/resultofg2', [G2::class, 'get_imageG2'])->name("get_imageg2");
+    //Create Image G2
+    Route::post('/createg2', [G2::class, 'ShowImageG2'])->name("createg2");
 
-//Show G3
-Route::get('/g3', [G3::class, 'InputDataG3'])->name("g3");
+    //Show result G2
+    Route::get('/resultofg2', [G2::class, 'get_imageG2'])->name("get_imageg2");
 
-//Create Image G3
-Route::post('/createg3', [G3::class, 'ShowImageG3'])->name("createg3");
+    //Show G3
+    Route::get('/g3', [G3::class, 'InputDataG3'])->name("g3");
 
-//Show result G3
-Route::get('/resultofg3', [G3::class, 'get_imageG3'])->name("get_imageg3");
+    //Create Image G3
+    Route::post('/createg3', [G3::class, 'ShowImageG3'])->name("createg3");
 
-//Show G4
-Route::get('/g4', [G4::class, 'InputDataG4'])->name("g4");
+    //Show result G3
+    Route::get('/resultofg3', [G3::class, 'get_imageG3'])->name("get_imageg3");
 
-//Create Image G4
-Route::post('/createg4', [G4::class, 'ShowImageG4'])->name("createg4");
+    //Show G4
+    Route::get('/g4', [G4::class, 'InputDataG4'])->name("g4");
 
-//Show result G4
-Route::get('/resultofg4', [G4::class, 'get_imageG4'])->name("get_imageg4");
+    //Create Image G4
+    Route::post('/createg4', [G4::class, 'ShowImageG4'])->name("createg4");
 
-//Show G5
-Route::get('/g5', [G3::class, 'InputDataG3'])->name("g5");
+    //Show result G4
+    Route::get('/resultofg4', [G4::class, 'get_imageG4'])->name("get_imageg4");
 
-//Show G6
-Route::get('/g6', [G3::class, 'InputDataG3'])->name("g6");
+    //Show G5
+    Route::get('/g5', [G3::class, 'InputDataG3'])->name("g5");
 
-//Show G7
-Route::get('/g7', [G3::class, 'InputDataG3'])->name("g7");
+    //Show G6
+    Route::get('/g6', [G3::class, 'InputDataG3'])->name("g6");
 
-//Show G8
-Route::get('/g8', [G3::class, 'InputDataG3'])->name("g8");
+    //Show G7
+    Route::get('/g7', [G3::class, 'InputDataG3'])->name("g7");
 
-//Show G9
-Route::get('/g9', [G3::class, 'InputDataG3'])->name("g9");
+    //Show G8
+    Route::get('/g8', [G3::class, 'InputDataG3'])->name("g8");
 
-//Show G10
-Route::get('/g10', [G3::class, 'InputDataG3'])->name("g10");
+    //Show G9
+    Route::get('/g9', [G3::class, 'InputDataG3'])->name("g9");
 
-//Show G11
-Route::get('/g11', [G3::class, 'InputDataG3'])->name("g11");
+    //Show G10
+    Route::get('/g10', [G3::class, 'InputDataG3'])->name("g10");
 
-//Show G12
-Route::get('/g12', [G3::class, 'InputDataG3'])->name("g12");
+    //Show G11
+    Route::get('/g11', [G3::class, 'InputDataG3'])->name("g11");
 
-//Show G13
-Route::get('/g13', [G3::class, 'InputDataG3'])->name("g13");
+    //Show G12
+    Route::get('/g12', [G3::class, 'InputDataG3'])->name("g12");
 
-//Show G14
-Route::get('/g14', [G3::class, 'InputDataG3'])->name("g14");
+    //Show G13
+    Route::get('/g13', [G3::class, 'InputDataG3'])->name("g13");
 
-//Show G15
-Route::get('/g15', [G3::class, 'InputDataG3'])->name("g15");
+    //Show G14
+    Route::get('/g14', [G3::class, 'InputDataG3'])->name("g14");
 
-//Show G16
-Route::get('/g16', [G3::class, 'InputDataG3'])->name("g16");
+    //Show G15
+    Route::get('/g15', [G3::class, 'InputDataG3'])->name("g15");
 
-//Show G17
-Route::get('/g17', [G3::class, 'InputDataG3'])->name("g17");
+    //Show G16
+    Route::get('/g16', [G3::class, 'InputDataG3'])->name("g16");
 
-//Show G18
-Route::get('/g18', [G3::class, 'InputDataG3'])->name("g18");
+    //Show G17
+    Route::get('/g17', [G3::class, 'InputDataG3'])->name("g17");
 
-//Show G19
-Route::get('/g19', [G3::class, 'InputDataG3'])->name("g19");
+    //Show G18
+    Route::get('/g18', [G3::class, 'InputDataG3'])->name("g18");
 
-//Show G20
-Route::get('/g20', [G3::class, 'InputDataG3'])->name("g20");
+    //Show G19
+    Route::get('/g19', [G3::class, 'InputDataG3'])->name("g19");
+
+    //Show G20
+    Route::get('/g20', [G3::class, 'InputDataG3'])->name("g20");
 });

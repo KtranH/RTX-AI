@@ -64,12 +64,13 @@
         <a href="/" class="d-flex align-items-center col-md-4 mb-2 mb-md-0 text-dark text-decoration-none">
             <img src="/assets/img/icon.png" alt="" style="width:40px;margin-right:10px">
             <h1 style="font-size: 30px; font-weight:bold"> RTX-AI </h1>
+            <i class="fa-solid fa-circle-info ml-2 text-2xl" title="Thông tin"></i>
         </a>
         <!-- Links -->
-        <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <a href="{{ route('showexplore') }}" class="nav-link px-2 link-dark nav-explore" style="font-weight:600">Khám phá</a>
-            <a href="{{ route('showhome') }}" class="nav-link px-2 link-dark nav-home" style="font-weight:bold">TRANG CHỦ</a>
-            <a href="{{ route('showcreativity') }}" class="nav-link px-2 link-dark nav-creativity" style="font-weight:600">Sáng tạo</a>
+        <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 text-2xl">
+            <a href="{{ route('showexplore') }}" class="nav-link px-4 link-dark nav-explore" style="font-weight:600" title="Khám phá"><i class="fa-solid fa-icons"></i></a>
+            <a href="{{ route('showboard') }}" class="nav-link px-4 link-dark nav-board" style="font-weight:bold" title="Trang chủ"><i class="fa-solid fa-id-badge"></i></a>
+            <a href="{{ route('showcreativity') }}" class="nav-link px-4 link-dark nav-creativity" style="font-weight:600" title="Sáng tạo"><i class="fa-solid fa-pencil"></i></a>
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function () 
@@ -78,7 +79,7 @@
                 
                 const links = 
                 {
-                    '/': 'nav-home',
+                    '/board': 'nav-board',
                     '/explore': 'nav-explore',
                     '/creativity': 'nav-creativity'
                 };

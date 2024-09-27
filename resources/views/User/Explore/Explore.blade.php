@@ -13,35 +13,39 @@
         </div>
         <!-- Search -->
         <style>
-        ::-webkit-scrollbar {
-            width: 12px; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background-color: #3949AB;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-            border-radius: 10px; 
-        }
+            ::-webkit-scrollbar {
+                width: 12px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background-color: #3949AB;
+                border-radius: 10px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
         </style>
-        <div class="flex items-center justify-center sticky z-50 bg-white">
+
+        <div class="flex items-center justify-center sticky z-20 bg-white">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
+                <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden transition-opacity"></div>
                 <div class="relative w-full">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <i id="search-icon" class="fas fa-search text-gray-500"></i>
+                        <i id="search-icon" class="fas fa-search text-gray-700"></i>
                     </span>
-                    <input id="search-bar" type="text" placeholder="Search..."
-                        class="w-full bg-gray-100 rounded-lg pl-10 pr-10 py-3 focus:outline-none"
-                        oninput="toggleCloseIcon()" onfocus="toggleCloseIcon()" onblur="checkCloseIcon()"
-                        onclick="toggleExtension(event)" style="border-radius: 30px;" />
+                    <input id="search-bar" type="text" placeholder="Tìm kiếm..."
+                        class="w-full rounded-2xl bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
+                        oninput="toggleCloseIcon()" onfocus="toggleOverlay(true)" onblur="toggleOverlay(false)"
+                        onclick="toggleExtension(event)" />
                     <span id="close-icon"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden"
                         onclick="clearSearchBar()">
                         <i class="text-xl fas fa-times"></i>
                     </span>
                     <div id="search-extension"
-                        class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden z-50"
+                        class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden"
                         style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;" onclick="event.stopPropagation();">
                         <!-- Search History -->
                         <div id="search-history-title" class="text-lg font-semibold mb-2 hidden">Lịch Sử</div>
@@ -49,10 +53,31 @@
                         <!-- Text-Only Categories -->
                         <div class="text-lg font-semibold mb-2">Thể Loại</div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
-                            @for ($i = 0; $i <= 10; $i++)
-                                <div class="text-sm text-white p-2 bg-indigo-600 hover:bg-gray-400 text-center rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal">Category {{ $i }}</div>
-                            @endfor
+                            @foreach ($categories as $each)
+                                <div class="text-sm text-white p-2 bg-indigo-600 hover:bg-indigo-400 text-center cursor-pointer truncate hover:overflow-visible hover:whitespace-normal"
+                                    style="border-radius: 30px">
+                                    <a class="font-semibold" href="/explore/?category={{ $each->id }}">
+                                        {{ $each->name }}
+                                    </a>
+                                </div>
+                            @endforeach
                         </div>
+                        <!-- More categories -->
+                        <div class="text-center" style="cursor: pointer">
+                            <a href="{{ route('morecategories') }}"
+                                class="text-2xs text-gray-500 font-semibold mb-2 hover:text-indigo-600 more_categories">
+                                Xem thêm <i class="fa-solid fa-caret-down"></i>
+                            </a>
+                        </div>
+                        <style>
+                            .more_categories i {
+                                transition: transform 0.3s ease;
+                            }
+
+                            .more_categories:hover i {
+                                transform: rotate(180deg);
+                            }
+                        </style>
                         <!-- Categories -->
                         <div class="text-lg font-semibold mb-2">Thể Loại</div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
@@ -80,7 +105,6 @@
                             @endfor
                         </div>
                     </div>
-                    <div id="overlay" class="fixed inset-0 bg-black opacity-0 hidden z-40"></div>
                 </div>
             </div>
         </div>
@@ -89,12 +113,32 @@
 
             function toggleExtension(event) {
                 event.stopPropagation();
+                const searchBar = document.getElementById('search-bar');
                 const extension = document.getElementById('search-extension');
                 const overlay = document.getElementById('overlay');
-                extension.classList.remove('hidden');
-                overlay.classList.remove('hidden');
-                overlay.classList.add('opacity-50');
+
+                if (extension.classList.contains('hidden')) {
+                    extension.classList.remove('hidden');
+                    overlay.classList.remove('hidden');
+                    overlay.classList.add('opacity-50');
+                } else {
+                    extension.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('opacity-50');
+                }
             }
+
+            document.addEventListener('click', function(event) {
+                const searchBar = document.getElementById('search-bar');
+                const extension = document.getElementById('search-extension');
+                const overlay = document.getElementById('overlay');
+
+                if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
+                    extension.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('opacity-50');
+                }
+            });
 
             function toggleCloseIcon() {
                 const searchBar = document.getElementById('search-bar');
@@ -177,17 +221,6 @@
                 }
             }
 
-            document.addEventListener('click', function(event) {
-                const searchBar = document.getElementById('search-bar');
-                const extension = document.getElementById('search-extension');
-                const overlay = document.getElementById('overlay');
-
-                if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
-                    extension.classList.add('hidden');
-                    overlay.classList.add('hidden');
-                }
-            });
-
             document.getElementById('search-extension').addEventListener('click', function(event) {
                 event.stopPropagation();
             });
@@ -203,44 +236,92 @@
         <!-- Library -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
-                <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2">
-                    @foreach ($photos as $photo)
-                        <div
-                            class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
-                            <a href="{{ route('showimage', ['id' => $photo->id]) }}">
-                                <div class="aspect-square">
-                                    <img src="{{ $photo->url }}" alt="Image 1"
-                                        class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15"
-                                        style="border-radius: 30px;">
-                                </div>
-                                <div
-                                    class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                    <div class="mt-2 text-left px-2 py-1">
-                                        <div class="font-semibold text-lg truncate group-hover:text-[#000000]">
-                                            {{ $photo->title }} </div>
-                                        <div class="text-sm text-gray-500 h-20 overflow-hidden truncate">
-                                            {{ $photo->description }} </div>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                                class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('showimage', ['id' => $photo->id]) }}"
-                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                    <a href="{{ route('showimage', ['id' => $photo->id]) }}"
-                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2" id="main-content">
                 </div>
             </div>
         </div>
-
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainContent = document.getElementById('main-content');
+            let currentPage = 1;
+            let isLoading = false;
+            let lastPage = false;
+
+            // const urlParams = new URLSearchParams(window.location.search);
+            // const category = urlParams.get('category');
+
+            function loadPhotos(page) {
+                if (isLoading || lastPage) return;
+
+                isLoading = true;
+
+                fetch(`{{ route('indexApi') }}?page=${page}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.last_page == currentPage) {
+                            lastPage = true;
+                        }
+                        renderPhotos(data.data);
+                        currentPage++;
+                        isLoading = false;
+                    })
+                    .catch(error => {
+                        console.error("Error loading photos:", error);
+                        isLoading = false;
+                    });
+            }
+
+            function renderPhotos(photos) {
+                let html = '';
+                photos.forEach(photo => {
+                    html += `
+                <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
+                    <a href="/image/${photo.id}">
+                        <div class="aspect-square">
+                            <img src="${photo.url}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
+                        </div>
+                        <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="mt-2 text-left px-2 py-1">
+                                <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
+                                <div class="text-sm text-gray-500 h-20 overflow-hidden truncate">${photo.description}</div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-3 account-mobile mt-4 mb-1">
+                            <div class="flex justify-start">
+                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="${photo.avatar_user}" alt="">
+                                <div>
+                                    <a href="/board" class="nav-link link-dark nav_name font-semibold ml-2">${photo.name_user}</a>
+                                </div>
+                            </div>
+                            <div class="flex-grow"></div>
+                            <div style="cursor: none">
+                                <span><i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i> <span class="font-bold">${photo.likes_count}</span></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `;
+                });
+                mainContent.insertAdjacentHTML('beforeend', html);
+            }
+
+            loadPhotos(currentPage);
+
+            window.addEventListener('scroll', debounce(() => {
+                if (!lastPage) {
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 850) {
+                        loadPhotos(currentPage);
+                    }
+                }
+            }, 200));
+        });
+    </script>
 @endsection
