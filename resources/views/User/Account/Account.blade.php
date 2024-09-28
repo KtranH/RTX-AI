@@ -38,7 +38,7 @@
                             </label>
                             <input type="file" id="cover" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror">
                             @error('cover')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                         <label for="username" class="block text-xl font-medium mb-1">Tên Người Dùng</label>
                         <input type="text" id="username" name="username" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('username') is-invalid @enderror" placeholder="{{ $account->username }}" required>
                         @error('username')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-4">

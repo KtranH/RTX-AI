@@ -27,10 +27,6 @@ trait AI_Create_Image
     private $outputDir = '';
     public function InputData($ListG)
     {
-        Session::forget("prompt");
-        Session::forget("seed");
-        Session::forget("url");
-
         $cookie = Cookie::get("token_account");
         $times = User::where("email",$cookie)->first();
         $ShowTimes = $times->times;
@@ -45,6 +41,10 @@ trait AI_Create_Image
         $model = Session::get("model");
         $seed = Session::get("seed");
         $url = Session::get("url");
+        Session::forget("prompt");
+        Session::forget("seed");
+        Session::forget("url");
+        Session::forget("model");
         $G = WorkFlow::find($ListG);
 
         if(empty($prompt) || empty($seed))

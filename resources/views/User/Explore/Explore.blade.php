@@ -78,25 +78,12 @@
                                 transform: rotate(180deg);
                             }
                         </style>
-                        <!-- Categories -->
-                        <div class="text-lg font-semibold mb-2">Thể Loại</div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                            @for ($i = 0; $i <= 5; $i++)
-                                <div
-                                    class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
-                                    <img src="https://picsum.photos/200" alt="Category Image"
-                                        class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Category
-                                        Lorem Lorem Lorem {{ $i }}</div>
-                                </div>
-                            @endfor
-                        </div>
                         <!-- Suggestions -->
                         <div class="text-lg font-semibold mb-2">Gợi Ý</div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                             @for ($i = 0; $i <= 5; $i++)
                                 <div
-                                    class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
+                                    class="flex items-center hover:bg-indigo-600 bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
                                     <img src="https://picsum.photos/200" alt="Category Image"
                                         class="w-24 h-24 object-cover rounded-2xl">
                                     <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Suggestion
