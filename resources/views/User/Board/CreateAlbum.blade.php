@@ -37,7 +37,7 @@
                         </label>
                         <input type="file" name="cover" id="cover" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror" required>
                         @error('cover')
-                            <div class="text-danger">{{ $message }}</div>
+                            <div class="text-danger w-100">{{ $message }}</div>
                         @enderror
                     </div>
                     <!-- Data -->

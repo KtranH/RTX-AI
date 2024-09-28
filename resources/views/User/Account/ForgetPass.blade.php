@@ -49,10 +49,10 @@
       <input placeholder="name@mail.com" title="Inpit title" name="input-email" type="email" class="input_field form-control @error('input-email') is-invalid @enderror" id="email_field">
     </div>
     @error('input-email')
-       <div class="text-danger">{{ $message }}</div>
+       <div class="text-danger w-100">{{ $message }}</div>
     @enderror
-    @if (Session::has("Manytimes"))
-        <p style="color: red; width:100%">Bạn đã thử quá nhiều lần! Vui lòng thử lại sau ít phút</p>
+    @if($errors->has('ManyTime'))
+      <div class="text-danger w-100">{{ $errors->first('ManyTime') }}</div>
     @endif
     <button title="Sign In" type="submit" class="sign-in_btn">
       <span>Tiếp theo</span>

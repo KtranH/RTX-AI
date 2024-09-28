@@ -58,7 +58,7 @@
                                 <img src="{{ $user->avatar_url }}" alt="Owner Avatar" class="w-10 h-10 rounded-full">
                                 <p class="font-semibold group-hover:!text-[#a000ff]">{{ $user->username }}</p>
                             </a>
-                            @if (!Session::Has("Owner"))
+                            @if (!Cookie::has('Owner'))
                                 <a href="#"
                                     class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Theo dõi
                                 </a>
@@ -126,7 +126,7 @@
                                 });
                             </script>
                                        
-                            @if(Session::has("Owner"))
+                            @if(Cookie::has('Owner'))
                                 @if($image->is_feature == true)
                                     <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                         <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>

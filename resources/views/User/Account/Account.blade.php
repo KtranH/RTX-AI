@@ -85,7 +85,7 @@
                         <button type="submit" id="updateAccount" class="bg-indigo-600 text-white font-bold px-5 py-2 rounded-md border border-[#a000ff] hover:bg-black hover:text-black hover:!text-white hover:border-[#a000ff] hover:border-![#a000ff]">
                             Lưu
                         </button>
-                        @if(Session::has('Manytimes'))
+                        @if($errors->has('ManyTime'))   
                             <script>
                                 Swal.fire({
                                     title: 'Thông báo',
@@ -118,8 +118,8 @@
                         </script>
                     </div>
                     <div style="text-align:center;margin-top:10px">
-                        @if (Session::has('Manytimes'))
-                            <p style="color:red">Bạn chỉ có thể cập nhật tài khoản 1 lần trong 1 tuần.</p>
+                        @if($errors->has('ManyTime'))
+                            <p style="color: red; width:100%">{{$errors->first('ManyTime')}}</p>
                         @endif
                     </div>
                 </form>

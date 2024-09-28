@@ -246,8 +246,8 @@
     @error('input-email')
        <div class="text-danger">{{ $message }}</div>
     @enderror
-    @if (Session::has("ErrorAccount"))
-        <p style="color: red; width:100%">Email hoặc mật khẩu không hợp lệ!</p>
+    @if($errors->has("error"))
+      <div class="text-danger">{{ $errors->first("error") }}</div>
     @endif
     <div class="input_container">
       <label class="input_label" for="password_field">Mật khẩu</label>
@@ -258,13 +258,11 @@
       </svg>
       <input placeholder="Password" title="Inpit title" name="input-pass" type="password" class="input_field form-control @error('input-pass') is-invalid @enderror" id="password_field">
     </div>
-    <div class="input_container">
-    </div>
     @error('input-pass')
       <div class="text-danger">{{ $message }}</div>
     @enderror
-    @if (Session::has("ErrorAccount"))
-        <p style="color: red; width:100%">Email hoặc mật khẩu không hợp lệ!</p>
+    @if($errors->has('error'))
+      <div class="text-danger">{{ $errors->first('error') }}</div>
     @endif
     <a href="{{ route("forgetpass") }}" class="note font-bold" style="margin:0 0 0 60% ">Quên mật khẩu?</a>
     <button title="Sign In" type="submit" class="sign-in_btn">

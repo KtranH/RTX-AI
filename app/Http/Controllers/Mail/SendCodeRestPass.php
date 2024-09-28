@@ -67,11 +67,12 @@ class SendCodeRestPass extends Controller
         $pass = $request->input("input-pass");
         $pass2 = $request->input("input-pass2");
 
-       
+        $errors = [];
+
         if($pass != $pass2)
         {
-            Session::flash("ErrorPass","checked");
-            return redirect()->route("inputcodetochangepass");
+            $errors["password"] = "Mật khẩu mới phải khác mật khẩu cũ";
+            return redirect()->back()->withErrors($errors)->withInput();
         }
 
         $verificationCode = Session::get('verification_code');
@@ -92,8 +93,8 @@ class SendCodeRestPass extends Controller
         } 
         else 
         {
-            Session::flash("ExpiredCode","checked");
-            return redirect()->route("inputcodetochangepass");
+            $errors["ExpiredCode"] = "Mã xác nhận đã hết hạn";
+            return redirect()->back()->withErrors($errors)->withInput();
         }
     }
 }

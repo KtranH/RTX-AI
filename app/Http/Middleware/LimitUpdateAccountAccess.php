@@ -17,15 +17,17 @@ class LimitUpdateAccountAccess
      */
     public function handle($request, Closure $next)
     {
-        $lastAccess = Session::get('last_update_account_access');
+        $lastAccess = $request->cookie('last_update_account_access');
         $now = Carbon::now();
 
+        $errors = [];
+
         if ($lastAccess && $now->diffInDays($lastAccess) < 7) {
-            Session::flash("Manytimes","checked");
-            return redirect()->route("showaccount");
+            $errors["ManyTime"] = 'Bạn chỉ được cập nhật tài khoản sau 7 ngày';
+            return redirect()->back()->withErrors($errors);
         }
 
-        Session::put('last_update_account_access', $now);
-        return $next($request);
+        $cookie = cookie('last_update_account_access', $now, 60 * 24 * 7);
+        return $next($request)->withCookie($cookie);
     }
 }

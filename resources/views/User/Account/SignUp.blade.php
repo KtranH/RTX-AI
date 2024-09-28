@@ -238,8 +238,8 @@
         <img src="/assets/img/user.png" class="icon" alt="">
         <input placeholder="Trần Văn A" title="Inpit title" name="input-name" type="text" class="input_field @error('input-name') is-invalid @enderror" id="email_field" minlength="6">
     </div>
-    @if (Session::has("ErrorName"))
-       <p style="color: red; width:100%">Tên tài khoản đã tồn tại!</p>
+    @if($errors->has('name'))
+      <div class="invalid-feedback">{{ $errors->first('name') }}</div>
     @endif
     @error('input-name')
       <div class="invalid-feedback">{{ $message }}</div>
@@ -252,8 +252,8 @@
       </svg>
       <input placeholder="name@mail.com" title="Inpit title" name="input-email" type="email" class="input_field form-control @error('input-email') is-invalid @enderror" id="email_field">
     </div>
-    @if (Session::has("ErrorEmail"))
-        <p style="color: red; width:100%">Địa chỉ email đã tồn tại!</p>
+    @if($errors->has('email'))
+      <div class="text-danger">{{ $errors->first('email') }}</div>
     @endif
     @error('input-email')
       <div class="text-danger">{{ $message }}</div>
@@ -279,8 +279,8 @@
       </svg>
       <input placeholder="Nhập lại password" title="Inpit title" name="input-pass2" type="password" class="input_field form-control @error('input-pass2') is-invalid @enderror" id="password_field" minlength="6">
     </div>
-    @if (Session::has("ErrorPass"))
-        <p style="color: red; width:100%">Mật khẩu không khớp!</p>
+    @if($errors->has('password'))
+      <div class="text-danger">{{ $errors->first('password') }}</div>
     @endif
     @error('input-pass2')
       <div class="text-danger">{{ $message }}</div>

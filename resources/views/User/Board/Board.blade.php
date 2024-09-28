@@ -3,6 +3,10 @@
 
     <?php
     $user = auth()->user();
+    if ($user == null) {
+        $cookie = request()->cookie('token_account');
+        $user = DB::select('SELECT * FROM users WHERE email = ?', [$cookie])[0];
+    }
     $path = request()->path();
     $segments = explode('/', $path);
     $tab = end($segments);
@@ -434,13 +438,11 @@
                                     ngay!</h3>
                             </div>
                         </div>
-                    @else --}}
-                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
-                        id="main-content">
-                    </div>
+                    @else
                     {{-- @endif --}}
                 </div>
             </div>
+        </div>
         </div>
         <!-- Saved Content -->
         <div id="saved-content" class="tab-content" style="display: none;">
@@ -505,6 +507,7 @@
                 <img id="modal-image" src="" alt="Modal Image">
             </div>
         </div>
+        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="main-content"></div>
         <script>
             const mainContent = document.getElementById('main-content');
             let currentPage = 1;
@@ -514,17 +517,20 @@
             function loadPhotos(page) {
                 if (isLoading || lastPage) return;
                 isLoading = true;
-                fetch(`{{ url('/') }}/api/board/uploaded?page=${page}`, {
+                fetch(`{{ route('ShowBoardApi', ['tab' => 'uploaded']) }}?page=${page}`, 
+                    {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         }
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        console.log(response); // Kiểm tra trạng thái response
+                        return response.json();
+                    })
                     .then(_data => {
                         var data = _data.photos;
-
                         if (data.last_page == currentPage) {
                             lastPage = true;
                         }
@@ -563,16 +569,16 @@
                                 class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                 <div class="flex space-x-2">
                                     ${photo.is_feature ? `
-                                                                <a href="/featureimage/${photo.id}"
-                                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                                    <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
-                                                                </a>
-                                                            ` : `
-                                                                <a href="/featureimage/${photo.id}"
-                                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                                    <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                                                </a>
-                                                            `}
+                                                                        <a href="/featureimage/${photo.id}"
+                                                                            class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                                            <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
+                                                                        </a>
+                                                                    ` : `
+                                                                        <a href="/featureimage/${photo.id}"
+                                                                            class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                                            <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                                                        </a>
+                                                                    `}
                                     <a href="#"
                                         class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                         <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>

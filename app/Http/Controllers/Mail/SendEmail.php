@@ -119,8 +119,9 @@ class SendEmail extends Controller
             $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
             return redirect()->route("showhome")->withCookie($cookie);
         } else {
-            Session::flash("ExpiredCode", "checked");
-            return redirect()->route("showauth");
+            $errors = [];
+            $errors["ExpiredCode"] = "Mã xác nhận đã hết hạn";
+            return redirect()->back()->withErrors($errors)->withInput();
         }
     }
 }

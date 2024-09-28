@@ -46,13 +46,13 @@
       <input placeholder="123456" title="Inpit title" name="input-code" type="number" class="input_field form-control @error('input-code') is-invalid @enderror" id="email_field">
     </div>
     @error('input-code')
-      <div class="text-danger">{{ $message }}</div>
+      <div class="text-danger w-100">{{ $message }}</div>
     @enderror
-    @if (Session::has("ExpiredCode"))
-        <p style="color: red; width:100%">Mã không đúng hoặc đã hết hạn!</p>
+    @if($errors->has("ExpiredCode"))
+        <p style="color: red; width:100%">Mã không đúng hoặc đã hết hình!</p>
     @endif
-    @if (Session::has("Manytimes"))
-        <p style="color: red; width:100%">Bạn đã thử quá nhiều lần! Vui lòng thử lại sau ít phút</p>
+    @if($errors->has("ManyTime"))
+        <p style="color: red; width:100%">{{$errors->first("ManyTime")}}</p>
     @endif
     <div class="input_container">
         <label class="input_label" for="password_field">Mật khẩu mới</label>
@@ -64,7 +64,7 @@
         <input placeholder="Mật khẩu" title="Inpit title" name="input-pass" type="password" class="input_field @error('input-pass') is-invalid @enderror" id="password_field" minlength="6" required>
     </div>
     @error('input-pass')
-        <div class="invalid-feedback">{{ $message }}</div>
+        <div class="text-danger w-100">{{ $message }}</div>
     @enderror
     <div class="input_container">
         <label class="input_label" for="password_field">Nhập lại mật khẩu</label>
@@ -76,11 +76,8 @@
         <input placeholder="Nhập lại password" title="Inpit title" name="input-pass2" type="password" class="input_field form-control @error('input-pass2') is-invalid @enderror" id="password_field" minlength="6" required>
     </div>
     @error('input-pass2')
-      <div class="text-danger">{{ $message }}</div>
+      <div class="text-danger w-100">{{ $message }}</div>
     @enderror
-    @if (Session::has("EmptyPass2"))
-        <p style="color: red; width:100%">Mật khẩu không bỏ trống!</p>
-    @endif
     <button title="Sign In" type="submit" class="sign-in_btn">
       <span>Hoàn thành</span>
     </button>

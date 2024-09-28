@@ -45,7 +45,7 @@ class Image extends Controller
 
         $idUserAlbum = $album->user_id;
         $checkUserLikedImage = $this->checkLike($id,$idUser);
-        Session::put("Owner", $idUser == $idUserAlbum ? "true" : null);
+        Cookie::queue('Owner', $idUser == $idUserAlbum ? "true" : null, 3600 * 24 * 30);
         return view('User.Image.Image', compact('image', 'photos', 'album', 'user', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'checkUserNow'));
     }
 

@@ -35,7 +35,7 @@ class Board extends Controller
             return view('User.Board.Board', ['tab' => $tab], compact('imagesAI'));
         }
 
-        $albums = Album::where('user_id', $this->find_id())->paginate(8);
+        $albums = Album::where('user_id', $this->find_id())->paginate(8);  
         $feature = Photo::where('is_feature', true)
             ->whereHas('album', function ($query) {
                 $query->where('user_id', $this->find_id());
@@ -46,6 +46,7 @@ class Board extends Controller
     public function ShowBoardApi()
     {
         $userId = auth()->user()->id;
+        dd($userId);
         $photos = DB::table('users')
             ->join('albums', 'users.id', '=', 'albums.user_id')
             ->join('photos', 'albums.id', '=', 'photos.album_id')
