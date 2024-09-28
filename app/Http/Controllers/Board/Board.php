@@ -45,8 +45,7 @@ class Board extends Controller
 
     public function ShowBoardApi()
     {
-        $userId = auth()->user()->id;
-        dd($userId);
+        $userId = $this->find_id();
         $photos = DB::table('users')
             ->join('albums', 'users.id', '=', 'albums.user_id')
             ->join('photos', 'albums.id', '=', 'photos.album_id')
