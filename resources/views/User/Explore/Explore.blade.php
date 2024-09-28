@@ -54,8 +54,8 @@
                         <div class="text-lg font-semibold mb-2">Thể Loại</div>
                         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
                             @foreach ($categories as $each)
-                                <div
-                                    class="text-sm text-white p-2 bg-indigo-600 hover:bg-indigo-400 text-center cursor-pointer truncate hover:overflow-visible hover:whitespace-normal" style="border-radius: 30px">
+                                <div class="text-sm text-white p-2 bg-indigo-600 hover:bg-indigo-400 text-center cursor-pointer truncate hover:overflow-visible hover:whitespace-normal"
+                                    style="border-radius: 30px">
                                     <a class="font-semibold" href="/explore/?category={{ $each->id }}">
                                         {{ $each->name }}
                                     </a>
@@ -64,7 +64,8 @@
                         </div>
                         <!-- More categories -->
                         <div class="text-center" style="cursor: pointer">
-                            <a href="{{ route("morecategories") }}" class="text-2xs text-gray-500 font-semibold mb-2 hover:text-indigo-600 more_categories">
+                            <a href="{{ route('morecategories') }}"
+                                class="text-2xs text-gray-500 font-semibold mb-2 hover:text-indigo-600 more_categories">
                                 Xem thêm <i class="fa-solid fa-caret-down"></i>
                             </a>
                         </div>
@@ -72,7 +73,7 @@
                             .more_categories i {
                                 transition: transform 0.3s ease;
                             }
-                        
+
                             .more_categories:hover i {
                                 transform: rotate(180deg);
                             }
@@ -97,43 +98,36 @@
         <script>
             const MAX_HISTORY = 10;
 
-            function toggleExtension(event) 
-            {
+            function toggleExtension(event) {
                 event.stopPropagation();
                 const searchBar = document.getElementById('search-bar');
                 const extension = document.getElementById('search-extension');
                 const overlay = document.getElementById('overlay');
 
-                if (extension.classList.contains('hidden')) 
-                {
+                if (extension.classList.contains('hidden')) {
                     extension.classList.remove('hidden');
                     overlay.classList.remove('hidden');
                     overlay.classList.add('opacity-50');
-                } 
-                else 
-                {
+                } else {
                     extension.classList.add('hidden');
                     overlay.classList.add('hidden');
                     overlay.classList.remove('opacity-50');
                 }
             }
 
-            document.addEventListener('click', function (event) 
-            {
+            document.addEventListener('click', function(event) {
                 const searchBar = document.getElementById('search-bar');
                 const extension = document.getElementById('search-extension');
                 const overlay = document.getElementById('overlay');
 
-                if (!searchBar.contains(event.target) && !extension.contains(event.target)) 
-                {
+                if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
                     extension.classList.add('hidden');
                     overlay.classList.add('hidden');
                     overlay.classList.remove('opacity-50');
                 }
             });
 
-            function toggleCloseIcon() 
-            {
+            function toggleCloseIcon() {
                 const searchBar = document.getElementById('search-bar');
                 const closeIcon = document.getElementById('close-icon');
 
@@ -144,8 +138,7 @@
                 }
             }
 
-            function checkCloseIcon() 
-            {
+            function checkCloseIcon() {
                 const searchBar = document.getElementById('search-bar');
                 const closeIcon = document.getElementById('close-icon');
 
@@ -154,22 +147,18 @@
                 }
             }
 
-            function clearSearchBar() 
-            {
+            function clearSearchBar() {
                 const searchBar = document.getElementById('search-bar');
                 searchBar.value = "";
                 checkCloseIcon();
                 searchBar.focus();
             }
 
-            function addSearchHistory(term) 
-            {
+            function addSearchHistory(term) {
                 let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-                if (!history.includes(term)) 
-                {
+                if (!history.includes(term)) {
                     history.unshift(term);
-                    if (history.length > MAX_HISTORY) 
-                    {
+                    if (history.length > MAX_HISTORY) {
                         history.pop();
                     }
                     localStorage.setItem('searchHistory', JSON.stringify(history));
@@ -177,16 +166,14 @@
                 }
             }
 
-            function removeSearchHistory(index)
-            {
+            function removeSearchHistory(index) {
                 let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
                 history.splice(index, 1);
                 localStorage.setItem('searchHistory', JSON.stringify(history));
                 renderSearchHistory();
             }
 
-            function renderSearchHistory() 
-            {
+            function renderSearchHistory() {
                 const historyContainer = document.getElementById('search-history');
                 const historyTitle = document.getElementById('search-history-title');
                 historyContainer.innerHTML = '';
@@ -213,8 +200,7 @@
                 }
             }
 
-            function handleSearch() 
-            {
+            function handleSearch() {
                 const searchBar = document.getElementById('search-bar');
                 const term = searchBar.value.trim();
                 if (term) {
@@ -222,15 +208,13 @@
                 }
             }
 
-            document.getElementById('search-extension').addEventListener('click', function(event) 
-            {
+            document.getElementById('search-extension').addEventListener('click', function(event) {
                 event.stopPropagation();
             });
 
             renderSearchHistory();
 
-            document.getElementById('search-bar').addEventListener('keyup', function(event) 
-            {
+            document.getElementById('search-bar').addEventListener('keyup', function(event) {
                 if (event.key === 'Enter') {
                     handleSearch();
                 }
@@ -306,7 +290,7 @@
                             </div>
                             <div class="flex-grow"></div>
                             <div style="cursor: none">
-                                <span><i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i> <span class="font-bold">${photo.count_like}</span></span>
+                                <span><i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i> <span class="font-bold">${photo.likes_count}</span></span>
                             </div>
                         </div>
                     </a>
@@ -318,21 +302,11 @@
 
             loadPhotos(currentPage);
 
-            function debounce(func, wait = 100) {
-                let timeout;
-                return function(...args) {
-                    const later = () => {
-                        clearTimeout(timeout);
-                        func(...args);
-                    };
-                    clearTimeout(timeout);
-                    timeout = setTimeout(later, wait);
-                };
-            }
-
             window.addEventListener('scroll', debounce(() => {
-                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 750) {
-                    loadPhotos(currentPage);
+                if (!lastPage) {
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 850) {
+                        loadPhotos(currentPage);
+                    }
                 }
             }, 200));
         });
