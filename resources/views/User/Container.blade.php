@@ -47,23 +47,20 @@
         <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
         <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
         <style>
-           body::-webkit-scrollbar
-           {
+            body::-webkit-scrollbar
+            {
                 display: none;
-           }
+            }
         </style>
     </head>
 
     <body class="{{ session('theme', 'theme-default') }}">
-        <style>
-             @media (max-width: 480px) {
-            .header-mobile {
-                margin-bottom: 150px;
-            }
-        }
-        </style>
-        <div style="height:80px;" class="header-mobile">@include('User.Header')</div>
-        <div class="mt-10 mb-10">@yield('Body')</div>
+        <div style="height:80px;">
+            @include('User.Header')
+        </div>
+        <div class="mt-10 mb-10">
+            @yield('Body')
+        </div>
         @include('User.Footer')
         <script>
             AOS.init({
