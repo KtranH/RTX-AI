@@ -10,7 +10,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Photo -->
                     <div class="relative md:col-span-1 aspect-square group">
-                        <img src="{{ $image->url }}" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
+                        <img src="{{ $image->url }}" loading="lazy" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
                         <a href="{{ $image->url }}" target="_blank" class="absolute top-4 left-4 text-black bg-white px-4 py-2 font-semibold text-xl rounded-lg hidden group-hover:flex items-center space-x-2">
                             <i class="fa-solid fa-circle-chevron-right"></i>
                             <span>Mở ảnh</span>
@@ -55,7 +55,7 @@
                         <!-- Owner -->
                         <div class="flex items-center space-x-4 mb-4">
                             <a href="#" class="flex items-center space-x-2 group">
-                                <img src="{{ $user->avatar_url }}" alt="Owner Avatar" class="w-10 h-10 rounded-full">
+                                <img src="{{ $user->avatar_url }}" loading="lazy" alt="Owner Avatar" class="w-10 h-10 rounded-full">
                                 <p class="font-semibold group-hover:!text-[#a000ff]">{{ $user->username }}</p>
                             </a>
                             @if (!Cookie::has('Owner'))
@@ -234,7 +234,7 @@
                         <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group">
                             <a href="{{ route('showimage', ['id' => $photo->id]) }}">
                                 <div class="aspect-square">
-                                    <img src="{{ $photo->url }}" alt="Image 1"
+                                    <img src="{{ $photo->url }}" loading="lazy" alt="Image 1"
                                         class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                 </div>
                                 <div

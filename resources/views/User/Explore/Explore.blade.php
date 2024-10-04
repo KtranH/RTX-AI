@@ -81,15 +81,16 @@
                         <!-- Suggestions -->
                         <div class="text-lg font-semibold mb-2">Gợi Ý</div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                            @for ($i = 0; $i <= 5; $i++)
-                                <div
-                                    class="flex items-center hover:bg-indigo-600 bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
-                                    <img src="https://picsum.photos/200" alt="Category Image"
+                            @foreach ($suggest as $x)
+                                 <div
+                                    class="t flex items-center hover:bg-indigo-600 bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
+                                    <img src="{{ $x['photo'] }}" loading="lazy" alt="Category Image"
                                         class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Suggestion
-                                        {{ $i }}</div>
+                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">
+                                        {{ $x['category'] }}
+                                    </div>
                                 </div>
-                            @endfor
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -273,7 +274,7 @@
                 <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
                     <a href="/image/${photo.id}">
                         <div class="aspect-square">
-                            <img src="${photo.url}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
+                            <img src="${photo.url}" loading="lazy" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
                         </div>
                         <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <div class="mt-2 text-left px-2 py-1">

@@ -33,7 +33,7 @@
                     </div>
                     <!-- Image -->
                     <div class="col-span-1 md:col-span-4 row-span-1 aspect-square relative group">
-                        <img id="image-cover" src="{{ $image->url }}" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
+                        <img id="image-cover" src="{{ $image->url }}" loading="lazy" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>

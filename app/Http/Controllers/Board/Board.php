@@ -34,7 +34,6 @@ class Board extends Controller
         if ($tab == 'created') {
             return view('User.Board.Board', ['tab' => $tab], compact('imagesAI'));
         }
-
         $albums = Album::where('user_id', $this->find_id())->paginate(8);  
         $feature = Photo::where('is_feature', true)
             ->whereHas('album', function ($query) {
@@ -42,19 +41,32 @@ class Board extends Controller
             })->get();
         return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'imagesAI'));
     }
+    public function ShowBoardApi(Request $request)
+    {
+        $imagesPerPage = 8; 
+        $page = $request->get('page', 1);
 
-    public function ShowBoardApi()
+        $userId = $this->find_id();
+        $photos = Photo::whereHas('album.user', function($query) use ($userId) {
+            $query->where('id', $userId);
+        })->paginate($imagesPerPage, ['*'], 'page', $page); 
+
+        return response()->json([
+            'photos' => $photos->items(),
+            'hasMorePages' => $photos->hasMorePages(),
+        ]);
+    }
+    /*public function ShowBoardApi()
     {
         $userId = $this->find_id();
         $photos = DB::table('users')
             ->join('albums', 'users.id', '=', 'albums.user_id')
             ->join('photos', 'albums.id', '=', 'photos.album_id')
-            ->where('users.id', $userId)
-            ->paginate(12);
+            ->where('users.id', $userId)->paginate(8);
         return response()->json([
             'photos' => $photos,
         ]);
-    }
+    }*/
 
     public function ShowAlbum($id)
     {
@@ -106,7 +118,7 @@ class Board extends Controller
             $filename = time() . '.' . $image->getClientOriginalExtension();
             $newCoverPath = "albums/{$email}/ImageCoverAlbum/{$filename}";
 
-            Storage::disk('r2')->put($newCoverPath, file_get_contents($image));
+            $this->OptimizationImage($image, $newCoverPath);
             Storage::disk('r2')->delete(str_replace($this->urlR2, "", $album->cover_image));
             $album->cover_image = $this->urlR2 . $newCoverPath;
         }
@@ -144,7 +156,9 @@ class Board extends Controller
         $email = Cookie::get("token_account");
         $image = $request->file('cover');
         $filename = time() . '.' . $image->getClientOriginalExtension();
-        Storage::disk('r2')->put("albums/{$email}/ImageCoverAlbum/{$filename}", file_get_contents($image));
+        $coverPath = "albums/{$email}/ImageCoverAlbum/{$filename}";
+
+        $this->OptimizationImage($image, $coverPath);
 
         $private = $request->has('private') ? 1 : 0;
         $userId = $this->find_id();
@@ -153,7 +167,7 @@ class Board extends Controller
             "user_id" => $userId,
             "title" => $request->input('title'),
             "description" => $request->input('description'),
-            "cover_image" => $this->urlR2 . "albums/{$email}/ImageCoverAlbum/{$filename}",
+            "cover_image" => $this->urlR2 . $coverPath,
             "created_at" => now(),
             "updated_at" => now(),
             "is_private" => $private,
