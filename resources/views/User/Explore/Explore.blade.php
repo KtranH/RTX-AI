@@ -222,10 +222,10 @@
                 const term = searchBar.value.trim();
                 if (term) {
                     addSearchHistory(term);
-                    // window.location.href = `/explore?q=${term}`;
                     currentPage = 1;
                     lastPage = false;
                     urlParams = `q=${term}`;
+                    history.pushState(null, '', `?${urlParams}`);
                     loadPhotos(currentPage, urlParams, true);
                 }
             }
