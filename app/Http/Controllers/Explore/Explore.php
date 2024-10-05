@@ -14,7 +14,7 @@ class Explore extends Controller
     {
         $categories = Category::take(18)->get();
         $suggestCategories = DB::table("category_photo")->select("photo_id", "category_id")->inRandomOrder()->limit(6)->get();
-        for($i = 0; $i < 6; $i++) {
+        for ($i = 0; $i < 6; $i++) {
             $suggest[$i]["category"] = Category::find($suggestCategories[$i]->category_id)->name;
             $suggest[$i]["photo"] = Photo::find($suggestCategories[$i]->photo_id)->url;
         }
@@ -39,7 +39,7 @@ class Explore extends Controller
             $query->where('photos.title', 'like', '%' . $request->q . '%');
         }
 
-        $photos = $query->paginate($request->limit ?? 10);
+        $photos = $query->paginate($request->limit ?? 8);
         return response()->json($photos);
     }
     public function MoreCategory()
