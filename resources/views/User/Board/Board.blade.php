@@ -246,61 +246,21 @@
                     <button id="uploaded" onclick="ActivateTab('uploaded')"
                         class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
                         Ảnh tải lên
-                        </but>
-                        <button id="saved" onclick="ActivateTab('saved')"
-                            class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
-                            Ảnh đã lưu
-                        </button>
-                        <button id="created" onclick="ActivateTab('created')"
-                            class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
-                            Ảnh AI
-                        </button>
+                    </button>
+                    <button id="saved" onclick="ActivateTab('saved')"
+                        class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
+                        Ảnh đã lưu
+                    </button>
+                    <button id="created" onclick="ActivateTab('created')"
+                        class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
+                        Ảnh AI
+                    </button>
                 </div>
             </div>
         </div>
         <script>
-            // function ChangeApperance(id)
-            // {
-            //     document.getElementById('created').classList.remove('font-bold', 'text-black');
-            //     document.getElementById('saved').classList.remove('font-bold', 'text-black');
-            //     document.getElementById('created').style.borderTop = '';
-            //     document.getElementById('saved').style.borderTop = '';
-
-            //     const active_tab = document.getElementById(id);
-            //     active_tab.classList.add('font-bold', 'text-black');
-            //     active_tab.style.borderTop = '4px solid black';
-            //     active_tab.style.marginTop = '-4px';
-
-            // }
-
-            // function ActivateTab(id)
-            // {
-            //     ChangeApperance(id);
-
-            //     document.getElementById('saved-content').style.display = id === 'saved' ? 'block' : 'none';
-            //     document.getElementById('created-content').style.display = id === 'created' ? 'block' : 'none';
-
-            //     document.getElementById('albums-section_board').style.display = id === 'saved' ? 'block' : 'none';
-            //     document.getElementById('gallery-section_board').style.display = id === 'saved' ? 'block' : 'none';
-
-            //     const new_path = `/board/${id}`;
-            //     history.pushState(null, '', new_path);
-
-            //     localStorage.setItem('activeTab', id);
-            // }
-
-            // document.addEventListener('DOMContentLoaded', function() {
-            //     const current_path = window.location.pathname;
-            //     const savedTab = localStorage.getItem('activeTab');
-
-            //     if (current_path.endsWith('/created') || savedTab === 'created') {
-            //         ActivateTab('created');
-            //     } else {
-            //         ActivateTab('saved');
-            //     }
-            // });
-
-            function ChangeApperance(id) {
+            function ChangeApperance(id) 
+            {
                 const tabs = ['uploaded', 'saved', 'created'];
 
                 tabs.forEach(tabId => {
@@ -316,7 +276,8 @@
                 active_tab.style.marginTop = '-4px';
             }
 
-            function ActivateTab(id) {
+            function ActivateTab(id) 
+            {
                 ChangeApperance(id);
                 const contents = ['uploaded-content', 'saved-content', 'created-content'];
 
@@ -335,7 +296,8 @@
                 localStorage.setItem('activeTab', id);
             }
 
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function() 
+            {
                 const current_path = window.location.pathname;
                 const savedTab = localStorage.getItem('activeTab');
 
@@ -348,7 +310,8 @@
                 }
             });
 
-            window.addEventListener('popstate', function() {
+            window.addEventListener('popstate', function()
+             {
                 const path = window.location.pathname.split('/').pop();
                 const validTabs = ['uploaded', 'saved', 'created'];
                 if (validTabs.includes(path)) {
@@ -519,7 +482,6 @@
         <div id="saved-content" class="tab-content" style="display: none;">
         </div>
         <!-- Created Content -->
-        <!-- <div id="created-content" style="display: {{ $tab == 'created' ? 'block' : 'none' }};"> -->
         <div id="created-content" class="tab-content" style="display: none;">
             <div class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">

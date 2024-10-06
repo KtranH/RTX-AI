@@ -31,7 +31,7 @@
     }
 
     .nav-link::after
-     {
+    {
         content: "";
         position: absolute;
         left: 0;
@@ -58,41 +58,28 @@
     }
 </style>
 
-<main class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 border-bottom mb-4 {{ request()->is('/') ? '' : 'fixed-top p-4'}}" style="background-color: white;">
+<main class="container mx-auto relative">
+    <!-- Header -->
+    <header class="flex items-center justify-between py-4 border-b bg-white fixed top-0 left-0 right-0 p-4 z-50">
         <!-- Logo -->
-        <a href="/" class="d-flex align-items-center col-md-4 mb-2 mb-md-0 text-dark text-decoration-none">
-            <img src="/assets/img/icon.png" alt="" style="width:40px;margin-right:10px">
-            <h1 style="font-size: 30px; font-weight:bold"> RTX-AI </h1>
+        <a href="/" class="flex items-center text-dark no-underline">
+            <img src="/assets/img/icon.png" alt="Logo" class="w-10 mr-2">
+            <h1 class="text-2xl font-bold">RTX-AI</h1>
             <i class="fa-solid fa-circle-info ml-2 text-2xl" title="Thông tin"></i>
         </a>
-        <!-- Links -->
-        <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 text-2xl">
-            <a href="{{ route('showexplore') }}" class="nav-link px-4 link-dark nav-explore" style="font-weight:600" title="Khám phá"><i class="fa-solid fa-icons"></i></a>
-            <a href="{{ route('showboard') }}" class="nav-link px-4 link-dark nav-board" style="font-weight:bold" title="Trang chủ"><i class="fa-solid fa-id-badge"></i></a>
-            <a href="{{ route('showcreativity') }}" class="nav-link px-4 link-dark nav-creativity" style="font-weight:600" title="Sáng tạo"><i class="fa-solid fa-pencil"></i></a>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () 
-            {
-                const currentPath = window.location.pathname;
-                
-                const links = 
-                {
-                    '/board': 'nav-board',
-                    '/explore': 'nav-explore',
-                    '/creativity': 'nav-creativity'
-                };
-                
-                for (const [path, className] of Object.entries(links)) {
-                    if (currentPath === path || (path === '/' && currentPath === '')) 
-                    {
-                        document.querySelector(`.${className}`).classList.add('active');
-                    }
-                }
-            });
-        </script>
-        <!-- Account -->
+        <!-- Laptop Navigation -->
+        <nav class="hidden md:grid grid-cols-3 items-center justify-center gap-16 text-2xl absolute left-1/2 transform -translate-x-1/2">
+            <a href="{{ route('showexplore') }}" class="nav-link link-dark nav-explore text-gray-700 hover:text-purple-600 justify-self-start">
+                <i id="nav-explore" class="fa-solid fa-icons"></i>
+            </a>
+            <a href="{{ route('showboard') }}" class="nav-link link-dark nav-board text-gray-700 font-bold hover:text-purple-600 justify-self-center">
+                <i id="nav-board" class="fa-solid fa-id-badge"></i>
+            </a>
+            <a href="{{ route('showcreativity') }}" class="nav-link link-dark nav-creativity text-gray-700 hover:text-purple-600 justify-self-end">
+                <i id="nav-creativity" class="fa-solid fa-pencil"></i>
+            </a>
+        </nav>
+        <!-- Laptop Account -->
         @php
             $cookie = request()->cookie("token_account");
         @endphp
@@ -101,89 +88,237 @@
                 $user = \App\Models\User::where('email', $cookie)->first();
             @endphp
             @if($user)
-            <style>
-                @media (max-width: 480px) {
-               .account-mobile {
-                   margin-top: 20px;
-               }
-           }
-            </style>
-            <div class="col-md-4 flex justify-end items-center space-x-3 account-mobile">
-                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="{{ $user->avatar_url }}" alt="">
-                <div>
-                    <a href="{{ route('showboard') }}" class="nav-link link-dark nav_name font-bold">{{ $user->username }}</a>
-                    @if ($user->times > 0)
-                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-green-600 font-bold">{{ $user->times}}</span></p>
-                    @else
-                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-red-600 font-bold">{{ $user->times}}</span></p>
-                    @endif
-                </div>
-                <!-- Notification -->
-                <div class="relative">
-                    <i class="fas fa-bell cursor-pointer" onclick="toggleBox('notificationBox', 'settingBox')"></i>
-                    <div id="notificationBox" class="hidden absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-80 bg-white border rounded-lg shadow-lg p-4 z-[9999]">
-                        <div class="max-h-64 overflow-y-auto">
-                            <ul>
-                                @for ($i = 0; $i <= 5; $i++)
-                                    <li class="py-2 flex">
-                                        <a href="#" class="flex items-center w-full">
-                                            <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $user->avatar_url }}" alt="">
-                                            <p class="hover:text-[#a000ff] font-semibold">{{ $user->username }}</p>
-                                        </a>
-                                    </li>
-                                @endfor
-                            </ul>
+                <div class="hidden md:flex items-center space-x-4">
+                    <img class="h-8 w-8 rounded-full ring-2 ring-white" src="{{ $user->avatar_url }}" alt="{{ $user->username }}">
+                    <div class="text-gray-700">
+                        <a href="{{ route('showboard') }}" class="font-bold hover:text-purple-600">{{ $user->username }}</a>
+                        @if ($user->times > 0)
+                            <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-purple-600 font-bold">{{ $user->times}}</span></p>
+                        @else
+                            <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-indigo-600 font-bold">{{ $user->times}}</span></p>
+                        @endif
+                    </div>
+                    <!-- Laptop Notifications -->
+                    <div class="relative">
+                        <i id='notifications-toggle' class="fas fa-bell cursor-pointer text-gray-700 hover:text-purple-600"></i>
+                        <div id="notifications-box" class="hidden absolute -right-48 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
+                            @include('User.Component.Notifications')
                         </div>
                     </div>
-                </div>
-                <!-- Settings -->
-                <div class="relative">
-                    <i class="fas fa-cog cursor-pointer" onclick="toggleBox('settingBox', 'notificationBox')"></i>
-                    <div id="settingBox" class="hidden absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-80 bg-white border rounded-lg shadow-lg p-4 z-[9999]">
-                        <h3 class="text-lg font-semibold mb-3">Select Theme</h3>
-                        <select id="themeSelect" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] sm:text-sm" onchange="changeTheme()">
-                            <option value="theme-default" {{ session('theme') == 'theme-default' ? 'selected' : '' }}>Default Theme</option>
-                            <option value="theme-dark" {{ session('theme') == 'theme-dark' ? 'selected' : '' }}>Dark Theme</option>
-                            <option value="theme-light" {{ session('theme') == 'theme-light' ? 'selected' : '' }}>Light Theme</option>
-                            <option value="theme-colorful" {{ session('theme') == 'theme-colorful' ? 'selected' : '' }}>Colorful Theme</option>
-                        </select>
+                    <!-- Laptop Settings -->
+                    <div class="relative">
+                        <i id='settings-toggle' class="fas fa-cog cursor-pointer text-gray-700 hover:text-purple-600"></i>
+                        <div id="settings-box" class="hidden absolute -right-40 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
+                            @include('User.Component.Settings')
+                        </div>
                     </div>
+                    <a href="{{ route('logout') }}" class="btn btn-dark font-bold rounded-full px-4 py-2 bg-gray-800 text-white hover:bg-gray-700">Đăng xuất</a>
                 </div>
-                <script>
-                    function changeTheme() {
-                        const theme = document.getElementById('themeSelect').value;
-                        fetch('/save-theme', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({ theme: theme })
-                        }).then(response => {
-                            if (response.ok) {
-                                location.reload();
-                            }
-                        });
-                    }
-                </script>
-                <a href="{{ route('logout') }}" class="btn btn-dark font-bold rounded-[30px]">Đăng xuất</a>
-            </div>
-            <script>
-                function toggleBox(openBoxId, closeBoxId) {
-                    const openBox = document.getElementById(openBoxId);
-                    const closeBox = document.getElementById(closeBoxId);
-                    if (!closeBox.classList.contains('hidden')) {
-                        closeBox.classList.add('hidden');
-                    }
-                    openBox.classList.toggle('hidden');
-                }
-            </script>
             @endif
         @else
-            <div class="col-md-4 flex justify-end items-center space-x-3">
-                <a href="{{ route('showlogin') }}" type="button" class="btn btn-outline-dark me-2" style="border-radius:30px;font-weight:bold;border:none;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">Đăng nhập</a>
-                <a href="{{ route('showsignup') }}" type="button" class="btn btn-dark" style="border-radius:30px;font-weight:bold">Đăng ký</a>
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="{{ route('showlogin') }}" class="px-4 py-2 border border-gray-800 text-gray-800 rounded-full font-bold hover:bg-gray-800 hover:text-white transition">Đăng nhập</a>
+                <a href="{{ route('showsignup') }}" class="px-4 py-2 bg-gray-800 text-white rounded-full font-bold hover:bg-gray-700 transition">Đăng ký</a>
             </div>
         @endif
+        <!-- Mobile Function -->
+        <div class="md:hidden text-2xl text-gray-700 flex flex-row justify-contents space-x-4">
+            <!-- Number of Create -->
+            @if($user)
+                @if ($user->times > 0)
+                    <div class="font-bold text-purple-600">{{ $user->times }}</div>
+                @else
+                    <div class="font-bold text-indigo-600">{{ $user->times }}</div>
+                @endif
+            @endif
+            <!-- Notifications Button -->
+            <button id="notifications-toggle-mobile">
+                <i class="fas fa-bell"></i>
+            </button>
+            <!-- Settings Button -->
+            <button id="settings-toggle-mobile">
+                <i class="fas fa-cog"></i>
+            </button>
+            <!-- Hamburger Button -->
+            <button id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
     </header>
+    <!-- Mobile Menu -->
+    <div id="menu" class="fixed hidden md:hidden w-full bg-white z-50 flex flex-col p-6 overflow-y-auto transition duration-300 ease-in-out left-0 top-[89px] border-b">
+        <!-- Mobile Account -->
+        @if($cookie && $user)
+            <div class="flex items-center space-x-2 mb-4">
+                <img class="h-8 w-8 rounded-full ring-2 ring-white" src="{{ $user->avatar_url }}" alt="{{ $user->username }}">
+                <a href="{{ route('showboard') }}" class="font-semibold text-2xl">{{ $user->username }}</a>
+            </div>
+        @endif  
+        <!-- Mobile Navigation -->
+        <nav class="flex flex-col space-y-4 text-2xl border-t pt-4 pb-4">
+            <a href="{{ route('showexplore') }}" class="flex flex-row items-center justify-start">
+                <i class="fa-solid fa-icons mr-4"></i>
+                <div class="font-semibold">Khám Phá</div>
+            </a>
+            <a href="{{ route('showboard') }}" class="flex flex-row items-center justify-start">
+                <i class="fa-solid fa-id-badge mr-4"></i>
+                <div class="font-semibold">Trang Chủ</div>
+            </a>
+            <a href="{{ route('showcreativity') }}" class="flex-row flex items-center justify-start">
+                <i class="fa-solid fa-pencil mr-4"></i>
+                <div class="font-semibold">Sáng Tạo</div>
+            </a>
+        </nav>
+        <!-- Mobile Action -->
+        <div class="flex flex-col space-y-4 border-t pt-4">
+            @if($cookie && $user)
+                <a href="{{ route('logout') }}" class="btn btn-dark font-bold rounded-full px-4 py-2 bg-gray-800 text-white">Đăng xuất</a>
+            @else
+                <a href="{{ route('showlogin') }}" class="px-4 py-2 border border-gray-800 text-gray-800 rounded-full font-bold transition text-center">Đăng nhập</a>
+                <a href="{{ route('showsignup') }}" class="px-4 py-2 bg-gray-800 text-white rounded-full font-bold transition text-center">Đăng ký</a>
+            @endif  
+        </div>
+    </div>
+    <!-- Mobile Notification Box  -->
+    <div id="notifications-box-mobile" class="fixed hidden md:hidden w-full bg-white z-50 flex flex-col p-6 overflow-y-auto transition duration-300 ease-in-out left-0 top-[89px] border-b">
+        @include('User.Component.Notifications')
+    </div>
+    <!-- Setting Notification Box  -->
+    <div id="settings-box-mobile" class="fixed hidden md:hidden w-full bg-white z-50 flex flex-col p-6 overflow-y-auto transition duration-300 ease-in-out left-0 top-[89px] border-b">
+        @include('User.Component.Settings')
+    </div>
 </main>
+
+<!-- Popup Box -->
+<script>
+    //Close All Boxes
+    function closeBoxes(exception) 
+    {
+        const boxes = ['notifications-box', 'settings-box', 'notifications-box-mobile', 'settings-box-mobile', 'menu'];
+
+        boxes.forEach(boxId => {
+            if (boxId === exception) return;
+
+            const box = document.getElementById(boxId);
+            if (box && !box.classList.contains('hidden')) 
+            {
+                box.classList.add('hidden');
+            }
+        });
+    }
+
+    //Change All Toggles
+    function changeToggles(exception) 
+    {
+        const toggles = ['notifications-toggle', 'settings-toggle', 'notifications-toggle-mobile', 'settings-toggle-mobile', 'menu-toggle'];
+
+        toggles.forEach(toggleId => 
+        {
+            if (toggleId === exception) return;
+
+            const toggle = document.getElementById(toggleId);
+            if (toggle) {
+                toggle.classList.remove('text-purple-600');
+            }
+        });
+    }
+
+    //Setup Toggle
+    function setupToggle(toggleId, boxId) 
+    {
+        document.getElementById(toggleId).addEventListener('click', function (e) 
+        {
+            e.stopPropagation();
+            const box = document.getElementById(boxId);
+            const toggle = document.getElementById(toggleId);
+
+            closeBoxes(boxId);
+            changeToggles(toggleId);
+
+            box.classList.toggle('hidden');
+            toggle.classList.toggle('text-purple-600');
+
+            // Toggle body class to prevent background scrolling
+            // document.body.classList.toggle('menu-open');
+        });
+    }
+
+    // Click outside
+    function closeOnClickOutside(toggleId, boxId) 
+    {
+        window.addEventListener('click', function (e) 
+        {
+            const box = document.getElementById(boxId);
+            const toggle = document.getElementById(toggleId);
+            if (box && !box.contains(e.target) && !toggle.contains(e.target)) 
+            {
+                box.classList.add('hidden');
+                toggle.classList.remove('text-purple-600');
+            }
+        });
+    }
+
+    setupToggle('settings-toggle-mobile', 'settings-box-mobile');
+    setupToggle('notifications-toggle-mobile', 'notifications-box-mobile');
+    setupToggle('settings-toggle', 'settings-box');
+    setupToggle('notifications-toggle', 'notifications-box');
+    setupToggle('menu-toggle', 'menu');
+
+    closeOnClickOutside('settings-toggle-mobile', 'settings-box-mobile');
+    closeOnClickOutside('notifications-toggle-mobile', 'notifications-box-mobile');
+    closeOnClickOutside('settings-toggle', 'settings-box');
+    closeOnClickOutside('notifications-toggle', 'notifications-box');
+    closeOnClickOutside('menu-toggle', 'menu');
+</script>
+
+<!-- Active Link Highlighting -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () 
+    {
+        const currentPath = window.location.pathname;
+        const links = {
+            '/board': 'nav-board',
+            '/explore': 'nav-explore',
+            '/creativity': 'nav-creativity'
+        };
+        
+        for (const [path, id] of Object.entries(links)) 
+        {
+            if (currentPath === path || (path === '/' && currentPath === '')) 
+            {
+                const linkElement = document.getElementById(id);
+                if (linkElement) 
+                {
+                    linkElement.classList.add('text-purple-600'); // Add highlight class
+                }
+            }
+        }
+    });
+</script>
+
+
+<!-- Theme Change -->
+<script>
+    function changeTheme() 
+    {
+        const themeSelect = document.getElementById('themeSelect') || document.getElementById('themeSelectMobile');
+        const theme = themeSelect.value;
+        fetch('/save-theme', 
+        {
+            method: 'POST',
+            headers: 
+            {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ theme: theme })
+        }).then(response => 
+        {
+            if (response.ok) 
+            {
+                location.reload();
+            }
+        });
+    }
+</script>
