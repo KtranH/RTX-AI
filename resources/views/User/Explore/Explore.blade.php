@@ -37,8 +37,7 @@
                     </span>
                     <input id="search-bar" type="text" placeholder="Tìm kiếm..."
                         class="w-full rounded-2xl bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
-                        oninput="toggleCloseIcon()" onfocus="toggleOverlay(true)" onblur="toggleOverlay(false)"
-                        onclick="toggleExtension(event)" />
+                        oninput="toggleCloseIcon()" onclick="toggleExtension(event)" />
                     <span id="close-icon"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden"
                         onclick="clearSearchBar()">
@@ -107,115 +106,121 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+
+        const MAX_HISTORY = 10;
+
+        function toggleExtension(event) 
+        {
+            event.stopPropagation();
+            const searchBar = document.getElementById('search-bar');
+            const extension = document.getElementById('search-extension');
+            const overlay = document.getElementById('overlay');
+
+            if (extension.classList.contains('hidden')) {
+                extension.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+                overlay.classList.add('opacity-50');
+            } else {
+                extension.classList.add('hidden');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('opacity-50');
+            }
+        }
+
+        document.addEventListener('click', function(event) {
+            const searchBar = document.getElementById('search-bar');
+            const extension = document.getElementById('search-extension');
+            const overlay = document.getElementById('overlay');
+
+            if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
+                extension.classList.add('hidden');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('opacity-50');
+            }
+        });
+
+        function toggleCloseIcon() {
+            const searchBar = document.getElementById('search-bar');
+            const closeIcon = document.getElementById('close-icon');
+
+            if (searchBar.value.trim() !== "") {
+                closeIcon.classList.remove('hidden');
+            } else {
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        function checkCloseIcon() {
+            const searchBar = document.getElementById('search-bar');
+            const closeIcon = document.getElementById('close-icon');
+
+            if (searchBar.value.trim() === "") {
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        function clearSearchBar() {
+            const searchBar = document.getElementById('search-bar');
+            searchBar.value = "";
+            checkCloseIcon();
+            searchBar.focus();
+        }
+
+        function addSearchHistory(term) {
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            if (!history.includes(term)) {
+                history.unshift(term);
+                if (history.length > MAX_HISTORY) {
+                    history.pop();
+                }
+                localStorage.setItem('searchHistory', JSON.stringify(history));
+                renderSearchHistory();
+            }
+        }
+
+        function removeSearchHistory(index) {
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            history.splice(index, 1);
+            localStorage.setItem('searchHistory', JSON.stringify(history));
+            renderSearchHistory();
+        }
+
+        function renderSearchHistory() {
+            const historyContainer = document.getElementById('search-history');
+            const historyTitle = document.getElementById('search-history-title');
+            historyContainer.innerHTML = '';
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+            if (history.length > 0) {
+                historyTitle.classList.remove('hidden');
+                history.forEach((term, index) => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className =
+                        'flex items-center justify-between text-sm text-white p-2 hover:bg-[#a00fff] bg-gray-400 rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal';
+                    historyItem.innerHTML = `
+                    <div class="ml-2 truncate">${term}</div>
+                    <i class="mr-2 text-xl fas fa-times text-white hover:!text-yellow-100 cursor-pointer" onclick="removeSearchHistory(${index}); event.stopPropagation();"></i>
+                `;
+                    historyItem.onclick = () => {
+                        document.getElementById('search-bar').value = term;
+                        toggleCloseIcon();
+                    };
+                    historyContainer.appendChild(historyItem);
+                });
+            } else {
+                historyTitle.classList.add('hidden');
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+
             let mainContent = document.getElementById('main-content');
             let urlParams = (new URLSearchParams(window.location.search)).toString();
             let currentPage = 1;
             let isLoading = false;
             let lastPage = false;
-            const MAX_HISTORY = 10;
-
-            function toggleExtension(event) {
-                event.stopPropagation();
-                const searchBar = document.getElementById('search-bar');
-                const extension = document.getElementById('search-extension');
-                const overlay = document.getElementById('overlay');
-
-                if (extension.classList.contains('hidden')) {
-                    extension.classList.remove('hidden');
-                    overlay.classList.remove('hidden');
-                    overlay.classList.add('opacity-50');
-                } else {
-                    extension.classList.add('hidden');
-                    overlay.classList.add('hidden');
-                    overlay.classList.remove('opacity-50');
-                }
-            }
-
-            document.addEventListener('click', function(event) {
-                const searchBar = document.getElementById('search-bar');
-                const extension = document.getElementById('search-extension');
-                const overlay = document.getElementById('overlay');
-
-                if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
-                    extension.classList.add('hidden');
-                    overlay.classList.add('hidden');
-                    overlay.classList.remove('opacity-50');
-                }
-            });
-
-            function toggleCloseIcon() {
-                const searchBar = document.getElementById('search-bar');
-                const closeIcon = document.getElementById('close-icon');
-
-                if (searchBar.value.trim() !== "") {
-                    closeIcon.classList.remove('hidden');
-                } else {
-                    closeIcon.classList.add('hidden');
-                }
-            }
-
-            function checkCloseIcon() {
-                const searchBar = document.getElementById('search-bar');
-                const closeIcon = document.getElementById('close-icon');
-
-                if (searchBar.value.trim() === "") {
-                    closeIcon.classList.add('hidden');
-                }
-            }
-
-            function clearSearchBar() {
-                const searchBar = document.getElementById('search-bar');
-                searchBar.value = "";
-                checkCloseIcon();
-                searchBar.focus();
-            }
-
-            function addSearchHistory(term) {
-                let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-                if (!history.includes(term)) {
-                    history.unshift(term);
-                    if (history.length > MAX_HISTORY) {
-                        history.pop();
-                    }
-                    localStorage.setItem('searchHistory', JSON.stringify(history));
-                    renderSearchHistory();
-                }
-            }
-
-            function removeSearchHistory(index) {
-                let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-                history.splice(index, 1);
-                localStorage.setItem('searchHistory', JSON.stringify(history));
-                renderSearchHistory();
-            }
-
-            function renderSearchHistory() {
-                const historyContainer = document.getElementById('search-history');
-                const historyTitle = document.getElementById('search-history-title');
-                historyContainer.innerHTML = '';
-                let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-
-                if (history.length > 0) {
-                    historyTitle.classList.remove('hidden');
-                    history.forEach((term, index) => {
-                        const historyItem = document.createElement('div');
-                        historyItem.className =
-                            'flex items-center justify-between text-sm text-white p-2 hover:bg-[#a00fff] bg-gray-400 rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal';
-                        historyItem.innerHTML = `
-                        <div class="ml-2 truncate">${term}</div>
-                        <i class="mr-2 text-xl fas fa-times text-white hover:!text-yellow-100 cursor-pointer" onclick="removeSearchHistory(${index}); event.stopPropagation();"></i>
-                    `;
-                        historyItem.onclick = () => {
-                            document.getElementById('search-bar').value = term;
-                            toggleCloseIcon();
-                        };
-                        historyContainer.appendChild(historyItem);
-                    });
-                } else {
-                    historyTitle.classList.add('hidden');
-                }
-            }
 
             function handleSearch() {
                 const searchBar = document.getElementById('search-bar');
