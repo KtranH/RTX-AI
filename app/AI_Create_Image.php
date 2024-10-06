@@ -37,14 +37,14 @@ trait AI_Create_Image
     }
     public function ImageG($ListG)
     {
-        $prompt = Session::get("prompt");
-        $model = Session::get("model");
-        $seed = Session::get("seed");
-        $url = Session::get("url");
-        Session::forget("prompt");
-        Session::forget("seed");
-        Session::forget("url");
-        Session::forget("model");
+        $prompt = Cookie::get("prompt");
+        $model = Cookie::get("model");
+        $seed = Cookie::get("seed");
+        $url = Cookie::get("url");
+        Cookie::forget("prompt");
+        Cookie::forget("seed");
+        Cookie::forget("url");
+        Cookie::forget("model");
         $G = WorkFlow::find($ListG);
 
         if(empty($prompt) || empty($seed))
@@ -163,11 +163,12 @@ trait AI_Create_Image
         $pathInR2 = "AIimages/{$Email}/{$timestamp}.png";
 
         if ($response->successful()) {
-            $this->OptimizationImage($response->body(), $pathInR2);
+            Storage::disk('r2')->put($pathInR2, $response->body());
             return "{$timestamp}.png";
         }
         return null;
     }
+
     private function checkTimes($price)
     {
         $user = User::find($this->find_id());

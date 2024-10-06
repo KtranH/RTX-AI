@@ -428,7 +428,7 @@
                                     <div class="relative group">
                                         <a href="/showimage/${photo.id}">
                                             <div class="aspect-square">
-                                                <img src="${photo.url}" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                                <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                             </div>
                                             <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                                 <div class="mt-2 text-left px-2 py-1">
@@ -509,9 +509,6 @@
                                 </div>
                             @endforeach
                         </div>
-                        <div class="mt-2">
-                            {{ $imagesAI->links('vendor.pagination.simple-tailwind') }}
-                        </div>
                     @else
                         <div class="mt-2 grid gap-2">
                             <div style="display:flex;margin-top:2%">
@@ -532,10 +529,10 @@
         <!-- Modal for Image -->
         <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50"
             onclick="closeImageModal()">
-            <div class="relative" onclick="event.stopPropagation();" style="margin-top: 8%; width:30%;">
+            <div class="relative" onclick="event.stopPropagation();" style="margin-top: 1%; width:30%;">
                 <button onclick="closeImageModal()" class="absolute right-0 top-0 text-white text-2xl p-2"
                     style="transform: translate(50%, -50%);">
-                    <p class="text-xl bg-black text-white p-2 rounded-full">X</p>
+                    <p class="text-xl bg-white font-bold text-black p-2 rounded-full">X</p>
                 </button>
                 <img id="modal-image" src="" alt="Modal Image">
             </div>

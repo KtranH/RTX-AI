@@ -16,6 +16,7 @@ use App\Http\Controllers\Image\Image;
 use App\Http\Controllers\Creativity\Creativity;
 use App\Http\Controllers\Explore\Explore;
 use App\Http\Controllers\User\WorkFlow\G4;
+use App\Http\Controllers\User\WorkFlow\G5;
 use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitUpdateAccountAccess;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
@@ -203,7 +204,13 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/resultofg4', [G4::class, 'get_imageG4'])->name("get_imageg4");
 
     //Show G5
-    Route::get('/g5', [G3::class, 'InputDataG3'])->name("g5");
+    Route::get('/g5', [G5::class, 'InputDataG5'])->name("g5");
+
+    //Create image G5
+    Route::post('/createg5', [G5::class, 'ShowImageG5'])->name("createg5");
+
+    //Show result G5
+    Route::get('/resultofg5', [G5::class, 'get_imageG5'])->name("get_imageg5");
 
     //Show G6
     Route::get('/g6', [G3::class, 'InputDataG3'])->name("g6");

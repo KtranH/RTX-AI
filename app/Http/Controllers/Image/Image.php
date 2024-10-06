@@ -92,7 +92,7 @@ class Image extends Controller
         if ($image = $request->file('cover')) {
             $filename = time() . '.' . $image->getClientOriginalExtension();
             $path = "albums/" . Cookie::get("token_account") . "/" . Carbon::now()->format('d_m_Y') . "/{$filename}";
-            $this->OptimizationImage($image, $path);
+            Storage::disk('r2')->put($path, file_get_contents($image));
             Storage::disk('r2')->delete(str_replace($this->urlR2, "", $photo->url));
             $photo->url = $this->urlR2 . $path;
         }
@@ -152,7 +152,7 @@ class Image extends Controller
         $description = $request->input('description');
         $filename = time() . '.' . $image->getClientOriginalExtension();
         $path = "albums/" . $Email . "/" . $folder . "/" . $filename;
-        $this->OptimizationImage($image, $path);
+        Storage::disk('r2')->put($path, file_get_contents($image));
         $photos = Photo::create([
             "album_id" => $id,
             "title" => $title,

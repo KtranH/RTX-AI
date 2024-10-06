@@ -52,18 +52,17 @@ class G1 extends Controller
         try {
             $takeImageUrl = $this->UploadImageR2($imageUrl);
             $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
-
-            Session::put("url", $url);
-            Session::put("seed", $seed);
-            Session::put("model", $request->input("model"));
-            Session::put("prompt", $prompt);
+            Cookie::queue("url", $url);
+            Cookie::queue("seed", $seed);
+            Cookie::queue("model", $request->input("model"));
+            Cookie::queue("prompt", $prompt);
             return response()->json(['success' => true, 'redirect' => route("get_imageg1")]); 
         } catch (Exception $e) {
             $imageUrl = asset($this->moveToPublicDirectoryError($this->inputError . DIRECTORY_SEPARATOR . "error.jpg"));
-            Session::put("url", $imageUrl);
-            Session::put("seed", $seed);
-            Session::put("model", $request->input("model"));
-            Session::put("prompt", $prompt);
+            Cookie::queue("url", $imageUrl);
+            Cookie::queue("seed", $seed);
+            Cookie::queue("model", $request->input("model"));
+            Cookie::queue("prompt", $prompt);
             return response()->json(['success' => true, 'redirect' => route("get_imageg1")]);
         }
     }

@@ -24,21 +24,18 @@ class Board extends Controller
         $photo->save();
         return redirect()->back();
     }
-    public function ShowBoard()
+    public function ShowBoard(Request $request)
     {
         $cookie = request()->cookie("token_account");
         $userId = $this->find_id();
-
-        $imagesAI = HistoryImageAI::where('user_id', $userId)->paginate(12);
-        $tab = request()->query('tab', 'saved');
-        if ($tab == 'created') {
-            return view('User.Board.Board', ['tab' => $tab], compact('imagesAI'));
-        }
+        $imagesAI = HistoryImageAI::where('user_id', $userId)->take(1)->get();
+        $tab = $request->route('tab');
         $albums = Album::where('user_id', $this->find_id())->paginate(8);  
-        $feature = Photo::where('is_feature', true)
-            ->whereHas('album', function ($query) {
-                $query->where('user_id', $this->find_id());
-            })->get();
+        $feature = Photo::where('is_feature', true)->whereHas('album', function ($query) {$query->where('user_id', $this->find_id());})->get();       
+        if ($tab == 'created') {
+            $imagesAI = HistoryImageAI::where('user_id', $userId)->get();
+            return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'imagesAI'));
+        }
         return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'imagesAI'));
     }
     public function ShowBoardApi(Request $request)
@@ -118,7 +115,7 @@ class Board extends Controller
             $filename = time() . '.' . $image->getClientOriginalExtension();
             $newCoverPath = "albums/{$email}/ImageCoverAlbum/{$filename}";
 
-            $this->OptimizationImage($image, $newCoverPath);
+            Storage::disk('r2')->put($newCoverPath, file_get_contents($image));
             Storage::disk('r2')->delete(str_replace($this->urlR2, "", $album->cover_image));
             $album->cover_image = $this->urlR2 . $newCoverPath;
         }
@@ -158,7 +155,7 @@ class Board extends Controller
         $filename = time() . '.' . $image->getClientOriginalExtension();
         $coverPath = "albums/{$email}/ImageCoverAlbum/{$filename}";
 
-        $this->OptimizationImage($image, $coverPath);
+        Storage::disk('r2')->put($coverPath, file_get_contents($image));
 
         $private = $request->has('private') ? 1 : 0;
         $userId = $this->find_id();
