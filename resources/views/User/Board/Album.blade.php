@@ -16,7 +16,7 @@
                     <!-- Cover -->
                     <div class="relative text-center lg:text-left w-full lg:w-80 mb-4 lg:mb-0">
                         <img class="w-full h-full object-cover rounded-2xl border-8 border-[#a000ff]"
-                            src="{{ $album->cover_image }}" alt="Album Cover">
+                            src="{{ $album->cover_image }}" loading="lazy" alt="Album Cover">
                         <div
                             class="absolute inset-0 flex opacity-0 hover:opacity-100 hover:!opacity-100 transition-opacity duration-300">
                             <a href="{{ route('editalbum', ['id' => $album->id]) }}"
@@ -181,7 +181,7 @@
                         <div class="relative group">
                             <a href="/image/${photo.id}">
                                 <div class="aspect-square">
-                                    <img src="${photo.url}" alt="Image 1" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                    <img src="${photo.url}" loading="lazy" alt="Image 1" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                 </div>
                                 <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                     <div class="mt-2 text-left px-2 py-1">

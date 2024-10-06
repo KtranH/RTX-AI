@@ -163,7 +163,7 @@ trait AI_Create_Image
         $pathInR2 = "AIimages/{$Email}/{$timestamp}.png";
 
         if ($response->successful()) {
-            Storage::disk('r2')->put($pathInR2, $response->body());
+            $this->OptimizationImage($response->body(), $pathInR2);
             return "{$timestamp}.png";
         }
         return null;
