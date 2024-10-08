@@ -28,14 +28,20 @@ class Board extends Controller
     {
         $cookie = request()->cookie("token_account");
         $userId = $this->find_id();
-        $imagesAI = HistoryImageAI::where('user_id', $userId)->take(1)->get();
         $tab = $request->route('tab');
-        $albums = Album::where('user_id', $this->find_id())->paginate(8);  
+
+        $imagesAI = HistoryImageAI::where('user_id', $userId)->take(0)->get();
+        $albums = Album::where('user_id', $this->find_id())->paginate(0); 
+
         $feature = Photo::where('is_feature', true)->whereHas('album', function ($query) {$query->where('user_id', $this->find_id());})->get();       
+        
         if ($tab == 'created') {
             $imagesAI = HistoryImageAI::where('user_id', $userId)->get();
-            return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'imagesAI'));
         }
+        else if($tab == 'uploaded') {
+            $albums = Album::where('user_id', $this->find_id())->paginate(8);
+        }
+
         return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'imagesAI'));
     }
     public function ShowBoardApi(Request $request)

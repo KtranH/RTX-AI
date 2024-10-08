@@ -255,6 +255,7 @@
                         class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
                         Ảnh AI
                     </button>
+
                 </div>
             </div>
         </div>
@@ -262,14 +263,14 @@
             function ChangeApperance(id) 
             {
                 const tabs = ['uploaded', 'saved', 'created'];
-
+                
                 tabs.forEach(tabId => {
                     const tab = document.getElementById(tabId);
                     tab.classList.remove('font-bold', 'text-black');
                     tab.style.borderTop = '';
                     tab.style.marginTop = '';
                 });
-
+                
                 const active_tab = document.getElementById(id);
                 active_tab.classList.add('font-bold', 'text-black');
                 active_tab.style.borderTop = '4px solid black';
@@ -278,9 +279,12 @@
 
             function ActivateTab(id) 
             {
+                const new_path = `/board/${id}`;
+                const current_path = window.location.pathname;
+
                 ChangeApperance(id);
                 const contents = ['uploaded-content', 'saved-content', 'created-content'];
-
+                
                 contents.forEach(contentId => {
                     const content = document.getElementById(contentId);
                     if (contentId === `${id}-content`) {
@@ -289,18 +293,19 @@
                         content.style.display = 'none';
                     }
                 });
-
-                const new_path = `/board/${id}`;
-                history.pushState(null, '', new_path);
-
-                localStorage.setItem('activeTab', id);
+                
+                if (current_path !== new_path) {
+                    history.pushState(null, '', new_path);
+                    localStorage.setItem('activeTab', id);
+                    window.location.reload();
+                }
             }
 
             document.addEventListener('DOMContentLoaded', function() 
             {
                 const current_path = window.location.pathname;
                 const savedTab = localStorage.getItem('activeTab');
-
+                
                 if (current_path.endsWith('/uploaded') || savedTab === 'uploaded') {
                     ActivateTab('uploaded');
                 } else if (current_path.endsWith('/created') || savedTab === 'created') {
@@ -310,8 +315,8 @@
                 }
             });
 
-            window.addEventListener('popstate', function()
-             {
+            window.addEventListener('popstate', function() 
+            {
                 const path = window.location.pathname.split('/').pop();
                 const validTabs = ['uploaded', 'saved', 'created'];
                 if (validTabs.includes(path)) {
