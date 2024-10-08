@@ -100,6 +100,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Change board tab
     Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
     Route::get('/api/board', [Board::class, 'ShowBoardApi'])->name('ShowBoardApi');
+    Route::get('/api/AI_Image/board', [Board::class, 'ShowAiImageApi'])->name('ShowAiImageApi');
 
     //Access album page
     Route::get('/album/{id}', [Board::class, 'ShowAlbum'])->name("showalbum");

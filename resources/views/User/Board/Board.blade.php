@@ -59,7 +59,8 @@
                     class="flex flex-col items-center lg:flex-row lg:items-center lg:justify-center space-y-6 lg:space-y-0 lg:space-x-6">
                     <!-- Avatar -->
                     <div class="relative text-center">
-                        <img class="rounded-full w-40 h-40 object-cover" src="{{ $user->avatar_url }}" loading="lazy" alt="User Avatar">
+                        <img class="rounded-full w-40 h-40 object-cover" src="{{ $user->avatar_url }}" loading="lazy"
+                            alt="User Avatar">
                         <div
                             class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 hover:!opacity-100 transition-opacity duration-300">
                             <a href="{{ route('showaccount') }}"
@@ -260,31 +261,29 @@
             </div>
         </div>
         <script>
-            function ChangeApperance(id) 
-            {
+            function ChangeApperance(id) {
                 const tabs = ['uploaded', 'saved', 'created'];
-                
+
                 tabs.forEach(tabId => {
                     const tab = document.getElementById(tabId);
                     tab.classList.remove('font-bold', 'text-black');
                     tab.style.borderTop = '';
                     tab.style.marginTop = '';
                 });
-                
+
                 const active_tab = document.getElementById(id);
                 active_tab.classList.add('font-bold', 'text-black');
                 active_tab.style.borderTop = '4px solid black';
                 active_tab.style.marginTop = '-4px';
             }
 
-            function ActivateTab(id) 
-            {
+            function ActivateTab(id) {
                 const new_path = `/board/${id}`;
                 const current_path = window.location.pathname;
 
                 ChangeApperance(id);
                 const contents = ['uploaded-content', 'saved-content', 'created-content'];
-                
+
                 contents.forEach(contentId => {
                     const content = document.getElementById(contentId);
                     if (contentId === `${id}-content`) {
@@ -293,19 +292,12 @@
                         content.style.display = 'none';
                     }
                 });
-                
-                if (current_path !== new_path) {
-                    history.pushState(null, '', new_path);
-                    localStorage.setItem('activeTab', id);
-                    window.location.reload();
-                }
             }
 
-            document.addEventListener('DOMContentLoaded', function() 
-            {
+            document.addEventListener('DOMContentLoaded', function() {
                 const current_path = window.location.pathname;
                 const savedTab = localStorage.getItem('activeTab');
-                
+
                 if (current_path.endsWith('/uploaded') || savedTab === 'uploaded') {
                     ActivateTab('uploaded');
                 } else if (current_path.endsWith('/created') || savedTab === 'created') {
@@ -315,8 +307,7 @@
                 }
             });
 
-            window.addEventListener('popstate', function() 
-            {
+            window.addEventListener('popstate', function() {
                 const path = window.location.pathname.split('/').pop();
                 const validTabs = ['uploaded', 'saved', 'created'];
                 if (validTabs.includes(path)) {
@@ -407,78 +398,79 @@
                             </div>
                         </div>
                     @else --}}
-                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="photo-container">
+                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+                        id="photo-container">
 
                     </div>
-                    
+
                     <div id="loading" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
-                    
+
                     <script>
-                    let page = 1;
-                    let isLoading = false;
-                    
-                    function loadPhotos(initialLoad = false) {
-                        if (isLoading) return;
-                        isLoading = true;
-                    
-                        document.getElementById('loading').style.display = 'block';
-                    
-                        fetch(`/api/board?page=${page}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const photoContainer = document.getElementById('photo-container');
-                    
-                                data.photos.forEach(photo => {
-                                    const photoHTML = `
-                                    <div class="relative group">
-                                        <a href="/showimage/${photo.id}">
-                                            <div class="aspect-square">
-                                                <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                            </div>
-                                            <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                                <div class="mt-2 text-left px-2 py-1">
-                                                    <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
-                                                    <div class="text-sm text-gray-500 h-20 overflow-hidden">${photo.description}</div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>`;
-                                    photoContainer.insertAdjacentHTML('beforeend', photoHTML);
+                        var page = 1;
+                        var isLoading = false;
+
+                        function loadPhotosNormal(initialLoad = false) {
+                            if (isLoading) return;
+                            isLoading = true;
+
+                            document.getElementById('loading').style.display = 'block';
+
+                            fetch(`/api/board?page=${page}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const photoContainer = document.getElementById('photo-container');
+
+                                    data.photos.forEach(photo => {
+                                        const photoHTML = `
+                                            <div class="relative group">
+                                                <a href="/showimage/${photo.id}">
+                                                    <div class="aspect-square">
+                                                        <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                                    </div>
+                                                    <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                                        <div class="mt-2 text-left px-2 py-1">
+                                                            <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
+                                                            <div class="text-sm text-gray-500 h-20 overflow-hidden">${photo.description}</div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>`;
+                                        photoContainer.insertAdjacentHTML('beforeend', photoHTML);
+                                    });
+
+                                    isLoading = false;
+                                    document.getElementById('loading').style.display = 'none';
+
+                                    if (data.hasMorePages) {
+                                        page++;
+                                    } else {
+                                        window.removeEventListener('scroll', scrollHandlerNormal);
+                                    }
+
+                                    if (initialLoad && data.photos.length === 0) {
+                                        document.getElementById('loading').innerText = 'Không có ảnh nào để hiển thị.';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Lỗi khi tải ảnh:', error);
+                                    isLoading = false;
+                                    document.getElementById('loading').style.display = 'none';
                                 });
-                    
-                                isLoading = false;
-                                document.getElementById('loading').style.display = 'none';
-                    
-                                if (data.hasMorePages) {
-                                    page++;
-                                } else {
-                                    window.removeEventListener('scroll', scrollHandler); 
-                                }
-                    
-                                if (initialLoad && data.photos.length === 0) {
-                                    document.getElementById('loading').innerText = 'Không có ảnh nào để hiển thị.';
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Lỗi khi tải ảnh:', error);
-                                isLoading = false;
-                                document.getElementById('loading').style.display = 'none';
-                            });
-                    }
-                    
-                    window.addEventListener('load', () => {
-                        loadPhotos(true); 
-                    });
-                    
-                    function scrollHandler() {
-                        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                            loadPhotos();
                         }
-                    }
-                    
-                    window.addEventListener('scroll', scrollHandler);
+
+                        window.addEventListener('load', () => {
+                            loadPhotosNormal(true);
+                        });
+
+                        function scrollHandlerNormal() {
+                            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                                loadPhotosNormal();
+                            }
+                        }
+
+                        window.addEventListener('scroll', scrollHandlerNormal);
                     </script>
-                    
+
                     {{-- @endif --}}
                 </div>
             </div>
@@ -493,28 +485,12 @@
                     <h2 class="font-bold text-4xl text-left">Lịch sử tạo ảnh AI</h2>
                     <p class="text-gray-500 text-2xs text-left mt-2">Lưu ý chúng tôi chỉ lưu ảnh được tạo ra bởi AI trong
                         10 ngày!</p>
-                    @if ($imagesAI->isNotEmpty())
-                        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                            @foreach ($imagesAI as $image)
-                                <div class="relative group">
-                                    <div class="aspect-square">
-                                        <img src="{{ $image['url'] }}" loading="lazy" alt="AI Generated Image"
-                                            class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-50"
-                                            style="cursor: pointer;" onclick="openImageModal('{{ $image['url'] }}')">
-                                    </div>
-                                    <div
-                                        class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                        <div class="flex space-x-2">
-                                            <a href="#"
-                                                class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
+                    {{-- @if ($imagesAI->isNotEmpty()) --}}
+                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="AI-content">
+
+                    </div>
+                    <div id="loading_AI_Image" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
+                    {{-- @else
                         <div class="mt-2 grid gap-2">
                             <div style="display:flex;margin-top:2%">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
@@ -527,7 +503,75 @@
                                     nào. Hãy tạo truy cập tới sáng tạo và tạo ảnh ngay!</h3>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
+                    <script>
+                        var pageAI = 1;
+                        var isLoadingAI = false;
+
+                        function loadPhotosAI(initialLoad = false) {
+                            if (isLoadingAI) return;
+                            isLoadingAI = true;
+
+                            document.getElementById('loading_AI_Image').style.display = 'block';
+
+                            fetch(`/api/AI_Image/board?pageAI=${pageAI}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const photoContainer = document.getElementById('AI-content');
+
+                                    data.photos.forEach(photo => {
+                                        const photoHTML = `
+                                        <div class="relative group">
+                                            <div class="aspect-square">
+                                                <img src="${photo.url}" loading="lazy" alt="AI Generated Image"
+                                                    class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-50"
+                                                    style="cursor: pointer;" onclick="openImageModal('${photo.url}')">
+                                            </div>
+                                            <div
+                                                class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                                <div class="flex space-x-2">
+                                                    <a href="#"
+                                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                        <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                                        photoContainer.insertAdjacentHTML('beforeend', photoHTML);
+                                    });
+
+                                    isLoadingAI = false;
+                                    document.getElementById('loading_AI_Image').style.display = 'none';
+
+                                    if (data.hasMorePages) {
+                                        pageAI++;
+                                    } else {
+                                        window.removeEventListener('scroll', scrollHandlerAI);
+                                    }
+
+                                    if (initialLoad && data.photos.length === 0) {
+                                        document.getElementById('loading_AI_Image').innerText = 'Không có ảnh nào để hiển thị.';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Lỗi khi tải ảnh AI:', error);
+                                    isLoadingAI = false;
+                                    document.getElementById('loading_AI_Image').style.display = 'none';
+                                });
+                        }
+
+                        window.addEventListener('load', () => {
+                            loadPhotosAI(true);
+                        });
+
+                        function scrollHandlerAI() {
+                            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                                loadPhotosAI();
+                            }
+                        }
+
+                        window.addEventListener('scroll', scrollHandlerAI);
+                    </script>
                 </div>
             </div>
         </div>
@@ -544,7 +588,6 @@
         </div>
         <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="main-content"></div>
         <script>
-            
             function openImageModal(imageUrl) {
                 document.getElementById('modal-image').src = imageUrl;
                 document.getElementById('image-modal').classList.remove('hidden');
