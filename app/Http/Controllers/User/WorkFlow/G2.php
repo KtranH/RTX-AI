@@ -50,8 +50,8 @@ class G2 extends Controller
          $model = $this->ChooseModel($request->input("model"));
          $main = $email . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input")->getClientOriginalName()) . "G2" . ".png";
 
-         $process["21"]["inputs"]["lora_name"] = $model;
-         $process["3"]["inputs"]["text"] = $translated;
+         $process["35"]["inputs"]["text_b"] = $model;
+         $process["35"]["inputs"]["text_a"] = $translated;
          $process["7"]["inputs"]["noise_seed"] = $seed;
          $process["33"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
 

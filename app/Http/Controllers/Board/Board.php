@@ -9,6 +9,7 @@ use App\Models\Album;
 use App\Models\HistoryImageAI;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -35,7 +36,7 @@ class Board extends Controller
     }
     public function ShowBoardApi(Request $request)
     {
-        $imagesPerPage = 8; 
+        $imagesPerPage = 2; 
         $page = $request->get('page', 1);
 
         $userId = $this->find_id();
@@ -50,10 +51,10 @@ class Board extends Controller
     }
     public function ShowAiImageApi(Request $request)
     {
-        $imagesPerPage = 8; 
+        $imagesPerPage = 2; 
         $page = $request->get('pageAI', 1);
 
-        $userId = $this->find_id();
+        $userId = Auth::user()->id;
         $photos = HistoryImageAI::where('user_id', $userId)->paginate($imagesPerPage, ['*'], 'page', $page); 
         return response()->json([
             'photos' => $photos->items(),

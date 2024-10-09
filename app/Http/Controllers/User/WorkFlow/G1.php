@@ -43,8 +43,8 @@ class G1 extends Controller
         }
 
         $process = json_decode(file_get_contents(storage_path('app/G1.json')), true);
-        $process["20"]["inputs"]["lora_name"] = $model;
-        $process["8"]["inputs"]["text"] = $translated;
+        $process["22"]["inputs"]["text_b"] = $model;
+        $process["22"]["inputs"]["text_a"] = $translated;
         $process["12"]["inputs"]["noise_seed"] = $seed;
 
         $imageUrl = $this->get_image_result($process, 19);

@@ -149,8 +149,9 @@ trait AI_Create_Image
     private function ChooseModel($model)
     {
         $models = [
-            "Ảnh hình 3D" => "3DRedmond-3DRenderStyle-3DRenderAF.safetensors",
-            "Ảnh hoạt hình" => "Anime Enhancer XL_v5.safetensors"
+            "Ảnh hình 3D Chibi" => "3D Chibi cute",
+            "Ảnh hoạt hình" => "Anime:1.2",
+            "Ảnh hình Realistic" => "Realistic",
         ];
         return $models[$model] ?? $model;
     }

@@ -225,7 +225,8 @@
                         <div class="mt-2">
                         <select id="country" name="model" autocomplete="country-name" class="block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
                             <option>Ảnh hoạt hình</option>
-                            <option>Ảnh hình 3D</option>
+                            <option>Ảnh hình 3D Chibi</option>
+                            <option>Ảnh hình Realistic</option>
                         </select>
                         </div>
                     </div>    

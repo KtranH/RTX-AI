@@ -50,10 +50,10 @@ class G4 extends Controller
         $model = $this->ChooseModel($request->input("model"));
         $main = $email . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input")->getClientOriginalName()) . "G4" . ".png";
 
-        $process["25"]["inputs"]["lora_name"] = $model;
-        $process["2"]["inputs"]["text"] = $translated;
+        $process["26"]["inputs"]["text_b"] = $model;
+        $process["26"]["inputs"]["text_a"] = $translated;
         $process["6"]["inputs"]["noise_seed"] = $seed;
-        $process["14"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
+        $process["27"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
 
         $destinationPath = $this->inputDir . '/' . $email;
         if (!file_exists($destinationPath)) {

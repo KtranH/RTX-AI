@@ -58,8 +58,8 @@ class G3 extends Controller
         $main = "{$email}_" . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input")->getClientOriginalName()) . "_G3_Main_" . ".png";
         $other = "{$email}_" . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input2")->getClientOriginalName()) . "_G3_Other_" . ".png";
 
-        $process["32"]["inputs"]["lora_name"] = $model;
-        $process["2"]["inputs"]["text"] = $translated;
+        $process["35"]["inputs"]["text_b"] = $model;
+        $process["35"]["inputs"]["text_a"] = $translated;
         $process["6"]["inputs"]["noise_seed"] = $seed;
         $process["33"]["inputs"]["image"] = "{$this->inputDir}/{$email}/{$main}";
         $process["34"]["inputs"]["image"] = "{$this->inputDir}/{$email}/{$other}";

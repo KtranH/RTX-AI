@@ -50,7 +50,7 @@ class Account extends Controller
                 ]);
             }
             $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
-            Auth::attempt(["email" => $email, "password" => "123"], true);
+            Auth::attempt(["email" => $email], true);
             return redirect()->route("showhome")->withCookie($cookie);
         } catch (Exception $e) {
             return redirect()->route("showlogin");

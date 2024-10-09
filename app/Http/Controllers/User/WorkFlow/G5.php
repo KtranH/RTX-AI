@@ -38,11 +38,10 @@ class G5 extends Controller
          $seed = $request->input("seed");
 
          $process = json_decode(file_get_contents(storage_path('app/G5.json')), true);
-         $model = $this->ChooseModel($request->input("model"));
          $main = $email . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input")->getClientOriginalName()) . "G5" . ".png";
 
          $process["6"]["inputs"]["noise_seed"] = $seed;
-         $process["14"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
+         $process["58"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
 
          $destinationPath = $this->inputDir . '/' . $email;
          if (!file_exists($destinationPath)) {
