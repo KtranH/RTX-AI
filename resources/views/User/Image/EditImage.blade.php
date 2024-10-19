@@ -48,9 +48,9 @@
                             <label for="album" class="block text-xl font-medium mb-1">Album</label>
                             <div class="relative">
                                 <select id="album" name="album" class="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm pr-10" required>
-                                    <option value="{{ $album->id }}" selected>{{ $album->title }}</option>
+                                    <option value="{{ $image->album->id }}" selected>{{ $image->album->title }}</option>
                                     @foreach ($allAlbum as $item)
-                                        @if ($item->id != $album->id)
+                                        @if ($item->id != $image->album->id)
                                             <option value="{{ $item->id }}">{{ $item->title }}</option>
                                         @endif
                                     @endforeach

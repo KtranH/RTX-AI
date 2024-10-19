@@ -1,5 +1,8 @@
 @extends('User.Container')
 @section('Body')
+@php
+$count = count($listUserLiked);
+@endphp
     <title>RTX-AI: Hình Ảnh</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <main class="w-full h-full" style="scroll-behavior: smooth">
@@ -54,10 +57,10 @@
                         <!-- Owner -->
                         <div class="flex items-center space-x-4 mb-4">
                             <a href="#" class="flex items-center space-x-2 group">
-                                <img src="{{ $user->avatar_url }}" loading="lazy" alt="Owner Avatar" class="w-10 h-10 rounded-full">
-                                <p class="font-semibold group-hover:!text-indigo-700">{{ $user->username }}</p>
+                                <img src="{{ $image->album->user->avatar_url }}" loading="lazy" alt="Owner Avatar" class="w-10 h-10 rounded-full">
+                                <p class="font-semibold group-hover:!text-indigo-700">{{ $image->album->user->username }}</p>
                             </a>
-                            @if (!Cookie::has('Owner'))
+                            @if ($image->album->user->id != Auth::user()->id)
                                 <a href="#"
                                     class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Theo dõi
                                 </a>
@@ -102,6 +105,7 @@
                                                     if (text.includes('Bạn,') || text.includes('Bạn')) {
                                                         text = text.replace('Bạn', '').trim();
                                                         text = text.replace(',', '').trim();
+                                                        text = text.replace('và', "").trim();
                                                         if(text.endsWith('.'))
                                                         {
                                                             statusSpan.html(text);
@@ -111,9 +115,13 @@
                                                             statusSpan.html('Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.');
                                                         }
                                                     } else {
-                                                        if(text.includes('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :'))
+                                                        if(text.includes('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :') && !text.includes('người khác'))
                                                         {
                                                             text = text.replace('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :', 'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn, ');
+                                                        }
+                                                        else 
+                                                        {
+                                                            text = text.replace('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :', 'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn và ');
                                                         }
                                                         statusSpan.html(text);
                                                     }
@@ -126,7 +134,7 @@
                                     });
                                 });
                             </script>
-                            @if(Cookie::has('Owner'))
+                            @if($image->album->user->id == Auth::user()->id)
                                 @if($image->is_feature == true)
                                     <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                         <i class="fas fa-star text-yellow-500 text-xl hover:text-indigo-700"></i>
@@ -175,27 +183,33 @@
                         </div>
                     </div>
                         <!-- Number of likes -->
-                        @php
-                            $count = count($listUserLiked);
-                        @endphp
                         @if($count == 0)
                             <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.</span>
+                        @elseif ($count == 1)
+                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
+                                    @if($checkUserLikedImage != null) 
+                                        Bạn
+                                    @endif
+                                </span>
                         @elseif ($count <= 2 && $count > 0)
-                            <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
-                            @if($checkUserLikedImage != null) 
-                                Bạn,
-                            @endif
-                            @foreach ($listUserLiked as $l)
-                                @if($l->user->username != $checkUserNow->username)
-                                    {{ $l->user->username }}{{ $loop->last ? '.' : ', ' }}
+                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
+                                @if($checkUserLikedImage != null) 
+                                    Bạn,
                                 @endif
-                            @endforeach 
-                            </span>
+                                    @foreach ($listUserLiked as $l)
+                                        @if($l->user->username != $checkUserNow->username)
+                                            {{ $l->user->username }}{{ $loop->last ? '.' : ', ' }}
+                                        @endif
+                                    @endforeach 
+                                </span>
                         @else
                             <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
                                 @if($checkUserLikedImage != null) 
                                     Bạn và {{ $count }} người khác.
-                                @endif</span> <!-- add more here -->
+                                @else
+                                    {{ $count }} người khác.
+                                @endif
+                            </span>
                         @endif
                     <!-- Comment -->
                     <h3 class="font-semibold text-xl mb-2">Bình luận </h3>

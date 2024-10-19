@@ -28,7 +28,7 @@ class Board extends Controller
     public function ShowBoard(Request $request)
     {
         $cookie = request()->cookie("token_account");
-        $userId = $this->find_id();
+        $userId = Auth::user()->id;
         $tab = $request->route('tab');
         $albums = Album::where('user_id', $this->find_id())->paginate(8); 
         $feature = Photo::where('is_feature', true)->whereHas('album', function ($query) {$query->where('user_id', $this->find_id());})->get(); 
@@ -39,7 +39,7 @@ class Board extends Controller
         $imagesPerPage = 2; 
         $page = $request->get('page', 1);
 
-        $userId = $this->find_id();
+        $userId = Auth::user()->id;
         $photos = Photo::whereHas('album.user', function($query) use ($userId) {
             $query->where('id', $userId);
         })->paginate($imagesPerPage, ['*'], 'page', $page); 

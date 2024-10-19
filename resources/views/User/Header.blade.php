@@ -57,7 +57,10 @@
         transform-origin: bottom left;
     }
 </style>
-
+@php
+    $user = Auth::user();
+    $cookie = request()->cookie('token_account');
+@endphp
 <main class="container mx-auto relative">
     <!-- Header -->
     <header class="flex items-center justify-between py-4 border-b bg-white fixed top-0 left-0 right-0 p-4 z-50">
@@ -80,41 +83,33 @@
             </a>
         </nav>
         <!-- Laptop Account -->
-        @php
-            $cookie = request()->cookie("token_account");
-        @endphp
-        @if($cookie)
-            @php
-                $user = \App\Models\User::where('email', $cookie)->first();
-            @endphp
-            @if($user)
-                <div class="hidden md:flex items-center space-x-4">
-                    <img class="h-8 w-8 rounded-full ring-2 ring-white" src="{{ $user->avatar_url }}" alt="{{ $user->username }}">
-                    <div class="text-gray-700">
-                        <a href="{{ route('showboard') }}" class="font-bold hover:text-purple-600">{{ $user->username }}</a>
-                        @if ($user->times > 0)
-                            <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-purple-600 font-bold">{{ $user->times}}</span></p>
-                        @else
-                            <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-indigo-600 font-bold">{{ $user->times}}</span></p>
-                        @endif
-                    </div>
-                    <!-- Laptop Notifications -->
-                    <div class="relative">
-                        <i id='notifications-toggle' class="fas fa-bell cursor-pointer text-gray-700 hover:text-purple-600"></i>
-                        <div id="notifications-box" class="hidden absolute -right-48 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
-                            @include('User.Component.Notifications')
-                        </div>
-                    </div>
-                    <!-- Laptop Settings -->
-                    <div class="relative">
-                        <i id='settings-toggle' class="fas fa-cog cursor-pointer text-gray-700 hover:text-purple-600"></i>
-                        <div id="settings-box" class="hidden absolute -right-40 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
-                            @include('User.Component.Settings')
-                        </div>
-                    </div>
-                    <a href="{{ route('logout') }}" class="btn btn-dark font-bold rounded-full px-4 py-2 bg-gray-800 text-white hover:bg-gray-700">Đăng xuất</a>
+        @if(isset($user))
+            <div class="hidden md:flex items-center space-x-4">
+                <img class="h-8 w-8 rounded-full ring-2 ring-white" src="{{ $user->avatar_url }}" alt="{{ $user->username }}">
+                <div class="text-gray-700">
+                    <a href="{{ route('showboard') }}" class="font-bold hover:text-purple-600">{{ $user->username }}</a>
+                    @if ($user->times > 0)
+                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-purple-600 font-bold">{{ $user->times}}</span></p>
+                    @else
+                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-indigo-600 font-bold">{{ $user->times}}</span></p>
+                    @endif
                 </div>
-            @endif
+                <!-- Laptop Notifications -->
+                <div class="relative">
+                    <i id='notifications-toggle' class="fas fa-bell cursor-pointer text-gray-700 hover:text-purple-600"></i>
+                    <div id="notifications-box" class="hidden absolute -right-48 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
+                        @include('User.Component.Notifications')
+                    </div>
+                </div>
+                <!-- Laptop Settings -->
+                <div class="relative">
+                    <i id='settings-toggle' class="fas fa-cog cursor-pointer text-gray-700 hover:text-purple-600"></i>
+                    <div id="settings-box" class="hidden absolute -right-40 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
+                        @include('User.Component.Settings')
+                    </div>
+                </div>
+                <a href="{{ route('logout') }}" class="btn btn-dark font-bold rounded-full px-4 py-2 bg-gray-800 text-white hover:bg-gray-700">Đăng xuất</a>
+            </div>
         @else
             <div class="hidden md:flex items-center space-x-4">
                 <a href="{{ route('showlogin') }}" class="px-4 py-2 border border-gray-800 text-gray-800 rounded-full font-bold hover:bg-gray-800 hover:text-white transition">Đăng nhập</a>
@@ -124,7 +119,7 @@
         <!-- Mobile Function -->
         <div class="md:hidden text-2xl text-gray-700 flex flex-row justify-contents space-x-4">
             <!-- Number of Create -->
-            @if($user)
+           @if(isset($user))
                 @if ($user->times > 0)
                     <div class="font-bold text-purple-600">{{ $user->times }}</div>
                 @else
@@ -149,7 +144,7 @@
     <!-- Mobile Menu -->
     <div id="menu" class="fixed hidden md:hidden w-full bg-white z-50 flex flex-col p-6 overflow-y-auto transition duration-300 ease-in-out left-0 top-[89px] border-b">
         <!-- Mobile Account -->
-        @if($cookie && $user)
+        @if(isset($user) && isset($cookie))
             <div class="flex items-center space-x-2 mb-4">
                 <img class="h-8 w-8 rounded-full ring-2 ring-white" src="{{ $user->avatar_url }}" alt="{{ $user->username }}">
                 <a href="{{ route('showboard') }}" class="font-semibold text-2xl">{{ $user->username }}</a>
@@ -172,7 +167,7 @@
         </nav>
         <!-- Mobile Action -->
         <div class="flex flex-col space-y-4 border-t pt-4">
-            @if($cookie && $user)
+            @if(isset($user) && isset($cookie))
                 <a href="{{ route('logout') }}" class="btn btn-dark font-bold rounded-full px-4 py-2 bg-gray-800 text-white">Đăng xuất</a>
             @else
                 <a href="{{ route('showlogin') }}" class="px-4 py-2 border border-gray-800 text-gray-800 rounded-full font-bold transition text-center">Đăng nhập</a>

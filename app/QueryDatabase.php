@@ -19,6 +19,10 @@ trait QueryDatabase
         $id = User::where("email",$email)->firstOrFail();
         return $id->id;
     }
+    private function find_user($id)
+    {
+        return User::where("email", $id)->firstOrFail();
+    }
     private function find_id_categorie($x)
     {
         return Category::where("name", $x)->value('id') ?? 0;

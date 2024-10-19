@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\WorkFlow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -33,20 +34,16 @@ class Image extends Controller
         $image = Photo::findOrFail($id);
         $photos = Photo::query()
             ->limit(4)
-            ->orderBy('created_at', 'desc')
+            ->inRandomOrder()
             ->get();
-        $album = $image->album;
-        $user = $album->user;
-        $idUser = $this->find_id();
+        $idUser = Auth::user()->id;
         $checkUserNow = User::findOrFail($idUser);
 
         $listcate = $image->category()->where("photo_id",$id)->get();
         $listUserLiked = Like::where("photo_id", $id)->get(); 
 
-        $idUserAlbum = $album->user_id;
         $checkUserLikedImage = $this->checkLike($id,$idUser);
-        Cookie::queue('Owner', $idUser == $idUserAlbum ? "true" : null, 3600 * 24 * 30);
-        return view('User.Image.Image', compact('image', 'photos', 'album', 'user', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'checkUserNow'));
+        return view('User.Image.Image', compact('image', 'photos', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'checkUserNow'));
     }
 
     public function CreateImage($id)
@@ -61,10 +58,9 @@ class Image extends Controller
         $category = Category::all();
         $image = Photo::findOrFail($id);
         $listcate = $image->category()->where("photo_id", $id)->get();
-        $album = $image->album;
-        $idUser = $this->find_id();
+        $idUser = Auth::user()->id;
         $allAlbum = Album::where("user_id", $idUser)->get();
-        return view("User.Image.EditImage", compact("image", "album", "category", "listcate", "allAlbum"));
+        return view("User.Image.EditImage", compact("image", "category", "listcate", "allAlbum"));
     }
 
     public function UpdateImage(Request $request, $id)
@@ -173,7 +169,7 @@ class Image extends Controller
     }
     public function LikeImage($idImage)
     {
-        $UserID = $this->find_id();
+        $UserID = Auth::user()->id;
         $check = $this->checkLike($idImage, $UserID);
         if($check)
         {
