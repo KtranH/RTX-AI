@@ -39,7 +39,7 @@
                         </label>
                         <input type="file" name="cover" id="cover" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror">
                         @error('cover')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="text-danger w-100">{{ $message }}</div>
                         @enderror
                     </div>
                     <!-- Data -->
@@ -56,7 +56,7 @@
                             <label for="description" class="block text-xl font-medium mb-1">Chọn thể loại</label>
                             <input name="categories" class="form-control @error('categories') is-invalid @enderror" id="categories" value="" placeholder="Lựa chọn các thể loại cho hình ảnh">
                             @error('categories')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger w-100">{{ $message }}</div>
                             @enderror
                         </div>
                         <script>

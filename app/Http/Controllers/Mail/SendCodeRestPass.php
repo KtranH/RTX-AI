@@ -50,29 +50,29 @@ class SendCodeRestPass extends Controller
     }
     public function CheckCodeToChangePass(Request $request)
     {
+        $request->validate([
+            'input-code' => 'required|string|max:255',
+            'input-pass' => 'required|string|min:8',
+            'input-pass2' => 'required|string|min:8',
+        ], [
+            'input-code.required' => 'Vui lòng nhập mã xác nhận',
+            'input-code.max' => 'Mã xác nhận phải nhỏ hơn 255 ký tự',
+            'input-pass.required' => 'Vui lòng nhập Password',
+            'input-pass.min' => 'Password phải nhiều hơn 8 ký tự',
+            'input-pass2.required' => 'Vui lòng nhập lại Password',
+            'input-pass2.min' => 'Password phải nhiều hơn 8 ký tự',
+        ]);
+
         $code = $request->input("input-code");
         $pass = $request->input("input-pass");
         $pass2 = $request->input("input-pass2");
 
-        if(empty($code))
+        $errors = [];
+
+        if($pass != $pass2)
         {
-            Session::flash("EmptyCode","checked");
-            return redirect()->route("inputcodetochangepass");
-        }
-        else if(empty($pass))
-        {
-            Session::flash("EmptyPass","checked");
-            return redirect()->route("inputcodetochangepass");
-        }
-        else if(empty($pass2))
-        {
-            Session::flash("EmptyPass2","checked");
-            return redirect()->route("inputcodetochangepass");
-        }
-        else if($pass != $pass2)
-        {
-            Session::flash("ErrorPass","checked");
-            return redirect()->route("inputcodetochangepass");
+            $errors["password"] = "Mật khẩu mới phải khác mật khẩu cũ";
+            return redirect()->back()->withErrors($errors)->withInput();
         }
 
         $verificationCode = Session::get('verification_code');
@@ -93,8 +93,8 @@ class SendCodeRestPass extends Controller
         } 
         else 
         {
-            Session::flash("ExpiredCode","checked");
-            return redirect()->route("inputcodetochangepass");
+            $errors["ExpiredCode"] = "Mã xác nhận đã hết hạn";
+            return redirect()->back()->withErrors($errors)->withInput();
         }
     }
 }

@@ -138,7 +138,7 @@
                 </div>
                 <div data-aos="fade-up" data-aos-delay="100">
                     <div class="jarallax" data-jarallax data-speed="0.5" style="height:100vh;">
-                        <img src="/images/landscape.png" class="jarallax-img" alt="Image 1">
+                        <img src="/images/landscape.png" class="jarallax-img" alt="Image 1" loading="lazy">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
@@ -158,7 +158,7 @@
                         </div>
                     </div>
                     <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/animal.png" class="jarallax-img" alt="Image 2">
+                        <img src="/images/animal.png" class="jarallax-img" alt="Image 2" loading="lazy">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); ">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
@@ -178,7 +178,7 @@
                         </div>
                     </div>
                     <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/travel.png" class="jarallax-img" alt="Image 2">
+                        <img src="/images/travel.png" class="jarallax-img" alt="Image 2" loading="lazy">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
@@ -198,7 +198,7 @@
                         </div>
                     </div>
                     <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/tech.png" class="jarallax-img" alt="Image 2">
+                        <img src="/images/tech.png" class="jarallax-img" alt="Image 2" loading="lazy">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
@@ -218,7 +218,7 @@
                         </div>
                     </div>
                     <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/fashion.png" class="jarallax-img" alt="Image 2">
+                        <img src="/images/fashion.png" class="jarallax-img" alt="Image 2" loading="lazy">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
@@ -238,7 +238,7 @@
                         </div>
                     </div>
                     <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/city.png" class="jarallax-img" alt="Image 2">
+                        <img src="/images/city.png" class="jarallax-img" alt="Image 2" loading="lazy">
                         <div class="content"
                             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                             <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
@@ -446,7 +446,7 @@
                             @while ($count <= 4)
                                 <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/G{{ $count + 16 }}.png"
                                     alt="AI - Images"
-                                    class="rounded-lg bg-gray-100 w-full h-full object-cover object-center">
+                                    class="rounded-lg bg-gray-100 w-full h-full object-cover object-center" loading="lazy">
                                 @php
                                     $count = $count + 1;
                                 @endphp
@@ -533,41 +533,41 @@
                                                         @endphp
                                                         <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/AI_home/{{ $count }}.png"
                                                             alt=""
-                                                            class="h-full w-full object-cover object-center">
+                                                            class="h-full w-full object-cover object-center" loading="lazy">
                                                     </div>
                                                     <div class="h-64 w-44 overflow-hidden rounded-lg">
                                                         <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/AI_home/{{ $count + 1 }}.png"
                                                             alt=""
-                                                            class="h-full w-full object-cover object-center">
+                                                            class="h-full w-full object-cover object-center" loading="lazy">
                                                     </div>
                                                 </div>
                                                 <div class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
                                                     <div class="h-64 w-44 overflow-hidden rounded-lg">
                                                         <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/AI_home/{{ $count + 2 }}.png"
                                                             alt=""
-                                                            class="h-full w-full object-cover object-center">
+                                                            class="h-full w-full object-cover object-center" loading="lazy">
                                                     </div>
                                                     <div class="h-64 w-44 overflow-hidden rounded-lg">
                                                         <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/AI_home/{{ $count + 3 }}.png"
                                                             alt=""
-                                                            class="h-full w-full object-cover object-center">
+                                                            class="h-full w-full object-cover object-center" loading="lazy">
                                                     </div>
                                                     <div class="h-64 w-44 overflow-hidden rounded-lg">
                                                         <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/AI_home/{{ $count + 4 }}.png"
                                                             alt=""
-                                                            class="h-full w-full object-cover object-center">
+                                                            class="h-full w-full object-cover object-center" loading="lazy">
                                                     </div>
                                                 </div>
                                                 <div class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
                                                     <div class="h-64 w-44 overflow-hidden rounded-lg">
                                                         <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/AI_home/{{ $count + 5 }}.png"
                                                             alt=""
-                                                            class="h-full w-full object-cover object-center">
+                                                            class="h-full w-full object-cover object-center" loading="lazy">
                                                     </div>
                                                     <div class="h-64 w-44 overflow-hidden rounded-lg">
                                                         <img src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/AI_home/{{ $count + 6 }}.png"
                                                             alt=""
-                                                            class="h-full w-full object-cover object-center">
+                                                            class="h-full w-full object-cover object-center" loading="lazy">
                                                     </div>
                                                 </div>
                                             </div>

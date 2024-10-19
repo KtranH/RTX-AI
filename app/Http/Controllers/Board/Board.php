@@ -9,6 +9,7 @@ use App\Models\Album;
 use App\Models\HistoryImageAI;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -24,37 +25,53 @@ class Board extends Controller
         $photo->save();
         return redirect()->back();
     }
-    public function ShowBoard()
+    public function ShowBoard(Request $request)
     {
         $cookie = request()->cookie("token_account");
-        $userId = $this->find_id();
-
-        $imagesAI = HistoryImageAI::where('user_id', $userId)->paginate(12);
-        $tab = request()->query('tab', 'saved');
-        if ($tab == 'created') {
-            return view('User.Board.Board', ['tab' => $tab], compact('imagesAI'));
-        }
-
-        $albums = Album::where('user_id', $this->find_id())->paginate(8);
-        $feature = Photo::where('is_feature', true)
-            ->whereHas('album', function ($query) {
-                $query->where('user_id', $this->find_id());
-            })->get();
-        return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'imagesAI'));
+        $userId = Auth::user()->id;
+        $tab = $request->route('tab');
+        $albums = Album::where('user_id', $this->find_id())->paginate(8); 
+        $feature = Photo::where('is_feature', true)->whereHas('album', function ($query) {$query->where('user_id', $this->find_id());})->get(); 
+        return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature'));
     }
-
-    public function ShowBoardApi()
+    public function ShowBoardApi(Request $request)
     {
-        $userId = auth()->user()->id;
+        $imagesPerPage = 2; 
+        $page = $request->get('page', 1);
+
+        $userId = Auth::user()->id;
+        $photos = Photo::whereHas('album.user', function($query) use ($userId) {
+            $query->where('id', $userId);
+        })->paginate($imagesPerPage, ['*'], 'page', $page); 
+
+        return response()->json([
+            'photos' => $photos->items(),
+            'hasMorePages' => $photos->hasMorePages(),
+        ]);
+    }
+    public function ShowAiImageApi(Request $request)
+    {
+        $imagesPerPage = 2; 
+        $page = $request->get('pageAI', 1);
+
+        $userId = Auth::user()->id;
+        $photos = HistoryImageAI::where('user_id', $userId)->paginate($imagesPerPage, ['*'], 'page', $page); 
+        return response()->json([
+            'photos' => $photos->items(),
+            'hasMorePages' => $photos->hasMorePages(),
+        ]);
+    }
+    /*public function ShowBoardApi()
+    {
+        $userId = $this->find_id();
         $photos = DB::table('users')
             ->join('albums', 'users.id', '=', 'albums.user_id')
             ->join('photos', 'albums.id', '=', 'photos.album_id')
-            ->where('users.id', $userId)
-            ->paginate(12);
+            ->where('users.id', $userId)->paginate(8);
         return response()->json([
             'photos' => $photos,
         ]);
-    }
+    }*/
 
     public function ShowAlbum($id)
     {
@@ -144,7 +161,9 @@ class Board extends Controller
         $email = Cookie::get("token_account");
         $image = $request->file('cover');
         $filename = time() . '.' . $image->getClientOriginalExtension();
-        Storage::disk('r2')->put("albums/{$email}/ImageCoverAlbum/{$filename}", file_get_contents($image));
+        $coverPath = "albums/{$email}/ImageCoverAlbum/{$filename}";
+
+        Storage::disk('r2')->put($coverPath, file_get_contents($image));
 
         $private = $request->has('private') ? 1 : 0;
         $userId = $this->find_id();
@@ -153,7 +172,7 @@ class Board extends Controller
             "user_id" => $userId,
             "title" => $request->input('title'),
             "description" => $request->input('description'),
-            "cover_image" => $this->urlR2 . "albums/{$email}/ImageCoverAlbum/{$filename}",
+            "cover_image" => $this->urlR2 . $coverPath,
             "created_at" => now(),
             "updated_at" => now(),
             "is_private" => $private,

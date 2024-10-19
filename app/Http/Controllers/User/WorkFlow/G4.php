@@ -50,10 +50,10 @@ class G4 extends Controller
         $model = $this->ChooseModel($request->input("model"));
         $main = $email . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input")->getClientOriginalName()) . "G4" . ".png";
 
-        $process["25"]["inputs"]["lora_name"] = $model;
-        $process["2"]["inputs"]["text"] = $translated;
+        $process["26"]["inputs"]["text_b"] = $model;
+        $process["26"]["inputs"]["text_a"] = $translated;
         $process["6"]["inputs"]["noise_seed"] = $seed;
-        $process["14"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
+        $process["27"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
 
         $destinationPath = $this->inputDir . '/' . $email;
         if (!file_exists($destinationPath)) {
@@ -66,17 +66,17 @@ class G4 extends Controller
             $imageUrl = $this->get_image_result($process, 13);
             $takeImageUrl = $this->UploadImageR2($imageUrl);
             $url = $this->urlR2 . "AIimages/{$email}/{$takeImageUrl}";
-            Session::put("url", $url);
-            Session::put("seed", $seed);
-            Session::put("model", $request->input("model"));
-            Session::put("prompt", $request->input("prompt"));
+            Cookie::queue("url", $url);
+            Cookie::queue("seed", $seed);
+            Cookie::queue("model", $request->input("model"));
+            Cookie::queue("prompt", $request->input("prompt"));
             return response()->json(['success' => true, 'redirect' => route("get_imageg4")]);
         } catch (Exception $e) {
             $imageUrl = asset($this->moveToPublicDirectoryError($this->inputError . DIRECTORY_SEPARATOR . "error.jpg"));
-            Session::put("url", $imageUrl);
-            Session::put("seed", $seed);
-            Session::put("model", $request->input("model"));
-            Session::put("prompt", $request->input("prompt"));
+            Cookie::queue("url", $imageUrl);
+            Cookie::queue("seed", $seed);
+            Cookie::queue("model", $request->input("model"));
+            Cookie::queue("prompt", $request->input("prompt"));
             return response()->json(['success' => true, 'redirect' => route("get_imageg4")]);
         }
     }

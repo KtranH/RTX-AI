@@ -43,8 +43,8 @@ class G1 extends Controller
         }
 
         $process = json_decode(file_get_contents(storage_path('app/G1.json')), true);
-        $process["20"]["inputs"]["lora_name"] = $model;
-        $process["8"]["inputs"]["text"] = $translated;
+        $process["22"]["inputs"]["text_b"] = $model;
+        $process["22"]["inputs"]["text_a"] = $translated;
         $process["12"]["inputs"]["noise_seed"] = $seed;
 
         $imageUrl = $this->get_image_result($process, 19);
@@ -52,18 +52,17 @@ class G1 extends Controller
         try {
             $takeImageUrl = $this->UploadImageR2($imageUrl);
             $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
-
-            Session::put("url", $url);
-            Session::put("seed", $seed);
-            Session::put("model", $request->input("model"));
-            Session::put("prompt", $prompt);
+            Cookie::queue("url", $url);
+            Cookie::queue("seed", $seed);
+            Cookie::queue("model", $request->input("model"));
+            Cookie::queue("prompt", $prompt);
             return response()->json(['success' => true, 'redirect' => route("get_imageg1")]); 
         } catch (Exception $e) {
             $imageUrl = asset($this->moveToPublicDirectoryError($this->inputError . DIRECTORY_SEPARATOR . "error.jpg"));
-            Session::put("url", $imageUrl);
-            Session::put("seed", $seed);
-            Session::put("model", $request->input("model"));
-            Session::put("prompt", $prompt);
+            Cookie::queue("url", $imageUrl);
+            Cookie::queue("seed", $seed);
+            Cookie::queue("model", $request->input("model"));
+            Cookie::queue("prompt", $prompt);
             return response()->json(['success' => true, 'redirect' => route("get_imageg1")]);
         }
     }

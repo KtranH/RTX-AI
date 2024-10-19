@@ -50,8 +50,8 @@ class G2 extends Controller
          $model = $this->ChooseModel($request->input("model"));
          $main = $email . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input")->getClientOriginalName()) . "G2" . ".png";
 
-         $process["21"]["inputs"]["lora_name"] = $model;
-         $process["3"]["inputs"]["text"] = $translated;
+         $process["35"]["inputs"]["text_b"] = $model;
+         $process["35"]["inputs"]["text_a"] = $translated;
          $process["7"]["inputs"]["noise_seed"] = $seed;
          $process["33"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
 
@@ -66,17 +66,17 @@ class G2 extends Controller
              $imageUrl = $this->get_image_result($process, 14);
              $takeImageUrl = $this->UploadImageR2($imageUrl);
              $url = $this->urlR2 . "AIimages/{$email}/{$takeImageUrl}";
-             Session::put("url", $url);
-             Session::put("seed", $seed);
-             Session::put("model", $request->input("model"));
-             Session::put("prompt", $request->input("prompt"));
+             Cookie::queue("url", $url);
+             Cookie::queue("seed", $seed);
+             Cookie::queue("model", $request->input("model"));
+             Cookie::queue("prompt", $request->input("prompt"));
              return response()->json(['success' => true, 'redirect' => route("get_imageg2")]);
          } catch (Exception $e) {
              $imageUrl = asset($this->moveToPublicDirectoryError($this->inputError . DIRECTORY_SEPARATOR . "error.jpg"));
-             Session::put("url", $imageUrl);
-             Session::put("seed", $seed);
-             Session::put("model", $request->input("model"));
-             Session::put("prompt", $request->input("prompt"));
+             Cookie::queue("url", $imageUrl);
+             Cookie::queue("seed", $seed);
+             Cookie::queue("model", $request->input("model"));
+             Cookie::queue("prompt", $request->input("prompt"));
              return response()->json(['success' => true, 'redirect' => route("get_imageg2")]);
          }
      }

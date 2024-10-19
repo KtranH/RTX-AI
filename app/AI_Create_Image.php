@@ -27,10 +27,6 @@ trait AI_Create_Image
     private $outputDir = '';
     public function InputData($ListG)
     {
-        Session::forget("prompt");
-        Session::forget("seed");
-        Session::forget("url");
-
         $cookie = Cookie::get("token_account");
         $times = User::where("email",$cookie)->first();
         $ShowTimes = $times->times;
@@ -41,10 +37,14 @@ trait AI_Create_Image
     }
     public function ImageG($ListG)
     {
-        $prompt = Session::get("prompt");
-        $model = Session::get("model");
-        $seed = Session::get("seed");
-        $url = Session::get("url");
+        $prompt = Cookie::get("prompt");
+        $model = Cookie::get("model");
+        $seed = Cookie::get("seed");
+        $url = Cookie::get("url");
+        Cookie::forget("prompt");
+        Cookie::forget("seed");
+        Cookie::forget("url");
+        Cookie::forget("model");
         $G = WorkFlow::find($ListG);
 
         if(empty($prompt) || empty($seed))
@@ -149,8 +149,9 @@ trait AI_Create_Image
     private function ChooseModel($model)
     {
         $models = [
-            "Ảnh hình 3D" => "3DRedmond-3DRenderStyle-3DRenderAF.safetensors",
-            "Ảnh hoạt hình" => "Anime Enhancer XL_v5.safetensors"
+            "Ảnh hình 3D Chibi" => "3D Chibi cute",
+            "Ảnh hoạt hình" => "Anime:1.2",
+            "Ảnh hình Realistic" => "Realistic",
         ];
         return $models[$model] ?? $model;
     }
@@ -168,6 +169,7 @@ trait AI_Create_Image
         }
         return null;
     }
+
     private function checkTimes($price)
     {
         $user = User::find($this->find_id());

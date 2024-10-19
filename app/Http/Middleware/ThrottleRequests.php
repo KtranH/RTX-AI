@@ -14,10 +14,12 @@ class ThrottleRequests
     {
         $key = $this->resolveRequestSignature($request);
 
+        $errors = [];
+
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) 
         {
-            Session::flash("Manytimes","checked");
-            return redirect()->route("forgetpass");
+            $errors["ManyTime"] = 'Bạn chỉ được gửi yêu cầu mỗi 5 phút';
+            return redirect()->back()->withErrors($errors);
         }
 
         RateLimiter::hit($key, $decayMinutes * 60);

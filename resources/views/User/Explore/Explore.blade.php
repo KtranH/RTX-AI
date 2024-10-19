@@ -37,8 +37,7 @@
                     </span>
                     <input id="search-bar" type="text" placeholder="Tìm kiếm..."
                         class="w-full rounded-2xl bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
-                        oninput="toggleCloseIcon()" onfocus="toggleOverlay(true)" onblur="toggleOverlay(false)"
-                        onclick="toggleExtension(event)" />
+                        oninput="toggleCloseIcon()" onclick="toggleExtension(event)" />
                     <span id="close-icon"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden"
                         onclick="clearSearchBar()">
@@ -78,146 +77,161 @@
                                 transform: rotate(180deg);
                             }
                         </style>
-                        <!-- Categories -->
-                        <div class="text-lg font-semibold mb-2">Thể Loại</div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                            @for ($i = 0; $i <= 5; $i++)
-                                <div
-                                    class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
-                                    <img src="https://picsum.photos/200" alt="Category Image"
-                                        class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Category
-                                        Lorem Lorem Lorem {{ $i }}</div>
-                                </div>
-                            @endfor
-                        </div>
                         <!-- Suggestions -->
                         <div class="text-lg font-semibold mb-2">Gợi Ý</div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                            @for ($i = 0; $i <= 5; $i++)
+                            @foreach ($suggest as $x)
                                 <div
-                                    class="flex items-center hover:bg-[#a00fff] bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
-                                    <img src="https://picsum.photos/200" alt="Category Image"
+                                    class="t flex items-center hover:bg-indigo-600 bg-[#f5f5f5] rounded-2xl cursor-pointer border-2 border-[#f5f5f5] group">
+                                    <img src="{{ $x['photo'] }}" loading="lazy" alt="Category Image"
                                         class="w-24 h-24 object-cover rounded-2xl">
-                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">Suggestion
-                                        {{ $i }}</div>
+                                    <div class="ml-3 text-2xs text-black group-hover:!text-white leading-tight">
+                                        {{ $x['category'] }}
+                                    </div>
                                 </div>
-                            @endfor
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script>
-            const MAX_HISTORY = 10;
 
-            function toggleExtension(event) {
-                event.stopPropagation();
-                const searchBar = document.getElementById('search-bar');
-                const extension = document.getElementById('search-extension');
-                const overlay = document.getElementById('overlay');
+        <!-- Library -->
+        <div class="flex items-center justify-center">
+            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
+                <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2" id="main-content">
+                </div>
+            </div>
+        </div>
+    </main>
 
-                if (extension.classList.contains('hidden')) {
-                    extension.classList.remove('hidden');
-                    overlay.classList.remove('hidden');
-                    overlay.classList.add('opacity-50');
-                } else {
-                    extension.classList.add('hidden');
-                    overlay.classList.add('hidden');
-                    overlay.classList.remove('opacity-50');
-                }
+    <script>
+
+        const MAX_HISTORY = 10;
+
+        function toggleExtension(event) 
+        {
+            event.stopPropagation();
+            const searchBar = document.getElementById('search-bar');
+            const extension = document.getElementById('search-extension');
+            const overlay = document.getElementById('overlay');
+
+            if (extension.classList.contains('hidden')) {
+                extension.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+                overlay.classList.add('opacity-50');
+            } else {
+                extension.classList.add('hidden');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('opacity-50');
             }
+        }
 
-            document.addEventListener('click', function(event) {
-                const searchBar = document.getElementById('search-bar');
-                const extension = document.getElementById('search-extension');
-                const overlay = document.getElementById('overlay');
+        document.addEventListener('click', function(event) {
+            const searchBar = document.getElementById('search-bar');
+            const extension = document.getElementById('search-extension');
+            const overlay = document.getElementById('overlay');
 
-                if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
-                    extension.classList.add('hidden');
-                    overlay.classList.add('hidden');
-                    overlay.classList.remove('opacity-50');
-                }
-            });
-
-            function toggleCloseIcon() {
-                const searchBar = document.getElementById('search-bar');
-                const closeIcon = document.getElementById('close-icon');
-
-                if (searchBar.value.trim() !== "") {
-                    closeIcon.classList.remove('hidden');
-                } else {
-                    closeIcon.classList.add('hidden');
-                }
+            if (!searchBar.contains(event.target) && !extension.contains(event.target)) {
+                extension.classList.add('hidden');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('opacity-50');
             }
+        });
 
-            function checkCloseIcon() {
-                const searchBar = document.getElementById('search-bar');
-                const closeIcon = document.getElementById('close-icon');
+        function toggleCloseIcon() {
+            const searchBar = document.getElementById('search-bar');
+            const closeIcon = document.getElementById('close-icon');
 
-                if (searchBar.value.trim() === "") {
-                    closeIcon.classList.add('hidden');
+            if (searchBar.value.trim() !== "") {
+                closeIcon.classList.remove('hidden');
+            } else {
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        function checkCloseIcon() {
+            const searchBar = document.getElementById('search-bar');
+            const closeIcon = document.getElementById('close-icon');
+
+            if (searchBar.value.trim() === "") {
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        function clearSearchBar() {
+            const searchBar = document.getElementById('search-bar');
+            searchBar.value = "";
+            checkCloseIcon();
+            searchBar.focus();
+        }
+
+        function addSearchHistory(term) {
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            if (!history.includes(term)) {
+                history.unshift(term);
+                if (history.length > MAX_HISTORY) {
+                    history.pop();
                 }
-            }
-
-            function clearSearchBar() {
-                const searchBar = document.getElementById('search-bar');
-                searchBar.value = "";
-                checkCloseIcon();
-                searchBar.focus();
-            }
-
-            function addSearchHistory(term) {
-                let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-                if (!history.includes(term)) {
-                    history.unshift(term);
-                    if (history.length > MAX_HISTORY) {
-                        history.pop();
-                    }
-                    localStorage.setItem('searchHistory', JSON.stringify(history));
-                    renderSearchHistory();
-                }
-            }
-
-            function removeSearchHistory(index) {
-                let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-                history.splice(index, 1);
                 localStorage.setItem('searchHistory', JSON.stringify(history));
                 renderSearchHistory();
             }
+        }
 
-            function renderSearchHistory() {
-                const historyContainer = document.getElementById('search-history');
-                const historyTitle = document.getElementById('search-history-title');
-                historyContainer.innerHTML = '';
-                let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+        function removeSearchHistory(index) {
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            history.splice(index, 1);
+            localStorage.setItem('searchHistory', JSON.stringify(history));
+            renderSearchHistory();
+        }
 
-                if (history.length > 0) {
-                    historyTitle.classList.remove('hidden');
-                    history.forEach((term, index) => {
-                        const historyItem = document.createElement('div');
-                        historyItem.className =
-                            'flex items-center justify-between text-sm text-white p-2 hover:bg-[#a00fff] bg-gray-400 rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal';
-                        historyItem.innerHTML = `
-                            <div class="ml-2 truncate">${term}</div>
-                            <i class="mr-2 text-xl fas fa-times text-white hover:!text-yellow-100 cursor-pointer" onclick="removeSearchHistory(${index}); event.stopPropagation();"></i>
-                        `;
-                        historyItem.onclick = () => {
-                            document.getElementById('search-bar').value = term;
-                            toggleCloseIcon();
-                        };
-                        historyContainer.appendChild(historyItem);
-                    });
-                } else {
-                    historyTitle.classList.add('hidden');
-                }
+        function renderSearchHistory() {
+            const historyContainer = document.getElementById('search-history');
+            const historyTitle = document.getElementById('search-history-title');
+            historyContainer.innerHTML = '';
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+            if (history.length > 0) {
+                historyTitle.classList.remove('hidden');
+                history.forEach((term, index) => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className =
+                        'flex items-center justify-between text-sm text-white p-2 hover:bg-[#a00fff] bg-gray-400 rounded-xl cursor-pointer truncate hover:overflow-visible hover:whitespace-normal';
+                    historyItem.innerHTML = `
+                    <div class="ml-2 truncate">${term}</div>
+                    <i class="mr-2 text-xl fas fa-times text-white hover:!text-yellow-100 cursor-pointer" onclick="removeSearchHistory(${index}); event.stopPropagation();"></i>
+                `;
+                    historyItem.onclick = () => {
+                        document.getElementById('search-bar').value = term;
+                        toggleCloseIcon();
+                    };
+                    historyContainer.appendChild(historyItem);
+                });
+            } else {
+                historyTitle.classList.add('hidden');
             }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+
+            let mainContent = document.getElementById('main-content');
+            let urlParams = (new URLSearchParams(window.location.search)).toString();
+            let currentPage = 1;
+            let isLoading = false;
+            let lastPage = false;
 
             function handleSearch() {
                 const searchBar = document.getElementById('search-bar');
                 const term = searchBar.value.trim();
                 if (term) {
                     addSearchHistory(term);
+                    currentPage = 1;
+                    lastPage = false;
+                    urlParams = `q=${term}`;
+                    history.pushState(null, '', `?${urlParams}`);
+                    loadPhotos(currentPage, urlParams, true);
                 }
             }
 
@@ -232,32 +246,13 @@
                     handleSearch();
                 }
             });
-        </script>
-        <!-- Library -->
-        <div class="flex items-center justify-center">
-            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
-                <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2" id="main-content">
-                </div>
-            </div>
-        </div>
-    </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mainContent = document.getElementById('main-content');
-            let currentPage = 1;
-            let isLoading = false;
-            let lastPage = false;
 
-            // const urlParams = new URLSearchParams(window.location.search);
-            // const category = urlParams.get('category');
-
-            function loadPhotos(page) {
+            function loadPhotos(page, urlParams, loadData = false) {
                 if (isLoading || lastPage) return;
-
                 isLoading = true;
-
-                fetch(`{{ route('indexApi') }}?page=${page}`, {
+                let apiUrl = `{{ route('indexApi') }}?page=${page}&${urlParams}`;
+                fetch(apiUrl, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -269,24 +264,25 @@
                         if (data.last_page == currentPage) {
                             lastPage = true;
                         }
-                        renderPhotos(data.data);
+                        renderPhotos(data.data, loadData);
                         currentPage++;
-                        isLoading = false;
                     })
                     .catch(error => {
                         console.error("Error loading photos:", error);
+                    })
+                    .finally(() => {
                         isLoading = false;
                     });
             }
 
-            function renderPhotos(photos) {
+            function renderPhotos(photos, loadData = false) {
                 let html = '';
                 photos.forEach(photo => {
                     html += `
                 <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
                     <a href="/image/${photo.id}">
                         <div class="aspect-square">
-                            <img src="${photo.url}" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
+                            <img src="${photo.url}" loading="lazy" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
                         </div>
                         <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <div class="mt-2 text-left px-2 py-1">
@@ -310,15 +306,19 @@
                 </div>
             `;
                 });
-                mainContent.insertAdjacentHTML('beforeend', html);
+                if (loadData) {
+                    mainContent.innerHTML = html;
+                } else {
+                    mainContent.insertAdjacentHTML('beforeend', html);
+                }
             }
 
-            loadPhotos(currentPage);
+            loadPhotos(currentPage, urlParams);
 
             window.addEventListener('scroll', debounce(() => {
                 if (!lastPage) {
                     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 850) {
-                        loadPhotos(currentPage);
+                        loadPhotos(currentPage, urlParams);
                     }
                 }
             }, 200));

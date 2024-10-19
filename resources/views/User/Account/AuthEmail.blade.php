@@ -43,16 +43,16 @@
       <div class="input_container">
         <label class="input_label" for="email_field">Mã xác minh</label>
         <img src="/assets/img/select.png" class="icon" alt="">
-        <input placeholder="123456" title="Inpit title" name="input-code" type="number" class="input_field" id="email_field" minlength="6" required>
+        <input placeholder="123456" title="Inpit title" name="input-code" type="number" class="input_field form-control @error('input-code') is-invalid @enderror" id="email_field" minlength="6" required>
       </div>
-      @if (Session::has("EmptyCode"))
-          <p style="color: red; width:100%">Vui lòng nhập mã xác nhận!</p>
+      @error('input-code')
+        <div class="text-danger">{{ $message }}</div>
+      @enderror
+      @if($errors->has("ExpiredCode"))
+          <p style="color: red; width:100%">Mã không đúng hoặc đã hết hình!</p>
       @endif
-      @if (Session::has("ExpiredCode"))
-          <p style="color: red; width:100%">Mã không đúng hoặc đã hết hạn!</p>
-      @endif
-      @if (Session::has("Manytimes"))
-          <p style="color: red; width:100%">Bạn đã thử quá nhiều lần! Vui lòng thử lại sau ít phút</p>
+      @if($errors->has("ManyTime"))
+          <p style="color: red; width:100%">{{$errors->first("ManyTime")}}</p>
       @endif
       <div id="message" style="width:100%"></div>
       <a class="note font-bold" id="sendEmailLink" href="#" href="{{ route("sendemail") }}" style="margin:0 0 0 60% ">Gửi lại mã?</a>

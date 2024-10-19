@@ -33,13 +33,13 @@
                     </div>
                     <!-- Image -->
                     <div class="col-span-1 md:col-span-4 row-span-1 aspect-square relative group">
-                        <img id="image-cover" src="{{ $image->url }}" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
+                        <img id="image-cover" src="{{ $image->url }}" loading="lazy" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
                         <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                             <i class="fas fa-upload text-gray-700 text-8xl"></i>
                         </label>
                         <input type="file" name="cover" id="cover" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror">
                         @error('cover')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="text-danger w-100">{{ $message }}</div>
                         @enderror
                     </div>
                     <!-- Data -->
@@ -48,9 +48,9 @@
                             <label for="album" class="block text-xl font-medium mb-1">Album</label>
                             <div class="relative">
                                 <select id="album" name="album" class="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm pr-10" required>
-                                    <option value="{{ $album->id }}" selected>{{ $album->title }}</option>
+                                    <option value="{{ $image->album->id }}" selected>{{ $image->album->title }}</option>
                                     @foreach ($allAlbum as $item)
-                                        @if ($item->id != $album->id)
+                                        @if ($item->id != $image->album->id)
                                             <option value="{{ $item->id }}">{{ $item->title }}</option>
                                         @endif
                                     @endforeach
@@ -66,21 +66,21 @@
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
                             <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('title') is-invalid @enderror" value="{{ $image->title }}">
                             @error('title')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger w-100">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mb-4">
                             <label for="description" class="block text-xl font-medium mb-1">Mô Tả</label>
                             <textarea id="description" name="description" rows="1" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('description') is-invalid @enderror">{{ $image->description }}</textarea>
                             @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger w-100">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mb-4">
                             <label for="description" class="block text-xl font-medium mb-1">Thể loại ảnh</label>
                             <input name="categories" class="form-control @error('categories') is-invalid @enderror" id="categories" value="" placeholder="Lựa chọn các thể loại cho hình ảnh">
                             @error('categories')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger w-100">{{ $message }}</div>
                             @enderror
                         </div>
                         <script>
@@ -109,7 +109,7 @@
                             <button type="submit" id="edit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Cập nhật</button>
                             <a href="" id="delete" style="cursor:pointer" class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ml-5">Xóa ảnh</a>
                         </div>
-                        @if(Session::has('Manytimes'))
+                        @if($errors->has("ManyTime"))
                             <script>
                                 Swal.fire({ title: 'Thông báo', text: "Bạn chỉ có thể cập nhật nội dung 2 lần trong 1 tuần.", icon: 'warning', showCancelButton: false,
                                 });

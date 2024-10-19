@@ -3,6 +3,10 @@
 
     <?php
     $user = auth()->user();
+    if ($user == null) {
+        $cookie = request()->cookie('token_account');
+        $user = DB::select('SELECT * FROM users WHERE email = ?', [$cookie])[0];
+    }
     $path = request()->path();
     $segments = explode('/', $path);
     $tab = end($segments);
@@ -55,7 +59,8 @@
                     class="flex flex-col items-center lg:flex-row lg:items-center lg:justify-center space-y-6 lg:space-y-0 lg:space-x-6">
                     <!-- Avatar -->
                     <div class="relative text-center">
-                        <img class="rounded-full w-40 h-40 object-cover" src="{{ $user->avatar_url }}" alt="User Avatar">
+                        <img class="rounded-full w-40 h-40 object-cover" src="{{ $user->avatar_url }}" loading="lazy"
+                            alt="User Avatar">
                         <div
                             class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 hover:!opacity-100 transition-opacity duration-300">
                             <a href="{{ route('showaccount') }}"
@@ -168,7 +173,7 @@
                             <div class="relative group">
                                 <a href="{{ route('showimage', ['id' => $x->id]) }}">
                                     <div class="aspect-square">
-                                        <img src="{{ $x->url }}" alt="Image 1"
+                                        <img src="{{ $x->url }}" loading="lazy" alt="Image 1"
                                             class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15 rounded-2xl">
                                     </div>
                                     <div
@@ -242,60 +247,20 @@
                     <button id="uploaded" onclick="ActivateTab('uploaded')"
                         class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
                         Ảnh tải lên
-                        </but>
-                        <button id="saved" onclick="ActivateTab('saved')"
-                            class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
-                            Ảnh đã lưu
-                        </button>
-                        <button id="created" onclick="ActivateTab('created')"
-                            class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
-                            Ảnh AI
-                        </button>
+                    </button>
+                    <button id="saved" onclick="ActivateTab('saved')"
+                        class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
+                        Ảnh đã lưu
+                    </button>
+                    <button id="created" onclick="ActivateTab('created')"
+                        class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
+                        Ảnh AI
+                    </button>
+
                 </div>
             </div>
         </div>
         <script>
-            // function ChangeApperance(id)
-            // {
-            //     document.getElementById('created').classList.remove('font-bold', 'text-black');
-            //     document.getElementById('saved').classList.remove('font-bold', 'text-black');
-            //     document.getElementById('created').style.borderTop = '';
-            //     document.getElementById('saved').style.borderTop = '';
-
-            //     const active_tab = document.getElementById(id);
-            //     active_tab.classList.add('font-bold', 'text-black');
-            //     active_tab.style.borderTop = '4px solid black';
-            //     active_tab.style.marginTop = '-4px';
-
-            // }
-
-            // function ActivateTab(id)
-            // {
-            //     ChangeApperance(id);
-
-            //     document.getElementById('saved-content').style.display = id === 'saved' ? 'block' : 'none';
-            //     document.getElementById('created-content').style.display = id === 'created' ? 'block' : 'none';
-
-            //     document.getElementById('albums-section_board').style.display = id === 'saved' ? 'block' : 'none';
-            //     document.getElementById('gallery-section_board').style.display = id === 'saved' ? 'block' : 'none';
-
-            //     const new_path = `/board/${id}`;
-            //     history.pushState(null, '', new_path);
-
-            //     localStorage.setItem('activeTab', id);
-            // }
-
-            // document.addEventListener('DOMContentLoaded', function() {
-            //     const current_path = window.location.pathname;
-            //     const savedTab = localStorage.getItem('activeTab');
-
-            //     if (current_path.endsWith('/created') || savedTab === 'created') {
-            //         ActivateTab('created');
-            //     } else {
-            //         ActivateTab('saved');
-            //     }
-            // });
-
             function ChangeApperance(id) {
                 const tabs = ['uploaded', 'saved', 'created'];
 
@@ -313,6 +278,9 @@
             }
 
             function ActivateTab(id) {
+                const new_path = `/board/${id}`;
+                const current_path = window.location.pathname;
+
                 ChangeApperance(id);
                 const contents = ['uploaded-content', 'saved-content', 'created-content'];
 
@@ -324,11 +292,6 @@
                         content.style.display = 'none';
                     }
                 });
-
-                const new_path = `/board/${id}`;
-                history.pushState(null, '', new_path);
-
-                localStorage.setItem('activeTab', id);
             }
 
             document.addEventListener('DOMContentLoaded', function() {
@@ -390,7 +353,7 @@
                                 <div class="relative group">
                                     <a href="{{ route('showalbum', ['id' => $x->id]) }}">
                                         <div class="aspect-square">
-                                            <img src="{{ $x->cover_image }}" alt="Image 1"
+                                            <img src="{{ $x->cover_image }}" loading="lazy" alt="Image 1"
                                                 class="w-full h-full object-cover rounded-2xl border-4 border-[#a000ff]">
                                         </div>
                                         <div class="mt-2 text-left group-hover:text-[#a000ff]">
@@ -436,8 +399,78 @@
                         </div>
                     @else --}}
                     <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
-                        id="main-content">
+                        id="photo-container">
+
                     </div>
+
+                    <div id="loading" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
+
+                    <script>
+                        var page = 1;
+                        var isLoading = false;
+
+                        function loadPhotosNormal(initialLoad = false) {
+                            if (isLoading) return;
+                            isLoading = true;
+
+                            document.getElementById('loading').style.display = 'block';
+
+                            fetch(`/api/board?page=${page}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const photoContainer = document.getElementById('photo-container');
+
+                                    data.photos.forEach(photo => {
+                                        const photoHTML = `
+                                            <div class="relative group">
+                                                <a href="/showimage/${photo.id}">
+                                                    <div class="aspect-square">
+                                                        <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                                    </div>
+                                                    <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                                        <div class="mt-2 text-left px-2 py-1">
+                                                            <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
+                                                            <div class="text-sm text-gray-500 h-20 overflow-hidden">${photo.description}</div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>`;
+                                        photoContainer.insertAdjacentHTML('beforeend', photoHTML);
+                                    });
+
+                                    isLoading = false;
+                                    document.getElementById('loading').style.display = 'none';
+
+                                    if (data.hasMorePages) {
+                                        page++;
+                                    } else {
+                                        window.removeEventListener('scroll', scrollHandlerNormal);
+                                    }
+
+                                    if (initialLoad && data.photos.length === 0) {
+                                        document.getElementById('loading').innerText = 'Không có ảnh nào để hiển thị.';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Lỗi khi tải ảnh:', error);
+                                    isLoading = false;
+                                    document.getElementById('loading').style.display = 'none';
+                                });
+                        }
+
+                        window.addEventListener('load', () => {
+                            loadPhotosNormal(true);
+                        });
+
+                        function scrollHandlerNormal() {
+                            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                                loadPhotosNormal();
+                            }
+                        }
+
+                        window.addEventListener('scroll', scrollHandlerNormal);
+                    </script>
+
                     {{-- @endif --}}
                 </div>
             </div>
@@ -446,38 +479,18 @@
         <div id="saved-content" class="tab-content" style="display: none;">
         </div>
         <!-- Created Content -->
-        <!-- <div id="created-content" style="display: {{ $tab == 'created' ? 'block' : 'none' }};"> -->
         <div id="created-content" class="tab-content" style="display: none;">
             <div class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                     <h2 class="font-bold text-4xl text-left">Lịch sử tạo ảnh AI</h2>
                     <p class="text-gray-500 text-2xs text-left mt-2">Lưu ý chúng tôi chỉ lưu ảnh được tạo ra bởi AI trong
                         10 ngày!</p>
-                    @if ($imagesAI->isNotEmpty())
-                        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                            @foreach ($imagesAI as $image)
-                                <div class="relative group">
-                                    <div class="aspect-square">
-                                        <img src="{{ $image['url'] }}" alt="AI Generated Image"
-                                            class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-50"
-                                            style="cursor: pointer;" onclick="openImageModal('{{ $image['url'] }}')">
-                                    </div>
-                                    <div
-                                        class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                        <div class="flex space-x-2">
-                                            <a href="#"
-                                                class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                        <div class="mt-2">
-                            {{ $imagesAI->links('vendor.pagination.simple-tailwind') }}
-                        </div>
-                    @else
+                    {{-- @if ($imagesAI->isNotEmpty()) --}}
+                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="AI-content">
+
+                    </div>
+                    <div id="loading_AI_Image" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
+                    {{-- @else
                         <div class="mt-2 grid gap-2">
                             <div style="display:flex;margin-top:2%">
                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
@@ -490,109 +503,91 @@
                                     nào. Hãy tạo truy cập tới sáng tạo và tạo ảnh ngay!</h3>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
+                    <script>
+                        var pageAI = 1;
+                        var isLoadingAI = false;
+
+                        function loadPhotosAI(initialLoad = false) {
+                            if (isLoadingAI) return;
+                            isLoadingAI = true;
+
+                            document.getElementById('loading_AI_Image').style.display = 'block';
+
+                            fetch(`/api/AI_Image/board?pageAI=${pageAI}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const photoContainer = document.getElementById('AI-content');
+
+                                    data.photos.forEach(photo => {
+                                        const photoHTML = `
+                                        <div class="relative group">
+                                            <div class="aspect-square">
+                                                <img src="${photo.url}" loading="lazy" alt="AI Generated Image"
+                                                    class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-50"
+                                                    style="cursor: pointer;" onclick="openImageModal('${photo.url}')">
+                                            </div>
+                                            <div
+                                                class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                                <div class="flex space-x-2">
+                                                    <a href="#"
+                                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                        <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                                        photoContainer.insertAdjacentHTML('beforeend', photoHTML);
+                                    });
+
+                                    isLoadingAI = false;
+                                    document.getElementById('loading_AI_Image').style.display = 'none';
+
+                                    if (data.hasMorePages) {
+                                        pageAI++;
+                                    } else {
+                                        window.removeEventListener('scroll', scrollHandlerAI);
+                                    }
+
+                                    if (initialLoad && data.photos.length === 0) {
+                                        document.getElementById('loading_AI_Image').innerText = 'Không có ảnh nào để hiển thị.';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Lỗi khi tải ảnh AI:', error);
+                                    isLoadingAI = false;
+                                    document.getElementById('loading_AI_Image').style.display = 'none';
+                                });
+                        }
+
+                        window.addEventListener('load', () => {
+                            loadPhotosAI(true);
+                        });
+
+                        function scrollHandlerAI() {
+                            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                                loadPhotosAI();
+                            }
+                        }
+
+                        window.addEventListener('scroll', scrollHandlerAI);
+                    </script>
                 </div>
             </div>
         </div>
         <!-- Modal for Image -->
         <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50"
             onclick="closeImageModal()">
-            <div class="relative" onclick="event.stopPropagation();" style="margin-top: 8%; width:30%;">
+            <div class="relative" onclick="event.stopPropagation();" style="margin-top: 1%; width:30%;">
                 <button onclick="closeImageModal()" class="absolute right-0 top-0 text-white text-2xl p-2"
                     style="transform: translate(50%, -50%);">
-                    <p class="text-xl bg-black text-white p-2 rounded-full">X</p>
+                    <p class="text-xl bg-white font-bold text-black p-2 rounded-full">X</p>
                 </button>
                 <img id="modal-image" src="" alt="Modal Image">
             </div>
         </div>
+        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="main-content"></div>
         <script>
-            const mainContent = document.getElementById('main-content');
-            let currentPage = 1;
-            let isLoading = false;
-            let lastPage = false;
-
-            function loadPhotos(page) {
-                if (isLoading || lastPage) return;
-                isLoading = true;
-                fetch(`{{ url('/') }}/api/board/uploaded?page=${page}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(_data => {
-                        var data = _data.photos;
-
-                        if (data.last_page == currentPage) {
-                            lastPage = true;
-                        }
-                        renderPhotos(data.data);
-                        currentPage++;
-                        isLoading = false;
-                    })
-                    .catch(error => {
-                        console.error("Error loading photos:", error);
-                        isLoading = false;
-                    });
-            }
-            loadPhotos(currentPage);
-
-            function renderPhotos(photos) {
-                let html = '';
-                photos.forEach(photo => {
-                    html += `
-                        <div class="relative group">
-                            <a href="/image/${photo.id}">
-                                <div class="aspect-square">
-                                    <img src="${photo.url}" alt="Image 1"
-                                        class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                </div>
-                                <div
-                                    class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                    <div class="mt-2 text-left px-2 py-1">
-                                        <div class="font-semibold text-lg truncate group-hover:text-[#000000]">
-                                            ${photo.title}</div>
-                                        <div class="text-sm text-gray-500 h-20 overflow-hidden">
-                                            ${photo.description}</div>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                                class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                <div class="flex space-x-2">
-                                    ${photo.is_feature ? `
-                                                                <a href="/featureimage/${photo.id}"
-                                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                                    <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
-                                                                </a>
-                                                            ` : `
-                                                                <a href="/featureimage/${photo.id}"
-                                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                                    <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                                                </a>
-                                                            `}
-                                    <a href="#"
-                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-            `;
-                });
-                mainContent.insertAdjacentHTML('beforeend', html);
-            }
-
-            window.addEventListener('scroll', debounce(() => {
-                if (!lastPage) {
-                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 750) {
-                        loadPhotos(currentPage);
-                    }
-                };
-            }, 200));
-
             function openImageModal(imageUrl) {
                 document.getElementById('modal-image').src = imageUrl;
                 document.getElementById('image-modal').classList.remove('hidden');

@@ -2,7 +2,7 @@
 @section('Body')
 <title>RTX-AI: Sáng tạo hình ảnh</title>
 
-<form id="G3" method="POST" enctype="multipart/form-data" action="{{ route("createg3") }}">
+<form id="G5" method="POST" enctype="multipart/form-data" action="{{ route("createg5") }}">
     @csrf
     <div class="bg-white">
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-16">
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="col-span-full">
-                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Ảnh chính của bạn:</label>
+                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Ảnh của bạn:</label>
                         <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 drag-image">
                             <div class="text-center @error('categories') is-invalid @enderror">
                                 <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="icon-image">
@@ -39,7 +39,7 @@
                         @error('input')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <input type="file" name = "input" id="input_image" required hidden>
+                        <input type="file" name="input" id="input_image" required hidden>
                     </div>
                         
                     <script>
@@ -114,122 +114,7 @@
                         }
                     </script>
 
-                    <div class="col-span-full">
-                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Ảnh bạn muốn theo phong cách:</label>
-                        <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 drag-image2">
-                            <div class="text-center @error('categories') is-invalid @enderror">
-                                <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="icon-image">
-                                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
-                                </svg>
-                                <div class="mt-4 flex text-sm leading-6 text-gray-600">
-                                    <div>
-                                        <h6 class="h6_image2">Kéo thả ảnh vào đây</h6>
-                                        <span>Hoặc</span>
-                                        <button style="font-weight:bold;color:#631CB3" class="button_image2">Chọn ảnh</button>
-                                        <input type="file" class="input_image2" hidden>
-                                    </div>
-                                </div>
-                                <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF</p>
-                            </div>
-                        </div>
-                        @error('input2')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <input type="file" name = "input2" id="input_image2" required hidden>
-                    </div>
-                        
-                    <script>
-                        const dropArea2 = document.querySelector(".drag-image2"),
-                        dragText2 = document.querySelector(".h6_image2"),
-                        button2 = document.querySelector(".button_image2"),
-                        input2 = document.querySelector(".input_image2");
-                        let file2; 
-
-                        button2.onclick = ()=>{
-                            input2.click(); 
-                            }
-
-                        input2.addEventListener("change", function(){
-                            
-                            file2 = this.files[0];
-                            dropArea2.classList.add("active");
-
-                            var fileInput2 = document.getElementById('input_image2');
-                            var fileList2 = new DataTransfer();
-                            fileList2.items.add(this.files[0]);
-                            fileInput2.files = fileList2.files;
-
-                            viewfile2();
-                            });
-
-                        dropArea2.addEventListener("dragover", (event)=>{
-                            event.preventDefault();
-                            dropArea2.classList.add("active");
-                            dragText2.textContent = "Thả ảnh ra trong đây";
-                            });
-
-
-                        dropArea2.addEventListener("dragleave", ()=>{
-                            dropArea2.classList.remove("active");
-                            dragText2.textContent = "Kéo thả ảnh vào đây";
-                            }); 
-
-                        dropArea2.addEventListener("drop", (event)=>{                         
-                            event.preventDefault(); 
-                            file2 = event.dataTransfer.files[0];
-
-                            PutIntoInput2()
-                            viewfile2(); 
-                            });
-
-                        function PutIntoInput2()
-                        {
-                            var fileInput = document.getElementById('input_image2');
-                            var fileList = new DataTransfer();
-                            fileList.items.add(event.dataTransfer.files[0]);
-                            fileInput.files = fileList.files;
-                        }
-                        function viewfile2()
-                        {
-                            let fileType = file2.type; 
-                            let validExtensions = ["image/jpeg", "image/jpg", "image/png"];
-                            if(validExtensions.includes(fileType)){ 
-                                let fileReader = new FileReader(); 
-                                fileReader.onload = ()=>{
-                                let fileURL = fileReader.result; 
-                                let imgTag = `<img src="${fileURL}" alt="image" style="width: 25%;margin:auto;margin-top:-2%;margin-bottom:2%;border-radius:10px">`;
-                                dropArea2.innerHTML = imgTag; 
-                                }
-                                fileReader.readAsDataURL(file2);                            
-
-                            }else{
-                                alert("This is not an Image File!");
-                                dropArea2.classList.remove("active");
-                                dragText2.textContent = "Lỗi không phải là ảnh";
-                            }
-                        }
-                    </script>
-
-                    <div class="col-span-full" style="margin-bottom:2%">
-                        <label for="about" class="block text-sm font-medium leading-6 text-gray-900">Mô tả của bạn:</label>
-                        <div class="mt-2">
-                        <textarea id="about" name="prompt" rows="3" class="p-1 block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required></textarea>
-                        </div>
-                        <p class="mt-3 text-sm leading-6 text-gray-600">Vui lòng không nhập từ khóa nhạy cảm!</p>
-                        <p class="mt-3 text-sm leading-6 text-gray-400">Chú ý việc mô tả của bạn rất quan trọng. Nếu bạn muốn tạo ra hình ảnh hoạt hình hay 3D hãy đảm bảo trong mô tả của bạn có từ: Anime, 3D...!</p>
-                    </div>
-            
                 <div class="border-b border-gray-900/10 pb-12">
-                    <div class="sm:col-span-3" style="margin-bottom:2%">
-                        <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Thể loại ảnh: </label>
-                        <div class="mt-2">
-                        <select id="country" name="model" autocomplete="country-name" class="block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                            <option>Ảnh hoạt hình</option>
-                            <option>Ảnh hình 3D Chibi</option>
-                            <option>Ảnh hình Realistic</option>
-                        </select>
-                        </div>
-                    </div>    
 
                     <div class="sm:col-span-3" style="margin-bottom:2%">
                         <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Thông số Seed:</label>
@@ -276,25 +161,12 @@
                     event.preventDefault();
 
                     const fileInput = document.getElementById('input_image');
-                    const fileInput2 = document.getElementById('input_image2');
-                    const promptValue = document.getElementById('about').value.trim();
                     const seedValue = document.getElementById('first-name').value.trim();
                     
                     if (!fileInput.files.length) {
                         alert('Vui lòng tải ảnh của bạn lên!');
                         return;
-                    }
-
-                    if (!fileInput2.files.length) {
-                        alert('Vui lòng tải đầy đủ ảnh mà bạn muốn theo phong cách!');
-                        return;
-                    }
-
-                    if (!promptValue) {
-                        alert('Vui lòng nhập mô tả của bạn!');
-                        return;
-                    }
-                    
+                    }                    
                     if (!seedValue) {
                         alert('Vui lòng nhập thông số Seed!');
                         return;
@@ -305,7 +177,7 @@
                     document.getElementById('create').style.cursor = 'not-allowed';
                     document.getElementById('create').style.backgroundColor = '#6B6B6B';
                     document.getElementById('loading-image').style.display = 'block';
-                                     
+                    
                     setTimeout(() => {
                         const progressBar = document.getElementById('progress-bar');
                         const progressText = document.getElementById('progress-text');
@@ -313,8 +185,8 @@
                         progressText.innerText = '50%';
                     }, 2000);
 
-                    const formData = new FormData(document.getElementById('G3'));
-                    fetch("{{ route('createg3') }}", {
+                    const formData = new FormData(document.getElementById('G5'));
+                    fetch("{{ route('createg5') }}", {
                         method: 'POST',
                         body: formData,
                         headers: {
