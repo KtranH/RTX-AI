@@ -318,8 +318,7 @@ $count = count($listUserLiked);
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!-- Reply Container -->
-                                                        <div class="reply-container space-y-4 mt-4 hidden pl-10"></div>
+
                                                     </div>
                                                 `;
                                                 $('#commentList').append(newCommentHtml);
@@ -376,8 +375,6 @@ $count = count($listUserLiked);
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!-- Reply Container -->
-                                                        <div class="reply-container space-y-4 mt-4 hidden pl-10"></div>
                                                     </div>
                                             `;
                                             $('#commentList').prepend(newCommentHtml);
