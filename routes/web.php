@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
 use App\Http\Controllers\User\Account;
@@ -10,7 +9,6 @@ use App\Http\Controllers\User\WorkFlow\G2;
 use App\Http\Controllers\User\WorkFlow\G3;
 use App\Http\Middleware\CheckCookieLogin;
 use App\Http\Middleware\ThrottleRequests;
-use App\Models\WorkFlow;
 use App\Http\Controllers\Board\Board;
 use App\Http\Controllers\Image\Image;
 use App\Http\Controllers\Creativity\Creativity;
@@ -178,6 +176,15 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    //----------------------------------------------------------------------------LOAD COMMENT, ADD COMMENT, EDIT COMMENT AND DELETE COMMENT--------------------------------------------------------------------------------------------
+
+    //Add comment
+    Route::post('/addcomment/{idImage}', [Image::class, 'AddCommentInImage'])->name("addcomment");
+    
+    //Load more comment
+    Route::get('/loadmorecomment/{idImage}', [Image::class, 'ShowCommentAPI'])->name("loadmorecomment");
+
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
 
     //Access account page

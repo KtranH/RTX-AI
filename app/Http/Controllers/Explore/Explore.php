@@ -13,6 +13,7 @@ class Explore extends Controller
     public function ShowExplore(Request $request)
     {
         $categories = Category::take(18)->get();
+        
         $suggestCategories = DB::table("category_photo")->select("photo_id", "category_id")->inRandomOrder()->limit(6)->get();
         for ($i = 0; $i < 6; $i++) {
             $suggest[$i]["category"] = Category::find($suggestCategories[$i]->category_id)->name;

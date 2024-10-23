@@ -7,6 +7,7 @@ use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Photo;
 use App\Models\User;
@@ -15,7 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class Image extends Controller
@@ -32,10 +32,13 @@ class Image extends Controller
     public function ShowImage($id)
     {
         $image = Photo::findOrFail($id);
+        $countComment = Comment::where("photo_id", $id)->count();
+
         $photos = Photo::query()
             ->limit(4)
             ->inRandomOrder()
             ->get();
+
         $idUser = Auth::user()->id;
         $checkUserNow = User::findOrFail($idUser);
 
@@ -43,9 +46,28 @@ class Image extends Controller
         $listUserLiked = Like::where("photo_id", $id)->get(); 
 
         $checkUserLikedImage = $this->checkLike($id,$idUser);
-        return view('User.Image.Image', compact('image', 'photos', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'checkUserNow'));
+        return view('User.Image.Image', compact('image', 'photos', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'checkUserNow', 'countComment'));
     }
+    public function ShowCommentAPI(Request $request, $idImage)
+    {
+        $comments = Comment::with('user') 
+        ->where('photo_id', $idImage)
+        ->orderBy('created_at', 'desc')
+        ->skip($request->skip)
+        ->take(3)
+        ->get();
+        
+        $comments->map(function($comment) {
+            $comment->time_ago = $comment->created_at->diffForHumans(['locale' => 'vi']);
+            return $comment;
+        });
 
+        return response()->json([
+        'success' => true,
+        'comments' => $comments
+        ]);
+    }
+    
     public function CreateImage($id)
     {
         $Category = Category::all();
@@ -187,4 +209,35 @@ class Image extends Controller
         return redirect()->back();
        }
     }
+    public function AddCommentInImage($idImage, Request $request)
+    {
+        $request->validate([
+            'comment' => 'required|max:100',
+        ], [
+            'comment.required' => 'Vui lòng để lại bình luận trước khi hoàn thành',
+            'comment.max' => 'Bình luận không quá 100 kí tự',
+        ]);
+    
+        try {
+            $comment = Comment::create([
+                "user_id" => Auth::user()->id,
+                "photo_id" => $idImage,
+                "content" => $request->input('comment'),
+                "created_at" => now(),
+                "updated_at" => now(),
+            ]);
+            return response()->json([
+                'success' => true,
+                'comment' => [
+                    'user_name' => Auth::user()->username,
+                    'user_avatar' => Auth::user()->avatar_url,
+                    'content' => $request->input('comment'),
+                    'user_id' => Auth::user()->id,
+                    'created_at' => Carbon::parse($comment->created_at)->diffForHumans(['locale' => 'vi'])
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false ], 500);
+        }
+    }    
 }
