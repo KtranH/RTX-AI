@@ -312,8 +312,8 @@ $count = count($listUserLiked);
                                                                     <p class="font-semibold hover:text-indigo-700 hover:font-semibold">${comment.time_ago}</p>
                                                                     <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold">Phản hồi</button>
                                                                     ${(comment.user_id == '{{ Auth::user()->id }}') ?
-                                                                        `<button class="hover:text-indigo-700 font-bold hover:font-semibold">Chỉnh sửa</button>
-                                                                        <button class="hover:text-indigo-700 font-bold hover:font-semibold">Xóa</button>`
+                                                                        `<button class="hover:text-indigo-700 font-bold hover:font-semibold update-button" data-comment-id="${comment.id}">Chỉnh sửa</button>
+                                                                         <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
                                                                         : ''}
                                                                 </div>
                                                             </div>
@@ -336,6 +336,57 @@ $count = count($listUserLiked);
 
                             $('#loadMoreButton').on('click', function() {
                                 loadComments();
+                            });
+                            $(document).on('click', '.delete-button', function() {
+                                var commentItem = $(this).closest('.comment-item');
+                                var commentId = $(this).data('comment-id');
+                                
+                                Swal.fire({
+                                    title: 'Bạn có chắc chắn?',
+                                    text: "Bạn không thể hoàn tác hành động này!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Có, xóa nó!',
+                                    cancelButtonText: 'Hủy'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $.ajax({
+                                            url: `/deletecomment/${commentId}`,
+                                            type: 'DELETE',
+                                            data: {
+                                                _token: '{{ csrf_token() }}'
+                                            },
+                                            success: function(response) {
+                                                if (response.success) {
+                                                    Swal.fire(
+                                                        'Đã xóa!',
+                                                        'Bình luận đã được xóa.',
+                                                        'success'
+                                                    );
+                                                    commentItem.remove();
+                                                    var currentCount = parseInt($('#commentCount').text().match(/\d+/)[0]); 
+                                                    $('#commentCount').text(`Bình luận (${currentCount - 1})`);
+                                                    loadComments();
+                                                } else {
+                                                    Swal.fire(
+                                                        'Lỗi!',
+                                                        'Có lỗi xảy ra khi xóa bình luận.',
+                                                        'error'
+                                                    );
+                                                }
+                                            },
+                                            error: function() {
+                                                Swal.fire(
+                                                    'Lỗi!',
+                                                    'Có lỗi xảy ra khi xóa bình luận.',
+                                                    'error'
+                                                );
+                                            }
+                                        });
+                                    }
+                                });
                             });
                             $('#commentForm').on('submit', function(e) {
                                 e.preventDefault();
@@ -362,11 +413,13 @@ $count = count($listUserLiked);
                                                     <div class="comment-item space-y-2 relative">
                                                         <div class="flex items-start space-x-4">
                                                             <img src="${response.comment.user_avatar}" alt="Avatar" class="w-10 h-10 rounded-full">
-                                                            <div class="bg-gray-100 p-2 rounded-lg w-full">
-                                                                <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${response.comment.user_name}</div>
-                                                                <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal">${response.comment.content}</div>
+                                                            <div class="flex-grow">
+                                                                <div class="bg-gray-100 p-2 rounded-lg w-full">
+                                                                    <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${response.comment.user_name}</div>
+                                                                    <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal">${response.comment.content}</div>
+                                                                </div>
                                                                 <div class="flex items-center space-x-4 text-sm text-gray-500">
-                                                                <p class="hover:text-indigo-700 hover:font-semibold">${response.comment.created_at}</p>
+                                                                <p class="font-semibold hover:text-indigo-700 hover:font-semibold">${response.comment.created_at}</p>
                                                                     <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold">Phản hồi</button>
                                                                     ${(response.comment.user_id == '{{ Auth::user()->id }}') ?
                                                                     `<button class="hover:text-indigo-700 font-bold hover:font-semibold">Chỉnh sửa</button>

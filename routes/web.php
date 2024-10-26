@@ -184,6 +184,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Load more comment
     Route::get('/loadmorecomment/{idImage}', [Image::class, 'ShowCommentAPI'])->name("loadmorecomment");
 
+    //Delete comment
+    Route::delete('/deletecomment/{id}', [Image::class, 'DeleteComment'])->name("deletecomment");
+
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
 

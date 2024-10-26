@@ -240,4 +240,13 @@ class Image extends Controller
             return response()->json(['success' => false ], 500);
         }
     }    
+    public function DeleteComment($idComment)
+    {
+        $comment = Comment::findOrFail($idComment);
+        $comment->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Xóa thành công'
+        ]);
+    }
 }
