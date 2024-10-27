@@ -7,6 +7,7 @@ use App\Mail\MyTestMail;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -117,6 +118,7 @@ class SendEmail extends Controller
             ]);
 
             $cookie = Cookie::make("token_account", $email, 3600 * 24 * 30);
+            Auth::attempt(["email" => $email, "password" => $pass], true);
             return redirect()->route("showhome")->withCookie($cookie);
         } else {
             $errors = [];
