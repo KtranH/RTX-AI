@@ -29,6 +29,7 @@
 <body style="display:flex;flex-wrap:wrap">
   <form class="form_container" style="margin:5% auto auto auto;" novalidate method="POST" action="{{ route("checkcodetochangepass") }}">
     @csrf
+    @method('PATCH')
     <div class="logo_container">
       <a href="{{route("showhome")}}">
         <img src="/assets/img/email.gif" alt="" style="with:100%">

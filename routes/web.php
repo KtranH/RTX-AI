@@ -81,13 +81,13 @@ Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode")->m
 Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass")->middleware(VerifyTurnstileCaptcha::class);
 
 //Send email to password
-Route::post('/sendemail&changepass', [Account::class, 'SendEmailResetPass'])->name("sendemailresetpass");
+Route::get('/sendemail&changepass', [Account::class, 'SendEmailResetPass'])->name("sendemailresetpass");
 
 //Input code to change password
 Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass")->middleware(VerifyTurnstileCaptcha::class);
 
 //Check code to change password
-Route::post('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
+Route::patch('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -144,10 +144,10 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
 
     //Update album
-    Route::post('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
+    Route::patch('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
  
     //Delete album
-    Route::get('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
+    Route::delete('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
 
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -162,14 +162,17 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Access image page
     Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
 
+    //Access edit image page
+    Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
+
     //Update image
-    Route::post('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateimage")->middleware(LimitContentUpdate::class);
+    Route::patch('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateimage")->middleware(LimitContentUpdate::class);
 
     //Delete image
-    Route::get('/deleteimage/{id}', [Image::class, 'DeleteImage'])->name("deleteimage");
+    Route::delete('/deleteimage/{id}', [Image::class, 'DeleteImage'])->name("deleteimage");
 
     //Like image
-    Route::get('/likeimage/{id}', [Image::class, 'LikeImage'])->name("likeimage");
+    Route::post('/likeimage/{id}', [Image::class, 'LikeImage'])->name("likeimage");
 
     //Set feature image
     Route::get('/featureimage/{id}', [Board::class, 'FeatureImage'])->name("featureimage");
@@ -199,11 +202,8 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Change passsword
     Route::get('/changepassword', [Account::class, 'ChangePass'])->name("changepass");
 
-    //Access image page
-    Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
-
     //Update account
-    Route::post('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
+    Route::put('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

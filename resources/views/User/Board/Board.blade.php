@@ -423,7 +423,7 @@
                                     data.photos.forEach(photo => {
                                         const photoHTML = `
                                             <div class="relative group">
-                                                <a href="/showimage/${photo.id}">
+                                                <a href="/image/${photo.id}">
                                                     <div class="aspect-square">
                                                         <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                                     </div>

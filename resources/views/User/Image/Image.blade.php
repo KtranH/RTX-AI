@@ -124,7 +124,7 @@ $count = count($listUserLiked);
                             
                                         $.ajax({
                                             url: '{{ route('likeimage', ['id' => '__id__']) }}'.replace('__id__', imageId), 
-                                            type: 'GET',
+                                            type: 'POST',
                                             success: function(response) {
                                                 var icon = $('.like-button i');
                                                 if (icon.hasClass('text-red-500')) {
@@ -179,7 +179,6 @@ $count = count($listUserLiked);
                                     <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                         <i class="fas fa-star text-gray-700 text-xl hover:text-indigo-700"></i>
                                     </a>
-
                                 @endif
                                 <a href="{{ route('editimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                     <i class="fas fa-edit text-gray-700 text-xl hover:text-indigo-700"></i>
@@ -187,6 +186,42 @@ $count = count($listUserLiked);
                                 <a href="{{ route('deleteimage', $image->id) }}" id="delete" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                     <i class="fas fa-trash text-gray-700 text-xl hover:text-indigo-700"></i>
                                 </a>
+                                <script>
+                                    document.getElementById('delete').addEventListener('click', function(e)
+                                    {
+                                        e.preventDefault();
+                                        Swal.fire({
+                                            title: 'Chắc chắn xóa ảnh?',
+                                            text: "Ảnh sẽ bị xóa và không thể khôi phần một!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Tiếp tục',
+                                            cancelButtonText: 'Hủy',
+                                            reverseButtons: true
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                Swal.fire(
+                                                    'Đã xóa!',
+                                                    'Ảnh không bị xóa.',
+                                                    'success'
+                                                );
+                                                setTimeout(() => {
+                                                Swal.close();
+                                                }, 2000);
+                                                fetch('{{ route("deleteimage", $image->id) }}', {
+                                                method: 'DELETE',
+                                                headers: {
+                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                                }
+                                                })
+                                                .then()
+                                                {
+                                                    window.location.href = "{{ route('showexplore') }}";
+                                                }
+                                            }
+                                        });
+                                    });
+                                </script>
                             @else
                                 <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                     <i class="fa-solid fa-flag text-gray-700 text-xl hover:text-indigo-700"></i>

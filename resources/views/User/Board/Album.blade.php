@@ -201,7 +201,7 @@
                                                     <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                             `}
-                                    <a href="/editimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <a href="/edit_image/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                         <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                     </a>
                                     <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
