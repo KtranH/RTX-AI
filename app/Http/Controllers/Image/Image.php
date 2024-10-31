@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class Image extends Controller
 {
@@ -128,6 +129,7 @@ class Image extends Controller
                 }
             }
         }
+        Alert::toast('Đã thay đổi hình ảnh!', 'success')->position('bottom-left')->autoClose(3000);
         return redirect()->route("showimage", ["id" => $id]);
     }
     public function DeleteImage($id)
@@ -136,6 +138,7 @@ class Image extends Controller
         Storage::disk('r2')->delete(str_replace($this->urlR2, "", $photo->url));
         $idAlbum = $photo->album_id;
         $photo->delete();
+        Alert::toast('Đã xoá hình ảnh!', 'success')->position('bottom-left')->autoClose(3000);
         return redirect()->route("showalbum", ["id" => $idAlbum]);
     }
     public function AddImage2Album(Request $request, $id)
@@ -187,6 +190,8 @@ class Image extends Controller
                 $photos->category()->attach($cateid);
             }
         }
+
+        Alert::toast('Đã thêm hình ảnh vào album!', 'success')->position('bottom-left')->autoClose(3000);
         return redirect()->route("showalbum", ["id" => $id]);
     }
     public function LikeImage($idImage)
@@ -246,7 +251,7 @@ class Image extends Controller
         $comment->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Xóa thành công'
+            'message' => 'Xóa thành công',
         ]);
     }
 }

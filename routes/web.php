@@ -144,7 +144,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::post('/addmorealbum', [Board::class, 'AddAlbum'])->name("addalbum");
 
     //Update album
-    Route::patch('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
+    Route::put('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
  
     //Delete album
     Route::delete('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
@@ -166,7 +166,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
 
     //Update image
-    Route::patch('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateimage")->middleware(LimitContentUpdate::class);
+    Route::put('/updateimage/{id}', [Image::class, 'UpdateImage'])->name("updateimage")->middleware(LimitContentUpdate::class);
 
     //Delete image
     Route::delete('/deleteimage/{id}', [Image::class, 'DeleteImage'])->name("deleteimage");

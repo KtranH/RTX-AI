@@ -61,6 +61,7 @@
         @include('User.Header')
     </div>
     <div class="mt-10 mb-10">
+        @include('sweetalert::alert')
         @yield('Body')
     </div>
     @include('User.Footer')

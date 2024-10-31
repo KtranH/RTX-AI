@@ -172,11 +172,11 @@ $count = count($listUserLiked);
                             </script>
                             @if($image->album->user->id == Auth::user()->id)
                                 @if($image->is_feature == true)
-                                    <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                         <i class="fas fa-star text-yellow-500 text-xl hover:text-indigo-700"></i>
                                     </a>
                                 @else
-                                    <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                         <i class="fas fa-star text-gray-700 text-xl hover:text-indigo-700"></i>
                                     </a>
                                 @endif

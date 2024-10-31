@@ -29,7 +29,7 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mb-5">
                 <form class="grid grid-cols-1 md:grid-cols-12 gap-4" method="POST" action="{{ route('updatealbum', $album->id) }}" enctype="multipart/form-data">
                     @csrf
-                    @method('PATCH')
+                    @method('PUT')
                     <!-- Cover -->
                     <div class="md:col-span-4 aspect-square relative group">
                         <img id="album-cover" src="{{ $album->cover_image }}" alt="Album Cover" class="w-full h-full object-cover rounded-2xl border-4 border-[#a000ff]">

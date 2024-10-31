@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class Board extends Controller
 {
@@ -20,9 +21,15 @@ class Board extends Controller
     use QueryDatabase;
     public function FeatureImage($id)
     {
+        $checkCount = Photo::where('is_feature', true)->whereHas('album', function ($query) {$query->where('user_id', $this->find_id());})->count();
+        if ($checkCount > 10) {
+            Alert::toast('Bạn chỉ được cho phép 10 hình ảnh nổi bật!', 'error')->position('bottom-left')->autoClose(3000);
+            return redirect()->back();
+        }
         $photo = Photo::findOrFail($id);
         $photo->is_feature = !$photo->is_feature;
         $photo->save();
+        Alert::toast('Đã thay đổi thành hình ảnh nổi bật thành công', 'success')->position('bottom-left')->autoClose(3000);
         return redirect()->back();
     }
     public function ShowBoard(Request $request)
@@ -134,6 +141,7 @@ class Board extends Controller
         $dataToUpdate = array_filter($dataToUpdate);
 
         $album->update($dataToUpdate);
+        Alert::toast('Đã cập nhật mới Album!', 'success')->position('bottom-left')->autoClose(3000);
         return redirect()->route("showboard");
     }
     public function DeleteAlbum($id)
@@ -146,6 +154,7 @@ class Board extends Controller
         $urlRemove = str_replace($this->urlR2, "", $album->cover_image);
         Storage::disk('r2')->delete($urlRemove);
         $album->delete();
+        Alert::toast('Đã xoá Album!', 'success')->position('bottom-left')->autoClose(3000);
         return redirect()->route("showboard");
     }
     public function AddAlbum(Request $request)
@@ -178,6 +187,7 @@ class Board extends Controller
             "is_private" => $private,
         ]);
 
+        Alert::toast('Thêm Album thành công!', 'success')->position('bottom-left')->autoClose(3000);
         return redirect()->route("showboard");
     }
 }

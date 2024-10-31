@@ -190,12 +190,12 @@
                                         <div class="flex space-x-2">
                                             @if ($x->is_feature)
                                                 <a href="{{ route('featureimage', ['id' => $x->id]) }}"
-                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                                     <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                             @else
                                                 <a href="{{ route('featureimage', ['id' => $x->id]) }}"
-                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                                     <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                             @endif
