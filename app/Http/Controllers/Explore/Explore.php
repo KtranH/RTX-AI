@@ -28,17 +28,15 @@ class Explore extends Controller
             ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
             ->leftJoin('users', 'users.id', '=', 'albums.user_id')
             ->distinct()
+            ->join('category_photo', 'category_photo.photo_id', '=', 'photos.id')
             ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user')
             ->withCount('likes');
         
         if ($request->has('q')) {
             $query->where('photos.title', 'like', '%' . $request->q . '%');
         }
-    
         if ($request->has('category')) {
-            $query->whereHas('categories', function($q) use ($request) {
-                $q->where('categories.id', $request->category);
-            });
+            $query->where('category_photo.category_id', $request->category);
         }
     
         $photos = $query->paginate($request->limit ?? 8);
