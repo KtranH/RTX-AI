@@ -30,7 +30,8 @@ class Explore extends Controller
             ->distinct()
             ->join('category_photo', 'category_photo.photo_id', '=', 'photos.id')
             ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user')
-            ->withCount('likes');
+            ->withCount('likes')
+            ->inRandomOrder();
         
         if ($request->has('q')) {
             $query->where('photos.title', 'like', '%' . $request->q . '%');

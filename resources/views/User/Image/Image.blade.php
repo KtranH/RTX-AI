@@ -58,7 +58,7 @@ $count = count($listUserLiked);
                     <!-- Details -->
                     <div class="md:col-span-1 flex flex-col relative">
                         <!-- Return -->
-                        <a href="#" onclick="Back()"
+                        <a href="{{ route("showexplore") }}"
                             class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group mb-2">
                             <div
                                 class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-indigo-700 group-hover:w-[184px] z-10 duration-500 rounded-2xl">
@@ -72,11 +72,6 @@ $count = count($listUserLiked);
                             </div>
                             <p class="translate-x-2 relative" style="margin-top:12px">Quay lại</p>             
                         </a>
-                        <script>
-                            function Back() {
-                                window.history.back();
-                            }
-                        </script>
                         <!-- Title and Description -->
                         <div class="mb-2">
                             <h1 class="text-4xl font-bold truncate overflow-visible">{{ $image->title }}</h1>
