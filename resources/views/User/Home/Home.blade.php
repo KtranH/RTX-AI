@@ -193,50 +193,41 @@
                         document.getElementById('slide').prepend(lists[lists.length - 1]);
                     }
 
-                    // Thêm biến để theo dõi vị trí click ban đầu
                     let startX = 0;
                     let isDragging = false;
 
-                    // Thêm sự kiện click cho từng item
                     document.querySelectorAll('.item').forEach(item => {
-                        // Bắt sự kiện mouse down
                         item.addEventListener('mousedown', (e) => {
                             isDragging = true;
                             startX = e.clientX;
                         });
 
-                        // Bắt sự kiện mouse up
                         item.addEventListener('mouseup', (e) => {
                             if (!isDragging) return;
                             
                             isDragging = false;
                             const endX = e.clientX;
-                            const threshold = 50; // Ngưỡng để xác định hướng trượt
+                            const threshold = 50; 
                             
-                            // Nếu di chuyển chuột ít hơn ngưỡng, xem như là click
                             if (Math.abs(endX - startX) < threshold) {
                                 let lists = document.querySelectorAll('.item');
                                 document.getElementById('slide').appendChild(lists[0]);
                             } 
-                            // Nếu kéo sang phải
                             else if (endX - startX > threshold) {
                                 let lists = document.querySelectorAll('.item');
                                 document.getElementById('slide').prepend(lists[lists.length - 1]);
                             }
-                            // Nếu kéo sang trái
                             else if (startX - endX > threshold) {
                                 let lists = document.querySelectorAll('.item');
                                 document.getElementById('slide').appendChild(lists[0]);
                             }
                         });
 
-                        // Hủy sự kiện kéo khi di chuột ra khỏi item
                         item.addEventListener('mouseleave', () => {
                             isDragging = false;
                         });
                     });
 
-                    // Ngăn chặn kéo chuột mặc định của trình duyệt
                     document.addEventListener('dragstart', (e) => {
                         e.preventDefault();
                     });
