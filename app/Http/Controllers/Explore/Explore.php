@@ -38,7 +38,7 @@ class Explore extends Controller
         if ($request->has('category')) {
             $query->where('category_photo.category_id', $request->category);    
         }
-    
+
         $photos = $query->paginate($request->limit ?? 8);
         return response()->json($photos);
     }

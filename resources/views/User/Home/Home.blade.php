@@ -136,306 +136,111 @@
                         data-aos-delay="300">Chia sẻ và tìm
                         kiếm những bức ảnh nổi bật</p>
                 </div>
-                <div data-aos="fade-up" data-aos-delay="100">
-                    <div class="jarallax" data-jarallax data-speed="0.5" style="height:100vh;">
-                        <img src="/images/landscape.png" class="jarallax-img" alt="Image 1" loading="lazy">
-                        <div class="content"
-                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                            <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
-                                class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
-                                    data-aos-delay="200">
-                                    @foreach ($landscape as $x)
-                                        <?php echo $x->name; ?>
-                                    @endforeach
-                                </h2>
-                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
-                                    @foreach ($landscape as $x)
-                                        <?php echo $x->description; ?>
-                                    @endforeach
-                                </p>
+                <div class="w-[80%] h-[800px] bg-white mx-auto slide_image_home" data-aos="fade-up-right" data-aos-delay="300">
+                    <div class="container_slide overflow-hidden" style="border-radius: 30px">
+                        <div id="slide">
+                            <div class="item" style="background-image: url('{{ asset('images/city.png') }}');">
+                            <div class="content">
+                                    <div class="name">{{ $city->name }}</div>
+                                    <div class="des">{{ $city->description }}</div>
+                                </div>
+                            </div>
+                            <div class="item" style="background-image: url('{{ asset('images/animal.png') }}');">
+                                <div class="content">
+                                    <div class="name">{{ $animal->name }}</div>
+                                    <div class="des">{{ $animal->description }}</div>
+                                </div>
+                            </div>
+                            <div class="item" style="background-image: url('{{ asset('images/travel.png') }}');"> 
+                                <div class="content">
+                                    <div class="name">{{ $travel->name }}</div>
+                                    <div class="des">{{ $travel->description }}</div>
+                                </div>
+                            </div>
+                            <div class="item" style="background-image: url('{{ asset('images/landscape.png') }}');">
+                                <div class="content">
+                                    <div class="name">{{ $landscape->name }}</div>
+                                    <div class="des">{{ $landscape->description }}</div>
+                                </div>
+                            </div>
+                            <div class="item" style="background-image: url('{{ asset('images/fashion.png') }}');">
+                                <div class="content">
+                                    <div class="name">{{ $fashion->name }}</div>
+                                    <div class="des">{{ $fashion->description }}</div>
+                                </div>
+                            </div>
+                            <div class="item" style="background-image: url('{{ asset('images/tech.png') }}');">
+                                <div class="content">
+                                    <div class="name">{{ $tech->name }}</div>
+                                    <div class="des">{{ $tech->description }}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/animal.png" class="jarallax-img" alt="Image 2" loading="lazy">
-                        <div class="content"
-                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); ">
-                            <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
-                                class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
-                                    data-aos-delay="200">
-                                    @foreach ($animal as $x)
-                                        <?php echo $x->name; ?>
-                                    @endforeach
-                                </h2>
-                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
-                                    @foreach ($animal as $x)
-                                        <?php echo $x->description; ?>
-                                    @endforeach
-                                </p>
-                            </div>
+                        <div class="buttons">
+                            <button id="prev"><i class="fa-solid fa-angle-left"></i></button>
+                            <button id="next"><i class="fa-solid fa-angle-right"></i></button>
                         </div>
                     </div>
-                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/travel.png" class="jarallax-img" alt="Image 2" loading="lazy">
-                        <div class="content"
-                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                            <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
-                                class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
-                                    data-aos-delay="200">
-                                    @foreach ($travel as $x)
-                                        <?php echo $x->name; ?>
-                                    @endforeach
-                                </h2>
-                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
-                                    @foreach ($travel as $x)
-                                        <?php echo $x->description; ?>
-                                    @endforeach
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/tech.png" class="jarallax-img" alt="Image 2" loading="lazy">
-                        <div class="content"
-                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                            <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
-                                class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
-                                    data-aos-delay="200">
-                                    @foreach ($tech as $x)
-                                        <?php echo $x->name; ?>
-                                    @endforeach
-                                </h2>
-                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
-                                    @foreach ($tech as $x)
-                                        <?php echo $x->description; ?>
-                                    @endforeach
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/fashion.png" class="jarallax-img" alt="Image 2" loading="lazy">
-                        <div class="content"
-                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                            <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
-                                class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
-                                    data-aos-delay="100">
-                                    @foreach ($fashion as $x)
-                                        <?php echo $x->name; ?>
-                                    @endforeach
-                                </h2>
-                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="200">
-                                    @foreach ($fashion as $x)
-                                        <?php echo $x->description; ?>
-                                    @endforeach
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="jarallax" data-jarallax data-speed="0.1" style="height: 100vh;">
-                        <img src="/images/city.png" class="jarallax-img" alt="Image 2" loading="lazy">
-                        <div class="content"
-                            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                            <div style="width:100%;border-radius:30px; backdrop-filter: blur(5px); padding:5%; background-color:rgba(49, 49, 49, 0.5)"
-                                class="bg-" data-aos="zoom-in-up" data-aos-delay="100">
-                                <h2 class="text-5xl font-bold text-white text-center" data-aos="fade-up"
-                                    data-aos-delay="200">
-                                    @foreach ($city as $x)
-                                        <?php echo $x->name; ?>
-                                    @endforeach
-                                </h2>
-                                <p class="text-white text-center mt-2" data-aos="fade-up" data-aos-delay="400">
-                                    @foreach ($city as $x)
-                                        <?php echo $x->description; ?>
-                                    @endforeach
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div>                
                 <script>
-                    document.addEventListener('scroll', function() {
-                        const jarallaxElements = document.querySelectorAll('.jarallax');
-                        jarallaxElements.forEach(element => {
-                            const rect = element.getBoundingClientRect();
-                            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                                element.classList.add('in-view');
-                            } else {
-                                element.classList.remove('in-view');
+                   document.getElementById('next').onclick = function(){
+                        let lists = document.querySelectorAll('.item');
+                        document.getElementById('slide').appendChild(lists[0]);
+                    }
+
+                    document.getElementById('prev').onclick = function(){
+                        let lists = document.querySelectorAll('.item');
+                        document.getElementById('slide').prepend(lists[lists.length - 1]);
+                    }
+
+                    // Thêm biến để theo dõi vị trí click ban đầu
+                    let startX = 0;
+                    let isDragging = false;
+
+                    // Thêm sự kiện click cho từng item
+                    document.querySelectorAll('.item').forEach(item => {
+                        // Bắt sự kiện mouse down
+                        item.addEventListener('mousedown', (e) => {
+                            isDragging = true;
+                            startX = e.clientX;
+                        });
+
+                        // Bắt sự kiện mouse up
+                        item.addEventListener('mouseup', (e) => {
+                            if (!isDragging) return;
+                            
+                            isDragging = false;
+                            const endX = e.clientX;
+                            const threshold = 50; // Ngưỡng để xác định hướng trượt
+                            
+                            // Nếu di chuyển chuột ít hơn ngưỡng, xem như là click
+                            if (Math.abs(endX - startX) < threshold) {
+                                let lists = document.querySelectorAll('.item');
+                                document.getElementById('slide').appendChild(lists[0]);
+                            } 
+                            // Nếu kéo sang phải
+                            else if (endX - startX > threshold) {
+                                let lists = document.querySelectorAll('.item');
+                                document.getElementById('slide').prepend(lists[lists.length - 1]);
                             }
+                            // Nếu kéo sang trái
+                            else if (startX - endX > threshold) {
+                                let lists = document.querySelectorAll('.item');
+                                document.getElementById('slide').appendChild(lists[0]);
+                            }
+                        });
+
+                        // Hủy sự kiện kéo khi di chuột ra khỏi item
+                        item.addEventListener('mouseleave', () => {
+                            isDragging = false;
                         });
                     });
 
-                    jarallax(document.querySelectorAll('.jarallax'));
+                    // Ngăn chặn kéo chuột mặc định của trình duyệt
+                    document.addEventListener('dragstart', (e) => {
+                        e.preventDefault();
+                    });
                 </script>
-
-                <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-16">
-                    <div
-                        class="mt-6 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-16"data-aos="fade-up-right">
-                        <div class="group relative">
-                            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
-                                style="height: 400px">
-                                <img src="/images/landscape.png" alt="Front of men&#039;s Basic Tee in black."
-                                    class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                            </div>
-                            <div class="mt-4 flex justify-between">
-                                <div>
-                                    <h3 class="text-sm text-gray-700">
-                                        <a href="#">
-                                            <span aria-hidden="true" class="absolute inset-0"></span>
-                                            <p class="font-bold">
-                                                @foreach ($landscape as $x)
-                                                    <?php echo $x->name; ?>
-                                                @endforeach
-                                            </p>
-                                        </a>
-                                    </h3>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        @foreach ($landscape as $x)
-                                            <?php echo $x->description; ?>
-                                        @endforeach
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="group relative">
-                            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
-                                style="height: 400px">
-                                <img src="/images/animal.png" alt="Front of men&#039;s Basic Tee in black."
-                                    class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                            </div>
-                            <div class="mt-4 flex justify-between">
-                                <div>
-                                    <h3 class="text-sm text-gray-700">
-                                        <a href="#">
-                                            <span aria-hidden="true" class="absolute inset-0"></span>
-                                            <p class="font-bold">
-                                                @foreach ($animal as $x)
-                                                    <?php echo $x->name; ?>
-                                                @endforeach
-                                            </p>
-                                        </a>
-                                    </h3>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        @foreach ($animal as $x)
-                                            <?php echo $x->description; ?>
-                                        @endforeach
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="group relative">
-                            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
-                                style="height: 400px">
-                                <img src="/images/travel.png" alt="Front of men&#039;s Basic Tee in black."
-                                    class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                            </div>
-                            <div class="mt-4 flex justify-between">
-                                <div>
-                                    <h3 class="text-sm text-gray-700">
-                                        <a href="#">
-                                            <span aria-hidden="true" class="absolute inset-0"></span>
-                                            <p class="font-bold">
-                                                @foreach ($travel as $x)
-                                                    <?php echo $x->name; ?>
-                                                @endforeach
-                                            </p>
-                                        </a>
-                                    </h3>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        @foreach ($travel as $x)
-                                            <?php echo $x->description; ?>
-                                        @endforeach
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="group relative">
-                            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
-                                style="height: 400px">
-                                <img src="/images/tech.png" alt="Front of men&#039;s Basic Tee in black."
-                                    class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                            </div>
-                            <div class="mt-4 flex justify-between">
-                                <div>
-                                    <h3 class="text-sm text-gray-700">
-                                        <a href="#">
-                                            <span aria-hidden="true" class="absolute inset-0"></span>
-                                            <p class="font-bold">
-                                                @foreach ($tech as $x)
-                                                    <?php echo $x->name; ?>
-                                                @endforeach
-                                            </p>
-                                        </a>
-                                    </h3>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        @foreach ($tech as $x)
-                                            <?php echo $x->description; ?>
-                                        @endforeach
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="group relative">
-                            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
-                                style="height: 400px">
-                                <img src="/images/fashion.png" alt="Front of men&#039;s Basic Tee in black."
-                                    class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                            </div>
-                            <div class="mt-4 flex justify-between">
-                                <div>
-                                    <h3 class="text-sm text-gray-700">
-                                        <a href="#">
-                                            <span aria-hidden="true" class="absolute inset-0"></span>
-                                            <p class="font-bold">
-                                                @foreach ($fashion as $x)
-                                                    <?php echo $x->name; ?>
-                                                @endforeach
-                                            </p>
-                                        </a>
-                                    </h3>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        @foreach ($fashion as $x)
-                                            <?php echo $x->description; ?>
-                                        @endforeach
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="group relative">
-                            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
-                                style="height: 400px">
-                                <img src="/images/city.png" alt="Front of men&#039;s Basic Tee in black."
-                                    class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                            </div>
-                            <div class="mt-4 flex justify-between">
-                                <div>
-                                    <h3 class="text-sm text-gray-700">
-                                        <a href="#">
-                                            <span aria-hidden="true" class="absolute inset-0"></span>
-                                            <p class="font-bold">
-                                                @foreach ($city as $x)
-                                                    <?php echo $x->name; ?>
-                                                @endforeach
-                                            </p>
-                                        </a>
-                                    </h3>
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        @foreach ($city as $x)
-                                            <?php echo $x->description; ?>
-                                        @endforeach
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <script></script>
                 <div class="bg-white">
                     <div
                         class="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 py-24 sm:px-6 sm:py-32 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
