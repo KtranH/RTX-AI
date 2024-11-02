@@ -245,6 +245,18 @@ class Image extends Controller
             return response()->json(['success' => false ], 500);
         }
     }    
+    public function UpdateComment(Request $request, $id)
+    {
+        $comment = Comment::find($id);
+        if (!$comment || $comment->user_id != Auth::id()) {
+            return response()->json(['success' => false]);
+        }
+    
+        $comment->content = $request->content;
+        $comment->save();
+    
+        return response()->json(['success' => true]);
+    }
     public function DeleteComment($idComment)
     {
         $comment = Comment::findOrFail($idComment);
