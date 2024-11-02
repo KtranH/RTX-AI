@@ -11,12 +11,12 @@ class Home extends Controller
     // Show the home page
     public function ShowHome()
     {
-        $landscape = Category::where("name","like","%". "Phong cảnh". "%")->get();
-        $animal = Category::where("name","=","Động vật")->get();
-        $fashion = Category::where("name","like","%". "Thời trang". "%")->get();
-        $city = Category::where("name","like","%". "Thành phố". "%")->get();
-        $travel = Category::where("name","like","%". "Du lịch". "%")->get();
-        $tech = Category::where("name","like","%". "Công nghệ". "%")->get();
+        $landscape = Category::where("name","like","%". "Phong cảnh". "%")->firstOrFail();
+        $animal = Category::where("name","=","Động vật")->firstOrFail();
+        $fashion = Category::where("name","like","%". "Thời trang". "%")->firstOrFail();
+        $city = Category::where("name","like","%". "Thành phố". "%")->firstOrFail();
+        $travel = Category::where("name","like","%". "Du lịch". "%")->firstOrFail();
+        $tech = Category::where("name","like","%". "Công nghệ". "%")->firstOrFail();
         return view("User.Home.Home",compact("landscape","animal","fashion","city","travel","tech"));
     }
 }
