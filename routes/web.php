@@ -190,6 +190,8 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Delete comment
     Route::delete('/deletecomment/{id}', [Image::class, 'DeleteComment'])->name("deletecomment");
 
+    //Edit comment
+    Route::put('/updatecomment/{id}', [Image::class, 'UpdateComment'])->name("updatecomment");
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
 

@@ -293,7 +293,6 @@ $count = count($listUserLiked);
                             <div class="space-y-4 mb-4 max-h-64">
                                 <div class="space-y-6">
                                     <div id="commentList" class="space-y-4 overflow-y-auto overflow-x-hidden mb-4 max-h-64 p-4 hover-scrollbar">
-
                                     </div>
                                 </div>
                             </div>
@@ -335,20 +334,32 @@ $count = count($listUserLiked);
                                                             <img src="${comment.user.avatar_url}" alt="Avatar" class="w-10 h-10 rounded-full">
                                                             <div class="flex-grow">
                                                                 <div class="bg-gray-100 p-2 rounded-lg w-full">
-                                                                     <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${comment.user.username}</div>
-                                                                     <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal">${comment.content}</div>
+                                                                    <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${comment.user.username}</div>
+                                                                    <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
+                                                                    ${(comment.user_id == '{{ Auth::user()->id }}') ?
+                                                                       `<form class="edit-form hidden mt-2">
+                                                                        <input type="text" 
+                                                                            class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
+                                                                            value="${comment.content}" 
+                                                                            placeholder="Viết bình luận...">
+                                                                            <div class="flex justify-end mt-2">
+                                                                                <button type="button" class="cancel-edit mr-2 text-gray-600 hover:text-gray-800">Hủy</button>
+                                                                                <button type="submit" class="save-edit text-indigo-600 font-semibold hover:text-indigo-800">Lưu</button>
+                                                                            </div>
+                                                                        </form>`
+                                                                    : ''}
                                                                 </div>
                                                                 <div class="flex items-center space-x-4 text-sm text-gray-500">
                                                                     <p class="font-semibold hover:text-indigo-700 hover:font-semibold">${comment.time_ago}</p>
                                                                     <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold">Phản hồi</button>
                                                                     ${(comment.user_id == '{{ Auth::user()->id }}') ?
                                                                         `<button class="hover:text-indigo-700 font-bold hover:font-semibold update-button" data-comment-id="${comment.id}">Chỉnh sửa</button>
-                                                                         <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
+                                                                        <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
                                                                         : ''}
+                                                                    ${(new Date(comment.updated_at).getTime() !== new Date(comment.created_at).getTime()) ? `<p class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</p>` : ''}
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 `;
                                                 $('#commentList').append(newCommentHtml);
@@ -440,25 +451,38 @@ $count = count($listUserLiked);
                                     success: function(response) {
                                         if (response.success) {
                                             var newCommentHtml = `
-                                                    <div class="comment-item space-y-2 relative">
-                                                        <div class="flex items-start space-x-4">
-                                                            <img src="${response.comment.user_avatar}" alt="Avatar" class="w-10 h-10 rounded-full">
-                                                            <div class="flex-grow">
-                                                                <div class="bg-gray-100 p-2 rounded-lg w-full">
-                                                                    <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${response.comment.user_name}</div>
-                                                                    <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal">${response.comment.content}</div>
+                                                <div class="comment-item space-y-2 relative">
+                                                    <div class="flex items-start space-x-4">
+                                                        <img src="${comment.user.avatar_url}" alt="Avatar" class="w-10 h-10 rounded-full">
+                                                        <div class="flex-grow">
+                                                            <div class="bg-gray-100 p-2 rounded-lg w-full">
+                                                                <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${comment.user.username}</div>
+                                                                    <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
+                                                                     ${(comment.user_id == '{{ Auth::user()->id }}') ?
+                                                                        `<form class="edit-form hidden mt-2">
+                                                                            <input type="text" 
+                                                                                class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
+                                                                                value="${comment.content}" 
+                                                                                placeholder="Viết bình luận...">
+                                                                            <div class="flex justify-end mt-2">
+                                                                                <button type="button" class="cancel-edit mr-2 text-gray-600 hover:text-gray-800">Hủy</button>
+                                                                                <button type="submit" class="save-edit text-indigo-600 font-semibold hover:text-indigo-800">Lưu</button>
+                                                                            </div>
+                                                                        </form>`
+                                                                     : ''}
                                                                 </div>
                                                                 <div class="flex items-center space-x-4 text-sm text-gray-500">
-                                                                <p class="font-semibold hover:text-indigo-700 hover:font-semibold">${response.comment.created_at}</p>
+                                                                    <p class="font-semibold hover:text-indigo-700 hover:font-semibold">${comment.time_ago}</p>
                                                                     <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold">Phản hồi</button>
-                                                                    ${(response.comment.user_id == '{{ Auth::user()->id }}') ?
-                                                                    `<button class="hover:text-indigo-700 font-bold hover:font-semibold">Chỉnh sửa</button>
-                                                                    <button class="hover:text-indigo-700 font-bold hover:font-semibold">Xóa</button>`
-                                                                    : ''}
+                                                                    ${(comment.user_id == '{{ Auth::user()->id }}') ?
+                                                                        `<button class="hover:text-indigo-700 font-bold hover:font-semibold update-button" data-comment-id="${comment.id}">Chỉnh sửa</button>
+                                                                        <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
+                                                                        : ''}
+                                                                    ${(new Date(comment.updated_at).getTime() !== new Date(comment.created_at).getTime()) ? `<p class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</p>` : ''}
                                                                 </div>
-                                                            </div>
                                                         </div>
                                                     </div>
+                                                </div>
                                             `;
                                             $('#commentList').prepend(newCommentHtml);
                                             
@@ -475,6 +499,61 @@ $count = count($listUserLiked);
                                             var errors = xhr.responseJSON.errors;
                                             alert(errors.comment[0]); 
                                         }
+                                    }
+                                });
+                            });
+                            $(document).on('click', '.update-button', function() {
+                                var commentItem = $(this).closest('.comment-item');
+                                var content = commentItem.find('.comment-content').text();
+                                var form = commentItem.find('.edit-form');
+                                var input = form.find('.edit-input');
+                                
+                                commentItem.find('.comment-content').hide();
+                                form.removeClass('hidden');
+                                input.val(content).focus();
+                            });
+
+                            $(document).on('click', '.cancel-edit', function() {
+                                var form = $(this).closest('.edit-form');
+                                var commentItem = form.closest('.comment-item');
+                                
+                                form.addClass('hidden');
+                                commentItem.find('.comment-content').show();
+                            });
+
+                            $(document).on('submit', '.edit-form', function(e) {
+                                e.preventDefault();
+                                var form = $(this);
+                                var commentItem = form.closest('.comment-item');
+                                var commentId = commentItem.find('.update-button').data('comment-id');
+                                var newContent = form.find('.edit-input').val();
+
+                                $.ajax({
+                                    url: `/updatecomment/${commentId}`,
+                                    type: 'PUT',
+                                    data: {
+                                        content: newContent,
+                                        _token: '{{ csrf_token() }}'
+                                    },
+                                    success: function(response) {
+                                        if (response.success) {
+                                            commentItem.find('.comment-content').text(newContent).show();
+                                            form.addClass('hidden');
+                                            
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Đã cập nhật bình luận',
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            });
+                                        }
+                                    },
+                                    error: function() {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Có lỗi xảy ra',
+                                            text: 'Không thể cập nhật bình luận'
+                                        });
                                     }
                                 });
                             });
