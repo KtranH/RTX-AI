@@ -33,10 +33,16 @@ class Explore extends Controller
             ->withCount('likes');
 
         if ($request->has('q')) {
-            $query->where('photos.title', 'like', '%' . $request->q . '%');
+            $query->where(function ($query) use ($request) {
+                $query->where('photos.title', 'like', '%' . $request->q . '%')
+                    ->orWhereHas('category', function ($query) use ($request) {
+                        $query->where('name', $request->q);
+                    });
+            });
         }
+
         if ($request->has('category')) {
-            $query->where('category_photo.category_id', $request->category);    
+            $query->where('category_photo.category_id', $request->category);
         }
 
         $photos = $query->paginate($request->limit ?? 8);

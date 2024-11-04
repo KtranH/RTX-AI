@@ -73,7 +73,7 @@
             easing: 'ease-in-sine',
         });
     </script>
-    <script src="{{ asset('assets/js/helper.js') }}"></script>
+    
 </body>
 
 </html>
