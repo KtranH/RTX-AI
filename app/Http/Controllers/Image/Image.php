@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Photo;
+use App\Models\Reply;
 use App\Models\User;
 use App\Models\WorkFlow;
 use Illuminate\Http\Request;
@@ -56,6 +57,7 @@ class Image extends Controller
         ->orderBy('created_at', 'desc')
         ->skip($request->skip)
         ->take(3)
+        ->withCount('replies')
         ->get();
         
         $comments->map(function($comment) {
@@ -230,7 +232,7 @@ class Image extends Controller
                 "content" => $request->input('comment'),
                 "created_at" => now(),
                 "updated_at" => now(),
-            ]);
+            ])->withCount('replies');
             return response()->json([
                 'success' => true,
                 'comment' => [
@@ -238,7 +240,8 @@ class Image extends Controller
                     'user_avatar' => Auth::user()->avatar_url,
                     'content' => $request->input('comment'),
                     'user_id' => Auth::user()->id,
-                    'created_at' => Carbon::parse($comment->created_at)->diffForHumans(['locale' => 'vi'])
+                    'created_at' => Carbon::parse($comment->created_at)->diffForHumans(['locale' => 'vi']),
+                    'replies_count' => $comment->replies_count
                 ]
             ]);
         } catch (\Exception $e) {
@@ -266,4 +269,50 @@ class Image extends Controller
             'message' => 'Xóa thành công',
         ]);
     }
+    public function ReplyComment(Request $request, $parentId)
+    {
+        $comment = Comment::find($parentId)->firstOrFail(); 
+        $reply = Reply::create([
+            "user_id" => Auth::user()->id,
+            "comment_id" => $parentId,
+            "content" => $request->input('content'),
+            "parent_id" => null,
+            "created_at" => now(),
+            "updated_at" => now(),
+        ]);
+        $reply->load('user');
+        return response()->json(['success' => true, 'reply' => $reply]);
+    }
+    public function getReplies($commentId)
+{
+    $replies = Reply::where('comment_id', $commentId)
+        ->with('user')
+        ->with('comment.user')
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->map(function($reply) {
+            return [
+                'id' => $reply->id,
+                'content' => $reply->content,
+                'comment_id'=>
+                [
+                    'id' => $reply->comment->user->id,
+                    'username' => $reply->comment->user->username
+                ],
+                'user' => [
+                    'id' => $reply->user_id,
+                    'username' => $reply->user->username,
+                    'avatar_url' => $reply->user->avatar_url
+                ],
+                'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
+                'parent_id' => $reply->parent_id,
+                'original_comment_id' => $reply->comment_id
+            ];
+        });
+
+    return response()->json([
+        'success' => true,
+        'replies' => $replies
+    ]);
+}
 }

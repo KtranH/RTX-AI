@@ -191,7 +191,13 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::delete('/deletecomment/{id}', [Image::class, 'DeleteComment'])->name("deletecomment");
 
     //Edit comment
-    Route::put('/updatecomment/{id}', [Image::class, 'UpdateComment'])->name("updatecomment");
+    Route::patch('/updatecomment/{id}', [Image::class, 'UpdateComment'])->name("updatecomment");
+
+    //Reply comment
+    Route::post('/api/comments/{parentId}/replies', [Image::class, 'ReplyComment'])->name("replycomment");
+
+    //Load more replies
+    Route::get('/api/getcomments/{commentId}/replies', [Image::class, 'getReplies'])->name("getreplies");
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
 

@@ -140,37 +140,37 @@
                     <div class="container_slide overflow-hidden" style="border-radius: 30px">
                         <div id="slide">
                             <div class="item" style="background-image: url('{{ asset('images/city.png') }}');">
-                            <div class="content">
+                                <div class="content" style="backdrop-filter: blur(5px); border-radius:20px; padding: 20px; backdrop-filter: brightness(0.8)">
                                     <div class="name">{{ $city->name }}</div>
                                     <div class="des">{{ $city->description }}</div>
                                 </div>
                             </div>
                             <div class="item" style="background-image: url('{{ asset('images/animal.png') }}');">
-                                <div class="content">
+                                <div class="content" style="backdrop-filter: blur(5px); border-radius:20px; padding: 20px; backdrop-filter: brightness(0.8)">
                                     <div class="name">{{ $animal->name }}</div>
                                     <div class="des">{{ $animal->description }}</div>
                                 </div>
                             </div>
                             <div class="item" style="background-image: url('{{ asset('images/travel.png') }}');"> 
-                                <div class="content">
+                                <div class="content" style="backdrop-filter: blur(5px); border-radius:20px; padding: 20px; backdrop-filter: brightness(0.8)">
                                     <div class="name">{{ $travel->name }}</div>
                                     <div class="des">{{ $travel->description }}</div>
                                 </div>
                             </div>
                             <div class="item" style="background-image: url('{{ asset('images/landscape.png') }}');">
-                                <div class="content">
+                                <div class="content" style="backdrop-filter: blur(5px); border-radius:20px; padding: 20px; backdrop-filter: brightness(0.8)">
                                     <div class="name">{{ $landscape->name }}</div>
                                     <div class="des">{{ $landscape->description }}</div>
                                 </div>
                             </div>
                             <div class="item" style="background-image: url('{{ asset('images/fashion.png') }}');">
-                                <div class="content">
+                                <div class="content" style="backdrop-filter: blur(5px); border-radius:20px; padding: 20px; backdrop-filter: brightness(0.8)">
                                     <div class="name">{{ $fashion->name }}</div>
                                     <div class="des">{{ $fashion->description }}</div>
                                 </div>
                             </div>
                             <div class="item" style="background-image: url('{{ asset('images/tech.png') }}');">
-                                <div class="content">
+                                <div class="content" style="backdrop-filter: blur(5px); border-radius:20px; padding: 20px; backdrop-filter: brightness(0.8)">
                                     <div class="name">{{ $tech->name }}</div>
                                     <div class="des">{{ $tech->description }}</div>
                                 </div>
