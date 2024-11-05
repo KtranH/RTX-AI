@@ -457,17 +457,41 @@ $count = count($listUserLiked);
                                     }
                                 });
                             });
+                            let lastCommentTime = 0;
+                            const COMMENT_COOLDOWN = 3000;
+
                             $('#commentForm').on('submit', function(e) {
                                 e.preventDefault();
+                                
+                                const currentTime = Date.now();
+                                const timeSinceLastComment = currentTime - lastCommentTime;
+                                
+                                if (timeSinceLastComment < COMMENT_COOLDOWN) {
+                                    const remainingTime = Math.ceil((COMMENT_COOLDOWN - timeSinceLastComment) / 1000);
+                                    Swal.fire({
+                                        title: 'Bình luận quá nhanh!',
+                                        text: `Vui lòng đợi ${remainingTime} giây trước khi bình luận tiếp.`,
+                                        icon: 'warning',
+                                        confirmButtonText: 'Đồng ý',
+                                        confirmButtonColor: '#3085d6'
+                                    });
+                                    return;
+                                }
                                 
                                 var comment = $('#addComment').val();
                                 var idImage = '{{ $image->id }}';
                                 
                                 if (!comment) {
-                                    alert('Vui lòng nhập bình luận');
+                                    Swal.fire({
+                                        title: 'Lỗi',
+                                        text: 'Vui lòng nhập bình luận',
+                                        icon: 'error',
+                                        confirmButtonText: 'Đồng ý',
+                                        confirmButtonColor: '#3085d6'
+                                    });
                                     return;
                                 }
-                    
+
                                 $.ajax({
                                     url: "{{ route('addcomment', ['idImage' => $image->id]) }}",
                                     method: "POST",
@@ -478,16 +502,21 @@ $count = count($listUserLiked);
                                     },
                                     success: function(response) {
                                         if (response.success) {
+                                            console.log('Response:', response);
+                                            lastCommentTime = Date.now();
+                                            
+                                            const comment = response.comment;
+                                            
                                             var newCommentHtml = `
-                                                 <div class="comment-item space-y-2 relative" data-comment-id="${comment.id}" data-reply-count="${comment.replies_count}">
-                                                        <div class="flex items-start space-x-4">
-                                                            <img src="${comment.user.avatar_url}" alt="Avatar" class="w-10 h-10 rounded-full">
-                                                            <div class="flex-grow">
-                                                                <div class="bg-gray-100 p-2 rounded-lg w-full">
-                                                                    <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${comment.user.username}</div>
-                                                                    <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
-                                                                    ${(comment.user_id == '{{ Auth::user()->id }}') ?
-                                                                       `<form class="edit-form hidden mt-2">
+                                                <div class="comment-item space-y-2 relative" data-comment-id="${comment.id}" data-reply-count="${comment.replies_count}">
+                                                    <div class="flex items-start space-x-4">
+                                                        <img src="${comment.user.avatar_url}" alt="Avatar" class="w-10 h-10 rounded-full">
+                                                        <div class="flex-grow">
+                                                            <div class="bg-gray-100 p-2 rounded-lg w-full">
+                                                                <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${comment.user.username}</div>
+                                                                <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
+                                                                ${(comment.user_id == '{{ Auth::user()->id }}') ?
+                                                                    `<form class="edit-form hidden mt-2">
                                                                         <input type="text" 
                                                                             class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
                                                                             value="${comment.content}" 
@@ -496,64 +525,78 @@ $count = count($listUserLiked);
                                                                                 <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">Hủy</button>
                                                                                 <button type="submit" class="save-edit px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">Lưu</button>
                                                                             </div>
-                                                                        </form>`
-                                                                    : ''}
-                                                                </div>
-                                                                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                                                                    <p class="font-semibold hover:text-indigo-700 hover:font-semibold">${comment.time_ago}</p>
-                                                                    <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold" data-original-comment-id="${comment.id}">Phản hồi</button>
-                                                                    ${(comment.user_id == '{{ Auth::user()->id }}') ?
-                                                                        `<button class="hover:text-indigo-700 font-bold hover:font-semibold update-button" data-comment-id="${comment.id}">Chỉnh sửa</button>
-                                                                        <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
-                                                                        : ''}
-                                                                    ${(new Date(comment.updated_at).getTime() !== new Date(comment.created_at).getTime()) ? `<p class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</p>` : ''}
-                                                                </div>
-                                                                <form class="reply-form hidden mt-2">
-                                                                        <div class="flex items-start space-x-2">
-                                                                            <i class="fa-solid fa-repeat text-gray-400 text-lg"></i>
-                                                                            <img src="{{ Auth::user()->avatar_url }}" alt="Avatar" class="w-8 h-8 rounded-full">
-                                                                            <div class="flex-grow">
-                                                                                <div class="relative">
-                                                                                    <input type="text" 
-                                                                                        class="reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
-                                                                                        placeholder="Viết phản hồi...">
-                                                                                </div>
-                                                                                <span class="text-xs text-gray-400 font-semibold">Đang trả lời <b>${comment.user.username}</b></span>
-                                                                                <div class="flex justify-end mt-2 space-x-2">
-                                                                                    <button type="button" 
-                                                                                        class="cancel-reply px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">
-                                                                                        Hủy
-                                                                                    </button>
-                                                                                    <button type="submit" 
-                                                                                        class="submit-reply px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">
-                                                                                        Phản hồi
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                </form>
-                                                                ${(parseInt(comment.replies_count) > 0) ? '<i class="fa-solid fa-arrow-right-arrow-left mr-2 text-gray-400"></i><button class="view-replies text-sm text-gray-400 font-bold hover:text-indigo-700 pt-2 hover:font-semibold">Xem ' + comment.replies_count + ' phản hồi </button>' : ''}
-                                                                <div class="replies-container ml-8 mt-2">
-
-                                                                </div>
+                                                                    </form>`
+                                                                : ''}
                                                             </div>
+                                                            <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                                                <p class="font-semibold hover:text-indigo-700 hover:font-semibold">${comment.time_ago}</p>
+                                                                <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold" data-original-comment-id="${comment.id}">Phản hồi</button>
+                                                                ${(comment.user_id == '{{ Auth::user()->id }}') ?
+                                                                    `<button class="hover:text-indigo-700 font-bold hover:font-semibold update-button" data-comment-id="${comment.id}">Chỉnh sửa</button>
+                                                                    <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
+                                                                : ''}
+                                                                ${(new Date(comment.updated_at).getTime() !== new Date(comment.created_at).getTime()) ? 
+                                                                    `<p class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</p>` : 
+                                                                ''}
+                                                            </div>
+                                                            <form class="reply-form hidden mt-2">
+                                                                <div class="flex items-start space-x-2">
+                                                                    <i class="fa-solid fa-repeat text-gray-400 text-lg"></i>
+                                                                    <img src="{{ Auth::user()->avatar_url }}" alt="Avatar" class="w-8 h-8 rounded-full">
+                                                                    <div class="flex-grow">
+                                                                        <div class="relative">
+                                                                            <input type="text" 
+                                                                                class="reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
+                                                                                placeholder="Viết phản hồi...">
+                                                                        </div>
+                                                                        <span class="text-xs text-gray-400 font-semibold">Đang trả lời <b>${comment.user.username}</b></span>
+                                                                        <div class="flex justify-end mt-2 space-x-2">
+                                                                            <button type="button" 
+                                                                                class="cancel-reply px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">
+                                                                                Hủy
+                                                                            </button>
+                                                                            <button type="submit" 
+                                                                                class="submit-reply px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">
+                                                                                Phản hồi
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                            ${(parseInt(comment.replies_count) > 0) ? 
+                                                                '<i class="fa-solid fa-arrow-right-arrow-left mr-2 text-gray-400"></i><button class="view-replies text-sm text-gray-400 font-bold hover:text-indigo-700 pt-2 hover:font-semibold">Xem ' + comment.replies_count + ' phản hồi </button>' : 
+                                                            ''}
+                                                            <div class="replies-container ml-8 mt-2"></div>
                                                         </div>
                                                     </div>
+                                                </div>
                                             `;
-                                            $('#commentList').prepend(newCommentHtml);
                                             
+                                            $('#commentList').prepend(newCommentHtml);
                                             $('#addComment').val('');
                                             $('#noCommentsMessage').remove();
                                             var currentCount = parseInt($('#commentCount').text().match(/\d+/)[0]); 
                                             $('#commentCount').text(`Bình luận (${currentCount + 1})`);
                                         } else {
-                                            alert('Đã xảy ra lỗi, vui lòng thử lại');
+                                            Swal.fire({
+                                                title: 'Lỗi',
+                                                text: 'Đã xảy ra lỗi, vui lòng thử lại',
+                                                icon: 'error',
+                                                confirmButtonText: 'Đồng ý',
+                                                confirmButtonColor: '#3085d6'
+                                            });
                                         }
                                     },
                                     error: function(xhr) {
                                         if (xhr.status === 422) {
                                             var errors = xhr.responseJSON.errors;
-                                            alert(errors.comment[0]); 
+                                            Swal.fire({
+                                                title: 'Lỗi',
+                                                text: errors.comment[0],
+                                                icon: 'error',
+                                                confirmButtonText: 'Đồng ý',
+                                                confirmButtonColor: '#3085d6'
+                                            });
                                         }
                                     }
                                 });

@@ -232,17 +232,13 @@ class Image extends Controller
                 "content" => $request->input('comment'),
                 "created_at" => now(),
                 "updated_at" => now(),
-            ])->withCount('replies');
+            ]);
+            $comment = Comment::withCount('replies')->find($comment->id);
+            $comment->load('user');
+            $comment->time_ago = $comment->created_at->diffForHumans(['locale' => 'vi']);
             return response()->json([
                 'success' => true,
-                'comment' => [
-                    'user_name' => Auth::user()->username,
-                    'user_avatar' => Auth::user()->avatar_url,
-                    'content' => $request->input('comment'),
-                    'user_id' => Auth::user()->id,
-                    'created_at' => Carbon::parse($comment->created_at)->diffForHumans(['locale' => 'vi']),
-                    'replies_count' => $comment->replies_count
-                ]
+                'comment' => $comment
             ]);
         } catch (\Exception $e) {
             return response()->json(['success' => false ], 500);
