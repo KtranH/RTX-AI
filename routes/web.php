@@ -7,6 +7,7 @@ use App\Http\Controllers\User\Home;
 use App\Http\Controllers\User\WorkFlow\G1;
 use App\Http\Controllers\User\WorkFlow\G2;
 use App\Http\Controllers\User\WorkFlow\G3;
+use App\Http\Controllers\User\WorkFlow\G8;
 use App\Http\Middleware\CheckCookieLogin;
 use App\Http\Middleware\ThrottleRequests;
 use App\Http\Controllers\Board\Board;
@@ -15,6 +16,8 @@ use App\Http\Controllers\Creativity\Creativity;
 use App\Http\Controllers\Explore\Explore;
 use App\Http\Controllers\User\WorkFlow\G4;
 use App\Http\Controllers\User\WorkFlow\G5;
+use App\Http\Controllers\User\WorkFlow\G6;
+use App\Http\Controllers\User\WorkFlow\G7;
 use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitUpdateAccountAccess;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
@@ -275,14 +278,32 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/resultofg5', [G5::class, 'get_imageG5'])->name("get_imageg5");
 
     //Show G6
-    Route::get('/g6', [G3::class, 'InputDataG3'])->name("g6");
+    Route::get('/g6', [G6::class, 'InputDataG6'])->name("g6");
+
+    //Create imamge G6
+    Route::post('/createg6', [G6::class, 'ShowImageG6'])->name("createg6");
+
+    //Show result G6
+    Route::get('/resultofg6', [G6::class, 'get_imageG6'])->name("get_imageg6");
 
     //Show G7
-    Route::get('/g7', [G3::class, 'InputDataG3'])->name("g7");
+    Route::get('/g7', [G7::class, 'InputDataG7'])->name("g7");
+
+    //Create image G7
+    Route::post('/createg7', [G7::class, 'ShowImageG7'])->name("createg7");
+
+    //Show result G7
+    Route::get('/resultofg7', [G7::class, 'get_imageG7'])->name("get_imageg7");
 
     //Show G8
-    Route::get('/g8', [G3::class, 'InputDataG3'])->name("g8");
+    Route::get('/g8', [G8::class, 'InputDataG8'])->name("g8");
 
+    //Create image G8
+    Route::post('/createg8', [G8::class, 'ShowImageG8'])->name("createg8");
+
+    //Show result G8
+    Route::get('/resultofg8', [G8::class, 'get_imageG8'])->name("get_imageg8");
+    
     //Show G9
     Route::get('/g9', [G3::class, 'InputDataG3'])->name("g9");
 
