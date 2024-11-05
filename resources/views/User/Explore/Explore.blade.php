@@ -44,7 +44,7 @@
                     <i class="text-xl fas fa-times"></i>
                 </span>
                 <span id="enter-icon" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer" onclick="handleSearch()">
-                    <i class="fa-solid fa-circle-arrow-right"></i>
+                    <i class="fa-solid fa-circle-arrow-right text-2xl text-indigo-500"></i>
                 </span>
                 <div id="search-extension"
                     class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden"
