@@ -9,15 +9,7 @@
                 <p class="text-2xs text-gray-500 tracking-tight">Bắt đầu sáng tạo các hình ảnh bằng AI, và chia sẻ với những người khác.</p>
            </div>
           <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-            @php
-                $count = Cookie::get('count_G');
-                if($count == null){$count = 0;}
-            @endphp
             @foreach ( $workflow as $x )
-              @php
-                  $count = $count + 1;
-                  $link = "g" . $count;
-              @endphp
               <div class="group relative">
                 <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-2xl bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80" style="height: 400px">
                   <img src="{{ $x->image }}" loading="lazy" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
@@ -25,7 +17,7 @@
                 <div class="mt-4 flex justify-between">
                   <div>
                     <h3 class="text-sm text-gray-700">
-                      <a href="{{ route($link) }}">
+                      <a href="{{ route('g'.$x->id) }}">
                         <span aria-hidden="true" class="absolute inset-0"></span>
                        <p class="font-bold">
                         {{ $x->name }}
@@ -41,9 +33,6 @@
               @endforeach
             <!-- More products... -->
           </div>
-          @php
-              Cookie::queue('count_G', $count);
-          @endphp
           <div style="width:100%;margin-top:5%">
             {{ $workflow->links("vendor.pagination.tailwind") }}
           </div>
