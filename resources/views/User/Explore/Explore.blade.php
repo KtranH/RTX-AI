@@ -220,26 +220,6 @@
         }
     }
 
-    
-
-    function handleSearch() {
-        const searchBar = document.getElementById('search-bar');
-        const term = searchBar.value.trim();
-
-        const url = new URL(window.location.href);
-        url.searchParams.set('q', term);
-        window.history.replaceState({}, '', url);
-
-        addSearchHistory(term);
-        currentPage = 1;
-        lastPage = false;
-
-        const urlParams = url.searchParams.toString();
-
-        loadPhotos(currentPage, urlParams, true);
-    }
-
-
     function searchCategory(event, element) {
         event.preventDefault();
 
@@ -351,5 +331,32 @@
             }
         }, 500));
     });
+
+    function handleSearch() {
+        const searchBar = document.getElementById('search-bar');
+        const term = searchBar.value.trim();
+
+        const url = new URL(window.location.href);
+        
+        if (term === "") {
+            url.searchParams.delete('q');
+        } else {
+            url.searchParams.set('q', term); 
+        }
+        
+        if (term === "") {
+            url.searchParams.delete('category'); 
+        }
+        
+        window.history.replaceState({}, '', url); 
+
+        addSearchHistory(term);
+        currentPage = 1;
+        lastPage = false;
+
+        const urlParams = url.searchParams.toString();
+
+        loadPhotos(currentPage, urlParams, true);
+    }
 </script>
 @endsection
