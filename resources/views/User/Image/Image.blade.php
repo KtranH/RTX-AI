@@ -248,35 +248,35 @@ $count = count($listUserLiked);
                             </script>
                         </div>
                     </div>
-                        <!-- Number of likes -->
-                        @if($count == 0)
-                            <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.</span>
-                        @elseif ($count == 1)
-                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
-                                    @if($checkUserLikedImage != null) 
-                                        Bạn
-                                    @endif
-                                </span>
-                        @elseif ($count <= 2 && $count > 0)
-                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
-                                @if($checkUserLikedImage != null) 
-                                    Bạn,
-                                @endif
-                                    @foreach ($listUserLiked as $l)
-                                        @if($l->user->username != $checkUserNow->username)
-                                            {{ $l->user->username }}{{ $loop->last ? '.' : ', ' }}
-                                        @endif
-                                    @endforeach 
-                                </span>
-                        @else
-                            <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
-                                @if($checkUserLikedImage != null) 
-                                    Bạn và {{ $count }} người khác.
-                                @else
-                                    {{ $count }} người khác.
-                                @endif
-                            </span>
+                    <!-- Number of likes -->
+                    @if($count == 0)
+                        <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.</span>
+                    @elseif ($count == 1)
+                        <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
+                            @if($checkUserLikedImage != null) 
+                                Bạn
+                            @endif
+                        </span>
+                    @elseif ($count <= 2 && $count > 0)
+                        <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
+                        @if($checkUserLikedImage != null) 
+                            Bạn,
                         @endif
+                            @foreach ($listUserLiked as $l)
+                                @if($l->user->username != $checkUserNow->username)
+                                    {{ $l->user->username }}{{ $loop->last ? '.' : ', ' }}
+                                @endif
+                            @endforeach 
+                        </span>
+                    @else
+                        <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
+                            @if($checkUserLikedImage != null) 
+                                Bạn và {{ $count }} người khác.
+                            @else
+                                {{ $count }} người khác.
+                            @endif
+                        </span>
+                    @endif
                     <!-- Comment -->
                     <h3 class="font-semibold text-xl mb-2" id="commentCount">Bình luận ({{ $countComment }}) 
                         @if ($countComment > 3)
@@ -289,24 +289,22 @@ $count = count($listUserLiked);
                     @if($countComment == 0)
                         <p id="noCommentsMessage">Chưa có bình luận nào!</p>
                     @endif
-                        <div id="comment" class="flex flex-col mt-auto">
-                            <div class="space-y-4 mb-4 max-h-64">
-                                <div class="space-y-6">
-                                    <div id="commentList" class="space-y-4 overflow-y-auto overflow-x-hidden mb-4 max-h-64 p-4 hover-scrollbar">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Add Comment -->
-                            <div class="flex items-center space-x-4">
-                                <form id="commentForm" class="flex w-full" enctype="multipart/form-data" method="POST" action="{{ route('addcomment', $image->id) }}">
-                                    @csrf
-                                    <input type="text" id="addComment" name="comment" class="flex-grow px-4 py-2 text-gray-700 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Thêm bình luận">
-                                    <button type="submit" class="ml-4 p-2 text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-2 focus:ring-blue-300">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </button>
-                                </form>
+                    <div id="comment" class="flex flex-col">
+                        <div class="space-y-2 mb-4">
+                            <div id="commentList" class="space-y-4 overflow-y-auto overflow-x-hidden max-h-80 p-4 hover-scrollbar">
                             </div>
                         </div>
+                        <!-- Add Comment -->
+                        <div class="flex items-center space-x-4">
+                            <form id="commentForm" class="flex w-full" enctype="multipart/form-data" method="POST" action="{{ route('addcomment', $image->id) }}">
+                                @csrf
+                                <input type="text" id="addComment" name="comment" class="placeholder-gray-600 flex-grow px-4 py-2 text-gray-700 bg-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Thêm bình luận">
+                                <button type="submit" class="ml-4 pl-3 pr-4 py-2  text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-2 focus:ring-blue-300">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                     <script>
                         $(document).ready(function() {
                             var skip = 0; 
