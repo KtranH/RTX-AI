@@ -55,7 +55,7 @@
                         @foreach ($categories as $each)
                             <div class="text-sm text-white p-2 bg-indigo-600 hover:bg-indigo-400 text-center cursor-pointer truncate hover:overflow-visible hover:whitespace-normal"
                                 style="border-radius: 30px">
-                                <a class="font-semibold" href="/explore/?category={{ $each->id }}">
+                                <a class="font-semibold" href="#" data-id="{{ $each->id }}" onclick="searchCategory(event, this)">
                                     {{ $each->name }}
                                 </a>
                             </div>
@@ -104,10 +104,14 @@
         </div>
     </div>
 </main>
-
+<script src="{{ asset('assets/js/helper.js') }}"></script>
 <script>
-
     const MAX_HISTORY = 10;
+    let mainContent = document.getElementById('main-content');
+    let urlParams = (new URLSearchParams(window.location.search)).toString();
+    let currentPage = 1;
+    let isLoading = false;
+    let lastPage = false;
 
     function toggleExtension(event) {
         event.stopPropagation();
@@ -163,6 +167,11 @@
         searchBar.value = "";
         checkCloseIcon();
         searchBar.focus();
+        const url = new URL(window.location.href);
+        url.search = '';
+        window.history.replaceState({}, '', url);
+        currentPage = 1;
+        loadPhotos(currentPage, '');
     }
 
     function addSearchHistory(term) {
@@ -211,116 +220,136 @@
         }
     }
 
+    
+
+    function handleSearch() {
+        const searchBar = document.getElementById('search-bar');
+        const term = searchBar.value.trim();
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('q', term);
+        window.history.replaceState({}, '', url);
+
+        addSearchHistory(term);
+        currentPage = 1;
+        lastPage = false;
+
+        const urlParams = url.searchParams.toString();
+
+        loadPhotos(currentPage, urlParams, true);
+    }
+
+
+    function searchCategory(event, element) {
+        event.preventDefault();
+
+        const categoryId = element.getAttribute('data-id');
+        
+        const url = new URL(window.location.href);
+        url.searchParams.set('category', categoryId);
+        window.history.replaceState({}, '', url);
+
+        const urlParams = url.searchParams.toString();
+        currentPage = 1;
+        lastPage = false;
+        
+        loadPhotos(currentPage, urlParams, true);
+    }
+
+
+    document.getElementById('search-extension').addEventListener('click', function (event) {
+        event.stopPropagation();
+    });
+
+
+    document.getElementById('search-bar').addEventListener('keyup', function (event) {
+        if (event.key === 'Enter') {
+            handleSearch();
+            const extension = document.getElementById('search-extension');
+            extension.classList.add('hidden');
+            const overlay = document.getElementById('overlay');
+            overlay.classList.remove('opacity-50');
+        }
+    });
+
+
+    function loadPhotos(page, urlParams, loadData = false) {
+        if (isLoading || lastPage) return;
+        isLoading = true;
+        let apiUrl = `{{ route('indexApi') }}?page=${page}&${urlParams}`;
+        fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.last_page == currentPage) {
+                    lastPage = true;
+                }
+                renderPhotos(data.data, loadData);
+                currentPage++;
+            })
+            .catch(error => {
+                console.error("Error loading photos:", error);
+            })
+            .finally(() => {
+                isLoading = false;
+            });
+    }
+
+    function renderPhotos(photos, loadData = false) {
+        let html = '';
+        photos.forEach(photo => {
+            html += `
+            <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
+                <a href="/image/${photo.id}">
+                    <div class="aspect-square">
+                        <img src="${photo.url}" loading="lazy" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
+                    </div>
+                    <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="mt-2 text-left px-2 py-1">
+                            <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
+                            <div class="text-sm text-gray-500 h-20 overflow-hidden truncate">${photo.description}</div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3 account-mobile mt-4 mb-1">
+                        <div class="flex justify-start">
+                            <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="${photo.avatar_user}" alt="">
+                            <div>
+                                <a href="/board" class="nav-link link-dark nav_name font-semibold ml-2">${photo.name_user}</a>
+                            </div>
+                        </div>
+                        <div class="flex-grow"></div>
+                        <div style="cursor: none">
+                            <span><i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i> <span class="font-bold">${photo.likes_count}</span></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        `;
+        });
+        if (loadData) {
+            mainContent.innerHTML = html;
+        } else {
+            mainContent.insertAdjacentHTML('beforeend', html);
+        }
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
-
-        let mainContent = document.getElementById('main-content');
-        let urlParams = (new URLSearchParams(window.location.search)).toString();
-        let currentPage = 1;
-        let isLoading = false;
-        let lastPage = false;
-
-        function handleSearch() {
-            const searchBar = document.getElementById('search-bar');
-            const term = searchBar.value.trim();
-            if (term) {
-                const url = new URL(window.location.href);
-                addSearchHistory(term);
-                currentPage = 1;
-                lastPage = false;
-                url.searchParams.set('q', term);
-                window.history.replaceState({}, '', url);
-                loadPhotos(currentPage, urlParams, true);
-            }
-        }
-
-        document.getElementById('search-extension').addEventListener('click', function (event) {
-            event.stopPropagation();
-        });
-
-        renderSearchHistory();
-
-        document.getElementById('search-bar').addEventListener('keyup', function (event) {
-            if (event.key === 'Enter') {
-                handleSearch();
-            }
-        });
-
-
-        function loadPhotos(page, urlParams, loadData = false) {
-            if (isLoading || lastPage) return;
-            isLoading = true;
-            let apiUrl = `{{ route('indexApi') }}?page=${page}&${urlParams}`;
-            fetch(apiUrl, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.last_page == currentPage) {
-                        lastPage = true;
-                    }
-                    renderPhotos(data.data, loadData);
-                    currentPage++;
-                })
-                .catch(error => {
-                    console.error("Error loading photos:", error);
-                })
-                .finally(() => {
-                    isLoading = false;
-                });
-        }
-
-        function renderPhotos(photos, loadData = false) {
-            let html = '';
-            photos.forEach(photo => {
-                html += `
-                <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
-                    <a href="/image/${photo.id}">
-                        <div class="aspect-square">
-                            <img src="${photo.url}" loading="lazy" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
-                        </div>
-                        <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <div class="mt-2 text-left px-2 py-1">
-                                <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
-                                <div class="text-sm text-gray-500 h-20 overflow-hidden truncate">${photo.description}</div>
-                            </div>
-                        </div>
-                        <div class="flex space-x-3 account-mobile mt-4 mb-1">
-                            <div class="flex justify-start">
-                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="${photo.avatar_user}" alt="">
-                                <div>
-                                    <a href="/board" class="nav-link link-dark nav_name font-semibold ml-2">${photo.name_user}</a>
-                                </div>
-                            </div>
-                            <div class="flex-grow"></div>
-                            <div style="cursor: none">
-                                <span><i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i> <span class="font-bold">${photo.likes_count}</span></span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            `;
-            });
-            if (loadData) {
-                mainContent.innerHTML = html;
-            } else {
-                mainContent.insertAdjacentHTML('beforeend', html);
-            }
-        }
-
         loadPhotos(currentPage, urlParams);
-
+        renderSearchHistory();
         window.addEventListener('scroll', debounce(() => {
             if (!lastPage) {
                 if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 850) {
+                    const params = new URLSearchParams(window.location.search);
+                    let urlParams = params.toString();
                     loadPhotos(currentPage, urlParams);
                 }
             }
-        }, 200));
+        }, 500));
     });
 </script>
 @endsection
