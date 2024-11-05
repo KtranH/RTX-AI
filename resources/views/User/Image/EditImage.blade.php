@@ -17,6 +17,7 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                 <form class="grid grid-cols-1 md:grid-cols-12 gap-4" id="editimageform" method="POST" action="{{ route('updateimage', $image->id) }}" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <!-- Return -->
                     <div class="col-span-1 md:col-span-12">
                         <div class="flex justify-center">
@@ -129,8 +130,19 @@
                                             'Ảnh của bạn đã được xóa.',
                                             'success'
                                         );
-                                        document.getElementById('editimageform').action = "{{ route('deleteimage', $image->id) }}";
-                                        document.getElementById('editimageform').submit();
+                                        setTimeout(() => {
+                                        Swal.close();
+                                        }, 2000);
+                                        fetch('{{ route("deleteimage", $image->id) }}', {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                        }
+                                        })
+                                        .then()
+                                        {
+                                            window.location.href = "{{ route('showboard') }}";
+                                        }
                                     }
                                 });
                             });

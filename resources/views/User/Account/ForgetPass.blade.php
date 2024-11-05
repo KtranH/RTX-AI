@@ -27,7 +27,7 @@
 
 </head>
 <body style="display:flex;flex-wrap:wrap">
-  <form class="form_container" style="margin:5% auto auto auto;" method="POST" action="{{ route("sendemailresetpass") }}">
+  <form class="form_container" style="margin:5% auto auto auto;" method="GET" action="{{ route("sendemailresetpass") }}">
     @csrf
     <div class="logo_container">
       <a href="{{route("showhome")}}">

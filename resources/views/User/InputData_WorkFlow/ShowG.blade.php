@@ -10,8 +10,10 @@
                     <div class="mt-6 space-y-12 lg:grid lg:grid-cols-1 lg:gap-x-6 lg:space-y-0">
                         <div class="group relative">
                           <div class="relative h-100 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64" style="display:flex;flex-wrap:wrap;">
-                            @if ($url == null)
+                            @if ($url == null || empty($url))
                                 <img src="/images/loading.gif" loading="lazy" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." class="h-full w-full object-cover object-center">
+                            @elseif (str_contains($url, 'INPUT_AI'))
+                                <img src="{{ asset($url) }}" loading="lazy" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." style="width:400px;border-radius:10px" class="object-cover object-center">
                             @else
                                 <img src="{{ $url }}" loading="lazy" alt="Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug." style="width:400px;border-radius:10px" class="object-cover object-center">
                             @endif

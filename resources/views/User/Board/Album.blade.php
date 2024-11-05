@@ -131,7 +131,6 @@
                         </div>
                     @endforeach --}}
                 </div>
-
                 {{-- @endif --}}
             </div>
         </div>
@@ -193,15 +192,15 @@
                             <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                 <div class="flex space-x-2">
                                     ${photo.is_feature ? `
-                                                <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                                     <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                             ` : `
-                                                <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                                     <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                             `}
-                                    <a href="/editimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    <a href="/edit_image/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                         <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                     </a>
                                     <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">

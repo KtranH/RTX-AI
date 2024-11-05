@@ -29,6 +29,7 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-9xl lg:px-16">
                 <form class="shadow-md p-4" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;border-radius:20px;margin-bottom:10%" action="{{ route('updateaccount') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <label for="avatar-cover" class="block text-xl font-medium mb-1 text-center">Ảnh Đại Diện</label>
                     <div class="flex justify-center mb-4">
                         <div class="aspect-square relative group w-40 h-40">

@@ -72,13 +72,13 @@
         </a>
         <!-- Laptop Navigation -->
         <nav class="hidden md:grid grid-cols-3 items-center justify-center gap-16 text-2xl absolute left-1/2 transform -translate-x-1/2">
-            <a href="{{ route('showexplore') }}" class="nav-link link-dark nav-explore text-gray-700 hover:text-purple-600 justify-self-start">
+            <a href="{{ route('showexplore') }}" class="nav-link link-dark nav-explore text-gray-700 hover:text-indigo-600 justify-self-start">
                 <i id="nav-explore" class="fa-solid fa-icons"></i>
             </a>
-            <a href="{{ route('showboard') }}" class="nav-link link-dark nav-board text-gray-700 font-bold hover:text-purple-600 justify-self-center">
+            <a href="{{ route('showboard') }}" class="nav-link link-dark nav-board text-gray-700 font-bold hover:text-indigo-600 justify-self-center">
                 <i id="nav-board" class="fa-solid fa-id-badge"></i>
             </a>
-            <a href="{{ route('showcreativity') }}" class="nav-link link-dark nav-creativity text-gray-700 hover:text-purple-600 justify-self-end">
+            <a href="{{ route('showcreativity') }}" class="nav-link link-dark nav-creativity text-gray-700 hover:text-indigo-600 justify-self-end">
                 <i id="nav-creativity" class="fa-solid fa-pencil"></i>
             </a>
         </nav>
@@ -87,23 +87,23 @@
             <div class="hidden md:flex items-center space-x-4">
                 <img class="h-8 w-8 rounded-full ring-2 ring-white" src="{{ $user->avatar_url }}" alt="{{ $user->username }}">
                 <div class="text-gray-700">
-                    <a href="{{ route('showboard') }}" class="font-bold hover:text-purple-600">{{ $user->username }}</a>
+                    <a href="{{ route('showboard') }}" class="font-bold hover:text-indigo-600">{{ $user->username }}</a>
                     @if ($user->times > 0)
-                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-purple-600 font-bold">{{ $user->times}}</span></p>
+                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-green-600 font-bold">{{ $user->times}}</span></p>
                     @else
-                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-indigo-600 font-bold">{{ $user->times}}</span></p>
+                        <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-red-600 font-bold">{{ $user->times}}</span></p>
                     @endif
                 </div>
                 <!-- Laptop Notifications -->
                 <div class="relative">
-                    <i id='notifications-toggle' class="fas fa-bell cursor-pointer text-gray-700 hover:text-purple-600"></i>
+                    <i id='notifications-toggle' class="fas fa-bell cursor-pointer text-gray-700 hover:text-indigo-600"></i>
                     <div id="notifications-box" class="hidden absolute -right-48 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
                         @include('User.Component.Notifications')
                     </div>
                 </div>
                 <!-- Laptop Settings -->
                 <div class="relative">
-                    <i id='settings-toggle' class="fas fa-cog cursor-pointer text-gray-700 hover:text-purple-600"></i>
+                    <i id='settings-toggle' class="fas fa-cog cursor-pointer text-gray-700 hover:text-indigo-600"></i>
                     <div id="settings-box" class="hidden absolute -right-40 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
                         @include('User.Component.Settings')
                     </div>
@@ -121,7 +121,7 @@
             <!-- Number of Create -->
            @if(isset($user))
                 @if ($user->times > 0)
-                    <div class="font-bold text-purple-600">{{ $user->times }}</div>
+                    <div class="font-bold text-indigo-600">{{ $user->times }}</div>
                 @else
                     <div class="font-bold text-indigo-600">{{ $user->times }}</div>
                 @endif
@@ -214,7 +214,7 @@
 
             const toggle = document.getElementById(toggleId);
             if (toggle) {
-                toggle.classList.remove('text-purple-600');
+                toggle.classList.remove('text-indigo-600');
             }
         });
     }
@@ -232,7 +232,7 @@
             changeToggles(toggleId);
 
             box.classList.toggle('hidden');
-            toggle.classList.toggle('text-purple-600');
+            toggle.classList.toggle('text-indigo-600');
 
             // Toggle body class to prevent background scrolling
             // document.body.classList.toggle('menu-open');
@@ -249,7 +249,7 @@
             if (box && !box.contains(e.target) && !toggle.contains(e.target)) 
             {
                 box.classList.add('hidden');
-                toggle.classList.remove('text-purple-600');
+                toggle.classList.remove('text-indigo-600');
             }
         });
     }
@@ -285,7 +285,7 @@
                 const linkElement = document.getElementById(id);
                 if (linkElement) 
                 {
-                    linkElement.classList.add('text-purple-600'); // Add highlight class
+                    linkElement.classList.add('text-indigo-600'); // Add highlight class
                 }
             }
         }

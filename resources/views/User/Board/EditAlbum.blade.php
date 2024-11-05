@@ -29,6 +29,7 @@
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mb-5">
                 <form class="grid grid-cols-1 md:grid-cols-12 gap-4" method="POST" action="{{ route('updatealbum', $album->id) }}" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <!-- Cover -->
                     <div class="md:col-span-4 aspect-square relative group">
                         <img id="album-cover" src="{{ $album->cover_image }}" alt="Album Cover" class="w-full h-full object-cover rounded-2xl border-4 border-[#a000ff]">
@@ -62,7 +63,7 @@
                         </div>
                         <div class="flex justify-center mt-4">
                             <button type="submit" id="update" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Cập Nhật Album</button>
-                            <a href="{{ route('deletealbum', $album->id) }}" id="delete" style="cursor:pointer" class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ml-5">Xóa Album</a>
+                            <a href="" id="delete" style="cursor:pointer" class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ml-5">Xóa Album</a>
                         </div>
                         @if($errors->has("error"))
                             <script>
@@ -74,18 +75,42 @@
                              </div>
                         @endif
                         <script>
-                             document.getElementById('delete').addEventListener('click', function (e) {
+                          document.getElementById('delete').addEventListener('click', function(e) {
                             e.preventDefault();
-
-                            Swal.fire({ title: 'Chắc chắn xóa album?', text: "Tất cả ảnh trong album sẽ bị xóa và không thể khôi phục!", icon: 'warning', showCancelButton: true, confirmButtonText: 'Tiếp tục', cancelButtonText: 'Hủy', reverseButtons: true
+                        
+                            Swal.fire({
+                              title: 'Chắc chắn xóa album?',
+                              text: "Tất cả ảnh trong album sẽ bị xóa và không thể khôi phục!",
+                              icon: 'warning',
+                              showCancelButton: true,
+                              confirmButtonText: 'Tiếp tục',
+                              cancelButtonText: 'Hủy',
+                              reverseButtons: true
                             }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = "{{ route('deletealbum', $album->id) }}"; 
-                                } else {
-                                    Swal.close();
+                              if (result.isConfirmed) {
+                                Swal.fire(
+                                            'Đã xóa!',
+                                            'Album của bạn đã được xóa.',
+                                            'success'
+                                );
+                                setTimeout(() => {
+                                Swal.close();
+                                }, 2000);
+                                fetch('{{ route("deletealbum", $album->id) }}', {
+                                  method: 'DELETE',
+                                  headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                  }
+                                })
+                                .then()
+                                {
+                                    window.location.href = "{{ route('showboard') }}";
                                 }
+                              } else {
+                                Swal.close();
+                              }
                             });
-                        });
+                          });
                         </script>
                     </div>
                 </form>

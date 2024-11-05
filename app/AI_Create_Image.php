@@ -46,16 +46,9 @@ trait AI_Create_Image
         Cookie::forget("url");
         Cookie::forget("model");
         $G = WorkFlow::find($ListG);
-
-        if(empty($prompt) || empty($seed))
-        {
-            return redirect()->route("showworkflow");
-        }
-        else
-        {    
-            $this->storeImageHistory($url, $this->find_id());
-            return view("User.InputData_WorkFlow.ShowG", compact("prompt", "seed", "url", "G", "model"));
-        }
+        if(!str_contains($url, 'INPUT_AI'))
+        {$this->storeImageHistory($url, $this->find_id());}
+        return view("User.InputData_WorkFlow.ShowG", compact("prompt", "seed", "url", "G", "model"));
     }
     private function getLatestImage($folder)
     {
@@ -82,6 +75,34 @@ trait AI_Create_Image
                     return 'http://127.0.0.1:8188/api/view?filename=' . $takeFileName[$id]['outputs'][$numberOutput]['images'][0]['filename'];
                 }
             }
+            else
+            {
+                return null;
+            }
+            sleep(2);
+        }
+    }
+    private function get_text_result($process)
+    {
+        $client = new Client();
+        $response = $client->post($this->url, ['json' => ['prompt' => $process]]);
+
+        if ($response->getStatusCode() !== 200) return null;
+
+        $id = json_decode($response->getBody(), true)['prompt_id'] ?? null;
+
+        while (true) {
+            $response = $client->get("http://127.0.0.1:8188/api/history/{$id}");
+            if ($response->getStatusCode() === 200) {
+                $takeFileName = json_decode($response->getBody()->getContents(), true);
+                if (!empty($takeFileName)) {
+                    return $takeFileName[$id]["outputs"][8]["string"][0];
+                }
+            }
+            else
+            {
+                return null;
+            }
             sleep(2);
         }
     }
@@ -99,8 +120,12 @@ trait AI_Create_Image
             if ($response->getStatusCode() === 200) {
                 $takeFileName = json_decode($response->getBody()->getContents(), true);
                 if (!empty($takeFileName)) {
-                    return $takeFileName[$id]["outputs"][3]["string"][0];
+                    return $takeFileName[$id]["outputs"][2]["string"][0];
                 }
+            }
+            else
+            {
+                return null;
             }
             sleep(2);
         }
@@ -144,6 +169,12 @@ trait AI_Create_Image
     {
         $translator = new GoogleTranslate();
         $translated = $translator->setSource('vi')->setTarget('en')->translate($prompt);
+        return $translated;
+    }
+    private function Translate2Vietnamese($prompt)
+    {
+        $translator = new GoogleTranslate();
+        $translated = $translator->setSource('en')->setTarget('vi')->translate($prompt);
         return $translated;
     }
     private function ChooseModel($model)

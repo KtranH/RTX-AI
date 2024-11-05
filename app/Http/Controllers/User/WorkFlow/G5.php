@@ -41,7 +41,7 @@ class G5 extends Controller
          $main = $email . preg_replace("/[^a-zA-Z0-9]/", "_", $request->file("input")->getClientOriginalName()) . "G5" . ".png";
 
          $process["6"]["inputs"]["noise_seed"] = $seed;
-         $process["58"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
+         $process["93"]["inputs"]["image"] = $this->inputDir . '/' . $email . "/" . $main;
 
          $destinationPath = $this->inputDir . '/' . $email;
          if (!file_exists($destinationPath)) {

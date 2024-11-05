@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class Account extends Controller
 {
@@ -202,7 +203,7 @@ class Account extends Controller
             }
             $user->update(['username' => $user->username, 'avatar_url' => $user->avatar_url]);
         }
-
+        Alert::toast('Đã cập nhật thông tin tài khoản', 'success')->position('bottom-left')->autoClose(3000);
         return redirect()->route("showaccount");
     }
 }

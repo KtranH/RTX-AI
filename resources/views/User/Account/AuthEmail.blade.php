@@ -49,7 +49,7 @@
         <div class="text-danger">{{ $message }}</div>
       @enderror
       @if($errors->has("ExpiredCode"))
-          <p style="color: red; width:100%">Mã không đúng hoặc đã hết hình!</p>
+          <p style="color: red; width:100%">Mã không đúng hoặc đã hết hạn!</p>
       @endif
       @if($errors->has("ManyTime"))
           <p style="color: red; width:100%">{{$errors->first("ManyTime")}}</p>

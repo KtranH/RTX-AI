@@ -13,6 +13,7 @@ class Explore extends Controller
     public function ShowExplore(Request $request)
     {
         $categories = Category::take(18)->get();
+
         $suggestCategories = DB::table("category_photo")->select("photo_id", "category_id")->inRandomOrder()->limit(6)->get();
         for ($i = 0; $i < 6; $i++) {
             $suggest[$i]["category"] = Category::find($suggestCategories[$i]->category_id)->name;
@@ -23,20 +24,27 @@ class Explore extends Controller
 
     public function indexApi(Request $request)
     {
-        // DB::listen(function ($query) {
-        //     \Log::info('SQL Query: ' . $query->sql);
-        //     \Log::info('Bindings: ' . implode(', ', $query->bindings));
-        //     \Log::info('Time: ' . $query->time . 'ms');
-        // });
-
         $query = Photo::query()
             ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
             ->leftJoin('users', 'users.id', '=', 'albums.user_id')
+            ->distinct()
+            ->join('category_photo', 'category_photo.photo_id', '=', 'photos.id')
             ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user')
-            ->withCount('likes');
+            ->withCount('likes')
+            ->inRandomOrder()
+            ->take(8);
 
         if ($request->has('q')) {
-            $query->where('photos.title', 'like', '%' . $request->q . '%');
+            $query->where(function ($query) use ($request) {
+                $query->where('photos.title', 'like', '%' . $request->q . '%')
+                    ->orWhereHas('category', function ($query) use ($request) {
+                        $query->where('name', $request->q);
+                    });
+            });
+        }
+
+        if ($request->has('category')) {
+            $query->where('category_photo.category_id', $request->category);
         }
 
         $photos = $query->paginate($request->limit ?? 8);

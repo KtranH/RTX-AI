@@ -10,7 +10,8 @@
            </div>
           <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             @php
-                $count = 0;
+                $count = Cookie::get('count_G');
+                if($count == null){$count = 0;}
             @endphp
             @foreach ( $workflow as $x )
               @php
@@ -40,6 +41,9 @@
               @endforeach
             <!-- More products... -->
           </div>
+          @php
+              Cookie::queue('count_G', $count);
+          @endphp
           <div style="width:100%;margin-top:5%">
             {{ $workflow->links("vendor.pagination.tailwind") }}
           </div>
