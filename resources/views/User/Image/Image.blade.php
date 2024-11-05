@@ -403,6 +403,18 @@ $count = count($listUserLiked);
 
                             $('#loadMoreButton').on('click', function() {
                                 loadComments();
+                                const toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+
+                                toast.fire({
+                                    title: 'Thông báo',
+                                    text: 'Đã thêm bình luận',
+                                    icon: 'success'
+                                });
                             });
                             $(document).on('click', '.delete-button', function() {
                                 var commentItem = $(this).closest('.comment-item');

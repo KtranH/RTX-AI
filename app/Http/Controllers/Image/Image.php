@@ -64,7 +64,6 @@ class Image extends Controller
             $comment->time_ago = $comment->created_at->diffForHumans(['locale' => 'vi']);
             return $comment;
         });
-
         return response()->json([
         'success' => true,
         'comments' => $comments
