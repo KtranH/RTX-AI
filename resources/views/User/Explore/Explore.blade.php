@@ -39,9 +39,12 @@
                     class="w-full rounded-2xl bg-gray-100 focus:border-indigo-500 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:shadow-md transition duration-300 ease-in-out"
                     oninput="toggleCloseIcon()" onclick="toggleExtension(event)" />
                 <span id="close-icon"
-                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer hidden"
+                    class="absolute inset-y-0 right-10 flex items-center pr-3 text-gray-500 cursor-pointer hidden"
                     onclick="clearSearchBar()">
                     <i class="text-xl fas fa-times"></i>
+                </span>
+                <span id="enter-icon" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer" onclick="handleSearch()">
+                    <i class="fa-solid fa-circle-arrow-right"></i>
                 </span>
                 <div id="search-extension"
                     class="absolute mt-2 w-full max-h-64 sm:max-h-48 lg:max-h-96 overflow-y-auto rounded-2xl bg-white shadow-lg p-4 hidden"
@@ -175,6 +178,7 @@
     }
 
     function addSearchHistory(term) {
+        if (!term) return;
         let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
         if (!history.includes(term)) {
             history.unshift(term);
