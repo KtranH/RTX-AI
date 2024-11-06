@@ -120,7 +120,7 @@ trait AI_Create_Image
             if ($response->getStatusCode() === 200) {
                 $takeFileName = json_decode($response->getBody()->getContents(), true);
                 if (!empty($takeFileName)) {
-                    return $takeFileName[$id]["outputs"][2]["string"][0];
+                    return $takeFileName[$id]["outputs"][3]["string"][0];
                 }
             }
             else

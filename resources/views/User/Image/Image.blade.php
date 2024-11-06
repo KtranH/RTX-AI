@@ -832,6 +832,62 @@ $count = count($listUserLiked);
                                     </div>
                                 `;
                             }
+                            function deleteReply(replyId) {
+                                const $deleteBtn = $(`.reply-item[data-reply-id="${replyId}"] .delete-reply-reply`);
+                                $deleteBtn.prop('disabled', true);
+
+                                $.ajax({
+                                    url: `/api/deletereply/${replyId}`,
+                                    method: 'DELETE',
+                                    data: {
+                                        _token: '{{ csrf_token() }}'
+                                    },
+                                    success: function(response) {
+                                        if (response && response.success) {
+                                            $(`.reply-item[data-reply-id="${replyId}"]`).fadeOut('fast', function() {
+                                                $(this).remove();
+                                            });
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Đã xóa phản hồi thành công'
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Có lỗi xảy ra',
+                                                text: response.message || 'Không thể xóa phản hồi'
+                                            });
+                                        }
+                                    },
+                                    error: function(error) {
+                                        console.error('Error deleting reply:', error);
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Có lỗi xảy ra',
+                                            text: 'Không thể xóa phản hồi. Vui lòng thử lại sau.'
+                                        });
+                                    },
+                                    complete: function() {
+                                        $deleteBtn.prop('disabled', false);
+                                    }
+                                });
+                            }
+                            $(document).on('click', '.delete-reply-reply', function() {
+                                const replyId = $(this).closest('.reply-item').data('reply-id');
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Xóa phản hồi bình luận',
+                                    text: 'Bạn sẽ không thể khôi phục lại quyết định này!',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Xóa',
+                                    cancelButtonText: 'Hủy',
+
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        deleteReply(replyId);
+                                    }
+                                })
+                            });
                         });
                     </script>                     
                 </div>

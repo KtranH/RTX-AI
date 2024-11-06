@@ -266,7 +266,7 @@ class Image extends Controller
     }
     public function ReplyComment(Request $request, $parentId)
     {
-        $comment = Comment::find($parentId)->firstOrFail(); 
+        $comment = Comment::findOrFail($parentId); 
         $reply = Reply::create([
             "user_id" => Auth::user()->id,
             "comment_id" => $parentId,
@@ -276,38 +276,69 @@ class Image extends Controller
             "updated_at" => now(),
         ]);
         $reply->load('user');
+        $reply->load('comment.user');
+        $reply->time_ago = $reply->created_at->diffForHumans(['locale' => 'vi']);
+        $reply->comment_id = [
+            'id' => $reply->comment->user->id,
+            'username' => $reply->comment->user->username
+        ];
         return response()->json(['success' => true, 'reply' => $reply]);
     }
     public function getReplies($commentId)
-{
-    $replies = Reply::where('comment_id', $commentId)
-        ->with('user')
-        ->with('comment.user')
-        ->orderBy('created_at', 'desc')
-        ->get()
-        ->map(function($reply) {
-            return [
-                'id' => $reply->id,
-                'content' => $reply->content,
-                'comment_id'=>
-                [
-                    'id' => $reply->comment->user->id,
-                    'username' => $reply->comment->user->username
-                ],
-                'user' => [
-                    'id' => $reply->user_id,
-                    'username' => $reply->user->username,
-                    'avatar_url' => $reply->user->avatar_url
-                ],
-                'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
-                'parent_id' => $reply->parent_id,
-                'original_comment_id' => $reply->comment_id
-            ];
-        });
+    {
+        $replies = Reply::where('comment_id', $commentId)
+            ->with('user')
+            ->with('comment.user')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function($reply) {
+                return [
+                    'id' => $reply->id,
+                    'content' => $reply->content,
+                    'comment_id'=>
+                    [
+                        'id' => $reply->comment->user->id,
+                        'username' => $reply->comment->user->username
+                    ],
+                    'user' => [
+                        'id' => $reply->user_id,
+                        'username' => $reply->user->username,
+                        'avatar_url' => $reply->user->avatar_url
+                    ],
+                    'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
+                    'parent_id' => $reply->parent_id,
+                    'original_comment_id' => $reply->comment_id
+                ];
+            });
 
-    return response()->json([
-        'success' => true,
-        'replies' => $replies
-    ]);
-}
+        return response()->json([
+            'success' => true,
+            'replies' => $replies
+        ]);
+    }
+    public function DeleteReply($id)
+    {
+        try {
+            $reply = Reply::findOrFail($id);
+            
+            if (auth()->id() !== $reply->user_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized'
+                ], 403);
+            }
+    
+            $reply->delete();
+            Alert::toast('Đã xoá phản hồi!', 'success')->position('bottom-left')->autoClose(3000);
+            return response()->json([
+                'success' => true,
+                'message' => 'Reply deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting reply'
+            ], 500);
+        }
+    }
 }

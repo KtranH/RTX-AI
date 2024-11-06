@@ -201,6 +201,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Load more replies
     Route::get('/api/getcomments/{commentId}/replies', [Image::class, 'getReplies'])->name("getreplies");
+
+    //Delete reply
+    Route::delete('/api/deletereply/{id}', [Image::class, 'DeleteReply'])->name("deletereply");
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
 
