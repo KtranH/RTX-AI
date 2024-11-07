@@ -2,11 +2,6 @@
 @section('Body')
 
     <?php
-    $user = auth()->user();
-    if ($user == null) {
-        $cookie = request()->cookie('token_account');
-        $user = DB::select('SELECT * FROM users WHERE email = ?', [$cookie])[0];
-    }
     $path = request()->path();
     $segments = explode('/', $path);
     $tab = end($segments);
@@ -71,10 +66,22 @@
                     </div>
                     <!-- Information -->
                     <div class="flex flex-col items-start">
-                        <div class="font-bold text-3xl flex">
-                            <div class="truncate hover:overflow-visible hover:whitespace-normal">{{ $user->username }}</div>
-                            <img src="/assets/img/icon.png" alt="" class="w-10 ml-2">
-                        </div>
+                        <div class="flex items-center font-bold text-3xl space-x-2">
+
+                            <div class="truncate hover:overflow-visible hover:whitespace-normal">
+                                {{ $user->username }}
+                            </div>
+                            
+                            <img src="/assets/img/icon.png" 
+                                 alt="Icon" 
+                                 class="w-8 h-8 text-purple-500 transform transition-transform duration-300 hover:scale-110">
+                        
+                            @if ($user->id != auth()->user()->id)
+                                <button class="bg-gradient-to-r from-purple-500 to-pink-500 text-xs text-white font-bold px-4 py-2 rounded-full transition-colors duration-300 hover:from-purple-600 hover:to-pink-600">
+                                    Theo dõi
+                                </button>                                
+                            @endif
+                        </div>                        
                         <div class="text-gray-500 text-left truncate hover:overflow-visible hover:whitespace-normal">
                             {{ $user->email }}</div>
                         <div class="flex">
@@ -188,6 +195,7 @@
                                     <div
                                         class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-50 group-hover:!opacity-100 transition-opacity duration-300">
                                         <div class="flex space-x-2">
+                                           @if (Auth::user()->id == $x->album->user->id)
                                             @if ($x->is_feature)
                                                 <a href="{{ route('featureimage', ['id' => $x->id]) }}"
                                                     class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
@@ -199,6 +207,7 @@
                                                     <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                             @endif
+                                           @endif
                                         </div>
                                     </div>
                                 </a>
@@ -360,17 +369,19 @@
                                             <div class="font-semibold text-lg truncate">{{ $x->title }}</div>
                                             <div class="text-sm text-gray-500 truncate">{{ $x->description }}</div>
                                         </div>
-                                        <div
-                                            class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                            <a href="#"
-                                                class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                <i class="fas fa-lock text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                            </a>
-                                            <a href="{{ route('editalbum', ['id' => $x->id]) }}"
-                                                class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                            </a>
-                                        </div>
+                                        @if (Auth::user()->id == $x->user->id)
+                                            <div
+                                                class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                                <a href="#"
+                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                    <i class="fas fa-lock text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                                </a>
+                                                <a href="{{ route('editalbum', ['id' => $x->id]) }}"
+                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                                    <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                                </a>
+                                            </div>
+                                        @endif
                                     </a>
                                 </div>
                             @endforeach
@@ -415,7 +426,7 @@
 
                             document.getElementById('loading').style.display = 'block';
 
-                            fetch(`/api/board?page=${page}`)
+                            fetch(`/api/board/?page=${page}&userId={{ $user->id }}`)
                                 .then(response => response.json())
                                 .then(data => {
                                     const photoContainer = document.getElementById('photo-container');
@@ -514,7 +525,7 @@
 
                             document.getElementById('loading_AI_Image').style.display = 'block';
 
-                            fetch(`/api/AI_Image/board?pageAI=${pageAI}`)
+                            fetch(`/api/AI_Image/board?pageAI=${pageAI}&userId={{ $user->id }}`)
                                 .then(response => response.json())
                                 .then(data => {
                                     const photoContainer = document.getElementById('AI-content');

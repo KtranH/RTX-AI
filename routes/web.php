@@ -118,11 +118,11 @@ Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkfl
 
 Route::middleware([CheckCookieLogin::class])->group(function () {
 
-    //---------------------------------------------BOARD------------------------------------------------------------
+    //-----------------------------------------------------------------BOARD----------------------------------------
 
     //Access board page
-    Route::get('/board', [Board::class, 'ShowBoard'])->name("showboard");
-
+    Route::get('/board/{id?}', [Board::class, 'ShowBoard'])->name("showboard");
+    
     //Change board tab
     Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
     Route::get('/api/board', [Board::class, 'ShowBoardApi'])->name('ShowBoardApi');

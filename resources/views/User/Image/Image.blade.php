@@ -85,9 +85,10 @@ $count = count($listUserLiked);
                                 </a>
                             @endforeach
                         </div>
+                        <hr class="mt-4">
                         <!-- Owner -->
-                        <div class="flex items-center space-x-4 mb-4">
-                            <a href="#" class="flex items-center space-x-2 group">
+                        <div class="flex items-center space-x-4 mb-2">
+                            <a href="{{ route("showboard", ["id" => $image->album->user->id]) }}" class="flex items-center space-x-2 group">
                                 <img src="{{ $image->album->user->avatar_url }}" loading="lazy" alt="Owner Avatar" class="w-10 h-10 rounded-full">
                                 <p class="font-semibold group-hover:!text-indigo-700">{{ $image->album->user->username }}</p>
                             </a>
@@ -98,7 +99,7 @@ $count = count($listUserLiked);
                             @endif
                             <div class="flex-grow"></div>
                         <!-- Action -->
-                        <div class="flex justify-center space-x-4 mb-2 mt-2">
+                        <div class="flex justify-center space-x-4 mt-2">
                             @if($checkUserLikedImage != null)
                                 <a href="#" data-id="{{ $image->id }}" class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                     <i class="fas fa-heart text-red-500 text-xl hover:text-indigo-700"></i>
@@ -248,6 +249,7 @@ $count = count($listUserLiked);
                             </script>
                         </div>
                     </div>
+                    <hr class="mb-4">
                     <!-- Number of likes -->
                     @if($count == 0)
                         <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.</span>
@@ -286,9 +288,11 @@ $count = count($listUserLiked);
                             </span>
                         @endif
                     </h3>
-                    @if($countComment == 0)
-                        <p id="noCommentsMessage">Chưa có bình luận nào!</p>
-                    @endif
+                    <div class="flex-grow flex items-center justify-center"> 
+                        @if($countComment == 0)
+                            <p id="noCommentsMessage" class="text-gray-400 text-2xs">Chưa có bình luận nào...!</p>
+                        @endif
+                    </div>
                     <div id="comment" class="flex flex-col">
                         <div class="space-y-2 mb-4">
                             <div id="commentList" class="space-y-4 overflow-y-auto overflow-x-hidden max-h-80 p-4 hover-scrollbar">

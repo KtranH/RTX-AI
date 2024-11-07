@@ -303,7 +303,7 @@
                         <div class="flex justify-start">
                             <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="${photo.avatar_user}" alt="">
                             <div>
-                                <a href="/board" class="nav-link link-dark nav_name font-semibold ml-2">${photo.name_user}</a>
+                                <a href="/board/${photo.album.user.id}" class="nav-link link-dark nav_name font-semibold ml-2">${photo.name_user}</a>
                             </div>
                         </div>
                         <div class="flex-grow"></div>

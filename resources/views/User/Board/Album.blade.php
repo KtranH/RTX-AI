@@ -17,13 +17,15 @@
                     <div class="relative text-center lg:text-left w-full lg:w-80 mb-4 lg:mb-0">
                         <img class="w-full h-full object-cover rounded-2xl border-8 border-[#a000ff]"
                             src="{{ $album->cover_image }}" loading="lazy" alt="Album Cover">
-                        <div
-                            class="absolute inset-0 flex opacity-0 hover:opacity-100 hover:!opacity-100 transition-opacity duration-300">
-                            <a href="{{ route('editalbum', ['id' => $album->id]) }}"
-                                class="bg-white p-2 shadow-md w-full h-full border-8 border-[#a000ff] flex items-center justify-center rounded-2xl">
-                                <i class="fas fa-edit text-gray-700 text-5xl"></i>
-                            </a>
-                        </div>
+                        @if (Auth::user()->id == $album->user->id)
+                            <div
+                                class="absolute inset-0 flex opacity-0 hover:opacity-100 hover:!opacity-100 transition-opacity duration-300">
+                                <a href="{{ route('editalbum', ['id' => $album->id]) }}"
+                                    class="bg-white p-2 shadow-md w-full h-full border-8 border-[#a000ff] flex items-center justify-center rounded-2xl">
+                                    <i class="fas fa-edit text-gray-700 text-5xl"></i>
+                                </a>
+                            </div>
+                        @endif
                     </div>
                     <!-- Information -->
                     <div class="flex flex-col w-full max-w-full lg:max-w-72">
@@ -35,7 +37,7 @@
                         <div
                             class="font-semibold text-xl text-gray-500 truncate hover:overflow-visible hover:whitespace-normal">
                             {{ $album->description }}</div>
-                        <a href="#" class="font-semibold text-xl text-gray-500 flex mt-4 cursor-pointer group">
+                        <a href="{{ route('showboard', ['id' => $album->user->id]) }}" class="font-semibold text-xl text-gray-500 flex mt-4 cursor-pointer group">
                             <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2" src="{{ $user->avatar_url }}"
                                 alt="">
                             <p
@@ -48,7 +50,7 @@
         </div>
         <!-- Return -->
         <div class="flex justify-center">
-            <a href="{{ route('showboard') }}"
+            <a href="{{ route('showboard', ['id' => $album->user->id]) }}"
                 class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group">
                 <div
                     class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-[#a000ff] group-hover:w-[184px] z-10 duration-500 rounded-2xl">
@@ -62,7 +64,8 @@
                 <p class="translate-x-2" style="margin-top:12px">Quay lại</p>
             </a>
         </div>
-         <!-- Suggestion -->
+        @if (Auth::user()->id == $album->user->id)
+        <!-- Suggestion -->
          <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="font-bold text-3xl text-left">Thêm Ảnh</div>
@@ -75,6 +78,7 @@
                 </div>
             </div>
         </div>
+        @endif
         <!-- Gallery -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
@@ -136,35 +140,42 @@
         </div>
     </main>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const mainContent = document.getElementById('main-content');
             let currentPage = 1;
             let isLoading = false;
             let lastPage = false;
-
-            // const urlParams = new URLSearchParams(window.location.search);
-            // const category = urlParams.get('category');
-
+    
+            // Implementing debounce function if not defined
+            function debounce(func, wait) {
+                let timeout;
+                return function() {
+                    const context = this;
+                    const args = arguments;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), wait);
+                };
+            }
+    
             function loadPhotos(page) {
                 if (isLoading || lastPage) return;
-
+    
                 isLoading = true;
-
-                fetch(`{{ url('/') }}/api/album/{{ request()->id }}?page=${page}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        }
-                    })
+    
+                const apiUrl = "{{ url('/') }}/api/album/{{ request()->id }}?page=" + page;
+    
+                fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                })
                     .then(response => response.json())
-                    .then(_data => {
-                        var data = _data.photos;
-                        if (data.last_page == currentPage) {
-                            lastPage = true;
-                        }
-                        renderPhotos(data.data);
-                        currentPage++;
+                    .then(data => {
+                        renderPhotos(data.photos);
+                        currentPage = data.current_page;
+                        lastPage = currentPage >= data.last_page;
                         isLoading = false;
                     })
                     .catch(error => {
@@ -172,7 +183,7 @@
                         isLoading = false;
                     });
             }
-
+    
             function renderPhotos(photos) {
                 let html = '';
                 photos.forEach(photo => {
@@ -180,49 +191,52 @@
                         <div class="relative group">
                             <a href="/image/${photo.id}">
                                 <div class="aspect-square">
-                                    <img src="${photo.url}" loading="lazy" alt="Image 1" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                    <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                 </div>
                                 <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                     <div class="mt-2 text-left px-2 py-1">
-                                        <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title }</div>
-                                        <div class="text-sm text-gray-500 h-20 overflow-hidden">${photo.description }</div>
+                                        <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
+                                        <div class="text-sm text-gray-500 h-20 overflow-hidden">${photo.description}</div>
                                     </div>
                                 </div>
                             </a>
-                            <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                <div class="flex space-x-2">
-                                    ${photo.is_feature ? `
-                                                <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
-                                                    <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
-                                                </a>
-                                            ` : `
-                                                <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
-                                                    <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                                </a>
-                                            `}
-                                    <a href="/edit_image/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                    <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-sort text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                </div>
-                            </div>
+                            ${photo.album.user.id != "{{ Auth::user()->id }}" ? '' : `
+                                <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                    <div class="flex space-x-2">
+                                        ${photo.is_feature ? `
+                                            <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
+                                                <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
+                                            </a>
+                                        ` : `
+                                            <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
+                                                <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                            </a>
+                                        `}
+                                        <a href="/edit_image/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                            <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                        </a>
+                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                            <i class="fas fa-sort text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                        </a>
+                                    </div>
+                                </div>`
+                            }
                         </div>
-            `;
+                    `;
                 });
                 mainContent.insertAdjacentHTML('beforeend', html);
             }
-
+    
             loadPhotos(currentPage);
-
+    
             window.addEventListener('scroll', debounce(() => {
                 if (!lastPage) {
                     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 850) {
-                        loadPhotos(currentPage);
+                        loadPhotos(currentPage + 1);
                     }
                 }
             }, 200));
         });
     </script>
+    
 @endsection
