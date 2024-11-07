@@ -307,7 +307,9 @@ class Image extends Controller
                     ],
                     'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
                     'parent_id' => $reply->parent_id,
-                    'original_comment_id' => $reply->comment_id
+                    'original_comment_id' => $reply->comment_id,
+                    'updated_at' => $reply->updated_at,
+                    'created_at' => $reply->created_at
                 ];
             });
 
@@ -353,4 +355,23 @@ class Image extends Controller
     
         return response()->json(['success' => true]);
     }
-}
+    public function ReplyReply(Request $request, $parentId)
+    {
+        $reply = Reply::findOrFail($parentId); 
+        $reply = Reply::create([
+            "user_id" => Auth::user()->id,
+            "comment_id" => $reply->comment_id,
+            "content" => $request->input('content'),
+            "parent_id" => $parentId,
+            "created_at" => now(),
+            "updated_at" => now(),
+        ]);
+        $reply->load('user');
+        $reply->load('comment.user');
+        $reply->time_ago = $reply->created_at->diffForHumans(['locale' => 'vi']);
+        $reply->comment_id = [
+            'id' => $reply->parent->user->id,
+            'username' => $reply->parent->user->username
+        ];
+        return response()->json(['success' => true, 'reply' => $reply]);
+    }}

@@ -797,12 +797,15 @@ $count = count($listUserLiked);
                                                         <a href="#" class="text-blue-500"> ${reply.comment_id.id ? (reply.comment_id.id != reply.user.id ? '@' + reply.comment_id.username : '') : ''}</a><span class="reply-content"> ${reply.content}</span>
                                                         ${reply.user.id == '{{ Auth::user()->id }}' ? `
                                                         <form class="edit-reply-form hidden mt-2">
-                                                            <div class="flex items-start space-x-2">
+                                                            <div class="flex items-start space-x-2">    
                                                                 <img src="{{ Auth::user()->avatar_url }}" class="w-8 h-8 rounded-full">
                                                                 <div class="flex-grow">
-                                                                    <input type="text" 
-                                                                        class="edit-reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                                        placeholder="Viết phản hồi...">
+                                                                    <div class="relative">
+                                                                        <input type="text" 
+                                                                            class="edit-reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                            placeholder="Viết phản hồi...">
+                                                                    </div>
+                                                                    <span class="text-xs text-gray-400 font-semibold">Đang trả lời <b>${reply.user.username}</b></span>
                                                                     <div class="flex justify-end mt-2 space-x-2">   
                                                                         <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">
                                                                             Hủy
@@ -824,22 +827,37 @@ $count = count($listUserLiked);
                                                         <button class="edit-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Chỉnh sửa</button>
                                                         <button class="delete-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-red-600">Xóa</button>
                                                     ` : ''}
-                                                    ${(new Date(reply.updated_at).getTime() !== new Date(reply.created_at).getTime()) ? `<span class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</span>` : ''}
+                                                    ${(new Date(reply.updated_at).getTime() !== new Date(reply.created_at).getTime()) ?  
+                                                    `<span class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</span>`
+                                                     : ''}
                                                 </div>
-                                                <form class="reply-reply-form hidden mt-2">
-                                                    <input type="hidden" name="parent_id" value="">
-                                                    <input type="hidden" name="original_comment_id" value="">
+                                               <form class="reply-reply-form hidden mt-2">
                                                     <div class="flex items-start space-x-2">
-                                                        <img src="{{ Auth::user()->avatar_url }}" class="w-8 h-8 rounded-full">
+                                                        <i class="fa-solid fa-repeat text-gray-400 text-lg"></i>
+                                                        
+                                                        <img src="{{ Auth::user()->avatar_url }}" 
+                                                            alt="Avatar" 
+                                                            class="w-8 h-8 rounded-full">
+                                                        
                                                         <div class="flex-grow">
-                                                            <input type="text" 
-                                                                class="reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                                placeholder="Viết phản hồi...">
+                                                            <div class="relative">
+                                                                <input type="text" 
+                                                                    class="reply-reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
+                                                                    placeholder="Viết phản hồi...">
+                                                            </div>
+                                                            
+                                                            <span class="text-xs text-gray-400 font-semibold">
+                                                                Đang trả lời <b>${reply.user.username}</b>
+                                                            </span>
+                                                            
                                                             <div class="flex justify-end mt-2 space-x-2">
-                                                                <button type="button" class="cancel-reply px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">
+                                                                <button type="button" 
+                                                                        class="cancel-reply-reply px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">
                                                                     Hủy
                                                                 </button>
-                                                                <button type="submit" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600">
+                                                                
+                                                                <button type="submit" 
+                                                                        class="submit-reply-reply px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">
                                                                     Phản hồi
                                                                 </button>
                                                             </div>
@@ -958,6 +976,82 @@ $count = count($listUserLiked);
                                             icon: 'error',
                                             title: 'Có lỗi xảy ra',
                                             text: 'Không thể cập nhật bình luận'
+                                        });
+                                    }
+                                });
+                            });
+                            $(document).on('click', '.reply-reply-button', function(e) {
+                                e.preventDefault();
+                                const commentItem = $(this).closest('.reply-item');
+                                const replyForm = commentItem.find('.reply-reply-form');
+                                
+                                $('.reply-reply-form').not(replyForm).addClass('hidden');
+                                
+                                replyForm.toggleClass('hidden');
+                                
+                                if (!replyForm.hasClass('hidden')) {
+                                    replyForm.find('.reply-reply-input').focus();
+                                }
+                            });
+
+                            $(document).on('click', '.cancel-reply-reply', function(e) {
+                                e.preventDefault();
+                                const form = $(this).closest('.reply-reply-form');
+                                form.addClass('hidden');
+                                form.find('.reply-reply-input').val('');
+                            });
+
+                            $(document).on('submit', '.reply-reply-form', function(e) {
+                                e.preventDefault();
+                                const form = $(this);
+                                const commentItem = form.closest('.reply-item');
+                                const content = form.find('.reply-reply-input').val();
+                                const parentId = commentItem.data('reply-id');
+
+                                if (!content) {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Vui lòng nhập nội dung phản hồi'
+                                    });
+                                    return;
+                                }
+
+                                $.ajax({
+                                    url: `/api/reply/${parentId}/replies`,
+                                    method: 'POST',
+                                    data: {
+                                        content: content,
+                                        _token: '{{ csrf_token() }}'
+                                    },
+                                    success: function(response) {
+                                        if (response.success) {
+                                            const replyHtml = createReplyHTML(response.reply);
+                                            
+                                            let repliesContainer = commentItem.find('.replies-container');
+                                            if (repliesContainer.length === 0) {
+                                                commentItem.append('<div class="replies-container mt-2"></div>');
+                                                repliesContainer = commentItem.find('.replies-container');
+                                            }
+
+                                            repliesContainer.prepend(replyHtml);
+                                            
+                                            repliesContainer.show();
+                                            
+                                            form.addClass('hidden').find('.reply-reply-input').val('');
+                                
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Đã thêm phản hồi',
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            });
+                                        }
+                                    },
+                                    error: function(xhr) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Có lỗi xảy ra',
+                                            text: xhr.responseJSON?.message || 'Vui lòng thử lại sau'
                                         });
                                     }
                                 });

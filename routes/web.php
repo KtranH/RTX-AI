@@ -207,6 +207,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     
     //Update reply
     Route::patch('/api/updatereply/{id}', [Image::class, 'UpdateReply'])->name("updatereply");
+
+    //Reply reply
+    Route::post('/api/reply/{parentId}/replies', [Image::class, 'ReplyReply'])->name("replyreply");
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
 
