@@ -321,7 +321,7 @@ class Image extends Controller
         try {
             $reply = Reply::findOrFail($id);
             
-            if (auth()->id() !== $reply->user_id) {
+            if (Auth::user()->id !== $reply->user_id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized'
@@ -340,5 +340,17 @@ class Image extends Controller
                 'message' => 'Error deleting reply'
             ], 500);
         }
+    }
+    public function UpdateReply(Request $request, $id)
+    {
+        $reply = Reply::findOrFail($id);
+        if (!$reply || $reply->user_id != Auth::id()) {
+            return response()->json(['success' => false]);
+        }
+    
+        $reply->content = $request->content;
+        $reply->save();
+    
+        return response()->json(['success' => true]);
     }
 }

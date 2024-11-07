@@ -204,6 +204,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Delete reply
     Route::delete('/api/deletereply/{id}', [Image::class, 'DeleteReply'])->name("deletereply");
+    
+    //Update reply
+    Route::patch('/api/updatereply/{id}', [Image::class, 'UpdateReply'])->name("updatereply");
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
 

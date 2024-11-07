@@ -331,7 +331,7 @@ $count = count($listUserLiked);
                                                         <div class="flex items-start space-x-4">
                                                             <img src="${comment.user.avatar_url}" alt="Avatar" class="w-10 h-10 rounded-full">
                                                             <div class="flex-grow">
-                                                                <div class="bg-gray-100 p-2 rounded-lg w-full">
+                                                                <div class="bg-gray-100 p-3 rounded-lg w-full">
                                                                     <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${comment.user.username}</div>
                                                                     <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
                                                                     ${(comment.user_id == '{{ Auth::user()->id }}') ?
@@ -522,7 +522,7 @@ $count = count($listUserLiked);
                                                     <div class="flex items-start space-x-4">
                                                         <img src="${comment.user.avatar_url}" alt="Avatar" class="w-10 h-10 rounded-full">
                                                         <div class="flex-grow">
-                                                            <div class="bg-gray-100 p-2 rounded-lg w-full">
+                                                            <div class="bg-gray-100 p-3 rounded-lg w-full">
                                                                 <div class="font-semibold truncate hover:overflow-visible hover:whitespace-normal">${comment.user.username}</div>
                                                                 <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
                                                                 ${(comment.user_id == '{{ Auth::user()->id }}') ?
@@ -794,10 +794,38 @@ $count = count($listUserLiked);
                                                         ${reply.user.username}
                                                     </div>
                                                     <div class="text-sm text-gray-700 mt-1">
-                                                        <a href="#" class="text-blue-500"> ${reply.comment_id.id ? (reply.comment_id.id != reply.user.id ? '@' + reply.comment_id.username : '') : ''}</a> ${reply.content}
+                                                        <a href="#" class="text-blue-500"> ${reply.comment_id.id ? (reply.comment_id.id != reply.user.id ? '@' + reply.comment_id.username : '') : ''}</a><span class="reply-content"> ${reply.content}</span>
+                                                        ${reply.user.id == '{{ Auth::user()->id }}' ? `
+                                                        <form class="edit-reply-form hidden mt-2">
+                                                            <div class="flex items-start space-x-2">
+                                                                <img src="{{ Auth::user()->avatar_url }}" class="w-8 h-8 rounded-full">
+                                                                <div class="flex-grow">
+                                                                    <input type="text" 
+                                                                        class="edit-reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                        placeholder="Viết phản hồi...">
+                                                                    <div class="flex justify-end mt-2 space-x-2">   
+                                                                        <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">
+                                                                            Hủy
+                                                                        </button>
+                                                                        <button type="submit" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600">
+                                                                            Chỉnh sửa
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    ` : ''}
                                                     </div>
                                                 </div>
-                                                
+                                                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                                    <span class="font-semibold hover:text-indigo-700 hover:font-semibold">${reply.time_ago}</span>
+                                                    <button class="reply-reply-button font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Phản hồi</button>
+                                                    ${reply.user.id == '{{ Auth::user()->id }}' ? `
+                                                        <button class="edit-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Chỉnh sửa</button>
+                                                        <button class="delete-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-red-600">Xóa</button>
+                                                    ` : ''}
+                                                    ${(new Date(reply.updated_at).getTime() !== new Date(reply.created_at).getTime()) ? `<span class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</span>` : ''}
+                                                </div>
                                                 <form class="reply-reply-form hidden mt-2">
                                                     <input type="hidden" name="parent_id" value="">
                                                     <input type="hidden" name="original_comment_id" value="">
@@ -818,15 +846,6 @@ $count = count($listUserLiked);
                                                         </div>
                                                     </div>
                                                 </form>
-
-                                                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                                                    <span class="font-semibold hover:text-indigo-700 hover:font-semibold">${reply.time_ago}</span>
-                                                    <button class="reply-reply-button font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Phản hồi</button>
-                                                    ${reply.user.id == '{{ Auth::user()->id }}' ? `
-                                                        <button class="edit-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Chỉnh sửa</button>
-                                                        <button class="delete-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-red-600">Xóa</button>
-                                                    ` : ''}
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -887,6 +906,61 @@ $count = count($listUserLiked);
                                         deleteReply(replyId);
                                     }
                                 })
+                            });
+                            $(document).on('click', '.edit-reply-reply', function(e) {                                
+                                var replyItem = $(this).closest('.reply-item');
+                                var content = replyItem.find('.reply-content').text();
+                                var form = replyItem.find('.edit-reply-form');
+                                var input = form.find('.edit-reply-input');
+                                
+                                replyItem.find('.reply-content').hide();
+                                form.removeClass('hidden');
+                                input.val(content).focus();
+                            });
+
+                            $(document).on('click', '.cancel-edit', function(e) {
+                                var form = $(this).closest('.edit-reply-form');
+                                var replyItem = form.closest('.reply-item');
+                                
+                                form.addClass('hidden');
+                                replyItem.find('.reply-content').show();
+                            });
+
+                            $(document).on('submit', '.edit-reply-form', function(e) {
+                                e.preventDefault();
+                                var form = $(this);
+                                const replyItem = $(this).closest('.reply-item');
+                                const replyId = replyItem.data('reply-id');
+                                var newContent = form.find('.edit-reply-input').val();
+
+                                $.ajax({
+                                    url: `/api/updatereply/${replyId}`,
+                                    type: 'PATCH',
+                                    data: {
+                                        content: newContent,
+                                        _token: '{{ csrf_token() }}'
+                                    },
+                                    success: function(response) {
+                                        if (response.success) {
+                                            replyItem.find('.reply-content').text(newContent).show();
+                                            form.addClass('hidden');
+                                            
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Đã cập nhật bình luận',
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            });
+                                        }
+                                    },
+                                    error: function() {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Có lỗi xảy ra',
+                                            text: 'Không thể cập nhật bình luận'
+                                        });
+                                    }
+                                });
                             });
                         });
                     </script>                     
