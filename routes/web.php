@@ -160,14 +160,14 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //-------------------------------------------------------------IMAGE, ADD IMAGE, UPDATE IMAGE, DELETE IMAGE, SET FEATURE IMAGE, LIKE IMAGE----------------------------------------------------------------------------
 
+    //Access image page
+    Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
+
     //Access create image page
     Route::get('/create_image/{id}', [Image::class, 'CreateImage'])->name("createimage");
 
     //Add new image to album
     Route::post('/addimage2album/{id}', [Image::class, 'AddImage2Album'])->name("addimage2album");
-
-    //Access image page
-    Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
 
     //Access edit image page
     Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
@@ -205,7 +205,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Load more replies
     Route::get('/api/getcomments/{commentId}/replies', [Image::class, 'getReplies'])->name("getreplies");
-    
+
     //Delete reply
     Route::delete('/api/deletereply/{id}', [Image::class, 'DeleteReply'])->name("deletereply");
     

@@ -41,14 +41,18 @@ class Image extends Controller
             ->inRandomOrder()
             ->get();
 
-        $idUser = Auth::user()->id;
-        $checkUserNow = User::findOrFail($idUser);
-
+        if(Auth::check())
+        {
+            $idUser = Auth::user()->id;
+            $checkUserLikedImage = $this->checkLike($id,$idUser);
+        }
+        else
+        {
+            $checkUserLikedImage = null;
+        }
         $listcate = $image->category()->where("photo_id",$id)->get();
         $listUserLiked = Like::where("photo_id", $id)->get(); 
-
-        $checkUserLikedImage = $this->checkLike($id,$idUser);
-        return view('User.Image.Image', compact('image', 'photos', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'checkUserNow', 'countComment'));
+        return view('User.Image.Image', compact('image', 'photos', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'countComment'));
     }
     public function ShowCommentAPI(Request $request, $idImage)
     {

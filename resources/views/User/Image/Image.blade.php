@@ -110,7 +110,7 @@ $count = count($listUserLiked);
                                         <img src="{{ $image->album->user->avatar_url }}" loading="lazy" alt="Owner Avatar" class="w-10 h-10 rounded-full">
                                         <p class="font-semibold group-hover:!text-indigo-700">{{ $image->album->user->username }}</p>
                                     </a>
-                                    @if ($image->album->user->id != Auth::user()->id)
+                                    @if ($image->album->user->id == Auth::user()->id)
                                         <a href="#"
                                             class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Theo dõi
                                         </a>
@@ -184,7 +184,7 @@ $count = count($listUserLiked);
                                             });
                                         });
                                     </script>
-                                    @if($image->album->user->id == Auth::user()->id)
+                                    @if(Auth::user()->id == $image->user_id)
                                         @if($image->is_feature == true)
                                             <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                                 <i class="fas fa-star text-yellow-500 text-xl hover:text-indigo-700"></i>
@@ -283,7 +283,7 @@ $count = count($listUserLiked);
                                     Bạn,
                                 @endif
                                     @foreach ($listUserLiked as $l)
-                                        @if($l->user->username != $checkUserNow->username)
+                                        @if(Auth::user()->id != $l->user_id)
                                             {{ $l->user->username }}{{ $loop->last ? '.' : ', ' }}
                                         @endif
                                     @endforeach 
