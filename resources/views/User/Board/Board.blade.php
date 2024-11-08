@@ -87,11 +87,11 @@
                         <div class="flex">
                             <div class="cursor-pointer no-underline hover:text-[#a000ff]"
                                 onclick="openPopup('followers-popup')">
-                                <span class="font-bold mr-1">5</span> Theo dõi
+                                <span class="font-bold mr-1">{{ $user->followers_count }}</span> Theo dõi
                             </div>
                             <div class="cursor-pointer no-underline hover:text-[#a000ff] ml-5"
                                 onclick="openPopup('following-popup')">
-                                <span class="font-bold mr-1">10</span> Đang theo dõi
+                                <span class="font-bold mr-1">{{ $user->following_count }}</span> Đang theo dõi
                             </div>
                         </div>
                     </div>
@@ -179,9 +179,8 @@
                         @foreach ($feature as $x)
                             <div class="relative group">
                                 <a href="{{ route('showimage', ['id' => $x->id]) }}">
-                                    <div class="aspect-square">
-                                        <img src="{{ $x->url }}" loading="lazy" alt="Image 1"
-                                            class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15 rounded-2xl">
+                                    <div class="aspect-square group-hover:opacity-20 w-[307px]">
+                                        <img data-lazy="{{ $x->url }}" loading="lazy" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15 rounded-2xl">
                                     </div>
                                     <div
                                         class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-50 group-hover:!opacity-100 transition-opacity duration-300">
@@ -220,9 +219,10 @@
         <script>
             $(document).ready(function() {
                 $('.featured-photos').slick({
+                    lazyLoad: 'ondemand',
                     slidesToShow: 4,
                     slidesToScroll: 1,
-                    variableWidth: false,
+                    variableWidth: true,
                     infinite: false,
                     arrows: true,
                     dots: false,
