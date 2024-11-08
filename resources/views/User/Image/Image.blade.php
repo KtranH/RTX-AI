@@ -75,7 +75,24 @@ $count = count($listUserLiked);
                         <!-- Title and Description -->
                         <div class="mb-2">
                             <h1 class="text-4xl font-bold truncate overflow-visible">{{ $image->title }}</h1>
-                            <p class="text-lg mt-2 text-gray-600 truncate hover:overflow-visible hover:whitespace-normal">{{ $image->description }}</p>
+                            <p class="text-lg mt-2 text-gray-600 truncate" id="description-{{ $image->id }}">
+                                {{ \Illuminate\Support\Str::limit($image->description, 1000) }}
+                                
+                                @if (strlen($image->description) > 1000)
+                                    <span class="text-blue-500 cursor-pointer" onclick="showFullDescription({{ $image->id }})" id="show-more-{{ $image->id }}">
+                                        Xem thêm
+                                    </span>
+                                @endif
+                            </p>
+                            <script>
+                                function showFullDescription(id) {
+                                    var descriptionElement = document.getElementById('description-' + id);
+                                    var showMoreElement = document.getElementById('show-more-' + id);
+                            
+                                    descriptionElement.innerHTML = `{{ $image->description }}`;
+                                    showMoreElement.style.display = 'none';
+                                }
+                            </script>                        
                         </div>
                         <!-- Categories -->
                         <div class="flex flex-wrap gap-2 mb-4 max-w-screen-sm">
@@ -295,7 +312,7 @@ $count = count($listUserLiked);
                     </div>
                     <div id="comment" class="flex flex-col">
                         <div class="space-y-2 mb-4">
-                            <div id="commentList" class="space-y-4 overflow-y-auto overflow-x-hidden max-h-80 p-4 hover-scrollbar">
+                            <div id="commentList" class="space-y-4 overflow-y-auto overflow-x-hidden max-h-90 p-4 hover-scrollbar">
                             </div>
                         </div>
                         <!-- Add Comment -->
