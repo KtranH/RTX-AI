@@ -671,24 +671,6 @@ $count = count($listUserLiked);
                                 });
                             });
                             $('.replies-container').hide();
-                            $(document).on('click', '.view-replies', function(e) {
-                                e.preventDefault();
-                                const commentItem = $(this).closest('.comment-item');
-                                const repliesContainer = commentItem.find('.replies-container');
-                                const commentId = commentItem.data('comment-id');
-                                
-                                if (repliesContainer.is(':visible')) {
-                                    repliesContainer.slideUp(function() {
-                                        repliesContainer.empty(); 
-                                        const replyCount = commentItem.data('reply-count');
-                                        commentItem.find('.view-replies').text(`Xem ${replyCount} phản hồi`);
-                                    });
-                                } else {
-                                    loadReplies(commentId, repliesContainer);
-                                    $(this).text('Ẩn phản hồi');
-                                    repliesContainer.slideDown();
-                                }
-                            });
                             $(document).on('click', '.reply-button', function(e) {
                                 e.preventDefault();
                                 const commentItem = $(this).closest('.comment-item, .reply-item');
@@ -765,16 +747,44 @@ $count = count($listUserLiked);
                                     }
                                 });
                             });
-                            function loadReplies(commentId, container) {
+                            function loadReplies(commentId, container, skip = 0) {
                                 $.ajax({
                                     url: `/api/getcomments/${commentId}/replies`,
                                     method: 'GET',
+                                    data: { skip: skip },
                                     success: function(response) {
-                                        if (response.success && response.replies.length > 0) {
-                                            container.empty();
+                                        if (response.success) {
+                                            if (skip === 0) {
+                                                container.empty();
+                                            }
+                                            
+                                            container.find('.load-more-replies').remove();
+                                            
                                             const repliesHtml = response.replies.map(reply => createReplyHTML(reply)).join('');
-                                            container.html(repliesHtml);
-                                            container.show();
+                                            container.append(repliesHtml);
+                                            
+                                            if (response.hasMore) {
+                                                const loadMoreBtn = $(`
+                                                    <button class="load-more-replies text-sm text-gray-400 font-bold hover:text-indigo-700 mt-2 w-full text-left">
+                                                        <i class="fa-solid fa-arrow-right-arrow-left mr-2 text-gray-400"></i>Xem thêm phản hồi
+                                                    </button>
+                                                `);
+                                                
+                                                loadMoreBtn.on('click', function() {
+                                                    $(this).html('<i class="fas fa-spinner fa-spin mr-2"></i>Đang tải...');
+                                                    $(this).prop('disabled', true);
+                                                    
+                                                    loadReplies(commentId, container, skip + 3);
+                                                });
+                                                
+                                                container.append(loadMoreBtn);
+                                            }
+                                            
+                                            if (skip > 0) {
+                                                container.find('.reply-item').slice(-response.replies.length).hide().slideDown(300);
+                                            } else {
+                                                container.slideDown(300);
+                                            }
                                         }
                                     },
                                     error: function(error) {
@@ -787,6 +797,24 @@ $count = count($listUserLiked);
                                     }
                                 });
                             }
+                            $(document).on('click', '.view-replies', function(e) {
+                                e.preventDefault();
+                                const commentItem = $(this).closest('.comment-item');
+                                const repliesContainer = commentItem.find('.replies-container');
+                                const commentId = commentItem.data('comment-id');
+                                
+                                if (repliesContainer.is(':visible')) {
+                                    repliesContainer.slideUp(function() {
+                                        repliesContainer.empty();
+                                        const replyCount = commentItem.data('reply-count');
+                                        commentItem.find('.view-replies').text(`Xem ${replyCount} phản hồi`);
+                                    });
+                                } else {
+                                    loadReplies(commentId, repliesContainer);
+                                    $(this).text('Ẩn phản hồi');
+                                    repliesContainer.slideDown();
+                                }
+                            });
                             function createReplyHTML(reply) {
                                 return `
                                     <div class="reply-item mt-2" data-reply-id="${reply.id}" data-original-comment-id="${reply.original_comment_id}">
@@ -798,7 +826,7 @@ $count = count($listUserLiked);
                                                         ${reply.user.username}
                                                     </div>
                                                     <div class="text-sm text-gray-700 mt-1">
-                                                        <a href="#" class="text-blue-500"> ${reply.comment_id.id ? (reply.comment_id.id != reply.user.id ? '@' + reply.comment_id.username : '') : ''}</a><span class="reply-content"> ${reply.content}</span>
+                                                        <a href="#" class="text-blue-500">${reply.reply_reply.id ? (reply.reply_reply.id != reply.user.id ? '@' + reply.reply_reply.username : '') : (reply.comment_id.id ? (reply.comment_id.id != reply.user.id ? '@' + reply.comment_id.username : '') : '')}</a><span class="reply-content"> ${reply.content}</span>
                                                         ${reply.user.id == '{{ Auth::user()->id }}' ? `
                                                         <form class="edit-reply-form hidden mt-2">
                                                             <div class="flex items-start space-x-2">    
@@ -1029,6 +1057,7 @@ $count = count($listUserLiked);
                                     },
                                     success: function(response) {
                                         if (response.success) {
+                                            console.log('Response:', response);
                                             const replyHtml = createReplyHTML(response.reply);
                                             
                                             let repliesContainer = commentItem.find('.replies-container');

@@ -266,7 +266,6 @@ class Image extends Controller
     }
     public function ReplyComment(Request $request, $parentId)
     {
-        $comment = Comment::findOrFail($parentId); 
         $reply = Reply::create([
             "user_id" => Auth::user()->id,
             "comment_id" => $parentId,
@@ -282,40 +281,52 @@ class Image extends Controller
             'id' => $reply->comment->user->id,
             'username' => $reply->comment->user->username
         ];
+        $reply->reply_reply = [
+            'id' => $this->findParentId($reply->parent_id),
+            'username' => $this->findParentName($reply->parent_id)
+        ];
         return response()->json(['success' => true, 'reply' => $reply]);
     }
-    public function getReplies($commentId)
+    public function getReplies($commentId, Request $request)
     {
-        $replies = Reply::where('comment_id', $commentId)
-            ->with('user')
-            ->with('comment.user')
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function($reply) {
-                return [
-                    'id' => $reply->id,
-                    'content' => $reply->content,
-                    'comment_id'=>
-                    [
-                        'id' => $reply->comment->user->id,
-                        'username' => $reply->comment->user->username
-                    ],
-                    'user' => [
-                        'id' => $reply->user_id,
-                        'username' => $reply->user->username,
-                        'avatar_url' => $reply->user->avatar_url
-                    ],
-                    'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
-                    'parent_id' => $reply->parent_id,
-                    'original_comment_id' => $reply->comment_id,
-                    'updated_at' => $reply->updated_at,
-                    'created_at' => $reply->created_at
-                ];
-            });
+        $skip = $request->input('skip', 0);
+        $limit = 3;
+        $totalReplies = Reply::where('comment_id', $commentId)->count();
 
+        $replies = Reply::where('comment_id', $commentId)
+            ->with(['user', 'replies.user', 'comment.user'])
+            ->orderBy('created_at', 'asc')
+            ->skip($skip)
+            ->take($limit)
+            ->get()
+            ->map(function ($reply) {
+                return [
+                        'id' => $reply->id,
+                        'content' => $reply->content,
+                        'comment_id' => [
+                            'id' => $reply->comment->user->id,
+                            'username' => $reply->comment->user->username
+                        ],
+                        'reply_reply' =>[
+                                'id' => $this->findParentId($reply->parent_id),
+                                'username' => $this->findParentName($reply->parent_id)
+                        ],
+                        'user' => [
+                            'id' => $reply->user->id,
+                            'username' => $reply->user->username,
+                            'avatar_url' => $reply->user->avatar_url
+                        ],
+                        'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
+                        'parent_id' => $reply->parent_id,
+                        'original_comment_id' => $reply->comment_id,
+                        'updated_at' => $reply->updated_at,
+                        'created_at' => $reply->created_at
+                    ];
+            });
         return response()->json([
             'success' => true,
-            'replies' => $replies
+            'replies' => $replies,
+            'hasMore' => ($skip + $limit) < $totalReplies
         ]);
     }
     public function DeleteReply($id)
@@ -372,6 +383,10 @@ class Image extends Controller
         $reply->comment_id = [
             'id' => $reply->parent->user->id,
             'username' => $reply->parent->user->username
+        ];
+        $reply->reply_reply = [
+            'id' => $this->findParentId($reply->parent_id),
+            'username' => $this->findParentName($reply->parent_id)
         ];
         return response()->json(['success' => true, 'reply' => $reply]);
     }}
