@@ -72,7 +72,7 @@ $count = count($listUserLiked);
                             </div>
                             <p class="translate-x-2 relative" style="margin-top:12px">Quay lại</p>             
                         </a>
-                        <div class="flex flex-col h-[750px] overflow-y-auto overflow-x-hidden hover-scrollbar">
+                        <div class="flex flex-col overflow-y-auto overflow-x-hidden hover-scrollbar">
                             <!-- Title and Description -->
                                 <div class="mb-2">
                                     <h1 class="text-4xl font-bold truncate overflow-visible">{{ $image->title }}</h1>
@@ -313,7 +313,7 @@ $count = count($listUserLiked);
                             </div>
                             <div id="comment" class="flex flex-col">
                                 <div class="space-y-2 mb-4">
-                                    <div id="commentList" class="space-y-4">
+                                    <div id="commentList" class="space-y-4 h-64">
                                     </div>
                                 </div>
                             </div>
