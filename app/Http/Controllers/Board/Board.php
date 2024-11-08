@@ -6,6 +6,7 @@ use App\AI_Create_Image;
 use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
+use App\Models\FollowerUser;
 use App\Models\HistoryImageAI;
 use App\Models\Photo;
 use App\Models\User;
@@ -35,6 +36,7 @@ class Board extends Controller
     }
     public function ShowBoard(Request $request, $id = null)
     {
+        $isFollowing = false;
         if($id == null)
         {
             $userId = Auth::user()->id;
@@ -43,11 +45,14 @@ class Board extends Controller
         {
             $userId = $id;
         }
+        if (Auth::check()) {
+            $isFollowing = Auth::user()->isFollowing($userId);
+        }
         $user = User::findOrFail($userId);
         $tab = $request->route('tab');
         $albums = Album::where('user_id', $userId)->paginate(8); 
         $feature = Photo::where('is_feature', true)->whereHas('album', function ($query) use ($userId) {$query->where('user_id', $userId);})->get(); 
-        return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'user'));
+        return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'user', 'isFollowing'));
     }
     public function ShowBoardApi(Request $request)
     {
@@ -213,5 +218,35 @@ class Board extends Controller
 
         Alert::toast('Thêm Album thành công!', 'success')->position('bottom-left')->autoClose(3000);
         return redirect()->route("showboard");
+    }
+    public function UpdateCountFollowers($id)
+    {
+        $user = User::findOrFail($id);
+        $user->followers_count = $user->followers()->count();
+        $user->save();
+    }
+    public function UpdateCountFollowing($id)
+    {
+        $user = User::findOrFail($id);
+        $user->following_count = $user->following()->count();
+        $user->save();
+    }
+    public function FollowUser(Request $request)
+    {
+        $id = $request->get('user_id');
+        $user = User::findOrFail($id);
+        $user->followers()->attach(Auth::user()->id);
+        $this->UpdateCountFollowing(Auth::user()->id);
+        $this->UpdateCountFollowers($id);
+        return response()->json(['success' => true]);
+    }
+    public function UnFollowUser(Request $request)
+    {
+        $id = $request->get('user_id');
+        $user = User::findOrFail($id);
+        $user->followers()->detach(Auth::user()->id);
+        $this->UpdateCountFollowing(Auth::user()->id);  
+        $this->UpdateCountFollowers($id);
+        return response()->json(['success' => true]);
     }
 }

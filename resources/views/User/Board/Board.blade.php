@@ -77,27 +77,127 @@
                                  class="w-8 h-8 text-purple-500 transform transition-transform duration-300 hover:scale-110">
                         
                             @if ($user->id != auth()->user()->id)
-                                <button class="bg-gradient-to-r from-purple-500 to-pink-500 text-xs text-white font-bold px-4 py-2 rounded-full transition-colors duration-300 hover:from-purple-600 hover:to-pink-600">
-                                    Theo dõi
-                                </button>                                
+                                    <button class="cancel-follow-btn bg-gradient-to-r from-purple-500 to-pink-500 text-xs text-white font-bold px-4 py-2 rounded-full transition-colors duration-300 hover:from-purple-600 hover:to-pink-600">
+                                        Hủy theo dõi
+                                    </button>  
+                                    <button class="follow-btn bg-gradient-to-r from-purple-500 to-pink-500 text-xs text-white font-bold px-4 py-2 rounded-full transition-colors duration-300 hover:from-purple-600 hover:to-pink-600">
+                                        Theo dõi
+                                    </button>
                             @endif
                         </div>                        
                         <div class="text-gray-500 text-left truncate hover:overflow-visible hover:whitespace-normal">
                             {{ $user->email }}</div>
                         <div class="flex">
-                            <div class="cursor-pointer no-underline hover:text-[#a000ff]"
+                            <div class="followers cursor-pointer no-underline hover:text-[#a000ff]"
                                 onclick="openPopup('followers-popup')">
-                                <span class="font-bold mr-1">{{ $user->followers_count }}</span> Theo dõi
+                                <span class="font-bold mr-1 followers-count">{{ $user->followers_count }}</span> Theo dõi
                             </div>
-                            <div class="cursor-pointer no-underline hover:text-[#a000ff] ml-5"
+                            <div class="following cursor-pointer no-underline hover:text-[#a000ff] ml-5"
                                 onclick="openPopup('following-popup')">
-                                <span class="font-bold mr-1">{{ $user->following_count }}</span> Đang theo dõi
+                                <span class="font-bold mr-1 following-count">{{ $user->following_count }}</span> Đang theo dõi
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <script>
+            $(document).ready(function() {
+                @if (!$isFollowing)
+                    $('.cancel-follow-btn').hide();
+                @else
+                    $('.follow-btn').hide();
+                @endif
+
+                $('.follow-btn').click(function() {
+                    var userId = {{ $user->id }};
+                    var followButton = $(this);
+                    var cancelFollowButton = $('.cancel-follow-btn');
+
+                    $.ajax({
+                        url: '/follow',
+                        type: 'POST',
+                        data: {
+                            user_id: userId,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+
+                                followButton.css('display', 'none');
+
+                                cancelFollowButton.css('display', 'inline-block');
+
+                                var followersCount = parseInt($('.followers-count').text()) + 1;
+                                
+                                $('.followers-count').text(followersCount);
+
+                                const toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+
+                                toast.fire({
+                                    title: 'Thông báo',
+                                    text: 'Đã theo dõi người dùng!',
+                                    icon: 'success'
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            alert('Có lỗi xảy ra khi theo dõi.');
+                        }
+                    });
+                });
+
+                $('.cancel-follow-btn').click(function() {
+                    var userId = {{ $user->id }};
+                    var cancelFollowButton = $(this);
+                    var followButton = $('.follow-btn');
+
+                    $.ajax({
+                        url: '/unfollow',
+                        type: 'DELETE',
+                        data: {
+                            user_id: userId,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+
+                                cancelFollowButton.css('display', 'none');
+
+                                followButton.css('display', 'inline-block');
+                                
+                                var followersCount = parseInt($('.followers-count').text()) - 1;
+                                
+                                $('.followers-count').text(followersCount);
+
+                                const toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+
+                                toast.fire({
+                                    title: 'Thông báo',
+                                    text: 'Đã hủy theo dõi người dùng!',
+                                    icon: 'success'
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            alert('Có lỗi xảy ra khi hủy theo dõi.');
+                        }
+                    });
+                });
+            });
+        </script>   
         <!-- Followers Popup -->
         <div id="followers-popup"
             class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
@@ -179,8 +279,13 @@
                         @foreach ($feature as $x)
                             <div class="relative group">
                                 <a href="{{ route('showimage', ['id' => $x->id]) }}">
-                                    <div class="aspect-square group-hover:opacity-20 w-[307px]">
-                                        <img data-lazy="{{ $x->url }}" loading="lazy" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15 rounded-2xl">
+                                    <div class="aspect-square group-hover:opacity-20 w-[407px] md:w-[307px]">
+                                        <img 
+                                            data-lazy="{{ $x->url }}" 
+                                            loading="lazy" 
+                                            alt="Image 1" 
+                                            class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15 rounded-2xl"
+                                        >
                                     </div>
                                     <div
                                         class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-50 group-hover:!opacity-100 transition-opacity duration-300">

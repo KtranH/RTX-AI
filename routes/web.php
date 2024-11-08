@@ -128,6 +128,10 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/api/board', [Board::class, 'ShowBoardApi'])->name('ShowBoardApi');
     Route::get('/api/AI_Image/board', [Board::class, 'ShowAiImageApi'])->name('ShowAiImageApi');
 
+    //Follow user
+    Route::post('/follow', [Board::class, 'FollowUser'])->name("followuser");
+    Route::delete('/unfollow', [Board::class, 'UnFollowUser'])->name("unfollowuser");
+
     //--------------------------------------------------------------------------------------------------------------
 
 

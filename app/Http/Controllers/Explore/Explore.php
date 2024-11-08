@@ -32,8 +32,7 @@ class Explore extends Controller
             ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user')
             ->with(['album.user'])
             ->withCount('likes')
-            ->inRandomOrder()
-            ->take(8);
+            ->inRandomOrder();
         if ($request->has('q')) {
             $query->where(function ($query) use ($request) {
                 $query->where('photos.title', 'like', '%' . $request->q . '%')
