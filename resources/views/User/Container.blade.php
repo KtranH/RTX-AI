@@ -59,7 +59,7 @@
     <div style="height:80px;">
         @include('User.Header')
     </div>
-    <div class="mt-10 mb-10">
+    <div class="mt-2 mb-2">
         @include('sweetalert::alert')
         @yield('Body')
     </div>

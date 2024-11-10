@@ -87,7 +87,7 @@
             <div class="hidden md:flex items-center space-x-4">
                 <img class="h-8 w-8 rounded-full ring-2 ring-white" src="{{ $user->avatar_url }}" alt="{{ $user->username }}">
                 <div class="text-gray-700">
-                    <a href="{{ route('showboard') }}" class="font-bold hover:text-indigo-600">{{ $user->username }}</a>
+                    <a href="{{ route('showboard') }}" class="font-bold text-black no-underline hover:text-indigo-600">{{ $user->username }}</a>
                     @if ($user->times > 0)
                         <p class="text-xs text-gray-600">Lượt tạo ảnh: <span class="text-green-600 font-bold">{{ $user->times}}</span></p>
                     @else
@@ -139,7 +139,6 @@
                 <i class="fas fa-bars"></i>
             </button>
         </div>
-
     </header>
     <!-- Mobile Menu -->
     <div id="menu" class="fixed hidden md:hidden w-full bg-white z-50 flex flex-col p-6 overflow-y-auto transition duration-300 ease-in-out left-0 top-[89px] border-b">
@@ -275,7 +274,7 @@
         const links = {
             '/board': 'nav-board',
             '/explore': 'nav-explore',
-            '/creativity': 'nav-creativity'
+            '/creativity': 'nav-creativity',
         };
         
         for (const [path, id] of Object.entries(links)) 

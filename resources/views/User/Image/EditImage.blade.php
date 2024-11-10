@@ -65,7 +65,7 @@
                         </div>
                         <div class="mb-4">
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
-                            <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('title') is-invalid @enderror" value="{{ $image->title }}">
+                            <input type="text" id="title" maxlength="29" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('title') is-invalid @enderror" value="{{ $image->title }}">
                             @error('title')
                                 <div class="text-danger w-100">{{ $message }}</div>
                             @enderror

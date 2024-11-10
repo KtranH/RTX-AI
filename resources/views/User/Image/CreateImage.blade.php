@@ -46,7 +46,7 @@
                     <div class="md:col-span-8 row-span-1 p-4 rounded-2xl" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px">
                         <div class="mb-4">
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
-                            <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] sm:text-sm" placeholder="Nhập tiêu đề" required>
+                            <input type="text" id="title" name="title" maxlength="29" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] sm:text-sm" placeholder="Nhập tiêu đề" required>
                         </div>
                         <div class="mb-4">
                             <label for="description" class="block text-xl font-medium mb-1">Mô Tả</label>
