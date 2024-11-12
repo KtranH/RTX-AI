@@ -11,6 +11,7 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Photo;
 use App\Models\Reply;
+use App\Models\SavedImage;
 use App\Models\User;
 use App\Models\WorkFlow;
 use Illuminate\Http\Request;
@@ -35,7 +36,6 @@ class Image extends Controller
     {
         $image = Photo::findOrFail($id);
         $countComment = Comment::where("photo_id", $id)->count();
-
         $photos = Photo::query()
             ->limit(4)
             ->inRandomOrder()
@@ -393,4 +393,18 @@ class Image extends Controller
             'username' => $this->findParentName($reply->parent_id)
         ];
         return response()->json(['success' => true, 'reply' => $reply]);
-    }}
+    }
+    public function SavedImage(Request $request)
+    {
+        $checkSavedImg = SavedImage::where('user_id', Auth::user()->id)->where('photo_id', $request->get('image_id'))->first();
+        if ($checkSavedImg) {
+            $checkSavedImg->delete();
+            return response()->json(['success' => true, 'saved' => false]);
+        }
+        $savedImage = SavedImage::create([
+            'user_id' => Auth::user()->id,
+            'photo_id' => $request->get('image_id')
+        ]);
+        return response()->json(['success' => true, 'saved' => true]);
+    }
+}

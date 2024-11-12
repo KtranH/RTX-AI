@@ -43,7 +43,7 @@ $count = count($listUserLiked);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <main class="w-full h-full" style="scroll-behavior: smooth">
         <!-- Container -->
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center mt-4">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 rounded-2xl p-5 shadow-md" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Photo -->
@@ -327,12 +327,67 @@ $count = count($listUserLiked);
                                         <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fa-solid fa-flag text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 saved_button">
                                             <i class="fa-solid fa-bookmark text-gray-700 text-xl hover:text-indigo-700"></i>
-                                        </a>
+                                        </a>                                        
                                         <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fas fa-share text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>
+                                    <script>
+                                       $(document).ready(function() {
+                                            @if (Auth::user()->savedImg($image->id))
+                                                $('.saved_button').find('i')
+                                                    .removeClass('text-gray-700')
+                                                    .addClass('text-blue-700');
+                                            @endif
+                                            $('.saved_button').click(function(e) {
+                                                e.preventDefault(); 
+
+                                                var $this = $(this); 
+
+                                                $.ajax({
+                                                    url: "{{ route('savedimage') }}", 
+                                                    method: "POST", 
+                                                    data: {
+                                                        _token: "{{ csrf_token() }}", 
+                                                        image_id: "{{ $image->id }}" 
+                                                    },
+                                                    success: function(response) {
+                                                        if (response.saved) {
+                                                            $this.find('i')
+                                                                .removeClass('text-gray-700')
+                                                                .addClass('text-blue-700');
+                                                        } else {
+                                                            $this.find('i')
+                                                                .removeClass('text-blue-700')
+                                                                .addClass('text-gray-700');
+                                                        }
+
+                                                        Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Thao tác thành công',
+                                                            timer: 3000,
+                                                            position: 'bottom-end',
+                                                            toast: true,
+                                                            showConfirmButton: false
+                                                        });
+                                                    },
+                                                    error: function(xhr) {
+                                                        console.error('Đã xảy ra lỗi: ' + xhr.responseText);
+
+                                                        Swal.fire({
+                                                            icon: 'error',
+                                                            title: 'Thao tác thất bại!',
+                                                            timer: 3000,
+                                                            position: 'bottom-end',
+                                                            toast: true,
+                                                            showConfirmButton: false
+                                                        });
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
                                     @endif
                                     <script>
                                         document.getElementById('delete').addEventListener('click', function(e)

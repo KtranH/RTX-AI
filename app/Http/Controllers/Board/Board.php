@@ -9,6 +9,7 @@ use App\Models\Album;
 use App\Models\FollowerUser;
 use App\Models\HistoryImageAI;
 use App\Models\Photo;
+use App\Models\SavedImage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -90,6 +91,25 @@ class Board extends Controller
             $userId = $id;
         }
         $photos = HistoryImageAI::where('user_id', $userId)->paginate($imagesPerPage, ['*'], 'page', $page); 
+        return response()->json([
+            'photos' => $photos->items(),
+            'hasMorePages' => $photos->hasMorePages(),
+        ]);
+    }
+    public function ShowSavedImageApi(Request $request)
+    {
+        $imagesPerPage = 2; 
+        $page = $request->get('pageSaved', 1);
+        $id = $request->get('userId', null);
+        if($id == null)
+        {
+            $userId = Auth::user()->id;
+        }
+        else
+        {
+            $userId = $id;
+        }
+        $photos = SavedImage::where('user_id', $userId)->with('photo')->paginate($imagesPerPage, ['*'], 'page', $page); 
         return response()->json([
             'photos' => $photos->items(),
             'hasMorePages' => $photos->hasMorePages(),

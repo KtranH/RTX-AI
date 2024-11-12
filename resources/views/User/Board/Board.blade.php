@@ -53,7 +53,7 @@
                 <div
                     class="flex flex-col items-center lg:flex-row lg:items-center lg:justify-center space-y-6 lg:space-y-0 lg:space-x-6">
                     <!-- Avatar -->
-                    <div class="relative text-center">
+                    <div class="relative text-center" data-aos="fade-up">
                         <img class="rounded-full w-40 h-40 object-cover" src="{{ $user->avatar_url }}" loading="lazy"
                             alt="User Avatar">
                         @if ($user->id == Auth::user()->id)
@@ -68,7 +68,7 @@
                     </div>
                     <!-- Information -->
                     <div class="flex flex-col items-start">
-                        <div class="flex items-center font-bold text-3xl space-x-2">
+                        <div class="flex items-center font-bold text-3xl space-x-2" data-aos="fade-up" data-aos-delay="100">
 
                             <div class="truncate hover:overflow-visible hover:whitespace-normal">
                                 {{ $user->username }}
@@ -76,7 +76,7 @@
                             
                             <img src="/assets/img/icon.png" 
                                  alt="Icon" 
-                                 class="w-8 h-8 text-purple-500 transform transition-transform duration-300 hover:scale-110">
+                                 class="w-8 h-8 text-purple-500 transform transition-transform duration-300 hover:scale-110" loading="lazy">
                         
                             @if ($user->id != Auth::user()->id)
                                     <button class="cancel-follow-btn bg-gradient-to-r from-purple-500 to-pink-500 text-xs text-white font-bold px-4 py-2 rounded-full transition-colors duration-300 hover:from-purple-600 hover:to-pink-600">
@@ -87,15 +87,15 @@
                                     </button>
                             @endif
                         </div>                        
-                        <div class="text-gray-500 text-left truncate hover:overflow-visible hover:whitespace-normal">
+                        <div class="text-gray-500 text-left truncate hover:overflow-visible hover:whitespace-normal" data-aos="fade-up" data-aos-delay="300">
                             {{ $user->email }}</div>
                         <div class="flex">
                             <div class="followers cursor-pointer no-underline hover:text-[#a000ff]"
-                                onclick="openPopup('followers-popup')">
+                                onclick="openPopup('followers-popup')" data-aos="fade-up" data-aos-delay="400">
                                 <span class="font-bold mr-1 followers-count">{{ $user->followers_count }}</span> Theo dõi
                             </div>
                             <div class="following cursor-pointer no-underline hover:text-[#a000ff] ml-5"
-                                onclick="openPopup('following-popup')">
+                                onclick="openPopup('following-popup')" data-aos="fade-up" data-aos-delay="450">
                                 <span class="font-bold mr-1 following-count">{{ $user->following_count }}</span> Đang theo dõi
                             </div>
                         </div>
@@ -266,9 +266,9 @@
         <!-- Features  -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
-                <div class="font-bold text-3xl">Ảnh nổi bật</div>
+                <div class="font-bold text-3xl" data-aos="fade-right" data-aos-delay="600">Ảnh nổi bật</div>
                 @if (count($feature) == 0)
-                    <div class="mt-2 grid gap-2">
+                    <div class="mt-2 grid gap-2" data-aos="fade-up" data-aos-delay="700">
                         <div class="flex items-center mt-2">
                             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mr-4">
                                 <path
@@ -279,7 +279,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="mt-2 grid-cols-1 gap-2 featured-photos">
+                    <div class="mt-2 grid-cols-1 gap-2 featured-photos" data-aos="fade-right" data-aos-delay="150">
                         @foreach ($feature as $x)
                             <div class="relative group">
                                 <a href="{{ route('showimage', ['id' => $x->id]) }}">
@@ -597,12 +597,85 @@
         </div>
         <!-- Saved Content -->
         <div id="saved-content" class="tab-content" style="display: none;">
+            <div id="saved-section_board" class="flex items-center justify-center">
+                <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">            
+                    <h2 class="font-bold text-3xl text-left">Danh sách ảnh đã lưu lại</h2>
+                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"id="saved-container">
+                    </div>
+                    <div id="loading_saved_image" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
+                    <script>
+                        var pageSaved = 1;
+                        var isLoadingSaved = false;
+                    
+                        function loadPhotosSaved(initialLoad = false) {
+                            if (isLoadingSaved) return;
+                            isLoadingSaved = true;
+                    
+                            document.getElementById('loading_saved_image').style.display = 'block';
+                    
+                            fetch(`/api/Saved_Image/board/?pageSaved=${pageSaved}&userId={{ $user->id }}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    const photoContainer = document.getElementById('saved-container');
+                                    if (data.photos.length === 0) {
+                                        document.getElementById('loading_saved_image').innerText = 'Không có ảnh nào để hiển thị.';
+                                    }
+                    
+                                    data.photos.forEach(photo => {
+                                        const photoHTML = `
+                                           <div class="relative group">
+                                                <a href="/image/${photo.photo.id}">
+                                                    <div class="aspect-square">
+                                                        <img src="${photo.photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
+                                                    </div>
+                                                    <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                                        <div class="mt-2 text-left px-2 py-1">
+                                                            <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.photo.title}</div>
+                                                            <div class="text-sm text-gray-500 h-20 overflow-hidden">${photo.photo.description}</div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>`;
+                                        photoContainer.insertAdjacentHTML('beforeend', photoHTML);
+                                    });
+                    
+                                    isLoadingSaved = false;
+                                    document.getElementById('loading_saved_image').style.display = 'none';
+                    
+                                    if (data.hasMorePages) {
+                                        pageSaved++;
+                                    } else {
+                                        window.removeEventListener('scroll', scrollHandlerNormal);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Lỗi khi tải ảnh:', error);
+                                    isLoadingSaved = false;
+                                    document.getElementById('loading_saved_image').style.display = 'none';
+                                });
+                        }
+                    
+                        window.addEventListener('load', () => {
+                            loadPhotosSaved(true);
+                        });
+                    
+                        function scrollHandlerNormal() {
+                            console.log('scroll event triggered'); 
+                            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                                loadPhotosSaved();
+                            }
+                        }
+                    
+                        window.addEventListener('scroll', scrollHandlerNormal);
+                    </script>                    
+                </div>
+            </div>
         </div>
         <!-- Created Content -->
         <div id="created-content" class="tab-content" style="display: none;">
             <div class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
-                    <h2 class="font-bold text-4xl text-left">Lịch sử tạo ảnh AI</h2>
+                    <h2 class="font-bold text-3xl text-left">Lịch sử tạo ảnh AI</h2>
                     <p class="text-gray-500 text-2xs text-left mt-2">Lưu ý chúng tôi chỉ lưu ảnh được tạo ra bởi AI trong
                         10 ngày!</p>
                     {{-- @if ($imagesAI->isNotEmpty()) --}}

@@ -66,7 +66,7 @@
     @include('User.Footer')
     <script>
         AOS.init({
-            duration: 1000,
+            duration: 800,
             deplay: 500,
             once: false,
             offset: 150,

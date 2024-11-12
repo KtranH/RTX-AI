@@ -35,4 +35,8 @@ class Photo extends Model
     {
         return $this->hasMany(PostReview::class);
     }
+    public function savedImages()
+    {
+        return $this->hasMany(SavedImage::class);
+    }
 }

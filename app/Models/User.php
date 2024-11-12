@@ -71,4 +71,8 @@ class User extends Authenticatable
     {
         return $this->following()->where('user_id', $userId)->exists();
     }
+    public function savedImg($photo_id)
+    {
+        return SavedImage::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->exists();
+    }
 }

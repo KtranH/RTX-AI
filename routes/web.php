@@ -128,6 +128,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
     Route::get('/api/board', [Board::class, 'ShowBoardApi'])->name('ShowBoardApi');
     Route::get('/api/AI_Image/board', [Board::class, 'ShowAiImageApi'])->name('ShowAiImageApi');
+    Route::get('/api/Saved_Image/board', [Board::class, 'ShowSavedImageApi'])->name('ShowSavedImageApi');
 
     //Follow user
     Route::post('/follow', [Board::class, 'FollowUser'])->name("followuser");
@@ -186,6 +187,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Set feature image
     Route::get('/featureimage/{id}', [Board::class, 'FeatureImage'])->name("featureimage");
+
+    //Saved image
+    Route::post('/savedimage', [Image::class, 'SavedImage'])->name("savedimage");
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
