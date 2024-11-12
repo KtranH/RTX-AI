@@ -7,5 +7,8 @@ use Illuminate\Http\Request;
 
 class Payment extends Controller
 {
-    
+    public function ShowPayment($price)
+    {
+        return view('User.Payment.Payment',compact('price'));
+    }
 }

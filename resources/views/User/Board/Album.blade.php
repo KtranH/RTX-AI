@@ -15,7 +15,7 @@
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:space-x-6">
                     <!-- Cover -->
                     <div class="relative text-center lg:text-left w-full lg:w-80 mb-4 lg:mb-0">
-                        <img class="w-full h-full object-cover rounded-2xl border-8 border-[#a000ff]"
+                        <img class="w-full h-full object-cover rounded-2xl border-8 border-[]"
                             src="{{ $album->cover_image }}" loading="lazy" alt="Album Cover">
                         @if (Auth::user()->id == $album->user->id)
                             <div

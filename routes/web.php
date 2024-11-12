@@ -14,6 +14,7 @@ use App\Http\Controllers\Board\Board;
 use App\Http\Controllers\Image\Image;
 use App\Http\Controllers\Creativity\Creativity;
 use App\Http\Controllers\Explore\Explore;
+use App\Http\Controllers\Payment\Payment;
 use App\Http\Controllers\User\WorkFlow\G4;
 use App\Http\Controllers\User\WorkFlow\G5;
 use App\Http\Controllers\User\WorkFlow\G6;
@@ -130,6 +131,8 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Follow user
     Route::post('/follow', [Board::class, 'FollowUser'])->name("followuser");
+
+    //Unfollow user
     Route::delete('/unfollow', [Board::class, 'UnFollowUser'])->name("unfollowuser");
 
     //--------------------------------------------------------------------------------------------------------------
@@ -244,9 +247,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //----------------------------------------------------------------------------PAYMENT-----------------------------------------------------------------------------
 
     // Access Payment
-    Route::get('/payment', function () {
-        return view('User.Payment.Payment');
-    })->name('showpayment');
+    Route::get('/payment/{price}', [Payment::class, 'ShowPayment'])->name("showpayment");
 
     // Access Pricing
     Route::get('/pricing', function () {

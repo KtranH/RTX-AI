@@ -110,10 +110,97 @@ $count = count($listUserLiked);
                                         <img src="{{ $image->album->user->avatar_url }}" loading="lazy" alt="Owner Avatar" class="w-10 h-10 rounded-full">
                                         <p class="font-semibold group-hover:!text-indigo-700">{{ $image->album->user->username }}</p>
                                     </a>
-                                    @if ($image->album->user->id == Auth::user()->id)
-                                        <a href="#"
-                                            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">Theo dõi
+                                    @if ($image->album->user->id != Auth::user()->id)
+                                        <a href=""
+                                            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center unfollow-button" data-id="{{ $image->album->user->id }}">Hủy theo dõi
                                         </a>
+                                        <a href=""
+                                            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center follow-button" data-id="{{ $image->album->user->id }}">Theo dõi
+                                        </a>
+                                        <script>
+                                            $(document).ready(function() {
+                                                @if(Auth::user()->isFollowing($image->album->user->id))
+                                                    $('.follow-button').hide();
+                                                @else
+                                                    $('.unfollow-button').hide();
+                                                @endif
+
+                                                $('.follow-button').click(function(e) {
+                                                    e.preventDefault();
+                                                    var userId = $(this).data('id');
+                                                    $.ajax({
+                                                        url: '/follow',
+                                                        type: 'POST',
+                                                        data: {
+                                                            user_id: userId,
+                                                            _token: '{{ csrf_token() }}'
+                                                        },
+                                                        success: function(response) {
+                                                            if (response.success) {
+                                                                $('.follow-button').hide(); 
+                                                                $('.unfollow-button').show();
+                                                                Swal.fire({
+                                                                    icon: 'success',
+                                                                    title: 'Đã theo dõi người dùng!',
+                                                                    timer: 3000,
+                                                                    position: 'bottom-end',
+                                                                    toast: true,
+                                                                    showConfirmButton: false
+                                                                })
+                                                            }
+                                                            else
+                                                            {
+                                                                Swal.fire({
+                                                                    icon: 'error',
+                                                                    title: 'Theo dõi người dùng thất bại!',
+                                                                    timer: 3000,
+                                                                    position: 'bottom-end',
+                                                                    toast: true,
+                                                                    showConfirmButton: false
+                                                                })
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                                $('.unfollow-button').click(function(e) {
+                                                    e.preventDefault();
+                                                    var userId = $(this).data('id');
+                                                    $.ajax({
+                                                        url: '/unfollow',
+                                                        type: 'DELETE',
+                                                        data: {
+                                                            user_id: userId,
+                                                            _token: '{{ csrf_token() }}'
+                                                        },
+                                                        success: function(response) {
+                                                            if (response.success) {
+                                                                $('.unfollow-button').hide();
+                                                                $('.follow-button').show();
+                                                                Swal.fire({
+                                                                    icon: 'success',
+                                                                    title: 'Đã hủy theo dõi người dùng!',
+                                                                    timer: 3000,
+                                                                    position: 'bottom-end',
+                                                                    toast: true,
+                                                                    showConfirmButton: false
+                                                                })
+                                                            }
+                                                            else
+                                                            {
+                                                                Swal.fire({
+                                                                    icon: 'error',
+                                                                    title: 'Hủy theo dõi người dùng thất bại!',
+                                                                    timer: 3000,
+                                                                    position: 'bottom-end',
+                                                                    toast: true,
+                                                                    showConfirmButton: false
+                                                                })
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        </script>
                                     @endif
                                     <div class="flex-grow"></div>
                                 <!-- Action -->
@@ -184,7 +271,7 @@ $count = count($listUserLiked);
                                             });
                                         });
                                     </script>
-                                    @if(Auth::user()->id == $image->user_id)
+                                    @if(Auth::user()->id == $image->album->user->id)
                                         @if($image->is_feature == true)
                                             <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                                 <i class="fas fa-star text-yellow-500 text-xl hover:text-indigo-700"></i>
@@ -239,6 +326,9 @@ $count = count($listUserLiked);
                                     @else
                                         <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fa-solid fa-flag text-gray-700 text-xl hover:text-indigo-700"></i>
+                                        </a>
+                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                            <i class="fa-solid fa-bookmark text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>
                                         <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fas fa-share text-gray-700 text-xl hover:text-indigo-700"></i>
@@ -307,13 +397,13 @@ $count = count($listUserLiked);
                                 @endif
                             </h3>
                             <div class="flex-grow flex items-center justify-center"> 
-                                @if($countComment == 0)
-                                    <p id="noCommentsMessage" class="text-gray-400 text-2xs">Chưa có bình luận nào...!</p>
-                                @endif
                             </div>
                             <div id="comment" class="flex flex-col">
                                 <div class="space-y-2 mb-4">
-                                    <div id="commentList" class="space-y-4 h-64">
+                                    <div id="commentList" class="space-y-4 max-h-80 min-h-32">
+                                        @if($countComment == 0)
+                                            <p id="noCommentsMessage" class="text-gray-400 text-2xs">Chưa có bình luận nào...!</p>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -323,7 +413,7 @@ $count = count($listUserLiked);
                             <form id="commentForm" class="flex w-full" enctype="multipart/form-data" method="POST" action="{{ route('addcomment', $image->id) }}">
                                 @csrf
                                 <input type="text" id="addComment" name="comment" class="placeholder-gray-600 flex-grow px-4 py-2 text-gray-700 bg-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Thêm bình luận">
-                                <button type="submit" class="ml-4 pl-3 pr-4 py-2  text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-2 focus:ring-blue-300">
+                                <button type="submit" class="ml-4 pl-3 pr-4 py-2  text-white bg-indigo-500 rounded-full hover:bg-blue-600 focus:ring-2 focus:ring-blue-300">
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </form>

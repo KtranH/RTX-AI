@@ -56,13 +56,15 @@
                     <div class="relative text-center">
                         <img class="rounded-full w-40 h-40 object-cover" src="{{ $user->avatar_url }}" loading="lazy"
                             alt="User Avatar">
-                        <div
-                            class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 hover:!opacity-100 transition-opacity duration-300">
-                            <a href="{{ route('showaccount') }}"
-                                class="bg-white p-2 rounded-full shadow-md w-full h-full border-8 border-[#a000ff] flex items-center justify-center">
-                                <i class="fas fa-edit text-gray-700 text-5xl"></i>
-                            </a>
-                        </div>
+                        @if ($user->id == Auth::user()->id)
+                            <div
+                                class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 hover:!opacity-100 transition-opacity duration-300">
+                                <a href="{{ route('showaccount') }}"
+                                    class="bg-white p-2 rounded-full shadow-md w-full h-full border-8 border-[#a000ff] flex items-center justify-center">
+                                    <i class="fas fa-edit text-gray-700 text-5xl"></i>
+                                </a>
+                            </div>
+                        @endif
                     </div>
                     <!-- Information -->
                     <div class="flex flex-col items-start">
@@ -76,7 +78,7 @@
                                  alt="Icon" 
                                  class="w-8 h-8 text-purple-500 transform transition-transform duration-300 hover:scale-110">
                         
-                            @if ($user->id != auth()->user()->id)
+                            @if ($user->id != Auth::user()->id)
                                     <button class="cancel-follow-btn bg-gradient-to-r from-purple-500 to-pink-500 text-xs text-white font-bold px-4 py-2 rounded-full transition-colors duration-300 hover:from-purple-600 hover:to-pink-600">
                                         Hủy theo dõi
                                     </button>  
@@ -209,17 +211,18 @@
                 <h2 class="text-xl font-bold mb-4">Theo Dõi</h2>
                 <div class="max-h-64 overflow-y-auto">
                     <ul>
-                        @for ($i = 0; $i <= 5; $i++)
+                        @foreach ($user->followers as $x)
                             <li class="py-2 flex">
-                                <a href="#" class="flex items-center w-full">
+                                <a href="{{ route("showboard", ["id" => $x->id]) }}" class="flex items-center w-full">
                                     <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2 truncate hover:overflow-visible hover:whitespace-normal"
-                                        src="{{ $user->avatar_url }}" alt="">
+                                        src="{{ $x->avatar_url }}" alt="">
                                     <p
                                         class="hover:text-[#a000ff] font-semibold truncate hover:overflow-visible hover:whitespace-normal">
-                                        {{ $user->username }}</p>
+                                        {{ $x->username }}
+                                    </p>
                                 </a>
                             </li>
-                        @endfor
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -235,17 +238,18 @@
                 <h2 class="text-xl font-bold mb-4">Đang Theo Dõi</h2>
                 <div class="max-h-64 overflow-y-auto">
                     <ul>
-                        @for ($i = 0; $i <= 5; $i++)
+                        @foreach ($user->following as $x)
                             <li class="py-2 flex">
-                                <a href="#" class="flex items-center w-full">
+                                <a href="{{ route("showboard", ["id" => $x->id]) }}" class="flex items-center w-full">
                                     <img class="h-8 w-8 rounded-full ring-2 ring-white mr-2 truncate hover:overflow-visible hover:whitespace-normal"
-                                        src="{{ $user->avatar_url }}" alt="">
+                                        src="{{ $x->avatar_url }}" alt="">
                                     <p
                                         class="hover:text-[#a000ff] font-semibold truncate hover:overflow-visible hover:whitespace-normal">
-                                        {{ $user->username }}</p>
+                                        {{ $x->username }}
+                                    </p>
                                 </a>
                             </li>
-                        @endfor
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -458,7 +462,7 @@
                         <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             <div class="relative group">
                                 <a href="{{ route('createalbum') }}"
-                                    class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 rounded-2xl border-4 border-[#a000ff]">
+                                    class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 rounded-2xl border-4 border-[]">
                                     <i
                                         class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
                                 </a>
@@ -468,7 +472,7 @@
                                     <a href="{{ route('showalbum', ['id' => $x->id]) }}">
                                         <div class="aspect-square">
                                             <img src="{{ $x->cover_image }}" loading="lazy" alt="Image 1"
-                                                class="w-full h-full object-cover rounded-2xl border-4 border-[#a000ff]">
+                                                class="w-full h-full object-cover rounded-2xl border-4 border-[]">
                                         </div>
                                         <div class="mt-2 text-left group-hover:text-[#a000ff]">
                                             <div class="font-semibold text-lg truncate">{{ $x->title }}</div>
