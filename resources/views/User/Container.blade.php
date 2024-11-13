@@ -25,11 +25,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <!-- CSS Files -->
-    <link rel="stylesheet" href="{{ url('assets/css/header.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/css/login.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/css/theme.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/css/homeButton.css') }}">
-    <link rel="stylesheet" href="{{ url('assets/css/home.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/headers.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/homeButton.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
     <!-- JS link -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

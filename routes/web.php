@@ -160,6 +160,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Delete album
     Route::delete('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
 
+    //Private album
+    Route::post('/privatealbum', [Board::class, 'PrivateAlbum'])->name("privatealbum");
+
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //-------------------------------------------------------------IMAGE, ADD IMAGE, UPDATE IMAGE, DELETE IMAGE, SET FEATURE IMAGE, LIKE IMAGE----------------------------------------------------------------------------
@@ -186,7 +189,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::post('/likeimage/{id}', [Image::class, 'LikeImage'])->name("likeimage");
 
     //Set feature image
-    Route::get('/featureimage/{id}', [Board::class, 'FeatureImage'])->name("featureimage");
+    Route::post('/featureimage', [Board::class, 'FeatureImage'])->name("featureimage");
 
     //Saved image
     Route::post('/savedimage', [Image::class, 'SavedImage'])->name("savedimage");

@@ -305,13 +305,13 @@
                                         <div class="flex space-x-2">
                                            @if (Auth::user()->id == $x->album->user->id)
                                             @if ($x->is_feature)
-                                                <a href="{{ route('featureimage', ['id' => $x->id]) }}"
-                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
+                                                <a href=""
+                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image" data-photo-id="{{ $x->id }}">
                                                     <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                             @else
-                                                <a href="{{ route('featureimage', ['id' => $x->id]) }}"
-                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
+                                                <a href=""
+                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image" data-photo-id="{{ $x->id }}">
                                                     <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                             @endif
@@ -355,9 +355,62 @@
                         }
                     ]
                 });
+                $(document).ready(function() {
+                    $('.feature-image').click(function(e) {
+                        e.preventDefault(); 
+                        let photoId = $(this).data('photo-id');
+                        let $slickSlide = $(this).closest('.relative.group');
+                        let $slickSlider = $slickSlide.closest('.slick-slider');
+
+                        if (!photoId) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi: Không xác định ID ảnh.',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                toast: true,
+                                position: 'bottom-left',
+                            });
+                            return;
+                        }
+
+                        $.ajax({
+                            url: '/featureimage',
+                            type: 'POST',
+                            data: {
+                                photo_id: photoId,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                let slideIndex = $slickSlide.data('slick-index');
+                                $slickSlider.slick('slickRemove', slideIndex);
+                                $slickSlider.slick('refresh');
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Đã cập nhật ảnh nổi bật',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    toast: true,
+                                    position: 'bottom-left',
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error:', error);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Có lỗi xảy ra. Vui lòng thử lại sau.',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    toast: true,
+                                    position: 'bottom-left',
+                                });
+                            }
+                        });
+                    });
+                });
             });
         </script>
-
         <!-- Tab -->
         <div class="flex items-center justify-center mt-5">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 relative border-t">
@@ -412,18 +465,21 @@
                 });
             }
 
-            document.addEventListener('DOMContentLoaded', function() {
-                const current_path = window.location.pathname;
-                const savedTab = localStorage.getItem('activeTab');
+            document.addEventListener('DOMContentLoaded', function () {
+                const current_path = window.location.pathname; 
+                let savedTab = localStorage.getItem('activeTab');
 
                 if (current_path.endsWith('/uploaded') || savedTab === 'uploaded') {
                     ActivateTab('uploaded');
                 } else if (current_path.endsWith('/created') || savedTab === 'created') {
                     ActivateTab('created');
+                } else if (current_path.endsWith('/saved') || savedTab === 'saved') {
+                    ActivateTab('saved'); 
                 } else {
-                    ActivateTab('saved');
+                    ActivateTab('uploaded');
                 }
             });
+
 
             window.addEventListener('popstate', function() {
                 const path = window.location.pathname.split('/').pop();
@@ -451,25 +507,50 @@
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                     <div class="font-bold text-3xl text-left">Album</div>
                     @if (!$albums)
+                       @if (Auth::user()->id == $user->id)
                         <div class="mt-2 flex justify-center">
                             <a href="{{ route('createalbum') }}"
                                 class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 w-32 h-32 rounded-2xl border-4 border-indigo-600">
                                 <i
-                                    class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
+                                    class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300">
+                                </i>
                             </a>
                         </div>
+                       @endif
                     @else
                         <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            <div class="relative group">
-                                <a href="{{ route('createalbum') }}"
-                                    class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 rounded-2xl border-4 border-[]">
-                                    <i
-                                        class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300"></i>
-                                </a>
-                            </div>
+                            @if (Auth::user()->id == $user->id)
+                                <div class="relative group">
+                                    <a href="{{ route('createalbum') }}"
+                                        class="block aspect-square bg-gray-200 flex items-center justify-center group-hover:bg-[#a000ff] transition-colors duration-300 rounded-2xl border-4 border-[]">
+                                        <i
+                                            class="fas fa-plus text-8xl text-gray-600 group-hover:text-white transition-colors duration-300">
+                                        </i>
+                                    </a>
+                                </div>
+                            @endif
                             @foreach ($albums as $x)
                                 <div class="relative group">
-                                    <a href="{{ route('showalbum', ['id' => $x->id]) }}">
+                                    @if ($x->is_private == 0)
+                                        <a href="{{ route('showalbum', ['id' => $x->id]) }}">
+                                    @else
+                                        <a class="private-album" href="">
+                                        <script>
+                                            $(document).ready(function() {
+                                                $('.private-album').click(function(event) {
+                                                    event.preventDefault();
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Thông báo',
+                                                        text: 'Album này đang ở chế độ riêng tư!',
+                                                        showCancelButton: false,
+                                                        showConfirmButton: false,
+                                                        timer: 1500
+                                                    })
+                                                });
+                                            });
+                                        </script>
+                                    @endif
                                         <div class="aspect-square">
                                             <img src="{{ $x->cover_image }}" loading="lazy" alt="Image 1"
                                                 class="w-full h-full object-cover rounded-2xl border-4 border-[]">
@@ -479,17 +560,76 @@
                                             <div class="text-sm text-gray-500 truncate">{{ $x->description }}</div>
                                         </div>
                                         @if (Auth::user()->id == $x->user->id)
-                                            <div
-                                                class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                                <a href="#"
-                                                    class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                    <i class="fas fa-lock text-gray-700 text-xl hover:text-[#a000ff]"></i>
+                                            <div class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
+                                                <a href="" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 private-button" data-album-id="{{ $x->id }}">
+                                                    <i class="fas {{ $x->is_private ? 'fa-lock text-indigo-600' : 'fa-lock-open text-gray-700' }} text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                                 <a href="{{ route('editalbum', ['id' => $x->id]) }}"
                                                     class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                                     <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                                 </a>
                                             </div>
+                                            <script>
+                                                $(document).ready(function() {
+                                                    $('.private-button[data-album-id="{{ $x->id }}"]').click(function(e) {
+                                                        e.preventDefault();
+                                                        let $button = $(this); 
+                                                        Swal.fire({
+                                                            icon: 'warning',
+                                                            title: 'Cảnh báo',
+                                                            text: 'Bạn có muốn chuyển quyền riêng tư của album?',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#3085d6',
+                                                            cancelButtonColor: '#d33',
+                                                            confirmButtonText: 'Có, chuyển quyền riêng tư',
+                                                            cancelButtonText: 'Hủy bỏ'
+                                                        }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            var albumId = $button.data('album-id');
+                                                            $.ajax({
+                                                                url: '/privatealbum',
+                                                                method: 'POST', 
+                                                                data: {
+                                                                    album_id: albumId,
+                                                                    _token: '{{ csrf_token() }}'
+                                                                },
+                                                                success: function(response) {
+                                                                    let $icon = $button.find('i');
+                                                                    if (response.is_private) {
+                                                                        $icon.removeClass('fa-lock-open text-gray-700')
+                                                                            .addClass('fa-lock text-indigo-600');
+                                                                    } else {
+                                                                        $icon.removeClass('fa-lock text-indigo-600')
+                                                                            .addClass('fa-lock-open text-gray-700');
+                                                                    }
+                                                                    Swal.fire({
+                                                                        icon: 'success',
+                                                                        title: 'Thành công',
+                                                                        text: 'Chuyển quyền riêng tư của album',
+                                                                        showConfirmButton: false,
+                                                                        timer: 3000,
+                                                                        toast: true,
+                                                                        position: 'bottom-left',
+                                                                    });
+                                                                },
+                                                                error: function(xhr, status, error) {
+                                                                    console.error(error);
+                                                                    Swal.fire({
+                                                                        icon: 'error',
+                                                                        title: 'Thao tác thất bại!',
+                                                                        text: 'Vui lòng thử lại',
+                                                                        showConfirmButton: false,
+                                                                        timer: 3000,
+                                                                        toast: true,
+                                                                        position: 'bottom-left',
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                        })
+                                                    });
+                                                });
+                                            </script>
                                         @endif
                                     </a>
                                 </div>
@@ -505,19 +645,6 @@
             <div id="gallery-section_board" class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                     <div class="font-bold text-3xl text-left">Thư viện</div>
-                    {{-- @if (count($photos) == 0)
-                        <div class="mt-3 flex items-center">
-                            <div class="flex items-center">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mr-4">
-                                    <path
-                                        d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z"
-                                        fill="#6563ff" />
-                                </svg>
-                                <h3 class="text-gray-500 text-lg">Bạn chưa có bất kì ảnh nào. Hãy tạo album và đăng ảnh
-                                    ngay!</h3>
-                            </div>
-                        </div>
-                    @else --}}
                     <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
                         id="photo-container">
 
@@ -528,9 +655,10 @@
                     <script>
                         var page = 1;
                         var isLoading = false;
+                        var hasMore = true; 
 
                         function loadPhotosNormal(initialLoad = false) {
-                            if (isLoading) return;
+                            if (isLoading || !hasMore) return; 
                             isLoading = true;
 
                             document.getElementById('loading').style.display = 'block';
@@ -539,6 +667,12 @@
                                 .then(response => response.json())
                                 .then(data => {
                                     const photoContainer = document.getElementById('photo-container');
+
+                                    if (data.photos.length === 0) {
+                                        hasMore = false;
+                                        document.getElementById('loading').style.display = 'none';
+                                        return;
+                                    }
 
                                     data.photos.forEach(photo => {
                                         const photoHTML = `
@@ -561,10 +695,12 @@
                                     isLoading = false;
                                     document.getElementById('loading').style.display = 'none';
 
-                                    if (data.hasMorePages) {
+                                    hasMore = data.hasMorePages;
+                                    if (hasMore) {
                                         page++;
                                     } else {
                                         window.removeEventListener('scroll', scrollHandlerNormal);
+                                        document.getElementById('loading').style.display = 'none';
                                     }
 
                                     if (initialLoad && data.photos.length === 0) {
@@ -574,13 +710,22 @@
                                 .catch(error => {
                                     console.error('Lỗi khi tải ảnh:', error);
                                     isLoading = false;
+                                    hasMore = false; 
                                     document.getElementById('loading').style.display = 'none';
                                 });
                         }
 
-                        window.addEventListener('load', () => {
-                            loadPhotosNormal(true);
-                        });
+                        function debounce(func, wait) {
+                            let timeout;
+                            return function executedFunction(...args) {
+                                const later = () => {
+                                    clearTimeout(timeout);
+                                    func(...args);
+                                };
+                                clearTimeout(timeout);
+                                timeout = setTimeout(later, wait);
+                            };
+                        }
 
                         function scrollHandlerNormal() {
                             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
@@ -588,10 +733,14 @@
                             }
                         }
 
-                        window.addEventListener('scroll', scrollHandlerNormal);
-                    </script>
+                        const debouncedScrollHandler = debounce(scrollHandlerNormal, 250);
 
-                    {{-- @endif --}}
+                        window.addEventListener('load', () => {
+                            loadPhotosNormal(true);
+                        });
+
+                        window.addEventListener('scroll', debouncedScrollHandler);
+                    </script>
                 </div>
             </div>
         </div>
@@ -677,26 +826,10 @@
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                     <h2 class="font-bold text-3xl text-left">Lịch sử tạo ảnh AI</h2>
                     <p class="text-gray-500 text-2xs text-left mt-2">Lưu ý chúng tôi chỉ lưu ảnh được tạo ra bởi AI trong
-                        10 ngày!</p>
-                    {{-- @if ($imagesAI->isNotEmpty()) --}}
-                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="AI-content">
-
-                    </div>
+                        10 ngày!
+                    </p>
+                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="AI-content"></div>
                     <div id="loading_AI_Image" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
-                    {{-- @else
-                        <div class="mt-2 grid gap-2">
-                            <div style="display:flex;margin-top:2%">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
-                                    style="width:80px; margin-right:1%">
-                                    <path
-                                        d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z"
-                                        fill="#6563ff" />
-                                </svg>
-                                <h3 style="margin-top:30px;font-size:20px;" class="text-gray-500"> Bạn chưa có bất kì ảnh
-                                    nào. Hãy tạo truy cập tới sáng tạo và tạo ảnh ngay!</h3>
-                            </div>
-                        </div>
-                    @endif --}}
                     <script>
                         var pageAI = 1;
                         var isLoadingAI = false;

@@ -83,59 +83,8 @@
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="font-bold text-3xl">Thư Viện</div>
-                {{-- @if (count($photo) == 0)
-                    <div style="display:flex;margin-top:2%">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:80px; margin-right:1%">
-                            <path d="M22.71,6.29a1,1,0,0,0-1.42,0L20,7.59V2a1,1,0,0,0-2,0V7.59l-1.29-1.3a1,1,0,0,0-1.42,1.42l3,3a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l3-3A1,1,0,0,0,22.71,6.29ZM19,13a1,1,0,0,0-1,1v.38L16.52,12.9a2.79,2.79,0,0,0-3.93,0l-.7.7L9.41,11.12a2.85,2.85,0,0,0-3.93,0L4,12.6V7A1,1,0,0,1,5,6h8a1,1,0,0,0,0-2H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V14A1,1,0,0,0,19,13ZM5,20a1,1,0,0,1-1-1V15.43l2.9-2.9a.79.79,0,0,1,1.09,0l3.17,3.17,0,0L15.46,20Zm13-1a.89.89,0,0,1-.18.53L13.31,15l.7-.7a.77.77,0,0,1,1.1,0L18,17.21Z" fill="#6563ff"/>
-                        </svg>
-                        <h3 style="margin-top:30px;font-size:20px;" class="text-gray-500">Bạn chưa có bất kì ảnh nào. Hãy thêm ảnh vào album ngay!</h3>
-                    </div>
-                @else --}}
                 <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="main-content">
-                    {{-- @foreach ($photo as $x)
-                        <div class="relative group">
-                            <a href="{{ route('showimage', ['id' => $x->id]) }}">
-                                <div class="aspect-square">
-                                    <img src="{{ $x->url }}" alt="Image 1"
-                                        class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                </div>
-                                <div
-                                    class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                    <div class="mt-2 text-left px-2 py-1">
-                                        <div class="font-semibold text-lg truncate group-hover:text-[#000000]">
-                                            {{ $x->title }}</div>
-                                        <div class="text-sm text-gray-500 h-20 overflow-hidden">{{ $x->description }}</div>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                                class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                <div class="flex space-x-2">
-                                    @if ($x->is_feature)
-                                        <a href="{{ route('featureimage', ['id' => $x->id]) }}"
-                                            class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
-                                        </a>
-                                    @else
-                                        <a href="{{ route('featureimage', ['id' => $x->id]) }}"
-                                            class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                        </a>
-                                    @endif
-                                    <a href="{{ route('editimage', ['id' => $x->id]) }}"
-                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-edit text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                    <a href="#"
-                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                        <i class="fas fa-sort text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach --}}
                 </div>
-                {{-- @endif --}}
             </div>
         </div>
     </main>
@@ -204,11 +153,11 @@
                                 <div class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                     <div class="flex space-x-2">
                                         ${photo.is_feature ? `
-                                            <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
+                                            <a href="" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image" data-photo-id="${photo.id}">
                                                 <i class="fas fa-star text-yellow-500 text-xl hover:text-[#a000ff]"></i>
                                             </a>
                                         ` : `
-                                            <a href="/featureimage/${photo.id}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
+                                            <a href="" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image" data-photo-id="${photo.id}">
                                                 <i class="fas fa-star text-gray-700 text-xl hover:text-[#a000ff]"></i>
                                             </a>
                                         `}
@@ -236,7 +185,73 @@
                     }
                 }
             }, 200));
+
+            document.addEventListener('click', function (event) {
+                const target = event.target.closest('.feature-image');
+                if (target) {
+                    event.preventDefault();
+                    const photoId = target.getAttribute('data-photo-id');
+                    if (!photoId) {
+                        console.error("Photo ID không hợp lệ");
+                        return;
+                    }
+
+                    const apiUrl = "/featureimage";
+
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+                        },
+                        body: JSON.stringify({ photo_id: photoId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Đã cập nhật ảnh nổi bật',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                toast: true,
+                                position: 'bottom-left',
+                            });
+                        } 
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Có lỗi xảy ra',
+                                text: 'Không thể cập nhật ảnh nổi bật',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                toast: true,
+                                position: 'bottom-left',
+                            });
+                        }
+                        if (data.is_feature) {
+                            target.querySelector('i').classList.remove('text-gray-700');
+                            target.querySelector('i').classList.add('text-yellow-500');
+                        }
+                        if (!data.is_feature) {
+                            target.querySelector('i').classList.remove('text-yellow-500');
+                            target.querySelector('i').classList.add('text-gray-700');
+                        } 
+                    })
+                    .catch(error => {
+                        console.error("Error updating feature:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi kết nối',
+                            text: 'Không thể gửi yêu cầu đến server',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            toast: true,
+                            position: 'bottom-left',
+                        });
+                    });
+                }
+            });
         });
     </script>
-    
 @endsection
