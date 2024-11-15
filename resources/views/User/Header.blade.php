@@ -189,7 +189,7 @@
     //Close All Boxes
     function closeBoxes(exception) 
     {
-        const boxes = ['notifications-box', 'settings-box', 'notifications-box-mobile', 'settings-box-mobile', 'menu'];
+        const boxes = ['notifications-box', 'notifications-box-mobile', 'menu'];
 
         boxes.forEach(boxId => {
             if (boxId === exception) return;
@@ -205,7 +205,7 @@
     //Change All Toggles
     function changeToggles(exception) 
     {
-        const toggles = ['notifications-toggle', 'settings-toggle', 'notifications-toggle-mobile', 'settings-toggle-mobile', 'menu-toggle'];
+        const toggles = ['notifications-toggle', 'notifications-toggle-mobile', 'menu-toggle'];
 
         toggles.forEach(toggleId => 
         {
