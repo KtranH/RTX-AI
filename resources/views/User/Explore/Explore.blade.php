@@ -7,7 +7,7 @@
     <!-- Title -->
     <div class="flex items-center justify-center">
         <div class="w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 text-center">
-            <div class="font-bold text-4xl">Khám Phá</div>
+            <div class="font-bold text-4xl mb-2">Khám Phá</div>
             <div class="text-gray-500 text-2xs">Thỏa Sức Sáng Tạo - Truyền Đầy Cảm Hứng</div>
         </div>
     </div>

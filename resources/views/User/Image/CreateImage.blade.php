@@ -8,7 +8,7 @@
         <!-- Title -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 text-center">
-                <div class="font-bold text-3xl">Thêm Hình Ảnh</div>
+                <div class="font-bold text-3xl mb-2">Thêm Hình Ảnh</div>
                 <div class="text-gray-500">Thỏa Sức Sáng Tạo - Truyền Đầy Cảm Hứng</div>
             </div>
         </div>

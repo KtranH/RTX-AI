@@ -71,7 +71,7 @@
             <i class="fa-solid fa-circle-info ml-2 text-2xl" title="Thông tin"></i>
         </a>
         <!-- Laptop Navigation -->
-        <nav class="hidden md:grid grid-cols-3 items-center justify-center gap-16 text-2xl absolute left-1/2 transform -translate-x-1/2">
+        <nav class="hidden md:grid grid-cols-4 items-center justify-center gap-16 text-2xl absolute left-1/2 transform -translate-x-1/2">
             <a href="{{ route('showexplore') }}" class="nav-link link-dark nav-explore text-gray-700 hover:text-indigo-600 justify-self-start">
                 <i id="nav-explore" class="fa-solid fa-icons"></i>
             </a>
@@ -80,6 +80,9 @@
             </a>
             <a href="{{ route('showcreativity') }}" class="nav-link link-dark nav-creativity text-gray-700 hover:text-indigo-600 justify-self-end">
                 <i id="nav-creativity" class="fa-solid fa-pencil"></i>
+            </a>
+            <a href="{{ route('showpricing') }}" class="nav-link link-dark nav-creativity text-gray-700 hover:text-indigo-600 justify-self-end">
+                <i id="nav-pricing" class="fa-solid fa-money-check-dollar"></i>
             </a>
         </nav>
         <!-- Laptop Account -->
@@ -102,12 +105,9 @@
                     </div>
                 </div>
                 <!-- Laptop Settings -->
-                <div class="relative">
+                <a href="{{ route('showsettings') }}" id="settings-box" class="">
                     <i id='settings-toggle' class="fas fa-cog cursor-pointer text-gray-700 hover:text-indigo-600"></i>
-                    <div id="settings-box" class="hidden absolute -right-40 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
-                        @include('User.Component.Settings')
-                    </div>
-                </div>
+                </a>
                 <a href="{{ route('logout') }}" class="btn btn-dark font-bold rounded-full px-4 py-2 bg-gray-800 text-white hover:bg-gray-700">Đăng xuất</a>
             </div>
         @else
@@ -131,9 +131,9 @@
                 <i class="fas fa-bell"></i>
             </button>
             <!-- Settings Button -->
-            <button id="settings-toggle-mobile">
+            <a href="{{route('showsettings')}}" id="settings-toggle-mobile">
                 <i class="fas fa-cog"></i>
-            </button>
+            </a>
             <!-- Hamburger Button -->
             <button id="menu-toggle">
                 <i class="fas fa-bars"></i>
@@ -163,6 +163,10 @@
                 <i class="fa-solid fa-pencil mr-4"></i>
                 <div class="font-semibold">Sáng Tạo</div>
             </a>
+            <a href="{{ route('showpricing') }}" class="flex-row flex items-center justify-start">
+                <i class="fa-solid fa-pencil mr-4"></i>
+                <div class="font-semibold">Thành Viên</div>
+            </a>
         </nav>
         <!-- Mobile Action -->
         <div class="flex flex-col space-y-4 border-t pt-4">
@@ -177,10 +181,6 @@
     <!-- Mobile Notification Box  -->
     <div id="notifications-box-mobile" class="fixed hidden md:hidden w-full bg-white z-50 flex flex-col p-6 overflow-y-auto transition duration-300 ease-in-out left-0 top-[89px] border-b">
         @include('User.Component.Notifications')
-    </div>
-    <!-- Setting Notification Box  -->
-    <div id="settings-box-mobile" class="fixed hidden md:hidden w-full bg-white z-50 flex flex-col p-6 overflow-y-auto transition duration-300 ease-in-out left-0 top-[89px] border-b">
-        @include('User.Component.Settings')
     </div>
 </main>
 
@@ -253,15 +253,15 @@
         });
     }
 
-    setupToggle('settings-toggle-mobile', 'settings-box-mobile');
+    //setupToggle('settings-toggle-mobile', 'settings-box-mobile');
     setupToggle('notifications-toggle-mobile', 'notifications-box-mobile');
-    setupToggle('settings-toggle', 'settings-box');
+    //setupToggle('settings-toggle', 'settings-box');
     setupToggle('notifications-toggle', 'notifications-box');
     setupToggle('menu-toggle', 'menu');
 
-    closeOnClickOutside('settings-toggle-mobile', 'settings-box-mobile');
+    //closeOnClickOutside('settings-toggle-mobile', 'settings-box-mobile');
     closeOnClickOutside('notifications-toggle-mobile', 'notifications-box-mobile');
-    closeOnClickOutside('settings-toggle', 'settings-box');
+    //closeOnClickOutside('settings-toggle', 'settings-box');
     closeOnClickOutside('notifications-toggle', 'notifications-box');
     closeOnClickOutside('menu-toggle', 'menu');
 </script>
@@ -275,6 +275,7 @@
             '/board': 'nav-board',
             '/explore': 'nav-explore',
             '/creativity': 'nav-creativity',
+            '/pricing': 'nav-pricing',
         };
         
         for (const [path, id] of Object.entries(links)) 

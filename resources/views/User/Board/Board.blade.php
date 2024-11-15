@@ -427,7 +427,6 @@
                         class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
                         Ảnh AI
                     </button>
-
                 </div>
             </div>
         </div>
@@ -449,8 +448,6 @@
             }
 
             function ActivateTab(id) {
-                const new_path = `/board/${id}`;
-                const current_path = window.location.pathname;
 
                 ChangeApperance(id);
                 const contents = ['uploaded-content', 'saved-content', 'created-content'];
@@ -458,10 +455,11 @@
                 contents.forEach(contentId => {
                     const content = document.getElementById(contentId);
                     if (contentId === `${id}-content`) {
-                        content.style.display = 'block';
+                        content.classList.remove('hidden');
                     } else {
-                        content.style.display = 'none';
+                        content.classList.add('hidden');
                     }
+                    console.log(content)
                 });
             }
 
@@ -477,15 +475,6 @@
                     ActivateTab('saved'); 
                 } else {
                     ActivateTab('uploaded');
-                }
-            });
-
-
-            window.addEventListener('popstate', function() {
-                const path = window.location.pathname.split('/').pop();
-                const validTabs = ['uploaded', 'saved', 'created'];
-                if (validTabs.includes(path)) {
-                    ActivateTab(path);
                 }
             });
         </script>
@@ -745,7 +734,7 @@
             </div>
         </div>
         <!-- Saved Content -->
-        <div id="saved-content" class="tab-content" style="display: none;">
+        <div id="saved-content" class="tab-content hidden">
             <div id="saved-section_board" class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">            
                     <h2 class="font-bold text-3xl text-left">Danh sách ảnh đã lưu lại</h2>
@@ -780,7 +769,7 @@
                                                     <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                                         <div class="mt-2 text-left px-2 py-1">
                                                             <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.photo.title}</div>
-                                                            <div class="text-sm text-gray-500 h-20 overflow-hidden">${photo.photo.description}</div>
+                                                            <div class="text-sm text-gray-500 h-20 truncate overflow-hidden">${photo.photo.description}</div>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -821,7 +810,7 @@
             </div>
         </div>
         <!-- Created Content -->
-        <div id="created-content" class="tab-content" style="display: none;">
+        <div id="created-content" class="tab-content hidden">
             <div class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
                     <h2 class="font-bold text-3xl text-left">Lịch sử tạo ảnh AI</h2>
