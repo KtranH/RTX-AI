@@ -1,6 +1,5 @@
 @extends('User.Container')
 @section('Body')
-
     <?php
     $path = request()->path();
     $segments = explode('/', $path);

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('photos', function (Blueprint $table) {
-            $table->boolean('is_share')->default(false); // Thay 'column_name' bằng cột mà bạn muốn thêm sau nó
+            $table->boolean('is_share')->default(false); 
         });
     }
 
