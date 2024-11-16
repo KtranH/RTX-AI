@@ -24,13 +24,27 @@ class Explore extends Controller
 
     public function indexApi(Request $request)
     {
+        $currentUserId = auth()->id();
+        
         $query = Photo::query()
             ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
             ->leftJoin('users', 'users.id', '=', 'albums.user_id')
-            ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user')
+            ->distinct()
+            ->join('category_photo', 'category_photo.photo_id', '=', 'photos.id')
+            ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user', 'users.id as user_id')
             ->with(['album.user'])
             ->withCount('likes');
 
+        if ($currentUserId) {
+            $query->leftJoin('follower_user', function($join) use ($currentUserId) {
+                $join->on('users.id', '=', 'follower_user.user_id')
+                    ->where('follower_user.follower_id', '=', $currentUserId);
+            })
+            ->addSelect(DB::raw('CASE 
+                WHEN follower_user.user_id IS NOT NULL THEN 1 
+                ELSE 0 
+            END as is_following'));
+        }
         if ($request->has('q')) {
             $searchTerm = $request->q;
             $query->where(function ($query) use ($searchTerm) {
@@ -47,9 +61,15 @@ class Explore extends Controller
         if ($request->has('category')) {
             $query->where('category_photo.category_id', $request->category);
         }
-
-        $query->orderBy('photos.created_at', 'desc');
-
+        if ($currentUserId) {
+            $query->orderByRaw('CASE 
+                WHEN follower_user.user_id IS NOT NULL THEN 0 
+                ELSE 1 
+            END')
+            ->orderBy('photos.created_at', 'desc');
+        } else {
+            $query->inRandomOrder();
+        }
         $photos = $query->paginate($request->limit ?? 8);
         return response()->json($photos);
     }
