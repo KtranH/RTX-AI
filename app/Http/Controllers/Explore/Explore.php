@@ -29,8 +29,7 @@ class Explore extends Controller
             ->leftJoin('users', 'users.id', '=', 'albums.user_id')
             ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user')
             ->with(['album.user'])
-            ->withCount('likes')
-            ->inRandomOrder();
+            ->withCount('likes');
 
         if ($request->has('q')) {
             $searchTerm = $request->q;
