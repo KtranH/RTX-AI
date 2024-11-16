@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
+use App\Http\Controllers\Settings\Settings;
 use App\Http\Controllers\User\Account;
 use App\Http\Controllers\User\Home;
 use App\Http\Controllers\User\WorkFlow\G1;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Board\Board;
 use App\Http\Controllers\Image\Image;
 use App\Http\Controllers\Creativity\Creativity;
 use App\Http\Controllers\Explore\Explore;
+use App\Http\Controllers\Payment\Payment;
 use App\Http\Controllers\User\WorkFlow\G4;
 use App\Http\Controllers\User\WorkFlow\G5;
 use App\Http\Controllers\User\WorkFlow\G6;
@@ -118,15 +120,22 @@ Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkfl
 
 Route::middleware([CheckCookieLogin::class])->group(function () {
 
-    //---------------------------------------------BOARD------------------------------------------------------------
+    //-----------------------------------------------------------------BOARD----------------------------------------
 
     //Access board page
-    Route::get('/board', [Board::class, 'ShowBoard'])->name("showboard");
-
+    Route::get('/board/{id?}', [Board::class, 'ShowBoard'])->name("showboard");
+    
     //Change board tab
     Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
     Route::get('/api/board', [Board::class, 'ShowBoardApi'])->name('ShowBoardApi');
     Route::get('/api/AI_Image/board', [Board::class, 'ShowAiImageApi'])->name('ShowAiImageApi');
+    Route::get('/api/Saved_Image/board', [Board::class, 'ShowSavedImageApi'])->name('ShowSavedImageApi');
+
+    //Follow user
+    Route::post('/follow', [Board::class, 'FollowUser'])->name("followuser");
+
+    //Unfollow user
+    Route::delete('/unfollow', [Board::class, 'UnFollowUser'])->name("unfollowuser");
 
     //--------------------------------------------------------------------------------------------------------------
 
@@ -152,18 +161,21 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Delete album
     Route::delete('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
 
+    //Private album
+    Route::post('/privatealbum', [Board::class, 'PrivateAlbum'])->name("privatealbum");
+
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //-------------------------------------------------------------IMAGE, ADD IMAGE, UPDATE IMAGE, DELETE IMAGE, SET FEATURE IMAGE, LIKE IMAGE----------------------------------------------------------------------------
+
+    //Access image page
+    Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
 
     //Access create image page
     Route::get('/create_image/{id}', [Image::class, 'CreateImage'])->name("createimage");
 
     //Add new image to album
     Route::post('/addimage2album/{id}', [Image::class, 'AddImage2Album'])->name("addimage2album");
-
-    //Access image page
-    Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
 
     //Access edit image page
     Route::get('/edit_image/{id}', [Image::class, 'EditImage'])->name("editimage");
@@ -178,7 +190,10 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::post('/likeimage/{id}', [Image::class, 'LikeImage'])->name("likeimage");
 
     //Set feature image
-    Route::get('/featureimage/{id}', [Board::class, 'FeatureImage'])->name("featureimage");
+    Route::post('/featureimage', [Board::class, 'FeatureImage'])->name("featureimage");
+
+    //Saved image
+    Route::post('/savedimage', [Image::class, 'SavedImage'])->name("savedimage");
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -201,6 +216,15 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Load more replies
     Route::get('/api/getcomments/{commentId}/replies', [Image::class, 'getReplies'])->name("getreplies");
+
+    //Delete reply
+    Route::delete('/api/deletereply/{id}', [Image::class, 'DeleteReply'])->name("deletereply");
+    
+    //Update reply
+    Route::patch('/api/updatereply/{id}', [Image::class, 'UpdateReply'])->name("updatereply");
+
+    //Reply reply
+    Route::post('/api/reply/{parentId}/replies', [Image::class, 'ReplyReply'])->name("replyreply");
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
 
@@ -227,6 +251,28 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
         return response()->json(['status' => 'success']);
     });
     //-----------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------PAYMENT-----------------------------------------------------------------------------
+
+    // Access Payment
+    Route::get('/payment/{price}', [Payment::class, 'ShowPayment'])->name("showpayment");
+
+    // Access Pricing
+    Route::get('/pricing', function () {
+        return view('User.Payment.Pricing');
+    })->name('showpricing');
+
+    //----------------------------------------------------------------------------SETTINGS-----------------------------------------------------------------------------
+    
+    // Access Settings
+    Route::get('/settings', action: function () {
+        return view('User.Settings.Settings');
+    })->name('showsettings');
+
+    //Change Settings Tab
+    Route::get('/settings/{tab}', [Settings::class, 'ShowSettings'])->name('changesettings');
+
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //-------------------------------------------------------------------------------WORKFLOW---------------------------------------------------------------------------------
     //Show G1

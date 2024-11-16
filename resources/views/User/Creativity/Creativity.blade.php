@@ -5,10 +5,10 @@
     <div class="bg-white">
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-16">
            <div style="margin-top:-5%" class="text-center">
-                <h2 class="text-4xl font-bold tracking-tight text-gray-900 mb-2">Khám phá cùng RTX-AI</h2>
-                <p class="text-2xs text-gray-500 tracking-tight">Bắt đầu sáng tạo các hình ảnh bằng AI, và chia sẻ với những người khác.</p>
+                <h2 class="text-4xl font-bold tracking-tight text-gray-900 mb-2" data-aos="fade-up">Khám phá cùng RTX-AI</h2>
+                <p class="text-2xs text-gray-500 tracking-tight" data-aos="fade-up" data-aos-delay="300">Bắt đầu sáng tạo các hình ảnh bằng AI, và chia sẻ với những người khác.</p>
            </div>
-          <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+          <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8" data-aos="fade-up" data-aos-delay="500">
             @foreach ( $workflow as $x )
               <div class="group relative">
                 <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-2xl bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80" style="height: 400px">

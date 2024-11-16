@@ -11,6 +11,7 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Photo;
 use App\Models\Reply;
+use App\Models\SavedImage;
 use App\Models\User;
 use App\Models\WorkFlow;
 use Illuminate\Http\Request;
@@ -35,20 +36,23 @@ class Image extends Controller
     {
         $image = Photo::findOrFail($id);
         $countComment = Comment::where("photo_id", $id)->count();
-
         $photos = Photo::query()
             ->limit(4)
             ->inRandomOrder()
             ->get();
 
-        $idUser = Auth::user()->id;
-        $checkUserNow = User::findOrFail($idUser);
-
+        if(Auth::check())
+        {
+            $idUser = Auth::user()->id;
+            $checkUserLikedImage = $this->checkLike($id,$idUser);
+        }
+        else
+        {
+            $checkUserLikedImage = null;
+        }
         $listcate = $image->category()->where("photo_id",$id)->get();
         $listUserLiked = Like::where("photo_id", $id)->get(); 
-
-        $checkUserLikedImage = $this->checkLike($id,$idUser);
-        return view('User.Image.Image', compact('image', 'photos', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'checkUserNow', 'countComment'));
+        return view('User.Image.Image', compact('image', 'photos', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'countComment'));
     }
     public function ShowCommentAPI(Request $request, $idImage)
     {
@@ -266,7 +270,6 @@ class Image extends Controller
     }
     public function ReplyComment(Request $request, $parentId)
     {
-        $comment = Comment::find($parentId)->firstOrFail(); 
         $reply = Reply::create([
             "user_id" => Auth::user()->id,
             "comment_id" => $parentId,
@@ -276,38 +279,132 @@ class Image extends Controller
             "updated_at" => now(),
         ]);
         $reply->load('user');
+        $reply->load('comment.user');
+        $reply->time_ago = $reply->created_at->diffForHumans(['locale' => 'vi']);
+        $reply->comment_id = [
+            'id' => $reply->comment->user->id,
+            'username' => $reply->comment->user->username
+        ];
+        $reply->reply_reply = [
+            'id' => $this->findParentId($reply->parent_id),
+            'username' => $this->findParentName($reply->parent_id)
+        ];
         return response()->json(['success' => true, 'reply' => $reply]);
     }
-    public function getReplies($commentId)
-{
-    $replies = Reply::where('comment_id', $commentId)
-        ->with('user')
-        ->with('comment.user')
-        ->orderBy('created_at', 'desc')
-        ->get()
-        ->map(function($reply) {
-            return [
-                'id' => $reply->id,
-                'content' => $reply->content,
-                'comment_id'=>
-                [
-                    'id' => $reply->comment->user->id,
-                    'username' => $reply->comment->user->username
-                ],
-                'user' => [
-                    'id' => $reply->user_id,
-                    'username' => $reply->user->username,
-                    'avatar_url' => $reply->user->avatar_url
-                ],
-                'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
-                'parent_id' => $reply->parent_id,
-                'original_comment_id' => $reply->comment_id
-            ];
-        });
+    public function getReplies($commentId, Request $request)
+    {
+        $skip = $request->input('skip', 0);
+        $limit = 3;
+        $totalReplies = Reply::where('comment_id', $commentId)->count();
 
-    return response()->json([
-        'success' => true,
-        'replies' => $replies
-    ]);
-}
+        $replies = Reply::where('comment_id', $commentId)
+            ->with(['user', 'replies.user', 'comment.user'])
+            ->orderBy('created_at', 'asc')
+            ->skip($skip)
+            ->take($limit)
+            ->get()
+            ->map(function ($reply) {
+                return [
+                        'id' => $reply->id,
+                        'content' => $reply->content,
+                        'comment_id' => [
+                            'id' => $reply->comment->user->id,
+                            'username' => $reply->comment->user->username
+                        ],
+                        'reply_reply' =>[
+                                'id' => $this->findParentId($reply->parent_id),
+                                'username' => $this->findParentName($reply->parent_id)
+                        ],
+                        'user' => [
+                            'id' => $reply->user->id,
+                            'username' => $reply->user->username,
+                            'avatar_url' => $reply->user->avatar_url
+                        ],
+                        'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
+                        'parent_id' => $reply->parent_id,
+                        'original_comment_id' => $reply->comment_id,
+                        'updated_at' => $reply->updated_at,
+                        'created_at' => $reply->created_at
+                    ];
+            });
+        return response()->json([
+            'success' => true,
+            'replies' => $replies,
+            'hasMore' => ($skip + $limit) < $totalReplies
+        ]);
+    }
+    public function DeleteReply($id)
+    {
+        try {
+            $reply = Reply::findOrFail($id);
+            
+            if (Auth::user()->id !== $reply->user_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized'
+                ], 403);
+            }
+    
+            $reply->delete();
+            Alert::toast('Đã xoá phản hồi!', 'success')->position('bottom-left')->autoClose(3000);
+            return response()->json([
+                'success' => true,
+                'message' => 'Reply deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting reply'
+            ], 500);
+        }
+    }
+    public function UpdateReply(Request $request, $id)
+    {
+        $reply = Reply::findOrFail($id);
+        if (!$reply || $reply->user_id != Auth::id()) {
+            return response()->json(['success' => false]);
+        }
+    
+        $reply->content = $request->content;
+        $reply->save();
+    
+        return response()->json(['success' => true]);
+    }
+    public function ReplyReply(Request $request, $parentId)
+    {
+        $reply = Reply::findOrFail($parentId); 
+        $reply = Reply::create([
+            "user_id" => Auth::user()->id,
+            "comment_id" => $reply->comment_id,
+            "content" => $request->input('content'),
+            "parent_id" => $parentId,
+            "created_at" => now(),
+            "updated_at" => now(),
+        ]);
+        $reply->load('user');
+        $reply->load('comment.user');
+        $reply->time_ago = $reply->created_at->diffForHumans(['locale' => 'vi']);
+        $reply->comment_id = [
+            'id' => $reply->parent->user->id,
+            'username' => $reply->parent->user->username
+        ];
+        $reply->reply_reply = [
+            'id' => $this->findParentId($reply->parent_id),
+            'username' => $this->findParentName($reply->parent_id)
+        ];
+        return response()->json(['success' => true, 'reply' => $reply]);
+    }
+    public function SavedImage(Request $request)
+    {
+        $checkSavedImg = SavedImage::where('user_id', Auth::user()->id)->where('photo_id', $request->get('image_id'))->first();
+        if ($checkSavedImg) {
+            $checkSavedImg->delete();
+            return response()->json(['success' => true, 'saved' => false]);
+        }
+        $savedImage = SavedImage::create([
+            'user_id' => Auth::user()->id,
+            'photo_id' => $request->get('image_id')
+        ]);
+        return response()->json(['success' => true, 'saved' => true]);
+    }
 }

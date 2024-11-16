@@ -3,8 +3,10 @@
 namespace App;
 
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\HistoryImageAI;
 use App\Models\Like;
+use App\Models\Reply;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -52,5 +54,21 @@ trait QueryDatabase
 
         Storage::disk('r2')->put($pathImage, file_get_contents(storage_path('app/' . $tempPath)));
         Storage::delete($tempPath);
+    }
+    public function findParentName($parentId)
+    {
+        $parentComment = Reply::where('id', $parentId)->first();
+        if ($parentComment) {
+            return $parentComment->user->username;
+        }
+        return null;
+    }
+    public function findParentId($parentId)
+    {
+        $parentComment = Reply::where('id', $parentId)->first();
+        if ($parentComment) {
+            return $parentComment->user->id;
+        }
+        return null;
     }
 }

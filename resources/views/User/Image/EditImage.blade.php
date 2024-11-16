@@ -8,7 +8,7 @@
         <!-- Title -->
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 text-center">
-                <div class="font-bold text-3xl">Chỉnh Sửa Hình Ảnh</div>
+                <div class="font-bold text-3xl mb-2">Chỉnh Sửa Hình Ảnh</div>
                 <div class="text-gray-500">Thỏa Sức Sáng Tạo - Truyền Đầy Cảm Hứng</div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="mb-4">
                             <label for="title" class="block text-xl font-medium mb-1">Tiêu Đề</label>
-                            <input type="text" id="title" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('title') is-invalid @enderror" value="{{ $image->title }}">
+                            <input type="text" id="title" maxlength="29" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-[#a000ff] focus:!border-[#a000ff] sm:text-sm form-control @error('title') is-invalid @enderror" value="{{ $image->title }}">
                             @error('title')
                                 <div class="text-danger w-100">{{ $message }}</div>
                             @enderror

@@ -6,4 +6,7 @@
         <option value="theme-light" {{ session('theme') == 'theme-light' ? 'selected' : '' }}>Light Theme</option>
         <option value="theme-colorful" {{ session('theme') == 'theme-colorful' ? 'selected' : '' }}>Colorful Theme</option>
     </select>
+    <div class="mt-4">
+        <a href="{{ route('showpricing') }}" class="text-lg no-underline font-semibold mb-3 hover:text-indigo-500">Thành Viên</a>
+    </div>
 </html>
