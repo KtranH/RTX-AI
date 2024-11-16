@@ -85,11 +85,6 @@
                 </div>
               </div>
             </div>
-            <p class="mt-6 text-center text-gray-500 dark:text-gray-400 sm:mt-8 lg:text-left">
-            Thanh toán được xử lý bởi <a href="#" title="" class="font-medium text-indigo-600 underline hover:no-underline dark:text-indigo-500">Paddle</a>
-              cho <a href="#" title="" class="font-medium text-indigo-600 underline hover:no-underline dark:text-indigo-500">Flowbite LLC</a>
-              - United States Of America
-            </p>
           </div>
         </div>
       </div>

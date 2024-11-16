@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
+use App\Http\Controllers\Settings\Settings;
 use App\Http\Controllers\User\Account;
 use App\Http\Controllers\User\Home;
 use App\Http\Controllers\User\WorkFlow\G1;
@@ -260,6 +261,16 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/pricing', function () {
         return view('User.Payment.Pricing');
     })->name('showpricing');
+
+    //----------------------------------------------------------------------------SETTINGS-----------------------------------------------------------------------------
+    
+    // Access Settings
+    Route::get('/settings', action: function () {
+        return view('User.Settings.Settings');
+    })->name('showsettings');
+
+    //Change Settings Tab
+    Route::get('/settings/{tab}', [Settings::class, 'ShowSettings'])->name('changesettings');
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

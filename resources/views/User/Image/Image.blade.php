@@ -103,7 +103,7 @@ $count = count($listUserLiked);
                                         </a>
                                     @endforeach
                                 </div>
-                                <hr class="mt-4">
+                                <hr class="mt-4 mb-3">
                                 <!-- Owner -->
                                 <div class="flex items-center space-x-4 mb-2">
                                     <a href="{{ route("showboard", ["id" => $image->album->user->id]) }}" class="flex items-center space-x-2 group">
@@ -412,7 +412,7 @@ $count = count($listUserLiked);
                                     </script>
                                 </div>
                             </div>
-                            <hr class="mb-4">
+                            <hr class="mb-4 mt-3">
                             <!-- Number of likes -->
                             @if($count == 0)
                                 <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.</span>
