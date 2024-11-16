@@ -27,17 +27,20 @@ class Explore extends Controller
         $query = Photo::query()
             ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
             ->leftJoin('users', 'users.id', '=', 'albums.user_id')
-            ->distinct()
-            ->join('category_photo', 'category_photo.photo_id', '=', 'photos.id')
             ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user')
             ->with(['album.user'])
             ->withCount('likes')
             ->inRandomOrder();
+
         if ($request->has('q')) {
-            $query->where(function ($query) use ($request) {
-                $query->where('photos.title', 'like', '%' . $request->q . '%')
-                    ->orWhereHas('category', function ($query) use ($request) {
-                        $query->where('name', $request->q);
+            $searchTerm = $request->q;
+            $query->where(function ($query) use ($searchTerm) {
+                $query->where('photos.title', 'like', '%' . $searchTerm . '%')
+                    ->orWhereHas('category', function ($query) use ($searchTerm) {
+                        $query->where('name', $searchTerm);
+                    })
+                    ->orWhereHas('album.user', function ($query) use ($searchTerm) {
+                        $query->where('username', $searchTerm);
                     });
             });
         }
@@ -45,6 +48,8 @@ class Explore extends Controller
         if ($request->has('category')) {
             $query->where('category_photo.category_id', $request->category);
         }
+
+        $query->orderBy('photos.created_at', 'desc');
 
         $photos = $query->paginate($request->limit ?? 8);
         return response()->json($photos);
