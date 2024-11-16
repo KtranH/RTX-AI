@@ -53,7 +53,7 @@ class Explore extends Controller
                         $query->where('name', $searchTerm);
                     })
                     ->orWhereHas('album.user', function ($query) use ($searchTerm) {
-                        $query->where('username', $searchTerm);
+                        $query->where('username', 'like', '%' . $searchTerm . '%');
                     });
             });
         }
