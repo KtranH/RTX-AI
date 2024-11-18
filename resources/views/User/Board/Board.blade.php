@@ -7,32 +7,32 @@
     ?>
 
     <style>
-        .featured-photos {}
+        .featu#F04770-photos {}
 
-        .featured-photos img {
+        .featu#F04770-photos img {
             border-radius: 30px;
         }
 
-        .featured-photos .slick-slide {
+        .featu#F04770-photos .slick-slide {
             margin: 0 4px;
         }
 
-        .featured-photos .slick-list {
+        .featu#F04770-photos .slick-list {
             margin: 0 -10px;
         }
 
-        .featured-photos .slick-prev:before,
-        .featured-photos .slick-next:before {
+        .featu#F04770-photos .slick-prev:before,
+        .featu#F04770-photos .slick-next:before {
             font-size: 40px;
             color: white;
         }
 
-        .featured-photos .slick-prev {
+        .featu#F04770-photos .slick-prev {
             left: -5px;
             z-index: 1000;
         }
 
-        .featured-photos .slick-next {
+        .featu#F04770-photos .slick-next {
             right: 15px;
             z-index: 1000;
         }
@@ -135,15 +135,18 @@
 
                                 const toast = Swal.mixin({
                                     toast: true,
-                                    position: 'top-end',
+                                    position: 'bottom-left',
                                     showConfirmButton: false,
-                                    timer: 1500
+                                    timer: 3000
                                 });
 
                                 toast.fire({
                                     title: 'Thông báo',
+                                    color: 'white',
                                     text: 'Đã theo dõi người dùng!',
-                                    icon: 'success'
+                                    icon: 'success',
+                                    iconColor: 'white',
+                                    background: '#46DFB1',
                                 });
                             }
                         },
@@ -179,15 +182,18 @@
 
                                 const toast = Swal.mixin({
                                     toast: true,
-                                    position: 'top-end',
+                                    position: 'bottom-left',
                                     showConfirmButton: false,
-                                    timer: 1500
+                                    timer: 3000
                                 });
 
                                 toast.fire({
                                     title: 'Thông báo',
+                                    color: 'white',
                                     text: 'Đã hủy theo dõi người dùng!',
-                                    icon: 'success'
+                                    icon: 'success',
+                                    iconColor: 'white',
+                                    background: '#46DFB1'
                                 });
                             }
                         },
@@ -278,7 +284,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="mt-2 grid-cols-1 gap-2 featured-photos" data-aos="fade-right" data-aos-delay="150">
+                    <div class="mt-2 grid-cols-1 gap-2 featu#F04770-photos" data-aos="fade-right" data-aos-delay="150">
                         @foreach ($feature as $x)
                             <div class="relative group">
                                 <a href="{{ route('showimage', ['id' => $x->id]) }}">
@@ -326,7 +332,7 @@
         </div>
         <script>
             $(document).ready(function() {
-                $('.featured-photos').slick({
+                $('.featu#F04770-photos').slick({
                     lazyLoad: 'ondemand',
                     slidesToShow: 4,
                     slidesToScroll: 1,
@@ -364,11 +370,14 @@
                         if (!photoId) {
                             Swal.fire({
                                 icon: 'error',
+                                iconColor: 'white',
                                 title: 'Lỗi: Không xác định ID ảnh.',
+                                color: 'white',
                                 showConfirmButton: false,
                                 timer: 3000,
                                 toast: true,
                                 position: 'bottom-left',
+                                background: '#F04770'
                             });
                             return;
                         }
@@ -387,22 +396,28 @@
 
                                 Swal.fire({
                                     icon: 'success',
+                                    iconColor: 'white',
                                     title: 'Đã cập nhật ảnh nổi bật',
+                                    color: 'white',
                                     showConfirmButton: false,
                                     timer: 3000,
                                     toast: true,
                                     position: 'bottom-left',
+                                    background: '#46DFB1'
                                 });
                             },
                             error: function(xhr, status, error) {
                                 console.error('Error:', error);
                                 Swal.fire({
                                     icon: 'error',
+                                    iconColor: 'white',
                                     title: 'Có lỗi xảy ra. Vui lòng thử lại sau.',
+                                    color: 'white',
                                     showConfirmButton: false,
                                     timer: 3000,
                                     toast: true,
                                     position: 'bottom-left',
+                                    background: '#F04770'
                                 });
                             }
                         });
@@ -592,24 +607,30 @@
                                                                     }
                                                                     Swal.fire({
                                                                         icon: 'success',
+                                                                        iconColor: 'white',
                                                                         title: 'Thành công',
                                                                         text: 'Chuyển quyền riêng tư của album',
+                                                                        color: 'white',
                                                                         showConfirmButton: false,
                                                                         timer: 3000,
                                                                         toast: true,
                                                                         position: 'bottom-left',
+                                                                        background: '#46DFB1'
                                                                     });
                                                                 },
                                                                 error: function(xhr, status, error) {
                                                                     console.error(error);
                                                                     Swal.fire({
                                                                         icon: 'error',
+                                                                        iconColor: 'white',
                                                                         title: 'Thao tác thất bại!',
                                                                         text: 'Vui lòng thử lại',
+                                                                        color: 'white',
                                                                         showConfirmButton: false,
                                                                         timer: 3000,
                                                                         toast: true,
                                                                         position: 'bottom-left',
+                                                                        background: '#F04770'
                                                                     });
                                                                 }
                                                             });
@@ -797,7 +818,7 @@
                         });
                     
                         function scrollHandlerNormal() {
-                            console.log('scroll event triggered'); 
+                            console.log('scroll event trigge#F04770'); 
                             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                                 loadPhotosSaved();
                             }
