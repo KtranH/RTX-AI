@@ -40,6 +40,10 @@
 $count = count($listUserLiked);
 @endphp
     <title>RTX-AI: Hình Ảnh</title>
+    <meta property="og:title" content="{{ $image->title }}">
+    <meta property="og:image" content="{{ $image->url }}">
+    <meta property="og:url" content="{{ route('showimage', $image->id) }}">
+    <meta property="og:description" content="{{ $image->description }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <main class="w-full h-full" style="scroll-behavior: smooth">
         <!-- Container -->
@@ -461,7 +465,21 @@ $count = count($listUserLiked);
                                                                 const postLink = $('#postLink');
                                                                 postLink.select();
                                                                 navigator.clipboard.writeText(postLink.val());
-                                                                Swal.fire('Đã sao chép!', '', 'success');
+                                                                const toast = Swal.mixin({
+                                                                    toast: true,
+                                                                    position: 'bottom-left',
+                                                                    showConfirmButton: false,
+                                                                    timer: 3000
+                                                                });
+
+                                                                toast.fire({
+                                                                    title: 'Thông báo',
+                                                                    color: 'white',
+                                                                    text: 'Đã sao chép liên kết bài viết',
+                                                                    icon: 'success',
+                                                                    iconColor: 'white',
+                                                                    background: '#46DFB1'
+                                                                });
                                                             });
                                                         },
                                                         error: function () {

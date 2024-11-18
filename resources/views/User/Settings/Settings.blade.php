@@ -34,10 +34,6 @@
                             class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
                             Theo Dõi
                         </button>
-                        <button id="shared" onclick="ActivateTab('shared')"
-                            class="text-xl px-4 py-2 text-gray-600 hover:text-black focus:outline-none relative">
-                            Chia Sẽ
-                        </button>
                     </div>
                     <!-- Mobile -->
                     <div class="sm:hidden mt-2">
@@ -47,7 +43,6 @@
                             <option value="interests">Sở Thích</option>
                             <option value="board">Bảng</option>
                             <option value="following">Theo Dõi</option>
-                            <option value="shared">Chia Sẽ</option>
                         </select>
                     </div>
                 </div>
@@ -56,12 +51,9 @@
             <div id="activity-content" class="tab-content">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 my-4">
                     <div>
-                        <div class="font-bold text-2xl mb-2">Ảnh Bạn Đã Ghim</div>
-                        <div class="text-gray-500 text-xs">Ảnh bạn đã ghim trong những ngày gần đây</div>
+                        <div class="font-bold text-2xl mb-2">Ảnh Bạn Đã Thích</div>
+                        <div class="text-gray-500 text-xs">Ảnh bạn đã thích trong những ngày gần đây</div>
                     </div>
-                    <button class="sm:ml-auto rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">
-                        Bỏ ghim hết
-                    </button>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     @for ($i = 0; $i <= 15; $i++)
@@ -185,58 +177,12 @@
                     @endfor
                 </div>
             </div>
-            <!-- Shared -->
-            <div id="shared-content" class="tab-content hidden">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 my-4">
-                    <div>
-                        <div class="font-bold text-2xl mb-2">Ảnh Được Chia Sẻ</div>
-                        <div class="text-gray-500 text-xs">Ảnh bạn đã được chia sẻ bởi người khác</div>
-                    </div>
-                    <button class="sm:ml-auto rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center">
-                        Xóa hết
-                    </button>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    @for ($i = 0; $i <= 15; $i++)
-                        <div class="relative group">
-                            <a href="#">
-                                <div class="aspect-square">
-                                    <img src="https://picsum.photos/200" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                </div>
-                                <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                    <div class="mt-2 text-left px-2 py-1">
-                                        <div class="font-semibold text-lg truncate group-hover:text-black">Ảnh</div>
-                                        <div class="text-sm text-gray-500 h-20 truncate overflow-hidden">Ảnh</div>
-                                    </div>
-                                </div>
-                            </a>
-                            <!-- Profile Image -->
-                            <div class="absolute left-1/2 top-72 sm:top-60 transform -translate-x-1/2 translate-y-2 z-10 mb-4">
-                                <div class="w-20 h-20 bg-gray-300 rounded-full border-4 border-white overflow-hidden">
-                                    <img src="https://picsum.photos/100" alt="Profile" class="w-full h-full object-cover">
-                                </div>
-                            </div>
-                            <!-- Profile Information -->
-                            <div class="text-center mt-10">
-                                <div class="font-semibold text-lg truncate group-hover:text-black">Profile</div>
-                                <div class="text-sm text-gray-500 overflow-hidden truncate">Follower Count</div>
-                            </div>
-                            <!-- Button -->
-                            <div class="w-full flex flex-col items-center">
-                                <button class="mt-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                    Xóa
-                                </button>
-                            </div>
-                        </div>
-                    @endfor
-                </div>
-            </div>
         </div>
     </div>
 </main>
 <script>
     function ChangeApperance(id) {
-        const tabs = ['activity', 'interests', 'board', 'following', 'shared'];
+        const tabs = ['activity', 'interests', 'board', 'following'];
 
         tabs.forEach(tabId => {
             const tab = document.getElementById(tabId);
@@ -250,7 +196,7 @@
     function ActivateTab(id) {
         ChangeApperance(id);
         console.log(id);
-        const contents = ['activity-content', 'interests-content', 'board-content', 'following-content', 'shared-content'];
+        const contents = ['activity-content', 'interests-content', 'board-content', 'following-content'];
 
         contents.forEach(contentId => {
             const content = document.getElementById(contentId);
@@ -275,11 +221,10 @@
             ActivateTab('interests'); 
         } else if (current_path.endsWith('/following') || savedTab === 'following') {
             ActivateTab('following'); 
-        } else if (current_path.endsWith('/shared') || savedTab === 'shared') {
-            ActivateTab('shared'); 
-        }
-        else {
-            ActivateTab('shared');
+        } 
+        else 
+        {
+            ActivateTab('activity');
         }
     });
 </script>
