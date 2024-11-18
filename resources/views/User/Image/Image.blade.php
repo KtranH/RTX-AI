@@ -330,9 +330,10 @@ $count = count($listUserLiked);
                                         <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 saved_button">
                                             <i class="fa-solid fa-bookmark text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>                                        
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-share text-gray-700 text-xl hover:text-indigo-700"></i>
-                                        </a>
+                                    @endif
+                                    <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10" id="shareButton">
+                                        <i class="fas fa-share text-gray-700 text-xl hover:text-indigo-700"></i>
+                                    </a>
                                     <script>
                                        $(document).ready(function() {
                                             @if (Auth::user()->savedImg($image->id))
@@ -386,27 +387,89 @@ $count = count($listUserLiked);
                                                     }
                                                 });
                                             });
-                                        });
-                                    </script>
-                                    @endif
-                                    <script>
-                                        document.getElementById('delete').addEventListener('click', function(e)
-                                        {
-                                            e.preventDefault();
-                                            Swal.fire({
-                                                title: 'Chắc chắn xóa ảnh?',
-                                                text: "Ảnh sẽ bị xóa và không thể khôi phục!",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonText: 'Tiếp tục',
-                                                cancelButtonText: 'Hủy',
-                                                reverseButtons: true
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    window.location.href = "{{ route('deleteimage', $image->id) }}";
-                                                } else {
-                                                    Swal.close();
-                                                }
+                                            $(document).ready(function () {
+                                                $('#shareButton').on('click', function (event) {
+                                                    event.preventDefault();
+
+                                                    const postId = {{ $image->id }};
+
+                                                    $.ajax({
+                                                        url: `/shareimage/${postId}/share`,
+                                                        method: 'GET',
+                                                        success: function (data) {
+                                                            const content = `
+                                                                <div class="text-left space-y-4">
+                                                                    <div>
+                                                                        <p class="font-semibold text-gray-700">
+                                                                            <span class="text-indigo-500">Người dùng:</span> ${data.user}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="font-semibold text-gray-700">
+                                                                            <span class="text-indigo-500">Tiêu đề:</span> ${data.title}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="font-semibold text-gray-700">
+                                                                            <span class="text-indigo-500">Link bài viết:</span>
+                                                                        </p>
+                                                                        <div class="flex items-center mt-2">
+                                                                            <input 
+                                                                                type="text" 
+                                                                                value="${data.url}" 
+                                                                                id="postLink" 
+                                                                                readonly 
+                                                                                class="w-[70%] border border-gray-300 rounded-md p-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                                            />
+                                                                            <button 
+                                                                                id="copyButton" 
+                                                                                class="ml-2 px-4 py-2 bg-indigo-500 text-white text-sm font-medium rounded-md shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                                            >
+                                                                                <i class="fa-solid fa-clone"></i> Sao chép
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            `;
+                                                            Swal.fire({
+                                                                title: 'Chia sẻ bài viết',
+                                                                html: content,
+                                                                showCloseButton: true,
+                                                                showCancelButton: false,
+                                                                showConfirmButton: false,
+                                                            });
+
+                                                            $(document).on('click', '#copyButton', function () {
+                                                                const postLink = $('#postLink');
+                                                                postLink.select();
+                                                                navigator.clipboard.writeText(postLink.val());
+                                                                Swal.fire('Đã sao chép!', '', 'success');
+                                                            });
+                                                        },
+                                                        error: function () {
+                                                            Swal.fire('Có lỗi xảy ra', 'Không thể lấy dữ liệu bài viết.', 'error');
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                            $('.delete').on('click', function (event) {
+                                                event.preventDefault();
+                                                const postId = $(this).data('id');
+                                                Swal.fire({
+                                                    title: 'Chắc chắn xóa bài viết?',
+                                                    text: "Bài viết sẽ bị xóa và không thể khôi phục!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonText: 'Tiếp tục',
+                                                    cancelButtonText: 'Hủy',
+                                                    reverseButtons: true
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location.href = `/deleteimage/${postId}`;
+                                                    } else {
+                                                        Swal.close();
+                                                    }
+                                                });
                                             });
                                         });
                                     </script>
@@ -880,6 +943,7 @@ $count = count($listUserLiked);
                                         },
                                         success: function(response) {
                                             if (response.success) {
+                                                console.log('Response:', response);
                                                 const replyHtml = createReplyHTML(response.reply);
                                                 
                                                 let repliesContainer = commentItem.find('.replies-container');

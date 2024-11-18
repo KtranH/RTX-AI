@@ -31,96 +31,100 @@ use Illuminate\Support\Facades\Session;
 //});
 //Route::post('/generate-image', [ImageController::class, 'generateImage']);
 
-//------------------------------------------------------------------------DONT HAVE TO LOGIN FIRST----------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//DONT HAVE TO LOGIN FIRST
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //HOME
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    //Access home page
+    Route::get('/', [Home::class, 'ShowHome'])->name("showhome");
+    
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//--------------------------------------HOME------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //LOGIN, SIGN UP, LOGIN BY GOOGLE, LOGOUT
 
-//Access home page
-Route::get('/', [Home::class, 'ShowHome'])->name("showhome");
+    //Access login page
+    Route::get('/login', [Account::class, 'ShowLogin'])->name("showlogin")->middleware(VerifyTurnstileCaptcha::class);
 
-//------------------------------------------------------------------------------
+    //Login account
+    Route::post('/loginaccount', [Account::class, 'LoginAccount'])->name("loginaccount");
 
-//--------------------------------------LOGIN, SIGN UP, LOGIN BY GOOGLE, LOGOUT------------------------------------
+    //Access sign up page
+    Route::get('/signup', [Account::class, 'ShowSignUp'])->name("showsignup")->middleware(VerifyTurnstileCaptcha::class);
 
-//Access login page
-Route::get('/login', [Account::class, 'ShowLogin'])->name("showlogin")->middleware(VerifyTurnstileCaptcha::class);
+    //Button login by google
+    Route::get('/auth2Google', [Account::class, 'loginByGoogle'])->name("loginByGoogle");
 
-//Login account
-Route::post('/loginaccount', [Account::class, 'LoginAccount'])->name("loginaccount");
+    //Data from Google
+    Route::get('/callBackGoogle', [Account::class, 'callBackGoogle'])->name("callBackGoogle");
 
-//Access sign up page
-Route::get('/signup', [Account::class, 'ShowSignUp'])->name("showsignup")->middleware(VerifyTurnstileCaptcha::class);
+    //Button logout
+    Route::get('/logout', [Account::class, 'Logout'])->name("logout");
 
-//Button login by google
-Route::get('/auth2Google', [Account::class, 'loginByGoogle'])->name("loginByGoogle");
+    //Active sign up account
+    Route::post('/signupaccount', [Account::class, 'NewAccount'])->name("newaccount");
 
-//Data from Google
-Route::get('/callBackGoogle', [Account::class, 'callBackGoogle'])->name("callBackGoogle");
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//Button logout
-Route::get('/logout', [Account::class, 'Logout'])->name("logout");
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //VERIFY EMAIL, FORGET PASSWORD, CHECK CODE TO CHANGE PASSWORD, RESEND EMAIL, CHECK CODE TO VERIFY EMAIL
 
-//Active sign up account
-Route::post('/signupaccount', [Account::class, 'NewAccount'])->name("newaccount");
+    //Send email
+    Route::get('/sendemail', [SendEmail::class, 'SendEmail'])->name("sendemail");
 
-//---------------------------------------------------------------------------------------------------------
+    //Send code to email to change password
+    Route::get('/sendcodetoemailtochangepass', [SendCodeRestPass::class, 'SendCodeToEmail'])->name("sendcodetoemail")->middleware(ThrottleRequests::class . ':2,1');
 
-//--------------------------------------VERIFY EMAIL, FORGET PASSWORD, CHECK CODE TO CHANGE PASSWORD, RESEND EMAIL, CHECK CODE TO VERIFY EMAIL------------------------------------
+    //New send email
+    Route::get('/resendemail', [SendEmail::class, 'ReSendEmail'])->name("resendemail");
 
-//Send email
-Route::get('/sendemail', [SendEmail::class, 'SendEmail'])->name("sendemail");
+    //Show auth email
+    Route::get('/showauthemail', [SendEmail::class, 'ShowAuth'])->name("showauth");
 
-//Send code to email to change password
-Route::get('/sendcodetoemailtochangepass', [SendCodeRestPass::class, 'SendCodeToEmail'])->name("sendcodetoemail")->middleware(ThrottleRequests::class . ':2,1');
+    //Show auth email
+    Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode")->middleware(ThrottleRequests::class . ':2,1');;
 
-//New send email
-Route::get('/resendemail', [SendEmail::class, 'ReSendEmail'])->name("resendemail");
+    //Forget password page
+    Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass")->middleware(VerifyTurnstileCaptcha::class);
 
-//Show auth email
-Route::get('/showauthemail', [SendEmail::class, 'ShowAuth'])->name("showauth");
+    //Send email to password
+    Route::get('/sendemail&changepass', [Account::class, 'SendEmailResetPass'])->name("sendemailresetpass");
 
-//Show auth email
-Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode")->middleware(ThrottleRequests::class . ':2,1');;
+    //Input code to change password
+    Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass")->middleware(VerifyTurnstileCaptcha::class);
 
-//Forget password page
-Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass")->middleware(VerifyTurnstileCaptcha::class);
+    //Check code to change password
+    Route::patch('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
 
-//Send email to password
-Route::get('/sendemail&changepass', [Account::class, 'SendEmailResetPass'])->name("sendemailresetpass");
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//Input code to change password
-Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass")->middleware(VerifyTurnstileCaptcha::class);
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //EXPLORE, CATEGORIES IMAGE, GENAI
 
-//Check code to change password
-Route::patch('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
+    //Access creativity
+    Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcreativity");
 
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Access explore
+    Route::get('/explore', [Explore::class, 'ShowExplore'])->name("showexplore");
+    Route::get('/api/explore', [Explore::class, 'indexApi'])->name("indexApi");
 
-//--------------------------------------EXPLORE, CATEGORIES IMAGE, GENAI--------------------------------------
+    //See more categories
+    Route::get('/morecategories', [Explore::class, 'MoreCategory'])->name("morecategories");
 
-//Access creativity
-Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcreativity");
+    //Show All Workflow
+    Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkflow");
 
-//Access explore
-Route::get('/explore', [Explore::class, 'ShowExplore'])->name("showexplore");
-Route::get('/api/explore', [Explore::class, 'indexApi'])->name("indexApi");
-
-//See more categories
-Route::get('/morecategories', [Explore::class, 'MoreCategory'])->name("morecategories");
-
-//Show All Workflow
-Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkflow");
-
-//-------------------------------------------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-//-------------------------------------------------------------------------------HAVE TO LOGIN FIRST------------------------------------------------------------------------------------------
-
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//HAVE TO LOGIN FIRST
 Route::middleware([CheckCookieLogin::class])->group(function () {
 
-    //-----------------------------------------------------------------BOARD----------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //BOARD, FOLLOW USER, UNFOLLOW USER
 
     //Access board page
     Route::get('/board/{id?}', [Board::class, 'ShowBoard'])->name("showboard");
@@ -137,10 +141,10 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Unfollow user
     Route::delete('/unfollow', [Board::class, 'UnFollowUser'])->name("unfollowuser");
 
-    //--------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-    //--------------------------------------------------------------ALBUM, ADD IMAGE TO ALBUM, DELETE ALBUM, UPDATE ALBUM--------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //ALBUM, ADD IMAGE TO ALBUM, DELETE ALBUM, UPDATE ALBUM, PRIVATE ALBUM
 
     //Access album page
     Route::get('/album/{id}', [Board::class, 'ShowAlbum'])->name("showalbum");
@@ -164,9 +168,8 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Private album
     Route::post('/privatealbum', [Board::class, 'PrivateAlbum'])->name("privatealbum");
 
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //-------------------------------------------------------------IMAGE, ADD IMAGE, UPDATE IMAGE, DELETE IMAGE, SET FEATURE IMAGE, LIKE IMAGE----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //IMAGE, ADD IMAGE, UPDATE IMAGE, DELETE IMAGE, SET FEATURE IMAGE, LIKE IMAGE, SAVED IMAGE, SHARE IMAGE
 
     //Access image page
     Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
@@ -195,9 +198,11 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Saved image
     Route::post('/savedimage', [Image::class, 'SavedImage'])->name("savedimage");
 
-    //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Share image
+    Route::get('/shareimage/{id}/share', [Image::class, 'ShareImage'])->name("shareimage");
 
-    //----------------------------------------------------------------------------LOAD COMMENT, ADD COMMENT, EDIT COMMENT AND DELETE COMMENT--------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //LOAD COMMENT, ADD COMMENT, EDIT COMMENT AND DELETE COMMENT, LOAD REPLY, ADD REPLY, EDIT REPLY AND DELETE REPLY
 
     //Add comment
     Route::post('/addcomment/{idImage}', [Image::class, 'AddCommentInImage'])->name("addcomment");
@@ -225,8 +230,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Reply reply
     Route::post('/api/reply/{parentId}/replies', [Image::class, 'ReplyReply'])->name("replyreply");
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT
 
     //Access account page
     Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
@@ -240,9 +246,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Update account
     Route::put('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
 
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //THEME
 
-    //--------------------------------------THEME---------------------------------------------
     //Change theme
     Route::post('/save-theme', function (Illuminate\Http\Request $request) {
         $theme = $request->input('theme');
@@ -250,9 +256,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
         return response()->json(['status' => 'success']);
     });
-    //-----------------------------------------------------------------------------------------
 
-    //----------------------------------------------------------------------------PAYMENT-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //PAYMENT, PRICING
 
     // Access Payment
     Route::get('/payment/{price}', [Payment::class, 'ShowPayment'])->name("showpayment");
@@ -262,7 +268,8 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
         return view('User.Payment.Pricing');
     })->name('showpricing');
 
-    //----------------------------------------------------------------------------SETTINGS-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //SETTINGS
     
     // Access Settings
     Route::get('/settings', action: function () {
@@ -272,9 +279,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Change Settings Tab
     Route::get('/settings/{tab}', [Settings::class, 'ShowSettings'])->name('changesettings');
 
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //WORKFLOW
 
-    //-------------------------------------------------------------------------------WORKFLOW---------------------------------------------------------------------------------
     //Show G1
     Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
 
@@ -386,7 +393,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Show G20
     Route::get('/g20', [G3::class, 'InputDataG3'])->name("g20");
 
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 });
 
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -407,4 +407,14 @@ class Image extends Controller
         ]);
         return response()->json(['success' => true, 'saved' => true]);
     }
+    public function ShareImage($id)
+    {
+        $post = Photo::findOrFail($id);
+        return response()->json([
+            'title' => $post->title,
+            'image' => $post->url,
+            'url' => route('showimage', $post->id),
+            'user' => $post->album->user->username,
+        ]);
+    }
 }

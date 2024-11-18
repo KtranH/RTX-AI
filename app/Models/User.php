@@ -75,4 +75,8 @@ class User extends Authenticatable
     {
         return SavedImage::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->exists();
     }
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }
