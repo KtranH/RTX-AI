@@ -218,7 +218,7 @@
                                 timer: 3000,
                                 toast: true,
                                 position: 'bottom-left',
-                                background: '#06D7A0'
+                                background: '#46DFB1'
                             });
                         } 
                         else {
@@ -256,7 +256,7 @@
                             timer: 3000,
                             toast: true,
                             position: 'bottom-left',
-                            background: '#F04770'
+                            background: 'red'
                         });
                     });
                 }

@@ -7,32 +7,32 @@
     ?>
 
     <style>
-        .featu#F04770-photos {}
+        .featured-photos {}
 
-        .featu#F04770-photos img {
+        .featured-photos img {
             border-radius: 30px;
         }
 
-        .featu#F04770-photos .slick-slide {
+        .featured-photos .slick-slide {
             margin: 0 4px;
         }
 
-        .featu#F04770-photos .slick-list {
+        .featured-photos .slick-list {
             margin: 0 -10px;
         }
 
-        .featu#F04770-photos .slick-prev:before,
-        .featu#F04770-photos .slick-next:before {
+        .featured-photos .slick-prev:before,
+        .featured-photos .slick-next:before {
             font-size: 40px;
             color: white;
         }
 
-        .featu#F04770-photos .slick-prev {
+        .featured-photos .slick-prev {
             left: -5px;
             z-index: 1000;
         }
 
-        .featu#F04770-photos .slick-next {
+        .featured-photos .slick-next {
             right: 15px;
             z-index: 1000;
         }
@@ -284,7 +284,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="mt-2 grid-cols-1 gap-2 featu#F04770-photos" data-aos="fade-right" data-aos-delay="150">
+                    <div class="mt-2 grid-cols-1 gap-2 featured-photos" data-aos="fade-right" data-aos-delay="150">
                         @foreach ($feature as $x)
                             <div class="relative group">
                                 <a href="{{ route('showimage', ['id' => $x->id]) }}">
@@ -332,7 +332,7 @@
         </div>
         <script>
             $(document).ready(function() {
-                $('.featu#F04770-photos').slick({
+                $('.featured-photos').slick({
                     lazyLoad: 'ondemand',
                     slidesToShow: 4,
                     slidesToScroll: 1,
@@ -818,7 +818,7 @@
                         });
                     
                         function scrollHandlerNormal() {
-                            console.log('scroll event trigge#F04770'); 
+                            console.log('scroll event triggered'); 
                             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                                 loadPhotosSaved();
                             }

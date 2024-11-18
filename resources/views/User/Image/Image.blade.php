@@ -219,7 +219,7 @@ $count = count($listUserLiked);
                                 <div class="flex justify-center space-x-4 mt-2">
                                     @if($checkUserLikedImage != null)
                                         <a href="#" data-id="{{ $image->id }}" class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                            <i class="fas fa-heart text-#F04770-500 text-xl hover:text-indigo-700"></i>
+                                            <i class="fas fa-heart text-red-500 text-xl hover:text-indigo-700"></i>
                                         </a>
                                     @else
                                         <a href="#" data-id="{{ $image->id }}" class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
@@ -240,10 +240,10 @@ $count = count($listUserLiked);
                                                     type: 'POST',
                                                     success: function(response) {
                                                         var icon = $('.like-button i');
-                                                        if (icon.hasClass('text-#F04770-500')) {
-                                                            icon.removeClass('text-#F04770-500').addClass('text-gray-700');
+                                                        if (icon.hasClass('text-red-500')) {
+                                                            icon.removeClass('text-red-500').addClass('text-gray-700');
                                                         } else {
-                                                            icon.removeClass('text-gray-700').addClass('text-#F04770-500');
+                                                            icon.removeClass('text-gray-700').addClass('text-red-500');
                                                         }
                                                         var statusSpan = $('#like-status');
                                                         var text = statusSpan.html().trim();
@@ -1106,7 +1106,7 @@ $count = count($listUserLiked);
                                                         <button class="reply-reply-button font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Phản hồi</button>
                                                         ${reply.user.id == '{{ Auth::user()->id }}' ? `
                                                             <button class="edit-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Chỉnh sửa</button>
-                                                            <button class="delete-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-#F04770-600">Xóa</button>
+                                                            <button class="delete-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-red-600">Xóa</button>
                                                         ` : ''}
                                                         ${(new Date(reply.updated_at).getTime() !== new Date(reply.created_at).getTime()) ?  
                                                         `<span class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</span>`
