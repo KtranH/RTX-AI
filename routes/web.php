@@ -29,89 +29,90 @@ use Illuminate\Support\Facades\Session;
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
 //DONT HAVE TO LOGIN FIRST
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //HOME
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    
-    //Access home page
-    Route::get('/', [Home::class, 'ShowHome'])->name("showhome");
-    
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//HOME
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    //LOGIN, SIGN UP, LOGIN BY GOOGLE, LOGOUT
+//Access home page
+Route::get('/', [Home::class, 'ShowHome'])->name("showhome");
 
-    //Access login page
-    Route::get('/login', [Account::class, 'ShowLogin'])->name("showlogin")->middleware(VerifyTurnstileCaptcha::class);
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //Login account
-    Route::post('/loginaccount', [Account::class, 'LoginAccount'])->name("loginaccount");
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//LOGIN, SIGN UP, LOGIN BY GOOGLE, LOGOUT
 
-    //Access sign up page
-    Route::get('/signup', [Account::class, 'ShowSignUp'])->name("showsignup")->middleware(VerifyTurnstileCaptcha::class);
+//Access login page
+Route::get('/login', [Account::class, 'ShowLogin'])->name("showlogin")->middleware(VerifyTurnstileCaptcha::class);
 
-    //Button login by google
-    Route::get('/auth2Google', [Account::class, 'loginByGoogle'])->name("loginByGoogle");
+//Login account
+Route::post('/loginaccount', [Account::class, 'LoginAccount'])->name("loginaccount");
 
-    //Data from Google
-    Route::get('/callBackGoogle', [Account::class, 'callBackGoogle'])->name("callBackGoogle");
+//Access sign up page
+Route::get('/signup', [Account::class, 'ShowSignUp'])->name("showsignup")->middleware(VerifyTurnstileCaptcha::class);
 
-    //Button logout
-    Route::get('/logout', [Account::class, 'Logout'])->name("logout");
+//Button login by google
+Route::get('/auth2Google', [Account::class, 'loginByGoogle'])->name("loginByGoogle");
 
-    //Active sign up account
-    Route::post('/signupaccount', [Account::class, 'NewAccount'])->name("newaccount");
+//Data from Google
+Route::get('/callBackGoogle', [Account::class, 'callBackGoogle'])->name("callBackGoogle");
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//Button logout
+Route::get('/logout', [Account::class, 'Logout'])->name("logout");
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    //VERIFY EMAIL, FORGET PASSWORD, CHECK CODE TO CHANGE PASSWORD, RESEND EMAIL, CHECK CODE TO VERIFY EMAIL
+//Active sign up account
+Route::post('/signupaccount', [Account::class, 'NewAccount'])->name("newaccount");
 
-    //Send email
-    Route::get('/sendemail', [SendEmail::class, 'SendEmail'])->name("sendemail");
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //Send code to email to change password
-    Route::get('/sendcodetoemailtochangepass', [SendCodeRestPass::class, 'SendCodeToEmail'])->name("sendcodetoemail")->middleware(ThrottleRequests::class . ':2,1');
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//VERIFY EMAIL, FORGET PASSWORD, CHECK CODE TO CHANGE PASSWORD, RESEND EMAIL, CHECK CODE TO VERIFY EMAIL
 
-    //New send email
-    Route::get('/resendemail', [SendEmail::class, 'ReSendEmail'])->name("resendemail");
+//Send email
+Route::get('/sendemail', [SendEmail::class, 'SendEmail'])->name("sendemail");
 
-    //Show auth email
-    Route::get('/showauthemail', [SendEmail::class, 'ShowAuth'])->name("showauth");
+//Send code to email to change password
+Route::get('/sendcodetoemailtochangepass', [SendCodeRestPass::class, 'SendCodeToEmail'])->name("sendcodetoemail")->middleware(ThrottleRequests::class . ':2,1');
 
-    //Show auth email
-    Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode")->middleware(ThrottleRequests::class . ':2,1');;
+//New send email
+Route::get('/resendemail', [SendEmail::class, 'ReSendEmail'])->name("resendemail");
 
-    //Forget password page
-    Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass")->middleware(VerifyTurnstileCaptcha::class);
+//Show auth email
+Route::get('/showauthemail', [SendEmail::class, 'ShowAuth'])->name("showauth");
 
-    //Send email to password
-    Route::get('/sendemail&changepass', [Account::class, 'SendEmailResetPass'])->name("sendemailresetpass");
+//Show auth email
+Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode")->middleware(ThrottleRequests::class . ':2,1');
+;
 
-    //Input code to change password
-    Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass")->middleware(VerifyTurnstileCaptcha::class);
+//Forget password page
+Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass")->middleware(VerifyTurnstileCaptcha::class);
 
-    //Check code to change password
-    Route::patch('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
+//Send email to password
+Route::get('/sendemail&changepass', [Account::class, 'SendEmailResetPass'])->name("sendemailresetpass");
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//Input code to change password
+Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChangePass'])->name("inputcodetochangepass")->middleware(VerifyTurnstileCaptcha::class);
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    //EXPLORE, CATEGORIES IMAGE, GENAI
+//Check code to change password
+Route::patch('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
 
-    //Access creativity
-    Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcreativity");
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    //Access explore
-    Route::get('/explore', [Explore::class, 'ShowExplore'])->name("showexplore");
-    Route::get('/api/explore', [Explore::class, 'indexApi'])->name("indexApi");
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//EXPLORE, CATEGORIES IMAGE, GENAI
 
-    //See more categories
-    Route::get('/morecategories', [Explore::class, 'MoreCategory'])->name("morecategories");
+//Access creativity
+Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcreativity");
 
-    //Show All Workflow
-    Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkflow");
+//Access explore
+Route::get('/explore', [Explore::class, 'ShowExplore'])->name("showexplore");
+Route::get('/api/explore', [Explore::class, 'indexApi'])->name("indexApi");
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//See more categories
+Route::get('/morecategories', [Explore::class, 'MoreCategory'])->name("morecategories");
+
+//Show All Workflow
+Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkflow");
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -124,7 +125,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Access board page
     Route::get('/board/{id?}', [Board::class, 'ShowBoard'])->name("showboard");
-    
+
     //Change board tab
     Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
     Route::get('/api/board', [Board::class, 'ShowBoardApi'])->name('ShowBoardApi');
@@ -145,10 +146,10 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Access album page
     Route::get('/album/{id}', [Board::class, 'ShowAlbum'])->name("showalbum");
     Route::get('/api/album/{id}', [Board::class, 'ShowAlbumApi'])->name("ShowAlbumApi");
- 
+
     //Access album creation page
     Route::get('/create_album', [Board::class, 'CreateAlbum'])->name("createalbum");
- 
+
     //Access album edit page
     Route::get('/edit_album/{id}', [Board::class, 'EditAlbum'])->name("editalbum");
 
@@ -157,7 +158,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Update album
     Route::put('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
- 
+
     //Delete album
     Route::delete('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
 
@@ -202,7 +203,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Add comment
     Route::post('/addcomment/{idImage}', [Image::class, 'AddCommentInImage'])->name("addcomment");
-    
+
     //Load more comment
     Route::get('/loadmorecomment/{idImage}', [Image::class, 'ShowCommentAPI'])->name("loadmorecomment");
 
@@ -220,7 +221,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Delete reply
     Route::delete('/api/deletereply/{id}', [Image::class, 'DeleteReply'])->name("deletereply");
-    
+
     //Update reply
     Route::patch('/api/updatereply/{id}', [Image::class, 'UpdateReply'])->name("updatereply");
 
@@ -266,9 +267,12 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //SETTINGS
-    
+
     // Access Settings
-    Route::get('/settings' , [Settings::class, 'Index'])->name("showsettings");
+    Route::get('/settings', [Settings::class, 'Index'])->name("showsettings");
+    Route::get('/api/settings/liked', [Settings::class, 'apiDataLiked'])->name("apiDataLiked");
+    Route::get('/api/settings/album', [Settings::class, 'apiDataAlbum'])->name("apiDataAlbum");
+    Route::get('/api/settings/follow', [Settings::class, 'apiDataFollow'])->name("apiDataFollow");
 
     //Change Settings Tab
     Route::get('/settings/{tab}', [Settings::class, 'ShowSettings'])->name('changesettings');
@@ -353,7 +357,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Show result G8
     Route::get('/resultofg8', [G8::class, 'get_imageG8'])->name("get_imageg8");
-    
+
     //Show G9
     Route::get('/g9', [G3::class, 'InputDataG3'])->name("g9");
 
