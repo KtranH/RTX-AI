@@ -25,74 +25,35 @@ class Explore extends Controller
     public function indexApi(Request $request)
     {
         $currentUserId = auth()->id();
-        
-        $query = Photo::query()
-            ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
-            ->leftJoin('users', 'users.id', '=', 'albums.user_id')
-            ->distinct()
-            ->join('category_photo', 'category_photo.photo_id', '=', 'photos.id')
-            ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user', 'users.id as user_id')
-            ->with(['album.user'])
-            ->withCount('likes');
-
-        if ($currentUserId) {
-            $query->leftJoin('follower_user', function($join) use ($currentUserId) {
-                $join->on('users.id', '=', 'follower_user.user_id')
-                    ->where('follower_user.follower_id', '=', $currentUserId);
-            })
-            ->addSelect(DB::raw('CASE 
-                WHEN follower_user.user_id IS NOT NULL THEN 1 
-                ELSE 0 
-            END as is_following'));
-        }
-        if ($request->has('q')) {
-            $searchTerm = $request->q;
-            $query->where(function ($query) use ($searchTerm) {
-                $query->where('photos.title', 'like', '%' . $searchTerm . '%')
-                    ->orWhereHas('category', function ($query) use ($searchTerm) {
-                        $query->where('name', $searchTerm);
-                    })
-                    ->orWhereHas('album.user', function ($query) use ($searchTerm) {
-                        $query->where('username', 'like', '%' . $searchTerm . '%');
-                    });
-            });
-        }
-
-        if ($request->has('category')) {
-            $query->where('category_photo.category_id', $request->category);
-        }
-        if ($currentUserId) {
-            $query->orderByRaw('CASE 
-                WHEN follower_user.user_id IS NOT NULL THEN 0 
-                ELSE 1 
-            END')
-            ->orderBy('photos.created_at', 'desc');
-        } else {
-            $query->inRandomOrder();
-        }
-        $photos = $query->paginate($request->limit ?? 8);
-        return response()->json($photos);
-    }
-    /*public function indexApi(Request $request)
-    {
-        $currentUserId = auth()->id();
         $limit = $request->limit ?? 8;
 
-        // Tạo một danh sách ID ảnh ưu tiên từ người dùng được theo dõi
-        $priorityPhotoIds = Photo::query()
-            ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
-            ->leftJoin('users', 'users.id', '=', 'albums.user_id')
-            ->leftJoin('follower_user', function ($join) use ($currentUserId) {
-                $join->on('users.id', '=', 'follower_user.user_id')
-                    ->where('follower_user.follower_id', '=', $currentUserId);
-            })
-            ->whereNotNull('follower_user.user_id') // Chỉ lấy ảnh từ người được theo dõi
-            ->inRandomOrder() // Ngẫu nhiên
-            ->limit(3) // Chỉ lấy 3 ảnh
-            ->pluck('photos.id') // Lấy ID của ảnh
-            ->toArray();
+        // Take preferred categories
+        $preferredCategories = [];
+        if ($currentUserId) {
+            $preferredCategories = DB::table('preferences')
+                ->where('user_id', $currentUserId)
+                ->pluck('category_id')
+                ->toArray();
+        }
 
-        // Truy vấn chính
+        // Take 3 photos from followers
+        $priorityPhotoIds = [];
+        if ($currentUserId) {
+            $priorityPhotoIds = Photo::query()
+                ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
+                ->leftJoin('users', 'users.id', '=', 'albums.user_id')
+                ->leftJoin('follower_user', function ($join) use ($currentUserId) {
+                    $join->on('users.id', '=', 'follower_user.user_id')
+                        ->where('follower_user.follower_id', '=', $currentUserId);
+                })
+                ->whereNotNull('follower_user.user_id')
+                ->inRandomOrder()
+                ->limit(3)
+                ->pluck('photos.id')
+                ->toArray();
+        }
+
+        // Main query
         $query = Photo::query()
             ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
             ->leftJoin('users', 'users.id', '=', 'albums.user_id')
@@ -100,8 +61,10 @@ class Explore extends Controller
             ->join('category_photo', 'category_photo.photo_id', '=', 'photos.id')
             ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user', 'users.id as user_id')
             ->with(['album.user'])
-            ->withCount('likes');
+            ->withCount('likes')
+            ->where('albums.is_private', false);
 
+        // Add priority photos
         if ($currentUserId) {
             $query->leftJoin('follower_user', function ($join) use ($currentUserId) {
                 $join->on('users.id', '=', 'follower_user.user_id')
@@ -113,6 +76,7 @@ class Explore extends Controller
             END as is_following'));
         }
 
+        // Query search
         if ($request->has('q')) {
             $searchTerm = $request->q;
             $query->where(function ($query) use ($searchTerm) {
@@ -126,15 +90,17 @@ class Explore extends Controller
             });
         }
 
+        // Query category
         if ($request->has('category')) {
             $query->where('category_photo.category_id', $request->category);
         }
 
-        // Thay đổi thứ tự để ưu tiên các ảnh từ danh sách ID ảnh được theo dõi
+        // Query order
         if ($currentUserId) {
             $query->orderByRaw('CASE 
-                WHEN photos.id IN (' . implode(',', $priorityPhotoIds) . ') THEN 0 
-                ELSE 1 
+                WHEN photos.id IN (' . implode(',', $priorityPhotoIds ?: [0]) . ') THEN 0
+                WHEN category_photo.category_id IN (' . implode(',', $preferredCategories ?: [0]) . ') THEN 1
+                ELSE 2 
             END')
             ->orderBy('photos.created_at', 'desc');
         } else {
@@ -143,7 +109,7 @@ class Explore extends Controller
 
         $photos = $query->paginate($limit);
         return response()->json($photos);
-    }*/
+    }
 
     public function MoreCategory()
     {
