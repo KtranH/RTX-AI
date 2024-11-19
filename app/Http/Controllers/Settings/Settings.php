@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Models\Album;
 use App\Models\Category;
-use App\Models\Photo;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class Settings extends Controller
@@ -22,14 +19,44 @@ class Settings extends Controller
             'availableCategories' => $availableCategories,
         ]);
     }
+
+    public function apiDataLiked()
+    {
+        $user = Auth::user();
+        $likedPhotos = $user->likes()->with('photo')->paginate(4);
+        return response()->json([
+            'success' => true,
+            'data' => $likedPhotos,
+        ]);
+    }
+    public function apiDataAlbum()
+    {
+        $user = Auth::user();
+        $albums = $user->albums()->paginate(4);
+        return response()->json([
+            'success' => true,
+            'data' => $albums,
+        ]);
+    }
+
+    public function apiDataFollow()
+    {
+        $user = Auth::user();
+        $followings = $user->following()->paginate(4);
+        return response()->json([
+            'success' => true,
+            'data' => $followings,
+        ]);
+    }
+
     public function storePreferences(Request $request)
     {
         try {
             $user = Auth::user();
-            $newPreferences = $request->input('categories', []); 
-            
+            $newPreferences = $request->input('categories', []);
+
             $user->preferences()->sync($newPreferences);
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'Đã cập nhật sở thích thành công!',
@@ -40,7 +67,7 @@ class Settings extends Controller
                 'message' => 'Có lỗi xảy ra, vui lòng thử lại!',
             ]);
         }
-    }    
+    }
     public function ShowSettings(Request $request, $id = null)
     {
         $tab = $request->route('tab');
