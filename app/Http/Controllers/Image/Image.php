@@ -176,6 +176,9 @@ class Image extends Controller
         $image = $request->file('cover');
         $title = $request->input('title');
         $description = $request->input('description');
+        if($description == null){
+            $description = $title;
+        }
         $filename = time() . '.' . $image->getClientOriginalExtension();
         $path = "albums/" . $Email . "/" . $folder . "/" . $filename;
         Storage::disk('r2')->put($path, file_get_contents($image));

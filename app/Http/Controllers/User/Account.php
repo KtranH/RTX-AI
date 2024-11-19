@@ -67,7 +67,7 @@ class Account extends Controller
     {
         $request->validate([
             'input-name' => 'required|string|max:255',
-            'input-email' => 'required|string|email|max:255|unique:users',
+            'input-email' => 'required|string|email|max:255',
             'input-pass' => 'required|string|min:8',
             'input-pass2' => 'required|string|min:8',
         ], [
@@ -76,7 +76,6 @@ class Account extends Controller
             'input-email.required' => 'Vui lòng nhập email',
             'input-email.email' => 'Email phải là email',
             'input-email.max' => 'Email phải nhỏ hơn 255 ký tự',
-            'input-email.unique' => 'Email đã tồn tại',
             'input-pass.required' => 'Vui lòng nhập Password',
             'input-pass.min' => 'Password phải nhiều hơn 8 ký tự',
             'input-pass2.required' => 'Vui lòng nhập lại Password',
