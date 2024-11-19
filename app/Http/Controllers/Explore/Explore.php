@@ -102,15 +102,30 @@ class Explore extends Controller
                 WHEN category_photo.category_id IN (' . implode(',', $preferredCategories ?: [0]) . ') THEN 1
                 ELSE 2 
             END')
-            ->orderBy('photos.created_at', 'desc');
+            ->orderByRaw('CASE 
+                WHEN albums.user_id = ? THEN 1
+                ELSE 0 
+            END', [$currentUserId])
+            ->orderByRaw('RAND() * 
+                CASE 
+                    WHEN photos.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 2
+                    WHEN photos.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1.5
+                    ELSE 1
+                END'
+            );
         } else {
-            $query->inRandomOrder();
+            $query->orderByRaw('RAND() * 
+                CASE 
+                    WHEN photos.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 2
+                    WHEN photos.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1.5
+                    ELSE 1
+                END'
+            );
         }
 
         $photos = $query->paginate($limit);
         return response()->json($photos);
     }
-
     public function MoreCategory()
     {
         $ResultABC = [];

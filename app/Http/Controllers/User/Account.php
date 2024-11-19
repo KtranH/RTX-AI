@@ -191,10 +191,10 @@ class Account extends Controller
             'username.max' => 'Tên người dùng không được quá 255 ký tự',
         ]);
 
-        $user = User::where("email", Cookie::get("token_account"))->first();
+        $user = User::where("email", Auth::user()->email)->first();
         if ($user) {
             $user->username = $request->input("username");
-            if ($image = $request->file("avatar_url")) {
+            if ($image = $request->file("avatar")) {
                 $filename = time() . '.' . $image->getClientOriginalExtension();
                 Storage::disk('r2')->put("AvatarUser/{$user->email}/{$filename}", file_get_contents($image));
                 Storage::disk('r2')->delete(str_replace($this->urlR2, "", $user->avatar_url));

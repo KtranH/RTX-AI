@@ -37,7 +37,7 @@
                             <label for="cover" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
                                 <i class="fas fa-upload text-gray-700 text-3xl"></i>
                             </label>
-                            <input type="file" id="cover" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror">
+                            <input type="file" id="cover" name="avatar" class="absolute inset-0 opacity-0 cursor-pointer form-control @error('cover') is-invalid @enderror">
                             @error('cover')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
