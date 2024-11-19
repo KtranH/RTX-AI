@@ -84,31 +84,93 @@
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 my-4">
                     <div>
                         <div class="font-bold text-2xl mb-2">Sở Thích Của Bạn</div>
-                        <div class="text-gray-500 text-xs">Hệ thống tự tùy chỉnh sở thích của bạn tùy vào hoạt động gần đây</div>
+                        <div class="text-gray-500 text-xs">Cài đặt những sở thích phù hợp cho chúng tôi gợi ý nội dung cho bạn</div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    @for ($i = 0; $i <= 15; $i++)
-                        <div class="relative group">
-                            <a href="#">
-                                <div class="aspect-square">
-                                    <img src="https://picsum.photos/200" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                </div>
-                                <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div class="mt-2 text-left px-2 py-1">
-                                        <div class="font-semibold text-lg truncate group-hover:text-black">Sở Thích</div>
-                                        <div class="text-sm text-gray-500 h-20 truncate overflow-hidden">Sở Thích</div>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="w-full flex flex-col items-center">
-                                <button class="mt-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 w-auto">
-                                    Bỏ quan tâm
-                                </button>
+                <div x-data="preferencesHandler({{ $selectedCategories }}, {{ $availableCategories }})" class="w-full mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
+                    <p class="text-sm text-gray-600 mb-4">Chọn các sở thích phù hợp để chúng tôi gợi ý nội dung cho bạn.</p>
+                    <!-- Preferences selected -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <template x-for="(category, index) in selectedCategories" :key="category.id">
+                            <div class="flex items-center bg-indigo-500 text-white px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-shadow">
+                                <span x-text="category.name"></span>
+                                <button @click="removeCategory(index)" class="ml-3 text-white text-xl font-bold leading-none hover:text-red-300 transition-colors" id="remove-category">&times;</button>
                             </div>
-                        </div>
-                    @endfor
-                </div>
+                        </template>
+                    </div>
+                    <!-- List of available categories -->
+                    <div class="relative">
+                        <select x-model="selected" @change="addCategory()" class="form-control w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                            <option value="" disabled selected hidden>Chọn sở thích...</option>
+                            <template x-for="category in availableCategories" :key="category.id">
+                                <option :value="category.id" x-text="category.name"></option>
+                            </template>
+                        </select>
+                        <div x-show="!availableCategories.length" class="absolute inset-x-0 bottom-0 mt-2 text-sm text-gray-500">Tất cả sở thích đã được chọn.</div>
+                    </div>
+                    <!-- Save -->
+                    <button @click="savePreferences" class="mt-6 px-6 py-3 bg-indigo-500 text-white font-bold rounded-lg shadow-md hover:bg-indigo-600 hover:shadow-lg transition-all">
+                        Lưu
+                    </button>
+                </div>                
+                <script>
+                    function preferencesHandler(selectedCategories, availableCategories) {
+                        return {
+                            availableCategories: availableCategories,
+                            selectedCategories: selectedCategories,
+                            selected: null,
+                            showToast: false,
+                            toastMessage: '',
+
+                            addCategory() {
+                                if (!this.selected) return;
+                                const category = this.availableCategories.find(cat => cat.id == this.selected);
+                                if (category) {
+                                    this.selectedCategories.push(category);
+                                    this.availableCategories = this.availableCategories.filter(cat => cat.id != this.selected);
+                                    this.selected = null;
+                                }
+                            },
+
+                            removeCategory(index) {
+                                const category = this.selectedCategories[index];
+                                if (category) {
+                                    this.selectedCategories.splice(index, 1);
+                                    this.availableCategories.push(category);
+                                }
+                            },
+
+                            savePreferences() {
+                                const selectedIds = this.selectedCategories.map(category => category.id);
+                                fetch('{{ route('updatepreferences') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({ categories: selectedIds })
+                                })
+                                .then(response => response.json())
+                                .then(() => {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        iconColor: 'white',
+                                        title: 'Đã cập nhật sở thích!',
+                                        color: 'white',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        toast: true,
+                                        position: 'bottom-left',
+                                        background: '#46DFB1'
+                                    })
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                            }
+                        };
+                    }
+                </script>                          
             </div>
             <!-- Board -->
             <div id="board-content" class="tab-content hidden">

@@ -6,7 +6,6 @@ use App\AI_Create_Image;
 use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
-use App\Models\FollowerUser;
 use App\Models\HistoryImageAI;
 use App\Models\Photo;
 use App\Models\SavedImage;
@@ -15,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 

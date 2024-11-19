@@ -17,4 +17,8 @@ class Category extends Model
     {
         return $this->belongsToMany(Photo::class, 'category_photo');
     }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'preferences', 'category_id', 'user_id');
+    }
 }

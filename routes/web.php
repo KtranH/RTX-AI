@@ -268,12 +268,13 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //SETTINGS
     
     // Access Settings
-    Route::get('/settings', action: function () {
-        return view('User.Settings.Settings');
-    })->name('showsettings');
+    Route::get('/settings' , [Settings::class, 'Index'])->name("showsettings");
 
     //Change Settings Tab
     Route::get('/settings/{tab}', [Settings::class, 'ShowSettings'])->name('changesettings');
+
+    //Update Preferences
+    Route::post('/updatepreferences', [Settings::class, 'StorePreferences'])->name("updatepreferences");
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //WORKFLOW
