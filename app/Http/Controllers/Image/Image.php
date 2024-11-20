@@ -204,22 +204,29 @@ class Image extends Controller
     }
     public function LikeImage($idImage)
     {
-        $UserID = Auth::user()->id;
-        $check = $this->checkLike($idImage, $UserID);
-        if($check)
-        {
-            $check->delete();
-            return redirect()->back();
-        }
-       else
+       try
        {
-        Like::insert([
-            "user_id" => $UserID,
-            "photo_id" => $idImage,
-            "created_at" => now(),
-            "updated_at" => now(),
-        ]);
-        return redirect()->back();
+            $UserID = Auth::user()->id;
+            $check = $this->checkLike($idImage, $UserID);
+            if($check)
+            {
+                $check->delete();
+                return response()->json(['success' => true]);
+            }
+            else
+            {
+                Like::insert([
+                    "user_id" => $UserID,
+                    "photo_id" => $idImage,
+                    "created_at" => now(),
+                    "updated_at" => now(),
+                ]);
+                return response()->json(['success' => true]);
+            }
+       }
+       catch(\Exception $e)
+       {
+            return response()->json(['success' => false]);
        }
     }
     public function AddCommentInImage($idImage, Request $request)

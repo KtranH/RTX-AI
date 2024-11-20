@@ -242,6 +242,9 @@ $count = count($listUserLiked);
                                                 $.ajax({
                                                     url: '{{ route('likeimage', ['id' => '__id__']) }}'.replace('__id__', imageId), 
                                                     type: 'POST',
+                                                    data: {
+                                                        _token: '{{ csrf_token() }}'
+                                                    },
                                                     success: function(response) {
                                                         var icon = $('.like-button i');
                                                         if (icon.hasClass('text-red-500')) {

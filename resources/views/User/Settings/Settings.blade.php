@@ -181,39 +181,7 @@
                             <div class="text-gray-500 text-xs">Tùy chỉnh người mà bạn theo dõi</div>
                         </div>
                     </div>
-                    <div class="js-following grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        @for ($i = 0; $i <= 1; $i++)
-                            <div class="relative group">
-                                <!-- Two Featured Images -->
-                                <a href="#">
-                                    <div class="aspect-square flex flex-row items-center space-x-1 relative">
-                                        <img src="https://picsum.photos/200" loading="lazy" alt="Image"
-                                            class="w-1/2 h-3/4 rounded-l-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                        <img src="https://picsum.photos/200" loading="lazy" alt="Image"
-                                            class="w-1/2 h-3/4 rounded-r-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                    </div>
-                                </a>
-                                <!-- Profile Image -->
-                                <div class="absolute left-1/2 top-64 sm:top-52 transform -translate-x-1/2 z-10 mb-4">
-                                    <div class="w-20 h-20 bg-gray-300 rounded-full border-4 border-white overflow-hidden">
-                                        <img src="https://picsum.photos/100" alt="Profile"
-                                            class="w-full h-full object-cover">
-                                    </div>
-                                </div>
-                                <!-- Profile Information -->
-                                <div class="text-center">
-                                    <div class="font-semibold text-lg truncate group-hover:text-black">Tài Khoản</div>
-                                    <div class="text-sm text-gray-500 overflow-hidden truncate">Lượt Theo Dõi</div>
-                                </div>
-                                <!-- Button -->
-                                <div class="w-full flex flex-col items-center">
-                                    <button
-                                        class="mt-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                        Bỏ theo dõi
-                                    </button>
-                                </div>
-                            </div>
-                        @endfor
+                    <div class="js-following grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" style="margin-top: -35px">
                     </div>
                 </div>
             </div>
@@ -271,74 +239,71 @@
         var maxLastPage = -1;
 
         const htmlLiked = (item) => {
+            const url = '{{ route('showimage', ['id' => '__id__']) }}'.replace('__id__', item.photo_id);
             return `
-            <div class="relative group">
-                <a href="#">
-                    <div class="aspect-square">
-                        <img src="${item.photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                    </div>
-                    <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                        <div class="mt-2 text-left px-2 py-1">
-                            <div class="font-semibold text-lg truncate group-hover:text-black">Ảnh</div>
-                            <div class="text-sm text-gray-500 h-20 truncate overflow-hidden">Ảnh</div>
+           <div class="relative group">
+                <div>
+                    <a href="${url}">
+                        <div class="aspect-square">
+                            <img src="${item.photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                         </div>
-                    </div>
-                </a>
-                <!-- Button -->
-                <div class="w-full flex flex-col items-center">
-                    <button class="mt-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                        Bỏ ghim
+                    </a>
+                </div>
+                <div class="w-full flex flex-col items-center liked">
+                    <button class="mt-2 rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 unlike-btn" data-id="${item.photo_id}">
+                        <i class="fa-solid fa-heart-crack"></i> Bỏ thích
                     </button>
                 </div>
             </div>
             `;
         }
-
         const htmlAlbum = (item) => {
+            const url = '{{ route('showalbum', ['id' => '__id__']) }}'.replace('__id__', item.id);
             return `
-                <div class="flex flex-row items-center justify-between space-y-2">
+                <div class="flex flex-row items-center justify-between space-y-2 mb-2">
                     <div class="flex flex-row items-center space-x-4">
-                        <div class="aspect-square w-16 h-16">
-                            <img src="${item.cover_image}" alt="Image" class="object-cover rounded-lg">
-                        </div>
-                        <div class="">
-                            <div class="font-semibold text-lg truncate group-hover:text-black">${item.title}</div>
-                            <div class="text-sm text-gray-500 overflow-hidden truncate max-w-44">${item.description}</div>
-                        </div>
+                        <a href="${url}" class="flex flex-row items-center space-x-4 group">
+                            <div class="aspect-square w-16 h-16">
+                                <img src="${item.cover_image}" alt="Image" class="w-16 h-16 object-cover rounded-lg" loading="lazy">
+                            </div>
+                            <div class="">
+                                <div class="font-semibold text-lg truncate group-hover:text-black">${item.title}</div>
+                                <div class="text-sm text-gray-500 overflow-hidden truncate max-w-44">${item.description}</div>
+                            </div>
+                        </a>
                     </div>
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" value="" class="sr-only peer">
-                        <div
-                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600">
-                        </div>
+                           <input type="checkbox" value="" class="sr-only peer toggle-album" data-id="${item.id}" 
+                            ${item.is_private !== 1 ? 'checked' : ''}>
+                            <div
+                                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600">
+                            </div>
                     </label>
                 </div>`;
         }
 
         const htmlFollowing = (item) => {
+            const url = '{{ route('showboard', ['id' => '__id__']) }}'.replace('__id__', item.id);
             return `
                 <div class="relative group">
-                    <a href="#">
-                        <div class="aspect-square flex flex-row items-center space-x-1 relative">
-                            <img src="https://picsum.photos/200" loading="lazy" alt="Image"
-                                class="w-1/2 h-3/4 rounded-l-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                            <img src="https://picsum.photos/200" loading="lazy" alt="Image"
-                                class="w-1/2 h-3/4 rounded-r-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
+                    <div class="aspect-square flex flex-row items-center space-x-1 relative">
+                        <img src="https://static.vecteezy.com/system/resources/thumbnails/008/606/557/small_2x/dynamic-liquid-abstract-background-with-modern-ultra-violet-colors-vector.jpg" loading="lazy" alt="Image" class="w-1/2 h-3/4 rounded-l-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
+                        <img src="https://static.vecteezy.com/system/resources/thumbnails/008/606/557/small_2x/dynamic-liquid-abstract-background-with-modern-ultra-violet-colors-vector.jpg" loading="lazy" alt="Image" class="w-1/2 h-3/4 rounded-l-2xl object-cover transition-opacity duration-300 group-hover:opacity-15 transform rotate-360 scale-x-[-1]">
+                    </div>
+                    <a href="${url}" class="w-full flex flex-col items-center">
+                        <div class="absolute left-1/2 top-64 sm:top-52 transform -translate-x-1/2 z-10 mb-4">
+                            <div class="w-20 h-20 bg-gray-300 rounded-full border-4 border-white overflow-hidden">
+                                <img src="${item.avatar_url}" alt="Profile"
+                                    class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-semibold text-lg truncate group-hover:text-black">${item.username}</div>
+                            <div class="text-sm text-gray-500 overflow-hidden truncate">${item.email}</div>
                         </div>
                     </a>
-                    <div class="absolute left-1/2 top-64 sm:top-52 transform -translate-x-1/2 z-10 mb-4">
-                        <div class="w-20 h-20 bg-gray-300 rounded-full border-4 border-white overflow-hidden">
-                            <img src="https://static.vecteezy.com/system/resources/thumbnails/008/606/557/small_2x/dynamic-liquid-abstract-background-with-modern-ultra-violet-colors-vector.jpg" alt="Profile"
-                                class="w-full h-full object-cover">
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <div class="font-semibold text-lg truncate group-hover:text-black">Tài Khoản</div>
-                        <div class="text-sm text-gray-500 overflow-hidden truncate">Lượt Theo Dõi</div>
-                    </div>
                     <div class="w-full flex flex-col items-center">
-                        <button
-                            class="mt-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        <button class="cancel-follow-btn bg-gradient-to-r mt-2 from-purple-500 to-pink-500 text-xs text-white font-bold px-4 py-2 rounded-full transition-colors duration-300 hover:from-purple-600 hover:to-pink-600" data-id="${item.id}">
                             Bỏ theo dõi
                         </button>
                     </div>
@@ -389,6 +354,153 @@
                     page++;
                 }
             }, 500));
+
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.cancel-follow-btn', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'question',
+                    title: 'Bỏ theo dõi',
+                    text: 'Bạn chắc chắn muốn bỏ theo dõi người dùng không?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var userId = $(this).data('id');
+                        var parentElement = $(this).closest('.relative.group');
+                        $.ajax({
+                            url: '/unfollow',
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                user_id: userId
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        iconColor: 'white',
+                                        title: 'Bỏ theo dõi người dùng thành công',
+                                        color: 'white',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        toast: true,
+                                        position: 'bottom-left',
+                                        background: '#46DFB1'
+                                    });
+                                    parentElement.remove();
+                                }
+                                else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        iconColor: 'white',
+                                        title: 'Bỏ theo dõi người dùng không thành công',
+                                        color: 'white',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        toast: true,
+                                        position: 'bottom-left',
+                                        background: '#FF0000'
+                                    });
+                                }
+                            }
+                        });
+                    }
+                })
+            });
+            $(document).on('change', '.toggle-album', function(e) {
+                var albumId = $(this).data('id');
+                $.ajax({
+                    url: '/privatealbum',
+                    type: 'POST',
+                    data: {
+                        album_id: albumId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                iconColor: 'white',
+                                title: 'Cập nhật thành công',
+                                color: 'white',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                toast: true,
+                                position: 'bottom-left',
+                                background: '#46DFB1'
+                            });
+                            if (response.is_private) {
+                                $(`.toggle-album[data-id="${response.album_id}"]`).prop('checked', true);
+                            } else {
+                                $(`.toggle-album[data-id="${response.album_id}"]`).prop('checked', false);
+                            }
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                iconColor: 'white',
+                                title: 'Có lỗi xảy ra',
+                                text: 'Không thể cập nhật',
+                                color: 'white',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                toast: true,
+                                position: 'bottom-left',
+                                background: '#F04770'
+                            });
+                        }
+                    }
+                });
+            });
+            $(document).on('click', '.unlike-btn', function(e) {
+                e.preventDefault();
+                console.log('Clicked');
+                var imageId = $(this).data('id');
+                var parentElement = $(this).closest('.relative.group');
+                $.ajax({
+                    url: '/likeimage/' + imageId,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                            icon: 'success',
+                            iconColor: 'white',
+                            title: 'Đã bỏ thích ảnh',
+                            color: 'white',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            toast: true,
+                            position: 'bottom-left',
+                            background: '#46DFB1'
+                        }).then(() => {
+                            parentElement.remove(); 
+                        });
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                iconColor: 'white',
+                                title: 'Có lỗi xảy ra',
+                                text: 'Không thể bỏ thích ảnh',
+                                color: 'white',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                toast: true,
+                                position: 'bottom-left',
+                                background: '#F04770'
+                            });
+                        }
+                    }
+                });
+            });
+        })
     </script>
 @endsection
