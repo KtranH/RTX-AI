@@ -16,10 +16,16 @@ use App\Http\Controllers\Image\Image;
 use App\Http\Controllers\Creativity\Creativity;
 use App\Http\Controllers\Explore\Explore;
 use App\Http\Controllers\Payment\Payment;
+use App\Http\Controllers\User\WorkFlow\G10;
+use App\Http\Controllers\User\WorkFlow\G11;
+use App\Http\Controllers\User\WorkFlow\G12;
+use App\Http\Controllers\User\WorkFlow\G13;
+use App\Http\Controllers\User\WorkFlow\G14;
 use App\Http\Controllers\User\WorkFlow\G4;
 use App\Http\Controllers\User\WorkFlow\G5;
 use App\Http\Controllers\User\WorkFlow\G6;
 use App\Http\Controllers\User\WorkFlow\G7;
+use App\Http\Controllers\User\WorkFlow\G9;
 use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitUpdateAccountAccess;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
@@ -257,18 +263,21 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //PAYMENT, PRICING
 
-    // Access Payment
+    //Access Payment
     Route::get('/payment/{price}', [Payment::class, 'ShowPayment'])->name("showpayment");
 
-    // Access Pricing
+    //Access Pricing
     Route::get('/pricing', function () {
         return view('User.Payment.Pricing');
     })->name('showpricing');
 
+    //Payment Success
+    Route::patch('/payment/success', [Payment::class, 'ShowPaymentSuccess'])->name("showpaymentsuccess");
+
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //SETTINGS
 
-    // Access Settings
+    //Access Settings
     Route::get('/settings', [Settings::class, 'Index'])->name("showsettings");
     Route::get('/api/settings/liked', [Settings::class, 'apiDataLiked'])->name("apiDataLiked");
     Route::get('/api/settings/album', [Settings::class, 'apiDataAlbum'])->name("apiDataAlbum");
@@ -359,22 +368,52 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/resultofg8', [G8::class, 'get_imageG8'])->name("get_imageg8");
 
     //Show G9
-    Route::get('/g9', [G3::class, 'InputDataG3'])->name("g9");
+    Route::get('/g9', [G9::class, 'InputDataG9'])->name("g9");
+
+    //Create image G9
+    Route::post('/createg9', [G9::class, 'ShowImageG9'])->name("createg9");
+
+    //Show result G9
+    Route::get('/resultofg9', [G9::class, 'get_imageG9'])->name("get_imageg9");
 
     //Show G10
-    Route::get('/g10', [G3::class, 'InputDataG3'])->name("g10");
+    Route::get('/g10', [G10::class, 'InputDataG10'])->name("g10");
+
+    //Create image G10
+    Route::post('/createg10', [G10::class, 'ShowImageG10'])->name("createg10");
+    
+    //Show result G10
+    Route::get('/resultofg10', [G10::class, 'get_imageG10'])->name("get_imageg10");
 
     //Show G11
-    Route::get('/g11', [G3::class, 'InputDataG3'])->name("g11");
+    Route::get('/g11', [G11::class, 'InputDataG11'])->name("g11");
+
+    //Create image G11
+    Route::post('/createg11', [G11::class, 'ShowImageG11'])->name("createg11");
+
+    //Show result G11
+    Route::get('/resultofg11', [G11::class, 'get_imageG11'])->name("get_imageg11");
 
     //Show G12
-    Route::get('/g12', [G3::class, 'InputDataG3'])->name("g12");
+    Route::get('/g12', [G12::class, 'InputDataG12'])->name("g12");
 
     //Show G13
-    Route::get('/g13', [G3::class, 'InputDataG3'])->name("g13");
+    Route::get('/g13', [G13::class, 'InputDataG13'])->name("g13");
+
+    //Create image G13
+    Route::post('/createg13', [G13::class, 'ShowImageG13'])->name("createg13");
+
+    //Show result G13
+    Route::get('/resultofg13', [G13::class, 'get_imageG13'])->name("get_imageg13");
 
     //Show G14
-    Route::get('/g14', [G3::class, 'InputDataG3'])->name("g14");
+    Route::get('/g14', [G14::class, 'InputDataG14'])->name("g14");
+
+    //Create image G14
+    Route::post('/createg14', [G14::class, 'ShowImageG14'])->name("createg14");
+
+    //Show result G14
+    Route::get('/resultofg14', [G14::class, 'get_imageG14'])->name("get_imageg14");
 
     //Show G15
     Route::get('/g15', [G3::class, 'InputDataG3'])->name("g15");

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\WorkFlow;
 
 use App\AI_Create_Image;
 use App\Http\Controllers\Controller;
+use App\Models\WorkFlow;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -21,7 +22,7 @@ class G7 extends Controller
     {
         ini_set("max_execution_time", 3600);
 
-        if($this->checkTimes(1) == false)
+        if($this->checkTimes(WorkFlow::findOrFail(7)->Price) == false)
         {
             return response()->json(['success' => false, 'message' => 'Bạn đã hết lượt tạo ảnh, vui lòng mua thêm lượt hoặc đợi ngày mai']);
         }

@@ -2,7 +2,7 @@
 @section('Body')
 <title>RTX-AI: Sáng tạo hình ảnh</title>
 
-<form id="G8" method="POST" enctype="multipart/form-data" action="{{ route("createg8") }}">
+<form id="G11" method="POST" enctype="multipart/form-data" action="{{ route("createg11") }}">
     @csrf
     <div class="bg-white">
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-16">
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="col-span-full">
-                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Ảnh Pose của bạn:</label>
+                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Ảnh của bạn:</label>
                         <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 drag-image">
                             <div class="text-center @error('categories') is-invalid @enderror">
                                 <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="icon-image">
@@ -114,26 +114,7 @@
                         }
                     </script>
 
-                    <div class="col-span-full" style="margin-bottom:2%">
-                        <label for="about" class="block text-sm font-medium leading-6 text-gray-900">Mô tả của bạn:</label>
-                        <div class="mt-2">
-                        <textarea id="about" name="prompt" rows="3" class="p-1 block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required></textarea>
-                        </div>
-                        <p class="mt-3 text-sm leading-6 text-gray-600">Vui lòng không nhập từ khóa nhạy cảm!</p>
-                        @if (Session::has("SensitiveWord"))
-                            <p class="mt-3 text-sm leading-6 text-red-600">Mô tả của bạn chứa từ khóa nhạy cảm! Không thể tạo ảnh</p>
-                        @endif
-                    </div>
-            
                 <div class="border-b border-gray-900/10 pb-12">
-                    <div class="sm:col-span-3" style="margin-bottom:2%">
-                        <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Thông số Seed:</label>
-                        <div class="mt-2">
-                          <input type="number" name="seed" id="first-name" autocomplete="given-name" class="block w-full rounded-md border py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-1" required>
-                          <button id="generate-seed" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Tạo Seed</button>
-                          <p class="mt-3 text-sm leading-6 text-gray-600">Thông số Seed phải thay đổi sau mỗi lượt tạo ảnh nếu không ảnh sẽ không thay đổi</p>
-                        </div>
-                    </div>
 
                     <script>
                         document.getElementById('generate-seed').addEventListener('click', function() 
@@ -171,24 +152,12 @@
                     event.preventDefault();
 
                     const fileInput = document.getElementById('input_image');
-                    const promptValue = document.getElementById('about').value.trim();
-                    const seedValue = document.getElementById('first-name').value.trim();
                     
                     if (!fileInput.files.length) {
                         alert('Vui lòng tải ảnh của bạn lên!');
                         return;
-                    }
-
-                    if (!promptValue) {
-                        alert('Vui lòng nhập mô tả của bạn!');
-                        return;
-                    }
+                    }                    
                     
-                    if (!seedValue) {
-                        alert('Vui lòng nhập thông số Seed!');
-                        return;
-                    }
-
                     this.disabled = true;
 
                     document.getElementById('create').style.cursor = 'not-allowed';
@@ -202,8 +171,8 @@
                         progressText.innerText = '50%';
                     }, 2000);
 
-                    const formData = new FormData(document.getElementById('G8'));
-                    fetch("{{ route('createg8') }}", {
+                    const formData = new FormData(document.getElementById('G11'));
+                    fetch("{{ route('createg11') }}", {
                         method: 'POST',
                         body: formData,
                         headers: {

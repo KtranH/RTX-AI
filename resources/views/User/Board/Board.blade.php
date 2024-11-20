@@ -830,107 +830,108 @@
             </div>
         </div>
         <!-- Created Content -->
+        @if (Auth::user()->id == $user->id)
+            <div id="created-content" class="tab-content hidden">
+                <div class="flex items-center justify-center">
+                    <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
+                        <h2 class="font-bold text-3xl text-left">Lịch sử tạo ảnh AI</h2>
+                        <p class="text-gray-500 text-2xs text-left mt-2">Lưu ý chúng tôi chỉ lưu ảnh được tạo ra bởi AI trong
+                            10 ngày!
+                        </p>
+                        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="AI-content"></div>
+                        <div id="loading_AI_Image" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
+                        <script>
+                            var pageAI = 1;
+                            var isLoadingAI = false;
+                            function loadPhotosAI(initialLoad = false) {
+                                if (isLoadingAI) return;
+                                isLoadingAI = true;
+
+                                document.getElementById('loading_AI_Image').style.display = 'block';
+
+                                fetch(`/api/AI_Image/board?pageAI=${pageAI}&userId={{ $user->id }}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const photoContainer = document.getElementById('AI-content');
+
+                                        data.photos.forEach(photo => {
+                                            const photoHTML = `
+                                            <div class="relative group">
+                                                <div class="aspect-square">
+                                                    <img src="${photo.url}" loading="lazy" alt="AI Generated Image"
+                                                        class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-50"
+                                                        style="cursor: pointer;" onclick="openImageModal('${photo.url}')">
+                                                </div>
+                                            </div>`;
+                                            photoContainer.insertAdjacentHTML('beforeend', photoHTML);
+                                        });
+
+                                        isLoadingAI = false;
+                                        document.getElementById('loading_AI_Image').style.display = 'none';
+
+                                        if (data.hasMorePages) {
+                                            pageAI++;
+                                        } else {
+                                            window.removeEventListener('scroll', scrollHandlerAI);
+                                        }
+
+                                        if (initialLoad && data.photos.length === 0) {
+                                            document.getElementById('loading_AI_Image').innerText = 'Không có ảnh nào để hiển thị.';
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Lỗi khi tải ảnh AI:', error);
+                                        isLoadingAI = false;
+                                        document.getElementById('loading_AI_Image').style.display = 'none';
+                                    });
+                            }
+
+                            window.addEventListener('load', () => {
+                                loadPhotosAI(true);
+                            });
+
+                            function scrollHandlerAI() {
+                                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                                    loadPhotosAI();
+                                }
+                            }
+                            window.addEventListener('scroll', scrollHandlerAI);
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal for Image -->
+            <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50"
+                onclick="closeImageModal()">
+                <div class="relative" onclick="event.stopPropagation();" style="margin-top: 1%; width:30%;">
+                    <button onclick="closeImageModal()" class="absolute right-0 top-0 text-white text-2xl p-2"
+                        style="transform: translate(50%, -50%);">
+                        <p class="text-xl bg-white font-bold text-black p-2 rounded-full">X</p>
+                    </button>
+                    <img id="modal-image" src="" alt="Modal Image">
+                </div>
+            </div>
+            <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="main-content"></div>
+            <script>
+                function openImageModal(imageUrl) {
+                    document.getElementById('modal-image').src = imageUrl;
+                    document.getElementById('image-modal').classList.remove('hidden');
+                }
+
+                function closeImageModal() {
+                    document.getElementById('image-modal').classList.add('hidden');
+                }
+            </script>
+        @else
         <div id="created-content" class="tab-content hidden">
             <div class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16">
-                    <h2 class="font-bold text-3xl text-left">Lịch sử tạo ảnh AI</h2>
-                    <p class="text-gray-500 text-2xs text-left mt-2">Lưu ý chúng tôi chỉ lưu ảnh được tạo ra bởi AI trong
-                        10 ngày!
+                    <h2 class="font-bold text-3xl text-left">Bạn không được phép xem ảnh AI của người khác</h2>
+                    <p class="text-gray-500 text-2xs text-left mt-2">Bạn chỉ có thể ảnh AI của chính mình
                     </p>
-                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="AI-content"></div>
-                    <div id="loading_AI_Image" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
-                    <script>
-                        var pageAI = 1;
-                        var isLoadingAI = false;
-
-                        function loadPhotosAI(initialLoad = false) {
-                            if (isLoadingAI) return;
-                            isLoadingAI = true;
-
-                            document.getElementById('loading_AI_Image').style.display = 'block';
-
-                            fetch(`/api/AI_Image/board?pageAI=${pageAI}&userId={{ $user->id }}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    const photoContainer = document.getElementById('AI-content');
-
-                                    data.photos.forEach(photo => {
-                                        const photoHTML = `
-                                        <div class="relative group">
-                                            <div class="aspect-square">
-                                                <img src="${photo.url}" loading="lazy" alt="AI Generated Image"
-                                                    class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-50"
-                                                    style="cursor: pointer;" onclick="openImageModal('${photo.url}')">
-                                            </div>
-                                            <div
-                                                class="absolute inset-x-0 bottom-0 flex justify-center p-2 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
-                                                <div class="flex space-x-2">
-                                                    <a href="#"
-                                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
-                                                        <i class="fas fa-share text-gray-700 text-xl hover:text-[#a000ff]"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>`;
-                                        photoContainer.insertAdjacentHTML('beforeend', photoHTML);
-                                    });
-
-                                    isLoadingAI = false;
-                                    document.getElementById('loading_AI_Image').style.display = 'none';
-
-                                    if (data.hasMorePages) {
-                                        pageAI++;
-                                    } else {
-                                        window.removeEventListener('scroll', scrollHandlerAI);
-                                    }
-
-                                    if (initialLoad && data.photos.length === 0) {
-                                        document.getElementById('loading_AI_Image').innerText = 'Không có ảnh nào để hiển thị.';
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Lỗi khi tải ảnh AI:', error);
-                                    isLoadingAI = false;
-                                    document.getElementById('loading_AI_Image').style.display = 'none';
-                                });
-                        }
-
-                        window.addEventListener('load', () => {
-                            loadPhotosAI(true);
-                        });
-
-                        function scrollHandlerAI() {
-                            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                                loadPhotosAI();
-                            }
-                        }
-
-                        window.addEventListener('scroll', scrollHandlerAI);
-                    </script>
                 </div>
             </div>
         </div>
-        <!-- Modal for Image -->
-        <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50"
-            onclick="closeImageModal()">
-            <div class="relative" onclick="event.stopPropagation();" style="margin-top: 1%; width:30%;">
-                <button onclick="closeImageModal()" class="absolute right-0 top-0 text-white text-2xl p-2"
-                    style="transform: translate(50%, -50%);">
-                    <p class="text-xl bg-white font-bold text-black p-2 rounded-full">X</p>
-                </button>
-                <img id="modal-image" src="" alt="Modal Image">
-            </div>
-        </div>
-        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="main-content"></div>
-        <script>
-            function openImageModal(imageUrl) {
-                document.getElementById('modal-image').src = imageUrl;
-                document.getElementById('image-modal').classList.remove('hidden');
-            }
-
-            function closeImageModal() {
-                document.getElementById('image-modal').classList.add('hidden');
-            }
-        </script>
+        @endif
     </main>
 @endsection

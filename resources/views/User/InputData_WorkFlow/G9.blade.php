@@ -2,7 +2,7 @@
 @section('Body')
 <title>RTX-AI: Sáng tạo hình ảnh</title>
 
-<form id="G8" method="POST" enctype="multipart/form-data" action="{{ route("createg8") }}">
+<form id="G9" method="POST" enctype="multipart/form-data" action="{{ route("createg9") }}">
     @csrf
     <div class="bg-white">
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-16">
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="col-span-full">
-                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Ảnh Pose của bạn:</label>
+                        <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Ảnh khuôn mặt của bạn:</label>
                         <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 drag-image">
                             <div class="text-center @error('categories') is-invalid @enderror">
                                 <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="icon-image">
@@ -202,8 +202,8 @@
                         progressText.innerText = '50%';
                     }, 2000);
 
-                    const formData = new FormData(document.getElementById('G8'));
-                    fetch("{{ route('createg8') }}", {
+                    const formData = new FormData(document.getElementById('G9'));
+                    fetch("{{ route('createg9') }}", {
                         method: 'POST',
                         body: formData,
                         headers: {

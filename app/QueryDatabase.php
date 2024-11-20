@@ -8,6 +8,7 @@ use App\Models\HistoryImageAI;
 use App\Models\Like;
 use App\Models\Reply;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
@@ -33,10 +34,10 @@ trait QueryDatabase
     {
         HistoryImageAI::where('user_id', $id)->where('created_at', '<', now()->subDays(10))->delete();
     }
-    private function storeImageHistory($url, $userId)
+    private function storeImageHistory($url)
     {
         HistoryImageAI::create([
-            'user_id' => $userId,
+            'user_id' => Auth::user()->id,
             'url' => $url,
             'created_at' => now(),
             'updated_at' => now(),

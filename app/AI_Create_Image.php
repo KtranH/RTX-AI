@@ -18,9 +18,9 @@ trait AI_Create_Image
     //
     use QueryDatabase;
     private $urlR2 = 'https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/';
-    private $check_text = ' are these words SENSITIVE or OBSCENE? Just answer YES or NO.';
+    private $check_text = ' are these words SENSITIVE or NOT? Just SHORT ANSWER YES or NO.';
     private $url = 'http://127.0.0.1:8188/api/prompt';
-    private $url2 = 'http://192.168.1.11:8188/api/prompt';
+    private $url2 = 'http://192.168.1.13:8188/api/prompt';
     private $interrupt = '';
     private $inputDir = 'D:\ProjectPHP\DO_AN\public\images\INPUT_AI';
     private $inputError = 'D:\ProjectPHP\DO_AN\public\images';
@@ -46,8 +46,6 @@ trait AI_Create_Image
         Cookie::forget("url");
         Cookie::forget("model");
         $G = WorkFlow::find($ListG);
-        if(!str_contains($url, 'INPUT_AI'))
-        {$this->storeImageHistory($url, $this->find_id());}
         return view("User.InputData_WorkFlow.ShowG", compact("prompt", "seed", "url", "G", "model"));
     }
     private function getLatestImage($folder)

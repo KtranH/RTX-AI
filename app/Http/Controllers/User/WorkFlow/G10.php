@@ -11,19 +11,19 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 
-class G6 extends Controller
+class G10 extends Controller
 {
     use AI_Create_Image;
-    public function InputDataG6()
+    public function InputDataG10()
     {
-        return $this->InputData(6);
+        return $this->InputData(10);
     }
 
-    public function ShowImageG6(Request $request)
+    public function ShowImageG10(Request $request)
     {
         ini_set("max_execution_time", 3600);
 
-        if($this->checkTimes(WorkFlow::findOrFail(6)->Price) == false)
+        if($this->checkTimes(WorkFlow::findOrFail(10)->Price) == false)
         {
             return response()->json(['success' => false, 'message' => 'Bạn đã hết lượt tạo ảnh, vui lòng mua thêm lượt hoặc đợi ngày mai']);
         }
@@ -33,12 +33,12 @@ class G6 extends Controller
         $seed = $request->input("seed");
 
         $translated = $this->Translate2English($prompt);
-        
-        $process = json_decode(file_get_contents(storage_path('app/G6.json')), true);
-        $process["22"]["inputs"]["text_a"] = $translated;
-        $process["19"]["inputs"]["noise_seed"] = $seed;
+    
+        $process = json_decode(file_get_contents(storage_path('app/G10.json')), true);
+        $process["17"]["inputs"]["text_b"] = $translated;
+        $process["6"]["inputs"]["noise_seed"] = $seed;
 
-        $imageUrl = $this->get_image_result($process, 20);
+        $imageUrl = $this->get_image_result($process, 13);
 
         try {
             $takeImageUrl = $this->UploadImageR2($imageUrl);
@@ -46,20 +46,20 @@ class G6 extends Controller
             $this->storeImageHistory($url);
             Cookie::queue("url", $url);
             Cookie::queue("seed", $seed);
-            Cookie::queue("model", $request->input("model"));
+            Cookie::queue("model", "Tạo ảnh siêu thực");
             Cookie::queue("prompt", $prompt);
-            return response()->json(['success' => true, 'redirect' => route("get_imageg6")]); 
+            return response()->json(['success' => true, 'redirect' => route("get_imageg10")]); 
         } catch (Exception $e) {
             $imageUrl = asset($this->moveToPublicDirectoryError($this->inputError . DIRECTORY_SEPARATOR . "error.jpg"));
             Cookie::queue("url", $imageUrl);
             Cookie::queue("seed", $seed);
             Cookie::queue("model", $request->input("model"));
             Cookie::queue("prompt", $prompt);
-            return response()->json(['success' => true, 'redirect' => route("get_imageg6")]);
+            return response()->json(['success' => true, 'redirect' => route("get_imageg10")]);
         }
     }
-    public function get_imageG6()
+    public function get_imageG10()
     {
-        return $this->ImageG(6);
+        return $this->ImageG(10);
     }
 }
