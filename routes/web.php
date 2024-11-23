@@ -438,9 +438,13 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     // Admin
     Route::get('/admin', function () {
-        return view('Admin.Content.Home');
+        return view('Admin.Essential.Home');
     })->name('admin');
     
+    // Image Category
+    Route::get('/admin/category', function () {
+        return view('Admin.Image.Category');
+    })->name('admin.category');
 });
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------

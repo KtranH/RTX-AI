@@ -65,7 +65,7 @@
                         <label for="albums-fromDate" class="font-medium">Từ Ngày</label>
                         <input type="date" name="albums-fromDate" id="albums-fromDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
                     </div>
-                    <button type="submit" id="albums-submit" class="rounded-full bg-indigo-700 border-2 border-indigo-700  hover:bg-white hover:text-indigo-700 w-10 h-10">
+                    <button type="submit" id="albums-submit" class="rounded-full bg-indigo-700 border-2 border-indigo-700 hover:bg-white hover:text-indigo-700 w-10 h-10">
                         <i class="fa-solid fa-arrow-right text-lg text-inherit"></i>
                     </button>
                     <div class="w-72 space-y-1 text-black">
@@ -83,7 +83,7 @@
                         <label for="uploads-fromDate" class="font-medium">Từ Ngày</label>
                         <input type="date" name="uploads-fromDate" id="uploads-fromDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
                     </div>
-                    <button type="submit" id="uploads-submit" class="rounded-full bg-indigo-700 border-2 border-indigo-700  hover:bg-white hover:text-indigo-700 w-10 h-10">
+                    <button type="submit" id="uploads-submit" class="rounded-full bg-indigo-700 border-2 border-indigo-700 hover:bg-white hover:text-indigo-700 w-10 h-10">
                         <i class="fa-solid fa-arrow-right text-lg text-inherit"></i>
                     </button>
                     <div class="w-72 space-y-1 text-black">
@@ -123,7 +123,7 @@
                         <label for="workflows-fromDate" class="font-medium">Từ Ngày</label>
                         <input type="date" name="workflows-fromDate" id="workflows-fromDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
                     </div>
-                    <button type="submit" id="workflows-submit" class="rounded-full bg-indigo-700 border-2 border-indigo-700  hover:bg-white hover:text-indigo-700 w-10 h-10">
+                    <button type="submit" id="workflows-submit" class="rounded-full bg-indigo-700 border-2 border-indigo-700 hover:bg-white hover:text-indigo-700 w-10 h-10">
                         <i class="fa-solid fa-arrow-right text-lg text-inherit"></i>
                     </button>
                     <div class="w-72 space-y-1 text-black">
@@ -141,7 +141,7 @@
                         <label for="members-fromDate" class="font-medium">Từ Ngày</label>
                         <input type="date" name="members-fromDate" id="members-fromDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
                     </div>
-                    <button type="submit" id="members-submit" class="rounded-full bg-indigo-700 border-2 border-indigo-700  hover:bg-white hover:text-indigo-700 w-10 h-10">
+                    <button type="submit" id="members-submit" class="rounded-full bg-indigo-700 border-2 border-indigo-700 hover:bg-white hover:text-indigo-700 w-10 h-10">
                         <i class="fa-solid fa-arrow-right text-lg text-inherit"></i>
                     </button>
                     <div class="w-72 space-y-1 text-black">
@@ -304,7 +304,5 @@
     usersChart.setOption(usersOptions);
 
 </script>
-
-
 
 @endsection

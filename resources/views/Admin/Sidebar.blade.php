@@ -4,65 +4,65 @@
             <img src="/assets/img/icon.png" alt="Logo" class="w-10">
             <div class="text-2xl font-bold">RTX-ADMIN</div>
         </a>
-        <div class="flex flex-col pt-3">
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-house"></i>
+        <div class="flex flex-col pt-3 space-y-1">
+            <a id="home" href="{{ route('admin') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                <i class="fa-solid fa-house text-current"></i>
                 <div>Tổng Quan</div>
             </a>
         </div>
-        <div class="flex flex-col pt-3">
+        <div class="flex flex-col pt-3 space-y-1">
             <div class="mb-2 font-semibold text-indigo-700 cursor-default">Hình Ảnh</div>
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-layer-group"></i>
+            <a id="category" href="{{ route('admin.category') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                <i class="fa-solid fa-layer-group text-current"></i>
                 <div>Thể Loại</div>
             </a>
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-image"></i>
+            <a id="image" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                <i class="fa-solid fa-image text-current"></i>
                 <div>Hình Ảnh</div>
             </a>
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-comment"></i>
+            <a id="comment" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                <i class="fa-solid fa-comment text-current"></i>
                 <div>Bình Luận</div>
             </a>
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-robot"></i>
+            <a id="ai" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                <i class="fa-solid fa-robot text-current"></i>
                 <div>Ảnh AI</div>
             </a>
         </div>  
-        <div class="flex flex-col pt-3">
+        <div class="flex flex-col pt-3 space-y-1">
             <div class="mb-2 font-semibold text-indigo-700 cursor-default">Tài Khoản</div>
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-circle-info"></i>
+            <a id="information" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                <i class="fa-solid fa-circle-info text-current"></i>
                 <div>Thông Tin</div>
             </a>
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-user"></i>
+            <a id="user" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                <i class="fa-solid fa-user text-current"></i>
                 <div>Người Dùng</div>
             </a>
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-briefcase"></i>
+            <a id="employee" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                <i class="fa-solid fa-briefcase text-current"></i>
                 <div>Nhân Viên</div>
             </a>
         </div>
         <div class="flex flex-row justify-center space-x-8 pt-3">
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
-                <i class="fa-solid fa-gear"></i>
+            <a id="setting" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
+                <i class="fa-solid fa-gear text-current"></i>
             </a>
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <a id="theme" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
+                <i class="fa-solid fa-wand-magic text-current"></i>
             </a>
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
-                <i class="fa-solid fa-arrow-left"></i>
+            <a href="/" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
+                <i class="fa-solid fa-rocket text-current"></i>
             </a>
         </div>   
     </div>
     <div class="flex flex-col space-y-2 p-2">
         <div class="flex flex-col space-y-2 pt-3">
-            <a href="" class="flex flex-row items-center text-inherit hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-3">
+            <a href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-3">
                 <img src="https://picsum.photos/200" alt="Avatar" class="rounded-full w-10 h-10 border border-gray-400">
                 <div>
                     <div class="text-gray-400 text-xs">Admin</div>
-                    <div>Username</div>
+                    <div class="text-current">Username</div>
                 </div>
             </a>
             <a href="" class="flex flex-row items-center justify-center border-4 border-red-700 text-inherit hover:bg-red-700 hover:text-white rounded-lg p-2 text-lg space-x-2">
@@ -72,3 +72,34 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () 
+    {
+        var links = 
+        {
+            '/admin': $('#home'),
+            '/admin/category': $('#category'),
+            '/admin/image': $('#image'),
+            '/admin/comment': $('#comment'),
+            '/admin/ai': $('#ai'),
+            '/admin/information': $('#information'),
+            '/admin/user': $('#user'),
+            '/admin/employee': $('#employee')
+        };
+
+        var currentPath = window.location.pathname;
+
+        $.each(links, function (path, element) 
+        {
+            if (currentPath === path) 
+            {
+                element.addClass('bg-gray-200 text-indigo-700 font-bold');
+            } 
+            else 
+            {
+                element.removeClass('bg-gray-200 text-indigo-700 font-bold');
+            }
+        });
+    });
+</script>
