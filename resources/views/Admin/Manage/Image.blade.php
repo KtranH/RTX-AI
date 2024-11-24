@@ -139,31 +139,19 @@
             $('#image-dialog').removeClass('hidden');
             $('#image-imageDialog').attr('src', image);
         });
-    });
-</script>
 
-<!-- Image Dialog -->
-<div id="image-dialog" class="hidden fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex flex-col items-center justify-center">
-    <div class="bg-white rounded-2xl w-[500px] h-[600px] flex flex-col items-center justify-between space-y-4 border-[7px] border-indigo-700">
-        <div class="w-[500px] h-[500px] p-4">   
-            <img id="image-imageDialog" src="https://picsum.photos/id/237/200" alt="Image" class="aspect-square w-full h-full rounded-2xl border-2 border-gray-200">
-        </div>
-        <div class="flex flex-row items-center justify-center px-4 pb-10">
-            <button id="confirm-imageDialog" class="flex flex-row items-center space-x-2 bg-indigo-700 border-2 border-indigo-700 hover:bg-white hover:!text-indigo-700 rounded px-3 py-1 text-white text-lg font-medium"> 
-                <i class="fa-solid fa-circle-check text-xl text-current"></i>
-                <div>Xác Nhận</div>
-            </button>
-        </div>
-    </div>
-</div>  
-<script>
-    $(document).ready(function () 
-    {
-        $('#confirm-imageDialog').on('click', function (e) 
+        $('#approve-button').on('click', function (e) 
         {
             e.preventDefault();
 
-            $('#image-dialog').addClass('hidden');
+            SetNotificationDialog('special', 'abc')
+        });
+
+        $('#disapprove-button').on('click', function (e) 
+        {
+            e.preventDefault();
+
+            SetNotificationDialog('warning', 'abc')
         });
     });
 </script>
