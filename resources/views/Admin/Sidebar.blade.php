@@ -59,7 +59,7 @@
     <div class="flex flex-col space-y-2 p-2">
         <div class="flex flex-col space-y-2 pt-3">
             <a href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-3">
-                <img src="https://picsum.photos/200" alt="Avatar" class="rounded-full w-10 h-10 border border-gray-400">
+                <img src="https://picsum.photos/id/237/200" alt="Avatar" class="rounded-full w-10 h-10 border border-gray-400">
                 <div>
                     <div class="text-gray-400 text-xs">Admin</div>
                     <div class="text-current">Username</div>

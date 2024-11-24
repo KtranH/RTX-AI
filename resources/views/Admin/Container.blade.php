@@ -53,7 +53,6 @@
                 @yield("Content")
             </div>
         </div>
-        @include("Admin.Dialog")
     </div>
     <div class="block lg:hidden">
         <div class="w-screen h-screen flex flex-col items-center justify-center text-xl text-indigo-700 font-bold space-y-8">

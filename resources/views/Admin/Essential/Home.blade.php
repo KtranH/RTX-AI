@@ -9,7 +9,7 @@
     <!-- Content -->
     <div class="h-full overflow-y-auto p-2 scroll-smooth">
         <!-- Quick Number -->
-        <div class="grid grid-cols-4 h-36 space-x-4 p-2 snap-start">
+        <div class="grid grid-cols-4 h-[192px] space-x-4 p-2 snap-start">
             <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
                 <div class="basis-1/4 flex items-center justify-center">
                     <div class="flex items-center justify-center bg-green-600 rounded-full p-3">
@@ -56,11 +56,11 @@
             </div>
         </div>
         <!-- Charts -->
-        <div class="grid grid-cols-2 h-[710px] space-x-4 p-2">
+        <div class="grid grid-cols-2 h-[720px] space-x-4 p-2">
             <!-- Albums -->
-            <div class="flex flex-col items-center rounded-2xl bg-white py-3 px-4 shadow-md border-2 border-gray-200 space-y-2">
-                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 pb-2">SỐ LƯỢNG ALBUMS</div>
-                <form id="albums-form" class="w-full flex flex-row items-center justify-between space-x-10 p-2 border-b-2 border-gray-200 pb-4 text-white">
+            <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
+                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">SỐ LƯỢNG ALBUMS</div>
+                <form action="" id="albums-form" class="w-full flex flex-row items-center justify-between space-x-10 p-2 border-b-2 border-gray-200 pb-4 text-white">
                     <div class="w-72 space-y-1 text-black">
                         <label for="albums-fromDate" class="font-medium">Từ Ngày</label>
                         <input type="date" name="albums-fromDate" id="albums-fromDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
@@ -73,12 +73,12 @@
                         <input type="date" name="albums-toDate" id="albums-toDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
                     </div>
                 </form>
-                <div id="albums-Container" class="w-full h-full"></div>
+                <div id="albums-container" class="w-full h-full py-3"></div>
             </div>
             <!-- Uploads -->
-            <div class="flex flex-col items-center rounded-2xl bg-white py-3 px-4 shadow-md border-2 border-gray-200 space-y-2">
-                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 pb-2">SỐ LƯỢNG BÀI ĐĂNG</div>
-                <form id="uploads-form" class="w-full flex flex-row items-center justify-between space-x-10 p-2 border-b-2 border-gray-200 pb-4 text-white">
+            <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
+                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">SỐ LƯỢNG BÀI ĐĂNG</div>
+                <form action="" id="uploads-form" class="w-full flex flex-row items-center justify-between space-x-10 p-2 border-b-2 border-gray-200 pb-4 text-white">
                     <div class="w-72 space-y-1 text-black">
                         <label for="uploads-fromDate" class="font-medium">Từ Ngày</label>
                         <input type="date" name="uploads-fromDate" id="uploads-fromDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
@@ -91,16 +91,16 @@
                         <input type="date" name="uploads-toDate" id="uploads-toDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
                     </div>
                 </form>
-                <div id="uploads-Container" class="w-full h-full"></div>
+                <div id="uploads-container" class="w-full h-full py-3"></div>
             </div>
         </div>
-        <!-- Charts -->
-        <div class="w-full space-x-4 p-2">
+        <!-- Chart -->
+        <div class="w-full space-x-4 p-2 h-[720px]">
             <!-- Users -->
-            <div class="flex flex-col items-center rounded-2xl bg-white py-3 px-4 shadow-md border-2 border-gray-200 space-y-2">
-                <div class="w-full flex flex-row items-center justify-between border-b-2 border-gray-200 pb-2">
+            <div class="h-full flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
+                <div class="w-full flex flex-row items-center justify-between border-b-2 border-gray-200 py-3">
                     <div class="text-left font-semibold text-2xl">SỐ LƯỢNG NGƯỜI DÙNG</div>
-                    <form id="users-form" class="flex flex-row items-center justify-between space-x-4 text-white">
+                    <form action="" id="users-form" class="flex flex-row items-center justify-between space-x-4 text-white">
                         <label for="users-fromDate" class="font-medium text-black">Từ Ngày</label>
                         <input type="date" name="users-fromDate" id="users-fromDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-72 text-black">
                         <label for="users-toDate" class="font-medium text-black">Đến Ngày</label>
@@ -110,15 +110,15 @@
                         </button>
                     </form>
                 </div>
-                <div id="users-Container" class="w-full h-[500px]"></div>
+                <div id="users-container" class="w-full h-full py-3"></div>
             </div>
         </div>
         <!-- Charts -->
-        <div class="grid grid-cols-2 h-[710px] space-x-4 p-2">
+        <div class="grid grid-cols-2 h-[720px] space-x-4 p-2">
             <!-- Workflows -->
-            <div class="flex flex-col items-center rounded-2xl bg-white py-3 px-4 shadow-md border-2 border-gray-200 space-y-2">
-                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 pb-2">SỐ LƯỢNG WORKFLOW</div>
-                <form id="workflows-form" class="w-full flex flex-row items-center justify-between space-x-10 p-2 border-b-2 border-gray-200 pb-4 text-white">
+            <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
+                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">SỐ LƯỢNG WORKFLOW</div>
+                <form action="" id="workflows-form" class="w-full flex flex-row items-center justify-between space-x-10 p-2 border-b-2 border-gray-200 pb-4 text-white">
                     <div class="w-72 space-y-1 text-black">
                         <label for="workflows-fromDate" class="font-medium">Từ Ngày</label>
                         <input type="date" name="workflows-fromDate" id="workflows-fromDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
@@ -131,12 +131,12 @@
                         <input type="date" name="workflows-toDate" id="workflows-toDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
                     </div>
                 </form>
-                <div id="workflows-Container" class="w-full h-full"></div>
+                <div id="workflows-container" class="w-full h-full py-3"></div>
             </div>
             <!-- Members -->
-            <div class="flex flex-col items-center rounded-2xl bg-white py-3 px-4 shadow-md border-2 border-gray-200 space-y-2">
-                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 pb-2">SỐ LƯỢNG THÀNH VIÊN</div>
-                <form id="members-form" class="w-full flex flex-row items-center justify-between space-x-10 p-2 border-b-2 border-gray-200 pb-4 text-white">
+            <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
+                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">SỐ LƯỢNG THÀNH VIÊN</div>
+                <form action="" id="members-form" class="w-full flex flex-row items-center justify-between space-x-10 p-2 border-b-2 border-gray-200 pb-4 text-white">
                     <div class="w-72 space-y-1 text-black">
                         <label for="members-fromDate" class="font-medium">Từ Ngày</label>
                         <input type="date" name="members-fromDate" id="members-fromDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
@@ -149,7 +149,7 @@
                         <input type="date" name="members-toDate" id="members-toDate" placeholder="" class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
                     </div>
                 </form>
-                <div id="members-Container" class="w-full h-full"></div>
+                <div id="members-container" class="w-full h-full py-3"></div>
             </div>
         </div>
     </div>
@@ -157,11 +157,11 @@
 
 <script>
     //Charts Container
-    var albumsContainer = document.getElementById('albums-Container');
-    var uploadsContainer = document.getElementById('uploads-Container');
-    var workflowsContainer = document.getElementById('workflows-Container');
-    var membersContainer = document.getElementById('members-Container');
-    var usersContainer = document.getElementById('users-Container');
+    var albumsContainer = document.getElementById('albums-container');
+    var uploadsContainer = document.getElementById('uploads-container');
+    var workflowsContainer = document.getElementById('workflows-container');
+    var membersContainer = document.getElementById('members-container');
+    var usersContainer = document.getElementById('users-container');
 
     //Charts
     var albumsChart = echarts.init(albumsContainer);
