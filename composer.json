@@ -12,6 +12,7 @@
         "laravel/socialite": "^5.15",
         "laravel/tinker": "^2.9",
         "league/flysystem-aws-s3-v3": "^3.28",
+        "pusher/pusher-php-server": "^7.2",
         "realrashid/sweet-alert": "^7.2",
         "spatie/laravel-image-optimizer": "^1.8",
         "stichoza/google-translate-php": "^5.1"
