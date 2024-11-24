@@ -31,7 +31,7 @@
                 <i class="fa-solid fa-circle-info text-current"></i>
                 <div>Thông Tin</div>
             </a>
-            <a id="employee-sidebar" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+            <a id="employee-sidebar" href="{{ route('admin.employee') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-briefcase text-current"></i>
                 <div>Nhân Viên</div>
             </a>

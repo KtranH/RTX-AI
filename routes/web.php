@@ -455,6 +455,11 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/admin/information', function () {
         return view('Admin.Account.Information');
     })->name('admin.information');
+
+    // Account Employee
+    Route::get('/admin/employee', function () {
+        return view('Admin.Account.Employee');
+    })->name('admin.employee');
 });
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
