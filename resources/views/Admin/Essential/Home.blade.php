@@ -9,7 +9,7 @@
     <!-- Content -->
     <div class="h-full overflow-y-auto p-2 scroll-smooth">
         <!-- Quick Number -->
-        <div class="grid grid-cols-4 h-[192px] space-x-4 p-2 snap-start">
+        <div class="grid grid-cols-4 h-36 space-x-4 p-2 snap-start">
             <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
                 <div class="basis-1/4 flex items-center justify-center">
                     <div class="flex items-center justify-center bg-green-600 rounded-full p-3">
@@ -55,7 +55,6 @@
                 </div>
             </div>
         </div>
-        <!-- Charts -->
         <div class="grid grid-cols-2 h-[720px] space-x-4 p-2">
             <!-- Albums -->
             <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
@@ -94,7 +93,6 @@
                 <div id="uploads-container" class="w-full h-full py-3"></div>
             </div>
         </div>
-        <!-- Chart -->
         <div class="w-full space-x-4 p-2 h-[720px]">
             <!-- Users -->
             <div class="h-full flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
@@ -113,7 +111,6 @@
                 <div id="users-container" class="w-full h-full py-3"></div>
             </div>
         </div>
-        <!-- Charts -->
         <div class="grid grid-cols-2 h-[720px] space-x-4 p-2">
             <!-- Workflows -->
             <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">

@@ -5,50 +5,42 @@
             <div class="text-2xl font-bold">RTX-ADMIN</div>
         </a>
         <div class="flex flex-col pt-3 space-y-1">
-            <a id="home" href="{{ route('admin') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+            <a id="home-sidebar" href="{{ route('admin') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-house text-current"></i>
                 <div>Tổng Quan</div>
             </a>
         </div>
         <div class="flex flex-col pt-3 space-y-1">
-            <div class="mb-2 font-semibold text-indigo-700 cursor-default">Hình Ảnh</div>
-            <a id="category" href="{{ route('admin.category') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+            <div class="mb-2 font-semibold text-indigo-700 cursor-default">Quản Lý</div>
+            <a id="category-sidebar" href="{{ route('admin.category') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-layer-group text-current"></i>
                 <div>Thể Loại</div>
             </a>
-            <a id="image" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+            <a id="image-sidebar" href="{{ route('admin.image') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-image text-current"></i>
                 <div>Hình Ảnh</div>
             </a>
-            <a id="comment" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-comment text-current"></i>
-                <div>Bình Luận</div>
-            </a>
-            <a id="ai" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+            <a id="ai-sidebar" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-robot text-current"></i>
                 <div>Ảnh AI</div>
             </a>
         </div>  
         <div class="flex flex-col pt-3 space-y-1">
             <div class="mb-2 font-semibold text-indigo-700 cursor-default">Tài Khoản</div>
-            <a id="information" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+            <a id="information-sidebar" href="{{ route('admin.information') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-circle-info text-current"></i>
                 <div>Thông Tin</div>
             </a>
-            <a id="user" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-user text-current"></i>
-                <div>Người Dùng</div>
-            </a>
-            <a id="employee" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+            <a id="employee-sidebar" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-briefcase text-current"></i>
                 <div>Nhân Viên</div>
             </a>
         </div>
         <div class="flex flex-row justify-center space-x-8 pt-3">
-            <a id="setting" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
+            <a id="setting-sidebar" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
                 <i class="fa-solid fa-gear text-current"></i>
             </a>
-            <a id="theme" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
+            <a id="theme-sidebar" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
                 <i class="fa-solid fa-wand-magic text-current"></i>
             </a>
             <a href="/" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
@@ -78,14 +70,12 @@
     {
         var links = 
         {
-            '/admin': $('#home'),
-            '/admin/category': $('#category'),
-            '/admin/image': $('#image'),
-            '/admin/comment': $('#comment'),
-            '/admin/ai': $('#ai'),
-            '/admin/information': $('#information'),
-            '/admin/user': $('#user'),
-            '/admin/employee': $('#employee')
+            '/admin': $('#home-sidebar'),
+            '/admin/category': $('#category-sidebar'),
+            '/admin/image': $('#image-sidebar'),
+            '/admin/ai': $('#ai-sidebar'),
+            '/admin/information': $('#information-sidebar'),
+            '/admin/employee': $('#employee-sidebar')
         };
 
         var currentPath = window.location.pathname;

@@ -136,7 +136,7 @@
             <!-- Form -->
             <div class="flex flex-col items-center justify-start rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2 h-full">
                 <div id="crud-title" class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">THÊM MỚI THỂ LOẠI</div>
-                <form id="crud-form" class="w-full h-full flex flex-col items-center justify-between space-y-4 px-2">
+                <form action="" id="crud-form" class="w-full h-full flex flex-col items-center justify-between space-y-4 px-2">
                     <div class="w-full h-1/2 flex flex-col items-center space-y-4">
                         <div class="w-full space-y-1 text-black">
                             <label for="name-input" class="font-medium">Name</label>
@@ -170,7 +170,6 @@
         </div>
     </div>
 </div>
-
 <script>
     //Charts Container
     var statisticContainer = document.getElementById('statistic-container');

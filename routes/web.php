@@ -441,10 +441,20 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
         return view('Admin.Essential.Home');
     })->name('admin');
     
-    // Image Category
+    // Manage Category
     Route::get('/admin/category', function () {
-        return view('Admin.Image.Category');
+        return view('Admin.Manage.Category');
     })->name('admin.category');
+
+    // Manage Image
+    Route::get('/admin/image', function () {
+        return view('Admin.Manage.Image');
+    })->name('admin.image');
+
+    // Account Information
+    Route::get('/admin/information', function () {
+        return view('Admin.Account.Information');
+    })->name('admin.information');
 });
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
