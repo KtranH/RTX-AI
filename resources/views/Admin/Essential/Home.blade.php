@@ -7,9 +7,9 @@
     <!-- Header -->
     <div class="h-10 py-2 px-8 flex items-center text-2xl font-bold">TỔNG QUAN</div>
     <!-- Content -->
-    <div class="h-full overflow-y-auto p-2 scroll-smooth">
+    <div class="h-full overflow-y-auto p-2 space-y-4 snap-y snap-mandatory scroll-smooth">
         <!-- Quick Number -->
-        <div class="grid grid-cols-4 h-36 space-x-4 p-2 snap-start">
+        <div class="grid grid-cols-4 h-36 space-x-4 p-2 snap-start snap-always">
             <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
                 <div class="basis-1/4 flex items-center justify-center">
                     <div class="flex items-center justify-center bg-green-600 rounded-full p-3">
@@ -55,7 +55,7 @@
                 </div>
             </div>
         </div>
-        <div class="grid grid-cols-2 h-[720px] space-x-4 p-2">
+        <div class="grid grid-cols-2 h-full space-x-4 p-2 snap-start snap-always">
             <!-- Albums -->
             <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
                 <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">SỐ LƯỢNG ALBUMS</div>
@@ -93,7 +93,7 @@
                 <div id="uploads-container" class="w-full h-full py-3"></div>
             </div>
         </div>
-        <div class="w-full space-x-4 p-2 h-[720px]">
+        <div class="w-full space-x-4 p-2 h-full snap-start snap-always">
             <!-- Users -->
             <div class="h-full flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
                 <div class="w-full flex flex-row items-center justify-between border-b-2 border-gray-200 py-3">
@@ -111,7 +111,7 @@
                 <div id="users-container" class="w-full h-full py-3"></div>
             </div>
         </div>
-        <div class="grid grid-cols-2 h-[720px] space-x-4 p-2">
+        <div class="grid grid-cols-2 h-full space-x-4 p-2 snap-start snap-always">
             <!-- Workflows -->
             <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
                 <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">SỐ LƯỢNG WORKFLOW</div>

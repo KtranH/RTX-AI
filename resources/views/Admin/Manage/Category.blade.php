@@ -7,9 +7,9 @@
     <!-- Header -->
     <div class="h-10 py-2 px-8 flex items-center text-2xl font-bold">THỂ LOẠI</div>
     <!-- Content -->
-    <div class="h-full overflow-y-auto p-2 scroll-smooth">
+    <div class="h-full overflow-y-auto p-2 space-y-4 snap-y snap-mandatory scroll-smooth">
         <!-- Charts -->
-        <div class="grid grid-cols-2 h-[720px] space-x-4 p-2">
+        <div class="grid grid-cols-2 h-full space-x-4 p-2 snap-start snap-always">
             <!-- Statistic -->
             <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
                 <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">SỐ ẢNH THEO THỂ LOẠI</div>
@@ -64,9 +64,9 @@
             </div>
         </div>
         <!-- CRUD -->
-        <div class="grid grid-cols-2 h-[720px] space-x-4 p-2">
+        <div class="grid grid-cols-2 h-full space-x-4 p-2 snap-start snap-always">
             <!-- Table -->
-            <div class="flex flex-col items-center justify-between rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2 h-[720px]">
+            <div class="flex flex-col items-center justify-between rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2 h-full">
                 <!-- Header -->
                 <div class="w-full flex flex-row items-center justify-between border-b-2 border-gray-200 py-2.5">
                     <div class="font-semibold text-2xl text-left">BẢNG THỂ LOẠI</div>
@@ -78,7 +78,7 @@
                     </form>
                 </div>
                 <!-- Table -->
-                <div class="w-full h-full table-fixed overflow-auto pr-2">
+                <div class="w-full h-[700px] table-fixed overflow-auto pr-2">
                     <table class="relative w-full table-fixed border-collapse border-x-2">
                         <thead class="sticky top-0 bg-gray-200">
                             <tr class="text-center">

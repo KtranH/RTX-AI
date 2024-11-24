@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="h-10 py-2 px-8 flex items-center text-2xl font-bold">HÌNH ẢNH</div>
     <!-- Content -->
-    <div class="h-full overflow-y-auto p-2 scroll-smooth">
+    <div class="h-full overflow-hidden p-2">
         <div class="grid grid-cols-3 h-full space-x-4 p-2">
             <!-- Approve -->
             <div class="col-span-2 flex flex-col items-center justify-start rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2 h-full">
