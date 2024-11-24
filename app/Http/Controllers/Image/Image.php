@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Image;
 
 use App\AI_Create_Image;
+use App\Events\PushNotification;
 use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
@@ -41,39 +42,36 @@ class Image extends Controller
             ->inRandomOrder()
             ->get();
 
-        if(Auth::check())
-        {
+        if (Auth::check()) {
             $idUser = Auth::user()->id;
-            $checkUserLikedImage = $this->checkLike($id,$idUser);
-        }
-        else
-        {
+            $checkUserLikedImage = $this->checkLike($id, $idUser);
+        } else {
             $checkUserLikedImage = null;
         }
-        $listcate = $image->category()->where("photo_id",$id)->get();
-        $listUserLiked = Like::where("photo_id", $id)->get(); 
-        return view('User.Image.Image', compact('image', 'photos', 'listcate' , 'listUserLiked' ,'checkUserLikedImage', 'countComment'));
+        $listcate = $image->category()->where("photo_id", $id)->get();
+        $listUserLiked = Like::where("photo_id", $id)->get();
+        return view('User.Image.Image', compact('image', 'photos', 'listcate', 'listUserLiked', 'checkUserLikedImage', 'countComment'));
     }
     public function ShowCommentAPI(Request $request, $idImage)
     {
-        $comments = Comment::with('user') 
-        ->where('photo_id', $idImage)
-        ->orderBy('created_at', 'desc')
-        ->skip($request->skip)
-        ->take(3)
-        ->withCount('replies')
-        ->get();
-        
-        $comments->map(function($comment) {
+        $comments = Comment::with('user')
+            ->where('photo_id', $idImage)
+            ->orderBy('created_at', 'desc')
+            ->skip($request->skip)
+            ->take(3)
+            ->withCount('replies')
+            ->get();
+
+        $comments->map(function ($comment) {
             $comment->time_ago = $comment->created_at->diffForHumans(['locale' => 'vi']);
             return $comment;
         });
         return response()->json([
-        'success' => true,
-        'comments' => $comments
+            'success' => true,
+            'comments' => $comments
         ]);
     }
-    
+
     public function CreateImage($id)
     {
         $Category = Category::all();
@@ -176,7 +174,7 @@ class Image extends Controller
         $image = $request->file('cover');
         $title = $request->input('title');
         $description = $request->input('description');
-        if($description == null){
+        if ($description == null) {
             $description = $title;
         }
         $filename = time() . '.' . $image->getClientOriginalExtension();
@@ -204,30 +202,29 @@ class Image extends Controller
     }
     public function LikeImage($idImage)
     {
-       try
-       {
-            $UserID = Auth::user()->id;
+        try {
+            $userAuth = Auth::user();
+            $UserID = $userAuth->id;
             $check = $this->checkLike($idImage, $UserID);
-            if($check)
-            {
+            if ($check) {
                 $check->delete();
                 return response()->json(['success' => true]);
-            }
-            else
-            {
-                Like::insert([
+            } else {
+                $like = Like::insert([
                     "user_id" => $UserID,
                     "photo_id" => $idImage,
                     "created_at" => now(),
                     "updated_at" => now(),
                 ]);
+
+                $image = Photo::findOrFail($idImage);
+                $userIdPN = $image->album->user->id;
+                broadcast(new PushNotification("{$userAuth->username} Vừa mới like ảnh bạn <3", $userIdPN));
                 return response()->json(['success' => true]);
             }
-       }
-       catch(\Exception $e)
-       {
+        } catch (\Exception $e) {
             return response()->json(['success' => false]);
-       }
+        }
     }
     public function AddCommentInImage($idImage, Request $request)
     {
@@ -237,7 +234,7 @@ class Image extends Controller
             'comment.required' => 'Vui lòng để lại bình luận trước khi hoàn thành',
             'comment.max' => 'Bình luận không quá 100 kí tự',
         ]);
-    
+
         try {
             $comment = Comment::create([
                 "user_id" => Auth::user()->id,
@@ -254,19 +251,19 @@ class Image extends Controller
                 'comment' => $comment
             ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false ], 500);
+            return response()->json(['success' => false], 500);
         }
-    }    
+    }
     public function UpdateComment(Request $request, $id)
     {
         $comment = Comment::find($id);
         if (!$comment || $comment->user_id != Auth::id()) {
             return response()->json(['success' => false]);
         }
-    
+
         $comment->content = $request->content;
         $comment->save();
-    
+
         return response()->json(['success' => true]);
     }
     public function DeleteComment($idComment)
@@ -315,27 +312,27 @@ class Image extends Controller
             ->get()
             ->map(function ($reply) {
                 return [
-                        'id' => $reply->id,
-                        'content' => $reply->content,
-                        'comment_id' => [
-                            'id' => $reply->comment->user->id,
-                            'username' => $reply->comment->user->username
-                        ],
-                        'reply_reply' =>[
-                                'id' => $this->findParentId($reply->parent_id),
-                                'username' => $this->findParentName($reply->parent_id)
-                        ],
-                        'user' => [
-                            'id' => $reply->user->id,
-                            'username' => $reply->user->username,
-                            'avatar_url' => $reply->user->avatar_url
-                        ],
-                        'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
-                        'parent_id' => $reply->parent_id,
-                        'original_comment_id' => $reply->comment_id,
-                        'updated_at' => $reply->updated_at,
-                        'created_at' => $reply->created_at
-                    ];
+                    'id' => $reply->id,
+                    'content' => $reply->content,
+                    'comment_id' => [
+                        'id' => $reply->comment->user->id,
+                        'username' => $reply->comment->user->username
+                    ],
+                    'reply_reply' => [
+                        'id' => $this->findParentId($reply->parent_id),
+                        'username' => $this->findParentName($reply->parent_id)
+                    ],
+                    'user' => [
+                        'id' => $reply->user->id,
+                        'username' => $reply->user->username,
+                        'avatar_url' => $reply->user->avatar_url
+                    ],
+                    'time_ago' => $reply->created_at->diffForHumans(['locale' => 'vi']),
+                    'parent_id' => $reply->parent_id,
+                    'original_comment_id' => $reply->comment_id,
+                    'updated_at' => $reply->updated_at,
+                    'created_at' => $reply->created_at
+                ];
             });
         return response()->json([
             'success' => true,
@@ -347,14 +344,14 @@ class Image extends Controller
     {
         try {
             $reply = Reply::findOrFail($id);
-            
+
             if (Auth::user()->id !== $reply->user_id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unauthorized'
                 ], 403);
             }
-    
+
             $reply->delete();
             Alert::toast('Đã xoá phản hồi!', 'success')->position('bottom-left')->autoClose(3000);
             return response()->json([
@@ -374,15 +371,15 @@ class Image extends Controller
         if (!$reply || $reply->user_id != Auth::id()) {
             return response()->json(['success' => false]);
         }
-    
+
         $reply->content = $request->content;
         $reply->save();
-    
+
         return response()->json(['success' => true]);
     }
     public function ReplyReply(Request $request, $parentId)
     {
-        $reply = Reply::findOrFail($parentId); 
+        $reply = Reply::findOrFail($parentId);
         $reply = Reply::create([
             "user_id" => Auth::user()->id,
             "comment_id" => $reply->comment_id,
