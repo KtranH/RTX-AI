@@ -21,6 +21,9 @@ use App\Http\Controllers\User\WorkFlow\G11;
 use App\Http\Controllers\User\WorkFlow\G12;
 use App\Http\Controllers\User\WorkFlow\G13;
 use App\Http\Controllers\User\WorkFlow\G14;
+use App\Http\Controllers\User\WorkFlow\G15;
+use App\Http\Controllers\User\WorkFlow\G16;
+use App\Http\Controllers\User\WorkFlow\G17;
 use App\Http\Controllers\User\WorkFlow\G4;
 use App\Http\Controllers\User\WorkFlow\G5;
 use App\Http\Controllers\User\WorkFlow\G6;
@@ -416,13 +419,25 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/resultofg14', [G14::class, 'get_imageG14'])->name("get_imageg14");
 
     //Show G15
-    Route::get('/g15', [G3::class, 'InputDataG3'])->name("g15");
+    Route::get('/g15', [G15::class, 'InputDataG15'])->name("g15");
 
     //Show G16
-    Route::get('/g16', [G3::class, 'InputDataG3'])->name("g16");
+    Route::get('/g16', [G16::class, 'InputDataG16'])->name("g16");
+
+    //Create image G16
+    Route::post('/createg16', [G16::class, 'ShowImageG16'])->name("createg16");
+
+    //Show result G16
+    Route::get('/resultofg16', [G16::class, 'get_imageG16'])->name("get_imageg16");
 
     //Show G17
-    Route::get('/g17', [G3::class, 'InputDataG3'])->name("g17");
+    Route::get('/g17', [G17::class, 'InputDataG17'])->name("g17");
+
+    //Create image G17
+    Route::post('/createg17', [G17::class, 'ShowImageG17'])->name("createg17");
+
+    //Show result G17
+    Route::get('/resultofg17', [G17::class, 'get_imageG17'])->name("get_imageg17");
 
     //Show G18
     Route::get('/g18', [G3::class, 'InputDataG3'])->name("g18");
