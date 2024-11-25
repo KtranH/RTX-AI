@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Essential\HomeAdmin;
 use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
 use App\Http\Controllers\Settings\Settings;
@@ -450,17 +451,18 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //ADMIN
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //HOME
 
-    // Admin
-    Route::get('/admin', function () {
-        return view('Admin.Essential.Home');
-    })->name('admin');
+    // Home Admin
+    Route::get('/admin', [HomeAdmin::class, 'ShowHome'])->name('admin');
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     
     // Manage Category
     Route::get('/admin/category', function () {
         return view('Admin.Manage.Category');
     })->name('admin.category');
-
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     // Manage Image
     Route::get('/admin/image', function () {
         return view('Admin.Manage.Image');
@@ -475,6 +477,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/admin/employee', function () {
         return view('Admin.Account.Employee');
     })->name('admin.employee');
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 });
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
