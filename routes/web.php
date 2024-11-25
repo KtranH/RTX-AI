@@ -449,6 +449,32 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/g20', [G3::class, 'InputDataG3'])->name("g20");
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //ADMIN
+
+    // Admin
+    Route::get('/admin', function () {
+        return view('Admin.Essential.Home');
+    })->name('admin');
+    
+    // Manage Category
+    Route::get('/admin/category', function () {
+        return view('Admin.Manage.Category');
+    })->name('admin.category');
+
+    // Manage Image
+    Route::get('/admin/image', function () {
+        return view('Admin.Manage.Image');
+    })->name('admin.image');
+
+    // Account Information
+    Route::get('/admin/information', function () {
+        return view('Admin.Account.Information');
+    })->name('admin.information');
+
+    // Account Employee
+    Route::get('/admin/employee', function () {
+        return view('Admin.Account.Employee');
+    })->name('admin.employee');
 });
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
