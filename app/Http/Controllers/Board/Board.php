@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Board;
 
 use App\AI_Create_Image;
 use App\Events\PushNotification;
+use App\Models\Notification;
 use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
@@ -266,10 +267,20 @@ class Board extends Controller
     {
         $id = $request->get('user_id');
         $user = User::findOrFail($id);
+        $userFollow = Auth::user();
         $user->followers()->attach(Auth::user()->id);
         $this->UpdateCountFollowing(Auth::user()->id);
         $this->UpdateCountFollowers($id);
-        broadcast(new PushNotification("{$user->username} vừa mới theo dõi bạn <3", $id));
+        Notification::create([
+            'user_id' => $id,
+            'type' => 'follow',
+            'data' => json_encode([
+                'name' => $userFollow->username,
+                'message' => "{$userFollow->username} vừa mới theo dõi bạn <3",
+            ]),
+            'is_read' => 0,
+        ]);
+        broadcast(new PushNotification("{$userFollow->username} vừa mới theo dõi bạn <3", $id));
         return response()->json(['success' => true]);
     }
     public function UnFollowUser(Request $request)

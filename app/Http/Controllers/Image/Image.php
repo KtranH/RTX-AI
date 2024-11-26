@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Image;
 
 use App\AI_Create_Image;
 use App\Events\PushNotification;
+use App\Models\Notification;
 use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
@@ -219,6 +220,16 @@ class Image extends Controller
 
                 $image = Photo::findOrFail($idImage);
                 $userIdPN = $image->album->user->id;
+                Notification::create([
+                    'user_id' => $userIdPN,
+                    'type' => 'like',
+                    'data' => json_encode([
+                        'name' => $userAuth->username,
+                        'message' => "{$userAuth->username} vừa mới theo dõi bạn <3",
+                    ]),
+                    'is_read' => 0,
+                ]);
+
                 broadcast(new PushNotification("{$userAuth->username} Vừa mới like ảnh bạn <3", $userIdPN));
                 return response()->json(['success' => true]);
             }
