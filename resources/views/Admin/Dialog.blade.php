@@ -64,8 +64,8 @@
 
 <!-- Image Dialog -->
 <div id="image-dialog" class="hidden fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex flex-col items-center justify-center">
-    <div class="bg-white rounded-2xl w-[500px] h-[600px] flex flex-col items-center justify-between space-y-4 border-[7px] border-indigo-700">
-        <div class="w-[500px] h-[500px] p-4">   
+    <div class="bg-white rounded-2xl w-[800px] h-[900px] flex flex-col items-center justify-between space-y-4 border-[7px] border-indigo-700">
+        <div class="w-[800px] h-[900px] p-4">   
             <img id="image-imageDialog" src="https://picsum.photos/id/237/200" alt="Image" class="aspect-square w-full h-full rounded-2xl border-2 border-gray-200">
         </div>
         <div class="flex flex-row items-center justify-center px-4 pb-10">
@@ -87,3 +87,66 @@
         });
     });
 </script>
+
+<!-- Confirm Dialog -->
+<div id="confirm-dialog" class="hidden fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex flex-col items-center justify-center">
+    <div class="bg-white rounded-lg w-[500px]">
+        <div class="bg-indigo-700 rounded-t-lg text-white font-bold text-center text-xl p-2">XÁC NHẬN</div>
+        <div id="content-confirmDialog" class="flex flex-col items-center justify-center h-24 py-2 px-4 text-lg text-center"></div>
+        <div class="flex flex-row items-center justify-center p-2 space-x-4">
+            <button id="confirm-confirmDialog" class="flex flex-row items-center space-x-2 bg-green-700 border-2 border-green-700 hover:bg-white hover:!text-green-700 rounded px-3 py-1 text-white text-lg font-medium"> 
+                <i class="fa-solid fa-circle-check text-xl text-current"></i>
+                <div>Xác Nhận</div>
+            </button>
+            <button id="cancel-confirmDialog" class="flex flex-row items-center space-x-2 bg-red-700 border-2 border-red-700 hover:bg-white hover:!text-red-700 rounded px-3 py-1 text-white text-lg font-medium">
+                <i class="fa-solid fa-circle-xmark text-xl text-current"></i>
+                <div>Hủy Bỏ</div>
+            </button>
+        </div>
+    </div>
+</div>  
+<script>
+    $(document).ready(function () 
+    {
+        $('#confirm-confirmDialog').on('click', function (e) 
+        {
+            e.preventDefault();
+
+            $('#confirm-dialog').addClass('hidden');
+        });
+
+        $('#cancel-confirmDialog').on('click', function (e) 
+        {
+            e.preventDefault();
+
+            $('#confirm-dialog').addClass('hidden');
+        });
+    });
+</script>
+
+<!-- <div class="hidden w-full grid grid-rows-2 space-y-4 p-2 h-full snap-start snap-always">
+    <div class="flex flex-col items-center justify-start rounded-2xl bg-white px-4 py-3 shadow-md border-2 border-gray-200 space-y-2 w-full h-full ">
+        <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-2">ẢNH AI THEO TUẦN</div>
+        <div class="w-[1492.16px] h-full">
+            <div class="flex items-center gap-3 overflow-x-auto pb-2">
+                @for($i = 0; $i < 15; $i++)
+                    <div class="flex-none w-[300px] h-[300px] cursor-pointer">
+                        <img src="https://picsum.photos/id/{{$i + 10}}/200" alt="Image" class="w-full h-full image-display rounded-2xl border-2 border-gray-200 hover:opacity-50">
+                    </div>
+                @endfor
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col items-center justify-start rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2 h-full">
+        <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">TẤT CẢ ẢNH AI</div>
+        <div class="w-[1492.16px] h-full">
+            <div class="flex items-center gap-3 overflow-x-auto pb-2">
+                @for($i = 0; $i < 15; $i++)
+                    <div class="flex-none w-[300px] h-[300px] cursor-pointer">
+                        <img src="https://picsum.photos/id/{{$i + 20}}/200" alt="Image" class="w-full h-full image-display rounded-2xl border-2 border-gray-200 hover:opacity-50">
+                    </div>
+                @endfor
+            </div>
+        </div>
+    </div>
+</div> -->

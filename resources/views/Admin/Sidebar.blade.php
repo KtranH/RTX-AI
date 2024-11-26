@@ -20,9 +20,13 @@
                 <i class="fa-solid fa-image text-current"></i>
                 <div>Hình Ảnh</div>
             </a>
-            <a id="ai-sidebar" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+            <a id="ai-sidebar" href="{{ route('admin.ai') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-robot text-current"></i>
                 <div>Ảnh AI</div>
+            </a>
+            <a id="comment-sidebar" href="{{ route('admin.comment') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                <i class="fa-solid fa-comment text-current"></i>
+                <div>Bình Luận</div>
             </a>
         </div>  
         <div class="flex flex-col pt-3 space-y-1">
@@ -74,6 +78,7 @@
             '/admin/category': $('#category-sidebar'),
             '/admin/image': $('#image-sidebar'),
             '/admin/ai': $('#ai-sidebar'),
+            '/admin/comment': $('#comment-sidebar'),
             '/admin/information': $('#information-sidebar'),
             '/admin/employee': $('#employee-sidebar')
         };

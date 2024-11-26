@@ -451,6 +451,16 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
         return view('Admin.Manage.Image');
     })->name('admin.image');
 
+    // Manage Comment
+    Route::get('/admin/comment', function () {
+        return view('Admin.Manage.Comment');
+    })->name('admin.comment');
+
+    // Manage AI
+    Route::get('/admin/ai', function () {
+        return view('Admin.Manage.AI');
+    })->name('admin.ai');
+
     // Account Information
     Route::get('/admin/information', function () {
         return view('Admin.Account.Information');

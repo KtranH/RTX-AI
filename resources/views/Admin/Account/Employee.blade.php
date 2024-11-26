@@ -177,7 +177,7 @@
         });
     });
 
-    //Form
+    //Table
     $(document).ready(function () 
     {
         $('.image-table').on('click', function (e) 
@@ -241,7 +241,11 @@
             }
             
         });
+    });
 
+    //Form
+    $(document).ready(function () 
+    {
         //Insert Button
         $('#insert-button').on('click', function (e) 
         {
