@@ -119,7 +119,23 @@
                 iconColor: 'white',
                 background: '#46DFB1'
             });
+            setHtml(data);
         });
+
+        const html = (item) => `
+                <li class="py-2 flex">
+                    <a href="#" class="flex items-center w-full hover:bg-gray-100 p-2 rounded">
+                        <img class="h-6 w-6 rounded-full ring-2 ring-white mr-2"
+                            src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/default_avatar.jpg" alt="">
+                        <p class="font-semibold text-gray-700">${item.message}</p>
+                    </a>
+                </li>
+                `;
+
+        function setHtml(item) {
+            const ul = document.querySelector('#js-notification-main');
+            ul.insertAdjacentHTML('afterbegin', html(item));
+        }
     </script>
 @endauth
 
