@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\Account\Login;
+use App\Http\Controllers\Admin\Essential\AdminHome;
 use App\Http\Controllers\Admin\Essential\HomeAdmin;
+use App\Http\Controllers\Admin\Manage\AdminCategory;
 use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
 use App\Http\Controllers\Settings\Settings;
@@ -30,6 +33,7 @@ use App\Http\Controllers\User\WorkFlow\G5;
 use App\Http\Controllers\User\WorkFlow\G6;
 use App\Http\Controllers\User\WorkFlow\G7;
 use App\Http\Controllers\User\WorkFlow\G9;
+use App\Http\Middleware\CheckLoginAdmin;
 use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitUpdateAccountAccess;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
@@ -452,32 +456,64 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //ADMIN
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    //HOME
-
-    // Home Admin
-    Route::get('/admin', [HomeAdmin::class, 'ShowHome'])->name('admin');
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     
-    // Manage Category
-    Route::get('/admin/category', function () {
-        return view('Admin.Manage.Category');
-    })->name('admin.category');
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Manage Image
-    Route::get('/admin/image', function () {
-        return view('Admin.Manage.Image');
-    })->name('admin.image');
+    //LOGIN, LOGOUT
 
-    // Account Information
-    Route::get('/admin/information', function () {
-        return view('Admin.Account.Information');
-    })->name('admin.information');
+    //Form Login Admin
+    Route::get('/admin/login', [Login::class, 'ShowLogin'])->name('admin.login');
 
-    // Account Employee
-    Route::get('/admin/employee', function () {
-        return view('Admin.Account.Employee');
-    })->name('admin.employee');
+    //Login Admin
+    Route::post('/admin/login', [Login::class, 'Login'])->name('admin.login.account');
+
+    //Logout Admin
+    Route::get('/admin/logout', [Login::class, 'Logout'])->name('admin.logout');
+
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+        //HOME
+    
+        //Home Admin
+        Route::get('/admin', [AdminHome::class, 'ShowHome'])->name('admin');
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+        //CATEGORY, ADD CATEGORY, UPDATE CATEGORY, DELETE CATEGORY, SEARCH CATEGORY
+
+        //Manage Category
+        Route::get('/admin/category', [AdminCategory::class, 'ShowCategory'])->name('admin.category');
+
+        //Add Category
+        Route::post('/admin/addcategory', [AdminCategory::class, 'AddCategory'])->name('admin.addcategory');
+
+        //Delete Category
+        Route::delete('/admin/deletecategory', [AdminCategory::class, 'DeleteCategory'])->name('admin.deletecategory');
+
+        //Search Category
+        Route::get('/admin/searchcategory', [AdminCategory::class, 'SearchCategory'])->name('admin.searchcategory');
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+        //Manage Image
+        Route::get('/admin/image', function () {
+            return view('Admin.Manage.Image');
+        })->name('admin.image');
+
+        //Account Information
+        Route::get('/admin/information', function () {
+            return view('Admin.Account.Information');
+        })->name('admin.information');
+
+        //Account Employee
+        Route::get('/admin/employee', function () {
+            return view('Admin.Account.Employee');
+        })->name('admin.employee');
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    });
 });
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------

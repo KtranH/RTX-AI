@@ -8,8 +8,9 @@ use App\Models\Photo;
 use App\Models\User;
 use App\Models\WorkFlow;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class HomeAdmin extends Controller
+class AdminHome extends Controller
 {
     //
     public function ShowHome()
