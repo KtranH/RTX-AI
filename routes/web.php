@@ -474,7 +474,7 @@ Route::get('/admin/logout', [Login::class, 'Logout'])->name('admin.logout');
     Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------
         //HOME
-    
+      
         //Home Admin
         Route::get('/admin', [AdminHome::class, 'ShowHome'])->name('admin');
 
@@ -512,6 +512,16 @@ Route::get('/admin/logout', [Login::class, 'Logout'])->name('admin.logout');
         Route::get('/admin/employee', function () {
             return view('Admin.Account.Employee');
         })->name('admin.employee');
+      
+        // Manage Comment
+        Route::get('/admin/comment', function () {
+            return view('Admin.Manage.Comment');
+        })->name('admin.comment');
+
+        // Manage AI
+        Route::get('/admin/ai', function () {
+            return view('Admin.Manage.AI');
+        })->name('admin.ai');
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 });
 

@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <!-- Display -->
-                <div class="w-full h-[730px] table-fixed overflow-auto pr-4">
+                <div class="w-full h-[730px] overflow-auto pr-4">
                     <div class="grid grid-cols-4 gap-3 py-3">
                         @for($i = 0; $i < 15; $i++)
                             <div class="display-component group relative w-full h-full cursor-pointer" data-id="{{$i}}" data-image="{{"https://picsum.photos/id/" . $i * 10 . "/200"}}" data-quantity="{{$i}}">
