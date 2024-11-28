@@ -10,11 +10,18 @@
                 <li class="py-2 flex">
                     <a href="#" class="flex items-center w-full hover:bg-gray-100 p-2 rounded">
                         <img class="h-6 w-6 rounded-full ring-2 ring-white mr-2"
-                            src="https://pub-d9195d29f33243c7a4d4c49fe887131e.r2.dev/default_avatar.jpg" alt="">
+                            src="{{ json_decode($item->data)->url ?? 'https://lh3.googleusercontent.com/a/ACg8ocLev1qQPI8GSu3HuQYV5frfYBAmMQX_Fej2vyRveWGMPofrZdar=s96-c' }}" alt="">
                         <p class="font-semibold text-gray-700">{{ json_decode($item->data)->message ?? 'abc' }}</p>
                     </a>
                 </li>
             @endforeach
+            @if($data->count() == 0)
+                <li class="py-2 flex" id="no-notification">
+                    <a href="#" class="flex items-center w-full hover:bg-gray-100 p-2 rounded">
+                        <p class="font-semibold text-gray-300">Không có thông báo nào</p>
+                    </a>
+                </li>
+            @endif
         @endif
     </ul>
 </div>

@@ -275,12 +275,12 @@ class Board extends Controller
             'user_id' => $id,
             'type' => 'follow',
             'data' => json_encode([
-                'name' => $userFollow->username,
+                'url' => $userFollow->avatar_url,
                 'message' => "{$userFollow->username} vừa mới theo dõi bạn <3",
             ]),
             'is_read' => 0,
         ]);
-        broadcast(new PushNotification("{$userFollow->username} vừa mới theo dõi bạn <3", $id));
+        broadcast(new PushNotification("{$userFollow->username} vừa mới theo dõi bạn <3", $id, "http://127.0.0.1:8000/board/{$userFollow->id}",$userFollow->avatar_url));
         return response()->json(['success' => true]);
     }
     public function UnFollowUser(Request $request)

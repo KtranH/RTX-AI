@@ -219,18 +219,19 @@ class Image extends Controller
                 ]);
 
                 $image = Photo::findOrFail($idImage);
-                $userIdPN = $image->album->user->id;
+
+                $userIdPN = $image->album->user->id;              
                 Notification::create([
                     'user_id' => $userIdPN,
                     'type' => 'like',
                     'data' => json_encode([
-                        'name' => $userAuth->username,
-                        'message' => "{$userAuth->username} vừa mới theo dõi bạn <3",
+                        'url' => $userAuth->avatar_url,
+                        'message' => "{$userAuth->username} vừa mới thích ảnh của bạn <3",
                     ]),
                     'is_read' => 0,
                 ]);
 
-                broadcast(new PushNotification("{$userAuth->username} Vừa mới like ảnh bạn <3", $userIdPN));
+                broadcast(new PushNotification("{$userAuth->username} Vừa mới thích ảnh của bạn <3", $userIdPN, "http://127.0.0.1:8000/image/{$idImage}",$userAuth->avatar_url));
                 return response()->json(['success' => true]);
             }
         } catch (\Exception $e) {
@@ -257,12 +258,25 @@ class Image extends Controller
             $comment = Comment::withCount('replies')->find($comment->id);
             $comment->load('user');
             $comment->time_ago = $comment->created_at->diffForHumans(['locale' => 'vi']);
+
+            $userAuth = Auth::user();
+            Notification::create([
+                'user_id' => $comment->photo->album->user->id,
+                'type' => 'comment',
+                'data' => json_encode([
+                    'url' => $userAuth->avatar_url,
+                    'message' => "{$userAuth->username} vừa mới bình luận ảnh bạn <3",
+                ])
+            ]);
+
+            broadcast(new PushNotification("{$userAuth->username} Vừa mới bình luận ảnh bạn <3", $comment->photo->album->user->id,"http://127.0.0.1:8000/image/{$idImage}" ,$userAuth->avatar_url));
+
             return response()->json([
                 'success' => true,
                 'comment' => $comment
             ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false], 500);
+            return response()->json(['success' => false], $e->getMessage());
         }
     }
     public function UpdateComment(Request $request, $id)
@@ -307,6 +321,19 @@ class Image extends Controller
             'id' => $this->findParentId($reply->parent_id),
             'username' => $this->findParentName($reply->parent_id)
         ];
+
+        $userAuth = Auth::user();
+        Notification::create([
+            'user_id' => $reply->comment->user->id,
+            'type' => 'reply',
+            'data' => json_encode([
+                'url' => $userAuth->avatar_url,
+                'message' => $userAuth->username . ' Đã phản hồi bình luận của bạn ',
+            ])
+        ]);
+
+        broadcast(new PushNotification("{$userAuth->username} Vừa phản hồi bình luận của bạn <3", $reply->comment->user->id, " http://127.0.0.1:8000/image/{$reply->comment->photo_id} ",$userAuth->avatar_url));
+
         return response()->json(['success' => true, 'reply' => $reply]);
     }
     public function getReplies($commentId, Request $request)
@@ -410,6 +437,19 @@ class Image extends Controller
             'id' => $this->findParentId($reply->parent_id),
             'username' => $this->findParentName($reply->parent_id)
         ];
+
+        $userAuth = Auth::user();
+        Notification::create([
+            'user_id' => $reply->parent->user->id,
+            'type' => 'reply',
+            'data' => json_encode([
+                'url' => $userAuth->avatar_url,
+                'message' => $userAuth->username . ' Đã phản hồi bình luận của bạn',
+            ])
+        ]);
+
+        broadcast(new PushNotification("{$userAuth->username} Vừa phản hồi bình luận của bạn <3", $reply->parent->user, "http://127.0.0.1:8000/image/{$reply->comment->photo_id}",$userAuth))->toOthers();
+
         return response()->json(['success' => true, 'reply' => $reply]);
     }
     public function SavedImage(Request $request)
