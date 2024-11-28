@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\Account\Login;
+use App\Http\Controllers\Admin\Essential\AdminHome;
+use App\Http\Controllers\Admin\Essential\HomeAdmin;
+use App\Http\Controllers\Admin\Manage\AdminCategory;
 use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
 use App\Http\Controllers\Settings\Settings;
@@ -21,11 +25,15 @@ use App\Http\Controllers\User\WorkFlow\G11;
 use App\Http\Controllers\User\WorkFlow\G12;
 use App\Http\Controllers\User\WorkFlow\G13;
 use App\Http\Controllers\User\WorkFlow\G14;
+use App\Http\Controllers\User\WorkFlow\G15;
+use App\Http\Controllers\User\WorkFlow\G16;
+use App\Http\Controllers\User\WorkFlow\G17;
 use App\Http\Controllers\User\WorkFlow\G4;
 use App\Http\Controllers\User\WorkFlow\G5;
 use App\Http\Controllers\User\WorkFlow\G6;
 use App\Http\Controllers\User\WorkFlow\G7;
 use App\Http\Controllers\User\WorkFlow\G9;
+use App\Http\Middleware\CheckLoginAdmin;
 use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitUpdateAccountAccess;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
@@ -416,13 +424,25 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/resultofg14', [G14::class, 'get_imageG14'])->name("get_imageg14");
 
     //Show G15
-    Route::get('/g15', [G3::class, 'InputDataG3'])->name("g15");
+    Route::get('/g15', [G15::class, 'InputDataG15'])->name("g15");
 
     //Show G16
-    Route::get('/g16', [G3::class, 'InputDataG3'])->name("g16");
+    Route::get('/g16', [G16::class, 'InputDataG16'])->name("g16");
+
+    //Create image G16
+    Route::post('/createg16', [G16::class, 'ShowImageG16'])->name("createg16");
+
+    //Show result G16
+    Route::get('/resultofg16', [G16::class, 'get_imageG16'])->name("get_imageg16");
 
     //Show G17
-    Route::get('/g17', [G3::class, 'InputDataG3'])->name("g17");
+    Route::get('/g17', [G17::class, 'InputDataG17'])->name("g17");
+
+    //Create image G17
+    Route::post('/createg17', [G17::class, 'ShowImageG17'])->name("createg17");
+
+    //Show result G17
+    Route::get('/resultofg17', [G17::class, 'get_imageG17'])->name("get_imageg17");
 
     //Show G18
     Route::get('/g18', [G3::class, 'InputDataG3'])->name("g18");
@@ -432,44 +452,77 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Show G20
     Route::get('/g20', [G3::class, 'InputDataG3'])->name("g20");
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    //ADMIN
-
-    // Admin
-    Route::get('/admin', function () {
-        return view('Admin.Essential.Home');
-    })->name('admin');
+});
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//ADMIN
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
     
-    // Manage Category
-    Route::get('/admin/category', function () {
-        return view('Admin.Manage.Category');
-    })->name('admin.category');
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//LOGIN, LOGOUT
 
-    // Manage Image
-    Route::get('/admin/image', function () {
-        return view('Admin.Manage.Image');
-    })->name('admin.image');
+//Form Login Admin
+Route::get('/admin/login', [Login::class, 'ShowLogin'])->name('admin.login');
 
-    // Manage Comment
-    Route::get('/admin/comment', function () {
-        return view('Admin.Manage.Comment');
-    })->name('admin.comment');
+//Login Admin
+Route::post('/admin/login', [Login::class, 'Login'])->name('admin.login.account');
 
-    // Manage AI
-    Route::get('/admin/ai', function () {
-        return view('Admin.Manage.AI');
-    })->name('admin.ai');
+//Logout Admin
+Route::get('/admin/logout', [Login::class, 'Logout'])->name('admin.logout');
 
-    // Account Information
-    Route::get('/admin/information', function () {
-        return view('Admin.Account.Information');
-    })->name('admin.information');
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // Account Employee
-    Route::get('/admin/employee', function () {
-        return view('Admin.Account.Employee');
-    })->name('admin.employee');
+    Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+        //HOME
+      
+        //Home Admin
+        Route::get('/admin', [AdminHome::class, 'ShowHome'])->name('admin');
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+        
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+        //CATEGORY, ADD CATEGORY, UPDATE CATEGORY, DELETE CATEGORY, SEARCH CATEGORY
+
+        //Manage Category
+        Route::get('/admin/category', [AdminCategory::class, 'ShowCategory'])->name('admin.category');
+
+        //Add Category
+        Route::post('/admin/addcategory', [AdminCategory::class, 'AddCategory'])->name('admin.addcategory');
+
+        //Delete Category
+        Route::delete('/admin/deletecategory', [AdminCategory::class, 'DeleteCategory'])->name('admin.deletecategory');
+
+        //Search Category
+        Route::get('/admin/searchcategory', [AdminCategory::class, 'SearchCategory'])->name('admin.searchcategory');
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+        //Manage Image
+        Route::get('/admin/image', function () {
+            return view('Admin.Manage.Image');
+        })->name('admin.image');
+
+        //Account Information
+        Route::get('/admin/information', function () {
+            return view('Admin.Account.Information');
+        })->name('admin.information');
+
+        //Account Employee
+        Route::get('/admin/employee', function () {
+            return view('Admin.Account.Employee');
+        })->name('admin.employee');
+      
+        // Manage Comment
+        Route::get('/admin/comment', function () {
+            return view('Admin.Manage.Comment');
+        })->name('admin.comment');
+
+        // Manage AI
+        Route::get('/admin/ai', function () {
+            return view('Admin.Manage.AI');
+        })->name('admin.ai');
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 });
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------

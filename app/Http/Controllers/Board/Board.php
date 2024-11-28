@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Board;
 
 use App\AI_Create_Image;
+use App\Events\PushNotification;
+use App\Models\Notification;
 use App\QueryDatabase;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
@@ -24,20 +26,19 @@ class Board extends Controller
     public function FeatureImage(Request $request)
     {
         $id = $request->get('photo_id');
-        $checkCount = Photo::where('is_feature', true)->whereHas('album', function ($query) {$query->where('user_id', Auth::user()->id);})->count();
+        $checkCount = Photo::where('is_feature', true)->whereHas('album', function ($query) {
+            $query->where('user_id', Auth::user()->id);
+        })->count();
         if ($checkCount > 10) {
             return response()->json(['success' => false]);
         }
         $photo = Photo::findOrFail($id);
-        if($photo->is_feature == 0)
-        {
+        if ($photo->is_feature == 0) {
             $photo->is_feature = 1;
             $photo->updated_at = Carbon::now();
             $photo->save();
             return response()->json(['success' => true, 'is_feature' => true]);
-        }
-        else
-        {
+        } else {
             $photo->is_feature = 0;
             $photo->updated_at = Carbon::now();
             $photo->save();
@@ -47,12 +48,9 @@ class Board extends Controller
     public function ShowBoard(Request $request, $id = null)
     {
         $isFollowing = false;
-        if($id == null)
-        {
+        if ($id == null) {
             $userId = Auth::user()->id;
-        }
-        else    
-        {
+        } else {
             $userId = $id;
         }
         if (Auth::check()) {
@@ -60,36 +58,32 @@ class Board extends Controller
         }
         $user = User::findOrFail($userId);
         $tab = $request->route('tab');
-        $albums = Album::where('user_id', $userId)->paginate(8); 
-        $feature = Photo::where('is_feature', true)->whereHas('album', function ($query) use ($userId) {$query->where('user_id', $userId);})->orderBy('updated_at', 'desc')->get(); 
+        $albums = Album::where('user_id', $userId)->paginate(8);
+        $feature = Photo::where('is_feature', true)->whereHas('album', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->orderBy('updated_at', 'desc')->get();
         return view('User.Board.Board', ['tab' => $tab], compact('albums', 'feature', 'user', 'isFollowing'));
     }
     public function ShowBoardApi(Request $request)
     {
-        $imagesPerPage = 2; 
+        $imagesPerPage = 2;
         $page = $request->get('page', 1);
         $id = $request->get('userId', null);
-        if($id == null)
-        {
+        if ($id == null) {
             $userId = Auth::user()->id;
-        }
-        else
-        {
+        } else {
             $userId = $id;
         }
-        if(Auth::user()->id == $userId)
-        {
-            $photos = Photo::whereHas('album.user', function($query) use ($userId) {
+        if (Auth::user()->id == $userId) {
+            $photos = Photo::whereHas('album.user', function ($query) use ($userId) {
                 $query->where('id', $userId);
-            })->paginate($imagesPerPage, ['*'], 'page', $page); 
-        }
-        else
-        {
+            })->paginate($imagesPerPage, ['*'], 'page', $page);
+        } else {
             $photos = Photo::whereHas('album', function ($query) use ($userId) {
-                $query->where('is_private', 0) 
-                      ->whereHas('user', function ($query) use ($userId) {
-                          $query->where('id', $userId);
-                      });
+                $query->where('is_private', 0)
+                    ->whereHas('user', function ($query) use ($userId) {
+                        $query->where('id', $userId);
+                    });
             })->paginate($imagesPerPage, ['*'], 'page', $page);
         }
 
@@ -100,18 +94,15 @@ class Board extends Controller
     }
     public function ShowAiImageApi(Request $request)
     {
-        $imagesPerPage = 2; 
+        $imagesPerPage = 2;
         $page = $request->get('pageAI', 1);
         $id = $request->get('userId', null);
-        if($id == null)
-        {
+        if ($id == null) {
             $userId = Auth::user()->id;
-        }
-        else
-        {
+        } else {
             $userId = $id;
         }
-        $photos = HistoryImageAI::where('user_id', $userId)->paginate($imagesPerPage, ['*'], 'page', $page); 
+        $photos = HistoryImageAI::where('user_id', $userId)->paginate($imagesPerPage, ['*'], 'page', $page);
         return response()->json([
             'photos' => $photos->items(),
             'hasMorePages' => $photos->hasMorePages(),
@@ -119,18 +110,15 @@ class Board extends Controller
     }
     public function ShowSavedImageApi(Request $request)
     {
-        $imagesPerPage = 2; 
+        $imagesPerPage = 2;
         $page = $request->get('pageSaved', 1);
         $id = $request->get('userId', null);
-        if($id == null)
-        {
+        if ($id == null) {
             $userId = Auth::user()->id;
-        }
-        else
-        {
+        } else {
             $userId = $id;
         }
-        $photos = SavedImage::where('user_id', $userId)->with('photo')->paginate($imagesPerPage, ['*'], 'page', $page); 
+        $photos = SavedImage::where('user_id', $userId)->with('photo')->paginate($imagesPerPage, ['*'], 'page', $page);
         return response()->json([
             'photos' => $photos->items(),
             'hasMorePages' => $photos->hasMorePages(),
@@ -152,8 +140,7 @@ class Board extends Controller
     {
         $album = Album::findOrFail($id);
         $user = $album->user;
-        if(Auth::user()->id != $user->id && $album->is_private == 1)
-        {
+        if (Auth::user()->id != $user->id && $album->is_private == 1) {
             return view('errors.404');
         }
         $photo = Photo::where("album_id", $album->id)->paginate(8);
@@ -280,9 +267,20 @@ class Board extends Controller
     {
         $id = $request->get('user_id');
         $user = User::findOrFail($id);
+        $userFollow = Auth::user();
         $user->followers()->attach(Auth::user()->id);
         $this->UpdateCountFollowing(Auth::user()->id);
         $this->UpdateCountFollowers($id);
+        Notification::create([
+            'user_id' => $id,
+            'type' => 'follow',
+            'data' => json_encode([
+                'url' => $userFollow->avatar_url,
+                'message' => "{$userFollow->username} vừa mới theo dõi bạn <3",
+            ]),
+            'is_read' => 0,
+        ]);
+        broadcast(new PushNotification("{$userFollow->username} vừa mới theo dõi bạn <3", $id, "http://127.0.0.1:8000/board/{$userFollow->id}",$userFollow->avatar_url));
         return response()->json(['success' => true]);
     }
     public function UnFollowUser(Request $request)
@@ -290,7 +288,7 @@ class Board extends Controller
         $id = $request->get('user_id');
         $user = User::findOrFail($id);
         $user->followers()->detach(Auth::user()->id);
-        $this->UpdateCountFollowing(Auth::user()->id);  
+        $this->UpdateCountFollowing(Auth::user()->id);
         $this->UpdateCountFollowers($id);
         return response()->json(['success' => true]);
     }
@@ -298,14 +296,11 @@ class Board extends Controller
     {
         $id = $request->get('album_id');
         $album = Album::findOrFail($id);
-        if($album->is_private == 0)
-        {
+        if ($album->is_private == 0) {
             $album->is_private = 1;
             $album->save();
             return response()->json(['success' => true, 'is_private' => true]);
-        }
-        else
-        {
+        } else {
             $album->is_private = 0;
             $album->save();
             return response()->json(['success' => true, 'is_private' => false]);
