@@ -49,6 +49,8 @@ use Illuminate\Support\Facades\Session;
 //Access home page
 Route::get('/', [Home::class, 'ShowHome'])->name("showhome");
 
+Route::get('/api/get-notification/{userId}', [Home::class, 'ApiNotification']);
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -389,7 +391,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Create image G10
     Route::post('/createg10', [G10::class, 'ShowImageG10'])->name("createg10");
-    
+
     //Show result G10
     Route::get('/resultofg10', [G10::class, 'get_imageG10'])->name("get_imageg10");
 
@@ -456,7 +458,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 //ADMIN
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 //LOGIN, LOGOUT
 
@@ -471,58 +473,58 @@ Route::get('/admin/logout', [Login::class, 'Logout'])->name('admin.logout');
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
-        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-        //HOME
-      
-        //Home Admin
-        Route::get('/admin', [AdminHome::class, 'ShowHome'])->name('admin');
+Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //HOME
 
-        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-        
-        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-        //CATEGORY, ADD CATEGORY, UPDATE CATEGORY, DELETE CATEGORY, SEARCH CATEGORY
+    //Home Admin
+    Route::get('/admin', [AdminHome::class, 'ShowHome'])->name('admin');
 
-        //Manage Category
-        Route::get('/admin/category', [AdminCategory::class, 'ShowCategory'])->name('admin.category');
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //Add Category
-        Route::post('/admin/addcategory', [AdminCategory::class, 'AddCategory'])->name('admin.addcategory');
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //CATEGORY, ADD CATEGORY, UPDATE CATEGORY, DELETE CATEGORY, SEARCH CATEGORY
 
-        //Delete Category
-        Route::delete('/admin/deletecategory', [AdminCategory::class, 'DeleteCategory'])->name('admin.deletecategory');
+    //Manage Category
+    Route::get('/admin/category', [AdminCategory::class, 'ShowCategory'])->name('admin.category');
 
-        //Search Category
-        Route::get('/admin/searchcategory', [AdminCategory::class, 'SearchCategory'])->name('admin.searchcategory');
+    //Add Category
+    Route::post('/admin/addcategory', [AdminCategory::class, 'AddCategory'])->name('admin.addcategory');
 
-        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Delete Category
+    Route::delete('/admin/deletecategory', [AdminCategory::class, 'DeleteCategory'])->name('admin.deletecategory');
 
-        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-        //Manage Image
-        Route::get('/admin/image', function () {
-            return view('Admin.Manage.Image');
-        })->name('admin.image');
+    //Search Category
+    Route::get('/admin/searchcategory', [AdminCategory::class, 'SearchCategory'])->name('admin.searchcategory');
 
-        //Account Information
-        Route::get('/admin/information', function () {
-            return view('Admin.Account.Information');
-        })->name('admin.information');
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //Account Employee
-        Route::get('/admin/employee', function () {
-            return view('Admin.Account.Employee');
-        })->name('admin.employee');
-      
-        // Manage Comment
-        Route::get('/admin/comment', function () {
-            return view('Admin.Manage.Comment');
-        })->name('admin.comment');
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Manage Image
+    Route::get('/admin/image', function () {
+        return view('Admin.Manage.Image');
+    })->name('admin.image');
 
-        // Manage AI
-        Route::get('/admin/ai', function () {
-            return view('Admin.Manage.AI');
-        })->name('admin.ai');
-        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Account Information
+    Route::get('/admin/information', function () {
+        return view('Admin.Account.Information');
+    })->name('admin.information');
+
+    //Account Employee
+    Route::get('/admin/employee', function () {
+        return view('Admin.Account.Employee');
+    })->name('admin.employee');
+
+    // Manage Comment
+    Route::get('/admin/comment', function () {
+        return view('Admin.Manage.Comment');
+    })->name('admin.comment');
+
+    // Manage AI
+    Route::get('/admin/ai', function () {
+        return view('Admin.Manage.AI');
+    })->name('admin.ai');
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 });
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
