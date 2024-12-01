@@ -42,18 +42,18 @@ class AdminCategory extends Controller
     }
     public function AddCategory(Request $request)
     {
+        if(!$request->name) {
+            return response()->json(['success' => false, 'message' => 'Vui lòng nhập thể loại']);
+        }
         try {
             if(Category::where('name', $request->name)->exists()) {
                 return response()->json(['success' => false, 'message' => 'Thể loại đã tồn tại']);
             }
-            else
-            {
-                $category = new Category();
-                $category->name = $request->name;
-                $category->description = $request->description;
-                $category->save();
-                return response()->json(['success' => true, 'category' => $category]);
-            }
+            $category = new Category();
+            $category->name = $request->name;
+            $category->description = $request->description;
+            $category->save();
+            return response()->json(['success' => true, 'category' => $category]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -63,6 +63,24 @@ class AdminCategory extends Controller
         try {
             $category = Category::findOrFail($request->id);
             $category->delete();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+    public function UpdateCategory(Request $request)
+    {
+        if(!$request->name) {
+            return response()->json(['success' => false, 'message' => 'Vui lòng nhập thể loại']);
+        }
+        try {
+            $category = Category::findOrFail($request->id);
+            if(Category::where('name', $request->name)->exists()) {
+                return response()->json(['success' => false, 'message' => 'Thể loại đã tồn tại']);
+            }
+            $category->name = $request->name;
+            $category->description = $request->description;
+            $category->save();
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);

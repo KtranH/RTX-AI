@@ -62,7 +62,8 @@ class Explore extends Controller
             ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user', 'users.id as user_id')
             ->with(['album.user'])
             ->withCount('likes')
-            ->where('albums.is_private', false);
+            ->where('albums.is_private', false)
+            ->where('photos.is_deleted', false);
 
         // Add priority photos
         if ($currentUserId) {

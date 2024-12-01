@@ -111,7 +111,7 @@
                 </div>
                 <!-- Laptop Settings -->
                 <a href="{{ route('showsettings') }}" id="settings-box" class="">
-                    <i id='settings-toggle' class="fas fa-cog cursor-pointer text-gray-700 hover:text-indigo-600"></i>
+                    <i id='settings-toggle' class="text-xl fas fa-cog cursor-pointer text-gray-700 hover:text-indigo-600"></i>
                 </a>
                 <a href="{{ route('logout') }}" class="btn btn-dark font-bold rounded-full px-4 py-2 bg-gray-800 text-white hover:bg-gray-700">Đăng xuất</a>
             </div>

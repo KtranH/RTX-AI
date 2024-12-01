@@ -8,61 +8,6 @@
     <div class="h-10 py-2 px-8 flex items-center text-2xl font-bold">THỂ LOẠI</div>
     <!-- Content -->
     <div class="h-full overflow-y-auto p-2 space-y-4 snap-y snap-mandatory scroll-smooth">
-        <!-- Charts -->
-        <div class="grid grid-cols-2 h-full space-x-4 p-2 snap-start snap-always">
-            <!-- Statistic -->
-            <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
-                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">SỐ ẢNH THEO THỂ LOẠI</div>
-                <div id="statistic-container" class="w-full h-full py-3"></div>
-            </div>
-            <!-- Quick Information -->
-            <div class="grid grid-rows-4 space-y-4">
-                <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
-                    <div class="basis-1/4 flex items-center justify-center">
-                        <div class="flex items-center justify-center bg-green-600 rounded-full py-3 px-[12.88px]">
-                            <i class="fa-solid fa-layer-group text-[50px] text-white"></i>
-                        </div>
-                    </div>
-                    <div class="basis-3/4 text-center">
-                        <div class="font-medium text-lg">SỐ THỂ LOẠI</div>
-                        <div class="text-3xl" id="count-category">{{ $countCategory }}</div>
-                    </div>
-                </div>
-                <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
-                    <div class="basis-1/4 flex items-center justify-center">
-                        <div class="flex items-center justify-center bg-pink-600 rounded-full p-3">
-                            <i class="fa-solid fa-heart text-[50px] text-white"></i>
-                        </div>
-                    </div>
-                    <div class="basis-3/4 text-center">
-                        <div class="font-medium text-lg">THỂ LOẠI ĐƯỢC YÊU THÍCH NHẤT</div>
-                        <div class="text-3xl">{{ $mostPreferredCategory->name }}</div>
-                    </div>
-                </div>
-                <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
-                    <div class="basis-1/4 flex items-center justify-center">
-                        <div class="flex items-center justify-center bg-cyan-600 rounded-full p-3">
-                            <i class="fa-solid fa-heart-crack text-[50px] text-white"></i>
-                        </div>
-                    </div>
-                    <div class="basis-3/4 text-center">
-                        <div class="font-medium text-lg">THỂ LOẠI ÍT ẢNH NHẤT</div>
-                        <div class="text-3xl">{{ $leastPhotosCategory->name }} ({{ $leastPhotosCategory->photos_count }} ảnh)</div>
-                    </div>
-                </div>
-                <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
-                    <div class="basis-1/4 flex items-center justify-center">
-                        <div class="flex items-center justify-center bg-amber-600 rounded-full py-3 px-[12.88px]">
-                            <i class="fa-solid fa-trophy text-[50px] text-white"></i>
-                        </div>
-                    </div>
-                    <div class="basis-3/4 text-center">
-                        <div class="font-medium text-lg">THỂ LOẠI NHIỀU ẢNH NHẤT</div>
-                        <div class="text-3xl">{{ $mostPhotosCategory->name }} ({{ $mostPhotosCategory->photos_count }} ảnh)</div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- CRUD -->
         <div class="grid grid-cols-3 h-full space-x-4 p-2 snap-start snap-always">
             <!-- Table -->
@@ -78,20 +23,17 @@
                     </form>
                     <script>
                         $(document).ready(function() {
-                            // Xử lý tìm kiếm
                             $('#search-form').on('submit', function(e) {
                                 e.preventDefault();
                                 performSearch(1);
                             });
 
-                            // Xử lý phân trang Ajax
                             $(document).on('click', '.pagination a', function(e) {
                                 e.preventDefault();
                                 var page = $(this).attr('href').split('page=')[1];
                                 performSearch(page);
                             });
 
-                            // Hàm thực hiện tìm kiếm
                             function performSearch(page) {
                                 var searchTerm = $('#search-input').val();
                                 
@@ -103,10 +45,8 @@
                                         page: page
                                     },
                                     success: function(response) {
-                                        // Cập nhật bảng
                                         $('tbody').replaceWith(response.table_html);
                                         
-                                        // Cập nhật phân trang
                                         $('.pagination').replaceWith(response.pagination_html);
                                     },
                                     error: function(xhr) {
@@ -116,13 +56,11 @@
                                 });
                             }
 
-                            // Xử lý icon xóa tìm kiếm
                             $('#clear-icon').on('click', function() {
                                 $('#search-input').val('');
-                                performSearch(1); // Reload danh sách ban đầu
+                                performSearch(1); 
                             });
 
-                            // Hiển thị/ẩn icon xóa
                             $('#search-input').on('input', function() {
                                 $('#clear-icon').toggleClass('hidden', $(this).val().length === 0);
                             });
@@ -143,9 +81,9 @@
                         <tbody class="align-top">
                             @foreach ($allCategory as $item)
                                 <tr class="even:bg-gray-100 hover:bg-indigo-200 border-b-2">
-                                    <td class="p-1 text-center align-middle">{{$item->id}}</td>
-                                    <td class="p-1 text-center align-middle">{{ $item->name }}</td>
-                                    <td class="p-1 align-middle truncate hover:overflow-visible hover:whitespace-normal hover:text-ellipsis text-justify">{{ $item->description }}</td>
+                                    <td class="p-1 text-center align-middle id">{{$item->id}}</td>
+                                    <td class="p-1 text-center align-middle name">{{ $item->name }}</td>
+                                    <td class="p-1 align-middle truncate hover:overflow-visible hover:whitespace-normal hover:text-ellipsis text-justify description">{{ $item->description }}</td>
                                     <td class="flex flex-row items-center justify-center space-x-2 p-1">
                                         <button data-id="{{$item->id}}" data-name="{{$item->name}}" data-description="{{$item->description}}" class="edit-button flex items-center bg-yellow-700 border-2 border-yellow-700 hover:bg-white hover:!text-yellow-700 rounded p-2 text-white text-lg font-medium">
                                             <i class="fa-solid fa-pen text-current text-xs"></i>
@@ -170,6 +108,10 @@
                 <form action="" method="POST" id="crud-form" class="w-full h-full flex flex-col items-center justify-between space-y-4 px-2">
                     @csrf
                     <div class="w-full h-1/2 flex flex-col items-center space-y-4">
+                        <div class="w-full space-y-1 text-black hidden id-input">
+                            <label for="id-input" class="font-medium">ID thể loại</label>
+                            <input type="text" name="id-input" id="id-input"class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full" disabled>
+                        </div>
                         <div class="w-full space-y-1 text-black">
                             <label for="name-input" class="font-medium">Tên thể loại</label>
                             <input type="text" name="name-input" id="name-input" required placeholder="Nhập tên thể loại..." class="p-2 border-2 border-gray-500 focus:outline-none focus:border-indigo-700 rounded w-full">
@@ -200,6 +142,17 @@
                 </form>
                 <script>
                     $(document).ready(function() {
+                        //Function Find Tr
+                        function findTr(id) {
+                            let foundTr = null;
+                            $('tbody tr').each(function() {
+                                if($(this).find('td:nth-child(1)').text() == id) {
+                                    foundTr = $(this);
+                                    return false;
+                                }
+                            });
+                            return foundTr;
+                        }
                         //Function delete 
                         function deleteCategory(id, row) {
                             Swal.fire({
@@ -256,6 +209,79 @@
                                 }
                             })
                         }
+                        //Update Button
+                        $('#update-button').click(function(e) {
+                            e.preventDefault();
+                            Swal.fire({
+                                icon: 'question',
+                                title: 'SỬA LẠI THỂ LOẠI',
+                                text: 'Bạn có chắc muốn sửa thể loại này không?',
+                                showCancelButton: true,
+                                confirmButtonText: 'Xác Nhận',
+                                cancelButtonText: 'Hủy Bỏ',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                reverseButtons: true
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    let id = $('#id-input').val();
+                                    let name = $('#name-input').val();
+                                    let description = $('#description-input').val();
+                                    let row = findTr(id);
+                                    $.ajax({
+                                        url: "/admin/updatecategory",
+                                        type: "PUT",
+                                        data: {
+                                            id: id,
+                                            name: name,
+                                            description: description,
+                                            _token: "{{ csrf_token() }}"
+                                        },
+                                        success: function(response) {
+                                            if(response.success) {
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    iconColor: 'white',
+                                                    title: 'Đã sửa thể loại',
+                                                    color: 'white',
+                                                    showConfirmButton: false,
+                                                    timer: 3000,
+                                                    toast: true,
+                                                    position: 'bottom-left',
+                                                    background: '#46DFB1'
+                                                });
+                                            }
+                                            row.find('.name').text(name);
+                                            row.find('.description').text(description);
+
+                                            $('#crud-title').text('THÊM MỚI THỂ LOẠI');
+                                            $('#name-input').val('');
+                                            $('#description-input').val('');
+
+                                            $('#insert-button').removeClass('hidden');
+                                            $('#update-button').addClass('hidden');
+                                            $('#return-button').addClass('hidden');
+                                            $(this).addClass('hidden');
+                                        },
+                                        error: function(response) {
+                                                console.log(response);
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    iconColor: 'white',
+                                                    title: 'Có lỗi xảy ra. Vui lòng thử lại sau.',
+                                                    color: 'white',
+                                                    showConfirmButton: false,
+                                                    timer: 3000,
+                                                    toast: true,
+                                                    position: 'bottom-left',
+                                                    background: '#F04770'
+                                                }); 
+                                            }
+                                        }
+                                    );
+                                }
+                            })
+                        })
                         //Delete Button
                         $('.delete-button').click(function(e) {
                             let id = $(this).data('id');
@@ -373,6 +399,61 @@
                 </script>
             </div>
         </div>
+        <!-- Charts -->
+        <div class="grid grid-cols-2 h-full space-x-4 p-2 snap-start snap-always">
+            <!-- Statistic -->
+            <div class="flex flex-col items-center rounded-2xl bg-white px-4 shadow-md border-2 border-gray-200 space-y-2">
+                <div class="w-full text-left font-semibold text-2xl border-b-2 border-gray-200 py-3">SỐ ẢNH THEO THỂ LOẠI</div>
+                <div id="statistic-container" class="w-full h-full py-3"></div>
+            </div>
+            <!-- Quick Information -->
+            <div class="grid grid-rows-4 space-y-4">
+                <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
+                    <div class="basis-1/4 flex items-center justify-center">
+                        <div class="flex items-center justify-center bg-green-600 rounded-full py-3 px-[12.88px]">
+                            <i class="fa-solid fa-layer-group text-[50px] text-white"></i>
+                        </div>
+                    </div>
+                    <div class="basis-3/4 text-center">
+                        <div class="font-medium text-lg">SỐ THỂ LOẠI</div>
+                        <div class="text-3xl" id="count-category">{{ $countCategory }}</div>
+                    </div>
+                </div>
+                <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
+                    <div class="basis-1/4 flex items-center justify-center">
+                        <div class="flex items-center justify-center bg-pink-600 rounded-full p-3">
+                            <i class="fa-solid fa-heart text-[50px] text-white"></i>
+                        </div>
+                    </div>
+                    <div class="basis-3/4 text-center">
+                        <div class="font-medium text-lg">THỂ LOẠI ĐƯỢC YÊU THÍCH NHẤT</div>
+                        <div class="text-3xl">{{ $mostPreferredCategory->name }}</div>
+                    </div>
+                </div>
+                <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
+                    <div class="basis-1/4 flex items-center justify-center">
+                        <div class="flex items-center justify-center bg-cyan-600 rounded-full p-3">
+                            <i class="fa-solid fa-heart-crack text-[50px] text-white"></i>
+                        </div>
+                    </div>
+                    <div class="basis-3/4 text-center">
+                        <div class="font-medium text-lg">THỂ LOẠI ÍT ẢNH NHẤT</div>
+                        <div class="text-3xl">{{ $leastPhotosCategory->name }} ({{ $leastPhotosCategory->photos_count }} ảnh)</div>
+                    </div>
+                </div>
+                <div class="flex flex-row items-center justify-between rounded-2xl bg-white py-2 px-4 shadow-md border-2 border-gray-200">
+                    <div class="basis-1/4 flex items-center justify-center">
+                        <div class="flex items-center justify-center bg-amber-600 rounded-full py-3 px-[12.88px]">
+                            <i class="fa-solid fa-trophy text-[50px] text-white"></i>
+                        </div>
+                    </div>
+                    <div class="basis-3/4 text-center">
+                        <div class="font-medium text-lg">THỂ LOẠI NHIỀU ẢNH NHẤT</div>
+                        <div class="text-3xl">{{ $mostPhotosCategory->name }} ({{ $mostPhotosCategory->photos_count }} ảnh)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script>
@@ -424,14 +505,25 @@
     //Form
     $(document).ready(function () 
     {
-        //Update Button
-        $('#update-button').on('click', function (e) 
+        //Edit button
+        $('.edit-button').on('click', function (e)
         {
             e.preventDefault();
 
-            SetNotificationDialog('failure', 'abc');
-        });
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            const description = $(this).data('description');
+            $('#crud-title').text('SỬA LẠI THỂ LOẠI');
 
+            $('#id-input').val(id);
+            $('#name-input').val(name);
+            $('#description-input').val(description);
+
+            $('#insert-button').addClass('hidden');
+            $('.id-input').removeClass('hidden');
+            $('#update-button').removeClass('hidden');
+            $('#return-button').removeClass('hidden');
+        });
         //Return Button
         $('#return-button').on('click', function (e) 
         {
@@ -446,7 +538,6 @@
             $('#return-button').addClass('hidden');
             $(this).addClass('hidden');
         });
-
         //Reset Button
         $('#reset-button').on('click', function (e) 
         {

@@ -58,6 +58,11 @@ $count = count($listUserLiked);
                                 <i class="fas fa-image text-indigo-700 text-8xl"></i>
                             </a>
                         </label>
+                        <div style="text-align:center;margin-top:10px">
+                            @if($errors->has('ManyTimeReport'))
+                                <p style="color: red; width:100%">{{$errors->first('ManyTimeReport')}}</p>
+                            @endif
+                        </div>
                     </div>                             
                     <!-- Details -->
                     <div class="md:col-span-1 flex flex-col relative">
@@ -116,10 +121,10 @@ $count = count($listUserLiked);
                                     </a>
                                     @if ($image->album->user->id != Auth::user()->id)
                                         <a href=""
-                                            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center unfollow-button" data-id="{{ $image->album->user->id }}">Hủy theo dõi
+                                            class="bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center unfollow-button" style="border-radius: 20px" data-id="{{ $image->album->user->id }}">Hủy theo dõi
                                         </a>
                                         <a href=""
-                                            class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center follow-button" data-id="{{ $image->album->user->id }}">Theo dõi
+                                            class="bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center follow-button" style="border-radius: 20px" data-id="{{ $image->album->user->id }}">Theo dõi
                                         </a>
                                         <script>
                                             $(document).ready(function() {
@@ -343,9 +348,37 @@ $count = count($listUserLiked);
                                             });
                                         </script>
                                     @else
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 report_button">
                                             <i class="fa-solid fa-flag text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>
+                                        <!--Report Modal -->
+                                        <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                                            <div class="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+                                                <!-- Close Button -->
+                                                <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+
+                                                <!-- Modal Header -->
+                                                <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">Báo cáo hình ảnh</h2>
+                                                <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center"><i class="fa-solid fa-triangle-exclamation text-6xl" style="color: #FFD43B;"></i></h2>
+                                                <h2 class="text-sm font-semibold text-gray-800 mb-2">Cho chúng tôi biết hình ảnh vi phạm điều gì?</h2>
+                                                <!-- Modal Content -->
+                                                <div class="space-y-4">
+                                                    <div class="flex items-center space-x-2">
+                                                        <input type="checkbox" id="inappropriateContent" class="form-checkbox h-5 w-5 text-blue-500">
+                                                        <label for="inappropriateContent" class="text-gray-700">Hình ảnh này phản cảm hoặc không hợp lệ</label>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal Footer -->
+                                                <div class="mt-4 flex justify-end space-x-2">
+                                                    <button id="cancelReport" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:ring-2 focus:ring-gray-400">Hủy</button>
+                                                    <button id="submitReport" class="px-4 py-2 bg-indigo-700 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-indigo-400">Xác nhận</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 saved_button">
                                             <i class="fa-solid fa-bookmark text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>                                        
@@ -360,6 +393,77 @@ $count = count($listUserLiked);
                                                     .removeClass('text-gray-700')
                                                     .addClass('text-blue-700');
                                             @endif
+                                            $('.report_button').click(function(e) {
+                                                e.preventDefault();
+                                                $('#reportModal').removeClass('hidden');
+                                            })
+                                            $('#cancelReport, #closeModal').click(function () {
+                                                $('#reportModal').addClass('hidden');
+                                            });
+                                            $('#submitReport').click(function (e) {
+                                                let isInappropriate = $('#inappropriateContent').prop('checked'); 
+                                                if(!isInappropriate)
+                                                {
+                                                    Swal.fire({
+                                                        icon: 'warning',
+                                                        iconColor: 'white',
+                                                        title: 'Cảnh báo',
+                                                        text: 'Vui lòng chọn nội dung báo cáo',
+                                                        color: 'white',
+                                                        position: 'bottom-left',
+                                                        toast: true,
+                                                        timer: 3000,
+                                                        showConfirmButton: false,
+                                                        background: '#EFBF4D',
+                                                    })
+                                                }
+                                                else
+                                                {
+                                                    var imageId = "{{ $image->id }}";
+                                                    console.log(imageId);
+                                                    $.ajax({
+                                                        url: "{{ route('reportimage') }}", 
+                                                        method: "POST", 
+                                                        data: {
+                                                            _token: "{{ csrf_token() }}", 
+                                                            image_id: imageId 
+                                                        },
+                                                        success: function(response) {
+                                                            $('#reportModal').addClass('hidden');
+                                                            if(response.success)
+                                                            {
+                                                                Swal.fire({
+                                                                    icon: 'success',
+                                                                    iconColor: 'white',
+                                                                    title: 'Thành công',
+                                                                    text: 'Báo cáo hình ảnh thành công',
+                                                                    color: 'white',
+                                                                    position: 'bottom-left',
+                                                                    toast: true,
+                                                                    timer: 3000,
+                                                                    showConfirmButton: false,
+                                                                    background: '#46DFB1',
+                                                                })
+                                                            }
+                                                            else
+                                                            {
+                                                                Swal.fire({
+                                                                    icon: 'error',
+                                                                    iconColor: 'white',
+                                                                    title: 'Thất bại',
+                                                                    text: response.message,
+                                                                    color: 'white',
+                                                                    position: 'bottom-left',
+                                                                    toast: true,
+                                                                    timer: 3000,
+                                                                    showConfirmButton: false,
+                                                                    background: '#F04770',
+                                                                })
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            });
                                             $('.saved_button').click(function(e) {
                                                 e.preventDefault(); 
 

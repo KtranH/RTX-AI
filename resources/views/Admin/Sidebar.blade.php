@@ -16,17 +16,20 @@
                 <i class="fa-solid fa-layer-group text-current"></i>
                 <div>Thể Loại</div>
             </a>
-            <a id="image-sidebar" href="{{ route('admin.image') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-image text-current"></i>
-                <div>Hình Ảnh</div>
-            </a>
+            @if ($countReview != 0)
+                <a id="image-sidebar" href="{{ route('admin.image') }}" class="text-red-700 flex flex-row items-center hover:bg-gray-200 hover:text-red-400 rounded-lg p-2 text-lg space-x-2">
+                    <i class="fa-solid fa-image text-current"></i>
+                    Hình Ảnh <div id ="count-approval-sidebar">({{ $countReview }})</div>
+                </a>
+            @else
+                <a id="image-sidebar" href="{{ route('admin.image') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
+                    <i class="fa-solid fa-image text-current"></i>
+                    <div>Hình Ảnh</div>
+                </a>
+            @endif
             <a id="ai-sidebar" href="{{ route('admin.ai') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-robot text-current"></i>
                 <div>Ảnh AI</div>
-            </a>
-            <a id="comment-sidebar" href="{{ route('admin.comment') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-2">
-                <i class="fa-solid fa-comment text-current"></i>
-                <div>Bình Luận</div>
             </a>
         </div>  
         <div class="flex flex-col pt-3 space-y-1">
@@ -40,17 +43,6 @@
                 <div>Nhân Viên</div>
             </a>
         </div>
-        <div class="flex flex-row justify-center space-x-8 pt-3">
-            <a id="setting-sidebar" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
-                <i class="fa-solid fa-gear text-current"></i>
-            </a>
-            <a id="theme-sidebar" href="" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
-                <i class="fa-solid fa-wand-magic text-current"></i>
-            </a>
-            <a href="/" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 hover:border-indigo-700 border-2 border-gray-700 rounded-full p-2 text-lg space-x-2">
-                <i class="fa-solid fa-rocket text-current"></i>
-            </a>
-        </div>   
     </div>
     <div class="flex flex-col space-y-2 p-2">
         <div class="flex flex-col space-y-2 pt-3">

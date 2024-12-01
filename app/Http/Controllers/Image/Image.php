@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Photo;
+use App\Models\PostReview;
 use App\Models\Reply;
 use App\Models\SavedImage;
 use App\Models\User;
@@ -36,7 +37,7 @@ class Image extends Controller
 
     public function ShowImage($id)
     {
-        $image = Photo::findOrFail($id);
+        $image = Photo::where("id", $id)->where("is_deleted", 0)->firstOrFail();
         $countComment = Comment::where("photo_id", $id)->count();
         $photos = Photo::query()
             ->limit(4)
@@ -474,5 +475,32 @@ class Image extends Controller
             'url' => route('showimage', $post->id),
             'user' => $post->album->user->username,
         ]);
+    }
+    public function ReportImage(Request $request)
+    {
+        try
+        {
+            $postReview = PostReview::where('photo_id', $request->get('image_id'))->first();
+            if(!$postReview){
+                $postReview = PostReview::create([
+                    'photo_id' => $request->get('image_id'),
+                    'review_content' => "Hình ảnh này phản cảm hoặc không hợp lệ",
+                    'report_count' => 1,
+                ]);
+                $postReview->save();
+            }
+            else
+            {
+               if($postReview->status == 'pending'){
+                    $postReview->report_count = $postReview->report_count + 1;
+                    $postReview->save();
+               }
+            }
+            return response()->json(['success' => true]);
+        }
+        catch (\Exception $e)
+        {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 }

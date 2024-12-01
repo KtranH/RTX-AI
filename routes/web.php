@@ -3,7 +3,9 @@
 use App\Http\Controllers\Admin\Account\Login;
 use App\Http\Controllers\Admin\Essential\AdminHome;
 use App\Http\Controllers\Admin\Essential\HomeAdmin;
+use App\Http\Controllers\Admin\Manage\AdminAI;
 use App\Http\Controllers\Admin\Manage\AdminCategory;
+use App\Http\Controllers\Admin\Manage\AdminImage;
 use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
 use App\Http\Controllers\Settings\Settings;
@@ -35,6 +37,7 @@ use App\Http\Controllers\User\WorkFlow\G7;
 use App\Http\Controllers\User\WorkFlow\G9;
 use App\Http\Middleware\CheckLoginAdmin;
 use App\Http\Middleware\LimitContentUpdate;
+use App\Http\Middleware\LimitReport;
 use App\Http\Middleware\LimitUpdateAccountAccess;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
 use Illuminate\Support\Facades\Route;
@@ -213,6 +216,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Share image
     Route::get('/shareimage/{id}/share', [Image::class, 'ShareImage'])->name("shareimage");
+
+    //Report image
+    Route::post('/reportimage', [Image::class, 'ReportImage'])->name("reportimage")->middleware(LimitReport::class);
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //LOAD COMMENT, ADD COMMENT, EDIT COMMENT AND DELETE COMMENT, LOAD REPLY, ADD REPLY, EDIT REPLY AND DELETE REPLY
@@ -471,7 +477,7 @@ Route::post('/admin/login', [Login::class, 'Login'])->name('admin.login.account'
 //Logout Admin
 Route::get('/admin/logout', [Login::class, 'Logout'])->name('admin.logout');
 
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -479,8 +485,6 @@ Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
 
     //Home Admin
     Route::get('/admin', [AdminHome::class, 'ShowHome'])->name('admin');
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //CATEGORY, ADD CATEGORY, UPDATE CATEGORY, DELETE CATEGORY, SEARCH CATEGORY
@@ -497,13 +501,32 @@ Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
     //Search Category
     Route::get('/admin/searchcategory', [AdminCategory::class, 'SearchCategory'])->name('admin.searchcategory');
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Update Category
+    Route::put('/admin/updatecategory', [AdminCategory::class, 'UpdateCategory'])->name('admin.updatecategory');
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //IMAGE, ACCEPT IMAGE, REJECT IMAGE, AI IMAGE, DELETE AI IMAGE
+
     //Manage Image
-    Route::get('/admin/image', function () {
-        return view('Admin.Manage.Image');
-    })->name('admin.image');
+    Route::get('/admin/image', [AdminImage::class, 'ShowImage'])->name('admin.image');
+
+    //Review Image
+    Route::get('/api/admin/image', [AdminImage::class, 'ImageAPI'])->name('admin.image.api');
+
+    //Accept Image
+    Route::get('/api/admin/acceptimage', [AdminImage::class, 'imageAcceptAPI'])->name('admin.acceptimage');
+
+    //Reject Image
+    Route::get('/api/admin/rejectimage', [AdminImage::class, 'imageRejectAPI'])->name('admin.rejectimage');
+
+    //Approved Report
+    Route::put('/admin/approvedreport', [AdminImage::class, 'ApprovedReport'])->name('admin.approvedreport');
+
+    //Reject Report
+    Route::put('/admin/rejectreport', [AdminImage::class, 'RejectReport'])->name('admin.rejectreport');
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //ACOUNT ADMIN
 
     //Account Information
     Route::get('/admin/information', function () {
@@ -515,15 +538,15 @@ Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
         return view('Admin.Account.Employee');
     })->name('admin.employee');
 
-    // Manage Comment
-    Route::get('/admin/comment', function () {
-        return view('Admin.Manage.Comment');
-    })->name('admin.comment');
-
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //AI
+    
     // Manage AI
-    Route::get('/admin/ai', function () {
-        return view('Admin.Manage.AI');
-    })->name('admin.ai');
+    Route::get('/admin/ai', [AdminAI::class, 'ShowAI'])->name('admin.ai');
+
+    //Image AI
+    Route::get('/api/admin/imageai', [AdminAI::class, 'ImageAI'])->name('admin.imageai');
+    
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 });
 

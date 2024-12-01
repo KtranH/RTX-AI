@@ -16,6 +16,7 @@ class Photo extends Model
         'description',
         'url',
         'is_feature',
+        'is_deleted'
     ];
 
     public function album()
