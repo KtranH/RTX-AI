@@ -28,7 +28,7 @@ class AdminAI extends Controller
     public function ImageAI(Request $request){
         $imagesPerPage = 4;
         $page = $request->get('page', 1);
-        $photos = HistoryImageAI::paginate($imagesPerPage, ['*'], 'page', $page);
+        $photos = HistoryImageAI::orderBy('created_at', 'desc')->paginate($imagesPerPage, ['*'], 'page', $page);
 
         return response()->json([
             'photos' => $photos->items(),

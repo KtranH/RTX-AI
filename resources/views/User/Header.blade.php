@@ -101,9 +101,11 @@
                 <div class="relative">
                     <div class="relative inline-block">
                         <i id='notifications-toggle' class="fas fa-bell cursor-pointer text-gray-700 hover:text-indigo-600 text-2xl"></i>
-                        <span id="notification-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                            3
-                        </span>
+                        @if ($countNotification > 0)
+                            <span id="notification-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    {{ $countNotification }}
+                            </span>
+                        @endif
                     </div>
                     <div id="notifications-box" class="hidden absolute -right-48 mt-8 w-96 bg-white border rounded-lg shadow-lg p-4 z-50">
                         @include('User.Component.Notifications')
