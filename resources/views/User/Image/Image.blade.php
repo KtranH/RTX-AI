@@ -1,44 +1,44 @@
 @extends('User.Container')
 @section('Body')
 
-<style>
-    .hover-scrollbar::-webkit-scrollbar {
-        width: 6px;
-        opacity: 0;
-    }
-    
-    .hover-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    
-    .hover-scrollbar::-webkit-scrollbar-thumb {
-        background: transparent;
-        border-radius: 3px;
-        transition: background 0.3s ease;
-    }
-    
-    .hover-scrollbar:hover::-webkit-scrollbar-thumb {
-        background: rgba(156, 163, 175, 0.5);
-    }
-    
-    .hover-scrollbar:hover::-webkit-scrollbar-thumb:hover {
-        background: rgba(107, 114, 128, 0.7);
-    }
+    <style>
+        .hover-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            opacity: 0;
+        }
 
-    .hover-scrollbar {
-        scrollbar-width: thin;
-        scrollbar-color: transparent transparent;
-        transition: scrollbar-color 0.3s ease;
-    }
+        .hover-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
 
-    .hover-scrollbar:hover {
-        scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
-    }
-</style>
+        .hover-scrollbar::-webkit-scrollbar-thumb {
+            background: transparent;
+            border-radius: 3px;
+            transition: background 0.3s ease;
+        }
 
-@php
-$count = count($listUserLiked);
-@endphp
+        .hover-scrollbar:hover::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+        }
+
+        .hover-scrollbar:hover::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 0.7);
+        }
+
+        .hover-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+            transition: scrollbar-color 0.3s ease;
+        }
+
+        .hover-scrollbar:hover {
+            scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+        }
+    </style>
+
+    @php
+        $count = count($listUserLiked);
+    @endphp
     <title>RTX-AI: Hình Ảnh</title>
     <meta property="og:title" content="{{ $image->title }}">
     <meta property="og:image" content="{{ $image->url }}">
@@ -48,26 +48,30 @@ $count = count($listUserLiked);
     <main class="w-full h-full" style="scroll-behavior: smooth">
         <!-- Container -->
         <div class="flex flex-col items-center mt-4">
-            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 rounded-2xl p-5 shadow-md" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+            <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 rounded-2xl p-5 shadow-md"
+                style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Photo -->
                     <div class="relative md:col-span-1 aspect-square group">
-                        <img src="{{ $image->url }}" id="photo" loading="lazy" alt="Image Cover" class="w-full h-full object-cover rounded-2xl">
-                        <label for="photo" class="absolute inset-0 bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
-                            <a href="{{ $image->url }}" target="_blank" class="w-full h-full flex items-center justify-center">
+                        <img src="{{ $image->url }}" id="photo" loading="lazy" alt="Image Cover"
+                            class="w-full h-full object-cover rounded-2xl">
+                        <label for="photo"
+                            class="absolute inset-0 bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300 cursor-pointer">
+                            <a href="{{ $image->url }}" target="_blank"
+                                class="w-full h-full flex items-center justify-center">
                                 <i class="fas fa-image text-indigo-700 text-8xl"></i>
                             </a>
                         </label>
                         <div style="text-align:center;margin-top:10px">
-                            @if($errors->has('ManyTimeReport'))
-                                <p style="color: red; width:100%">{{$errors->first('ManyTimeReport')}}</p>
+                            @if ($errors->has('ManyTimeReport'))
+                                <p style="color: red; width:100%">{{ $errors->first('ManyTimeReport') }}</p>
                             @endif
                         </div>
-                    </div>                             
+                    </div>
                     <!-- Details -->
                     <div class="md:col-span-1 flex flex-col relative">
                         <!-- Return -->
-                        <a href="{{ route("showexplore") }}"
+                        <a href="{{ route('showexplore') }}"
                             class="text-center w-48 h-14 relative font-sans text-black text-xl font-semibold group mb-2">
                             <div
                                 class="bg-black h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:!bg-indigo-700 group-hover:w-[184px] z-10 duration-500 rounded-2xl">
@@ -79,173 +83,177 @@ $count = count($listUserLiked);
                                     </path>
                                 </svg>
                             </div>
-                            <p class="translate-x-2 relative" style="margin-top:12px">Quay lại</p>             
+                            <p class="translate-x-2 relative" style="margin-top:12px">Quay lại</p>
                         </a>
                         <div class="flex flex-col overflow-y-auto overflow-x-hidden hover-scrollbar">
                             <!-- Title and Description -->
-                                <div class="mb-2">
-                                    <h1 class="text-4xl font-bold truncate overflow-visible">{{ $image->title }}</h1>
-                                    <p class="text-lg mt-2 text-gray-600 truncate" id="description-{{ $image->id }}">
-                                        {{ \Illuminate\Support\Str::limit($image->description, 1000) }}
-                                        
-                                        @if (strlen($image->description) > 1000)
-                                            <span class="text-blue-500 cursor-pointer" onclick="showFullDescription({{ $image->id }})" id="show-more-{{ $image->id }}">
-                                                Xem thêm
-                                            </span>
-                                        @endif
-                                    </p>
-                                    <script>
-                                        function showFullDescription(id) {
-                                            var descriptionElement = document.getElementById('description-' + id);
-                                            var showMoreElement = document.getElementById('show-more-' + id);
-                                    
-                                            descriptionElement.innerHTML = `{{ $image->description }}`;
-                                            showMoreElement.style.display = 'none';
-                                        }
-                                    </script>                        
-                                </div>
-                                <!-- Categories -->
-                                <div class="flex flex-wrap gap-2 mb-4 max-w-screen-sm">
-                                    @foreach ($listcate as $item)
-                                        <a href="#" class="text-sm text-white p-2 bg-indigo-600 hover:bg-gray-400 text-center rounded-xl w-1/3 sm:w-1/4 md:w-auto">
-                                            {{ $item->name }}
-                                        </a>
-                                    @endforeach
-                                </div>
-                                <hr class="mt-4 mb-3">
-                                <!-- Owner -->
-                                <div class="flex items-center space-x-4 mb-2">
-                                    <a href="{{ route("showboard", ["id" => $image->album->user->id]) }}" class="flex items-center space-x-2 group">
-                                        <img src="{{ $image->album->user->avatar_url }}" loading="lazy" alt="Owner Avatar" class="w-10 h-10 rounded-full">
-                                        <p class="font-semibold group-hover:!text-indigo-700">{{ $image->album->user->username }}</p>
-                                    </a>
-                                    @if ($image->album->user->id != Auth::user()->id)
-                                        <a href=""
-                                            class="bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center unfollow-button" style="border-radius: 20px" data-id="{{ $image->album->user->id }}">Hủy theo dõi
-                                        </a>
-                                        <a href=""
-                                            class="bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center follow-button" style="border-radius: 20px" data-id="{{ $image->album->user->id }}">Theo dõi
-                                        </a>
-                                        <script>
-                                            $(document).ready(function() {
-                                                @if(Auth::user()->isFollowing($image->album->user->id))
-                                                    $('.follow-button').hide();
-                                                @else
-                                                    $('.unfollow-button').hide();
-                                                @endif
+                            <div class="mb-2">
+                                <h1 class="text-4xl font-bold truncate overflow-visible">{{ $image->title }}</h1>
+                                <p class="text-lg mt-2 text-gray-600 truncate" id="description-{{ $image->id }}">
+                                    {{ \Illuminate\Support\Str::limit($image->description, 1000) }}
 
-                                                $('.follow-button').click(function(e) {
-                                                    e.preventDefault();
-                                                    var userId = $(this).data('id');
-                                                    $.ajax({
-                                                        url: '/follow',
-                                                        type: 'POST',
-                                                        data: {
-                                                            user_id: userId,
-                                                            _token: '{{ csrf_token() }}'
-                                                        },
-                                                        success: function(response) {
-                                                            if (response.success) {
-                                                                $('.follow-button').hide(); 
-                                                                $('.unfollow-button').show();
-                                                                Swal.fire({
-                                                                    icon: 'success',
-                                                                    iconColor: 'white',
-                                                                    title: 'Đã theo dõi người dùng!',
-                                                                    color: 'white',
-                                                                    timer: 3000,
-                                                                    position: 'bottom-left',
-                                                                    toast: true,
-                                                                    showConfirmButton: false,
-                                                                    background: '#46DFB1'
-                                                                })
-                                                            }
-                                                            else
-                                                            {
-                                                                Swal.fire({
-                                                                    icon: 'error',
-                                                                    iconColor: 'white',
-                                                                    title: 'Theo dõi người dùng thất bại!',
-                                                                    color: 'white',
-                                                                    timer: 3000,
-                                                                    position: 'bottom-left',
-                                                                    toast: true,
-                                                                    showConfirmButton: false,
-                                                                    background: '#F04770'
-                                                                })
-                                                            }
+                                    @if (strlen($image->description) > 1000)
+                                        <span class="text-blue-500 cursor-pointer"
+                                            onclick="showFullDescription({{ $image->id }})"
+                                            id="show-more-{{ $image->id }}">
+                                            Xem thêm
+                                        </span>
+                                    @endif
+                                </p>
+                                <script>
+                                    function showFullDescription(id) {
+                                        var descriptionElement = document.getElementById('description-' + id);
+                                        var showMoreElement = document.getElementById('show-more-' + id);
+
+                                        descriptionElement.innerHTML = `{{ $image->description }}`;
+                                        showMoreElement.style.display = 'none';
+                                    }
+                                </script>
+                            </div>
+                            <!-- Categories -->
+                            <div class="flex flex-wrap gap-2 mb-4 max-w-screen-sm">
+                                @foreach ($listcate as $item)
+                                    <a href="#"
+                                        class="text-sm text-white p-2 bg-indigo-600 hover:bg-gray-400 text-center rounded-xl w-1/3 sm:w-1/4 md:w-auto">
+                                        {{ $item->name }}
+                                    </a>
+                                @endforeach
+                            </div>
+                            <hr class="mt-4 mb-3">
+                            <!-- Owner -->
+                            <div class="flex items-center space-x-4 mb-2">
+                                <a href="{{ route('showboard', ['id' => $image->album->user->id]) }}"
+                                    class="flex items-center space-x-2 group">
+                                    <img src="{{ $image->album->user->avatar_url }}" loading="lazy" alt="Owner Avatar"
+                                        class="w-10 h-10 rounded-full">
+                                    <p class="font-semibold group-hover:!text-indigo-700">
+                                        {{ $image->album->user->username }}</p>
+                                </a>
+                                @if (auth()->check() && $image->album->user->id != Auth::user()->id)
+                                    <a href=""
+                                        class="bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center unfollow-button"
+                                        style="border-radius: 20px" data-id="{{ $image->album->user->id }}">Hủy theo dõi
+                                    </a>
+                                    <a href=""
+                                        class="bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:!bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 flex items-center justify-center follow-button"
+                                        style="border-radius: 20px" data-id="{{ $image->album->user->id }}">Theo dõi
+                                    </a>
+                                    <script>
+                                        $(document).ready(function() {
+                                            @if (Auth::user()->isFollowing($image->album->user->id))
+                                                $('.follow-button').hide();
+                                            @else
+                                                $('.unfollow-button').hide();
+                                            @endif
+
+                                            $('.follow-button').click(function(e) {
+                                                e.preventDefault();
+                                                var userId = $(this).data('id');
+                                                $.ajax({
+                                                    url: '/follow',
+                                                    type: 'POST',
+                                                    data: {
+                                                        user_id: userId,
+                                                        _token: '{{ csrf_token() }}'
+                                                    },
+                                                    success: function(response) {
+                                                        if (response.success) {
+                                                            $('.follow-button').hide();
+                                                            $('.unfollow-button').show();
+                                                            Swal.fire({
+                                                                icon: 'success',
+                                                                iconColor: 'white',
+                                                                title: 'Đã theo dõi người dùng!',
+                                                                color: 'white',
+                                                                timer: 3000,
+                                                                position: 'bottom-left',
+                                                                toast: true,
+                                                                showConfirmButton: false,
+                                                                background: '#46DFB1'
+                                                            })
+                                                        } else {
+                                                            Swal.fire({
+                                                                icon: 'error',
+                                                                iconColor: 'white',
+                                                                title: 'Theo dõi người dùng thất bại!',
+                                                                color: 'white',
+                                                                timer: 3000,
+                                                                position: 'bottom-left',
+                                                                toast: true,
+                                                                showConfirmButton: false,
+                                                                background: '#F04770'
+                                                            })
                                                         }
-                                                    });
-                                                });
-                                                $('.unfollow-button').click(function(e) {
-                                                    e.preventDefault();
-                                                    var userId = $(this).data('id');
-                                                    $.ajax({
-                                                        url: '/unfollow',
-                                                        type: 'DELETE',
-                                                        data: {
-                                                            user_id: userId,
-                                                            _token: '{{ csrf_token() }}'
-                                                        },
-                                                        success: function(response) {
-                                                            if (response.success) {
-                                                                $('.unfollow-button').hide();
-                                                                $('.follow-button').show();
-                                                                Swal.fire({
-                                                                    icon: 'success',
-                                                                    iconColor: 'white',
-                                                                    title: 'Đã hủy theo dõi người dùng!',
-                                                                    color: 'white',
-                                                                    timer: 3000,
-                                                                    position: 'bottom-left',
-                                                                    toast: true,
-                                                                    showConfirmButton: false,
-                                                                    background: '#46DFB1'
-                                                                })
-                                                            }
-                                                            else
-                                                            {
-                                                                Swal.fire({
-                                                                    icon: 'error',
-                                                                    iconColor: 'white',
-                                                                    title: 'Hủy theo dõi người dùng thất bại!',
-                                                                    color: 'white',
-                                                                    timer: 3000,
-                                                                    position: 'bottom-left',
-                                                                    toast: true,
-                                                                    showConfirmButton: false,
-                                                                    background: '#F04770'
-                                                                })
-                                                            }
-                                                        }
-                                                    });
+                                                    }
                                                 });
                                             });
-                                        </script>
-                                    @endif
-                                    <div class="flex-grow"></div>
+                                            $('.unfollow-button').click(function(e) {
+                                                e.preventDefault();
+                                                var userId = $(this).data('id');
+                                                $.ajax({
+                                                    url: '/unfollow',
+                                                    type: 'DELETE',
+                                                    data: {
+                                                        user_id: userId,
+                                                        _token: '{{ csrf_token() }}'
+                                                    },
+                                                    success: function(response) {
+                                                        if (response.success) {
+                                                            $('.unfollow-button').hide();
+                                                            $('.follow-button').show();
+                                                            Swal.fire({
+                                                                icon: 'success',
+                                                                iconColor: 'white',
+                                                                title: 'Đã hủy theo dõi người dùng!',
+                                                                color: 'white',
+                                                                timer: 3000,
+                                                                position: 'bottom-left',
+                                                                toast: true,
+                                                                showConfirmButton: false,
+                                                                background: '#46DFB1'
+                                                            })
+                                                        } else {
+                                                            Swal.fire({
+                                                                icon: 'error',
+                                                                iconColor: 'white',
+                                                                title: 'Hủy theo dõi người dùng thất bại!',
+                                                                color: 'white',
+                                                                timer: 3000,
+                                                                position: 'bottom-left',
+                                                                toast: true,
+                                                                showConfirmButton: false,
+                                                                background: '#F04770'
+                                                            })
+                                                        }
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
+                                @endif
+                                <div class="flex-grow"></div>
                                 <!-- Action -->
                                 <div class="flex justify-center space-x-4 mt-2">
-                                    @if($checkUserLikedImage != null)
-                                        <a href="#" data-id="{{ $image->id }}" class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                    @if ($checkUserLikedImage != null)
+                                        <a href="#" data-id="{{ $image->id }}"
+                                            class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fas fa-heart text-red-500 text-xl hover:text-indigo-700"></i>
                                         </a>
                                     @else
-                                        <a href="#" data-id="{{ $image->id }}" class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                        <a href="#" data-id="{{ $image->id }}"
+                                            class="like-button bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fas fa-heart text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>
                                     @endif
                                     <script>
-                                        $(document).ready(function() 
-                                        {
-                                            $('.like-button').click(function(e) 
-                                            {
-                                                e.preventDefault(); 
-                                    
+                                        $(document).ready(function() {
+                                            $('.like-button').click(function(e) {
+                                                e.preventDefault();
+
                                                 var imageId = $(this).data('id');
-                                    
+
                                                 $.ajax({
-                                                    url: '{{ route('likeimage', ['id' => '__id__']) }}'.replace('__id__', imageId), 
+                                                    url: '{{ route('likeimage', ['id' => '__id__']) }}'.replace('__id__', imageId),
                                                     type: 'POST',
                                                     data: {
                                                         _token: '{{ csrf_token() }}'
@@ -260,29 +268,37 @@ $count = count($listUserLiked);
                                                         var statusSpan = $('#like-status');
                                                         var text = statusSpan.html().trim();
 
-                                                        if (text === 'Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.') {
-                                                            statusSpan.html('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn');
+                                                        if (text ===
+                                                            'Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.'
+                                                        ) {
+                                                            statusSpan.html(
+                                                                'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn'
+                                                            );
                                                         } else {
                                                             if (text.includes('Bạn,') || text.includes('Bạn')) {
                                                                 text = text.replace('Bạn', '').trim();
                                                                 text = text.replace(',', '').trim();
                                                                 text = text.replace('và', "").trim();
-                                                                if(text.endsWith('.'))
-                                                                {
+                                                                if (text.endsWith('.')) {
                                                                     statusSpan.html(text);
-                                                                }
-                                                                else
-                                                                {
-                                                                    statusSpan.html('Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.');
+                                                                } else {
+                                                                    statusSpan.html(
+                                                                        'Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.'
+                                                                    );
                                                                 }
                                                             } else {
-                                                                if(text.includes('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :') && !text.includes('người khác'))
-                                                                {
-                                                                    text = text.replace('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :', 'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn, ');
-                                                                }
-                                                                else 
-                                                                {
-                                                                    text = text.replace('Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :', 'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn và ');
+                                                                if (text.includes(
+                                                                        'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :'
+                                                                    ) && !text.includes('người khác')) {
+                                                                    text = text.replace(
+                                                                        'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :',
+                                                                        'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn, '
+                                                                    );
+                                                                } else {
+                                                                    text = text.replace(
+                                                                        'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :',
+                                                                        'Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : Bạn và '
+                                                                    );
                                                                 }
                                                                 statusSpan.html(text);
                                                             }
@@ -295,25 +311,28 @@ $count = count($listUserLiked);
                                             });
                                         });
                                     </script>
-                                    @if(Auth::user()->id == $image->album->user->id)
-                                        @if($image->is_feature == true)
-                                            <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
+                                    @if (auth()->check() && Auth::user()->id == $image->album->user->id)
+                                        @if ($image->is_feature == true)
+                                            <a href="{{ route('featureimage', ['id' => $image->id]) }}"
+                                                class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                                 <i class="fas fa-star text-yellow-500 text-xl hover:text-indigo-700"></i>
                                             </a>
                                         @else
-                                            <a href="{{ route('featureimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
+                                            <a href="{{ route('featureimage', ['id' => $image->id]) }}"
+                                                class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 feature-image">
                                                 <i class="fas fa-star text-gray-700 text-xl hover:text-indigo-700"></i>
                                             </a>
                                         @endif
-                                        <a href="{{ route('editimage', ['id' => $image->id]) }}" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                        <a href="{{ route('editimage', ['id' => $image->id]) }}"
+                                            class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fas fa-edit text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>
-                                        <a href="{{ route('deleteimage', $image->id) }}" id="delete" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
+                                        <a href="{{ route('deleteimage', $image->id) }}" id="delete"
+                                            class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10">
                                             <i class="fas fa-trash text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>
                                         <script>
-                                            document.getElementById('delete').addEventListener('click', function(e)
-                                            {
+                                            document.getElementById('delete').addEventListener('click', function(e) {
                                                 e.preventDefault();
                                                 Swal.fire({
                                                     title: 'Chắc chắn xóa ảnh?',
@@ -331,64 +350,81 @@ $count = count($listUserLiked);
                                                             'success'
                                                         );
                                                         setTimeout(() => {
-                                                        Swal.close();
+                                                            Swal.close();
                                                         }, 2000);
-                                                        fetch('{{ route("deleteimage", $image->id) }}', {
-                                                        method: 'DELETE',
-                                                        headers: {
-                                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                                        }
-                                                        })
-                                                        .then()
-                                                        {
-                                                            window.location.href = "{{ route('showexplore') }}";
-                                                        }
+                                                        fetch('{{ route('deleteimage', $image->id) }}', {
+                                                                method: 'DELETE',
+                                                                headers: {
+                                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                                                }
+                                                            })
+                                                            .then() {
+                                                                window.location.href = "{{ route('showexplore') }}";
+                                                            }
                                                     }
                                                 });
                                             });
                                         </script>
                                     @else
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 report_button">
+                                        <a href="#"
+                                            class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 report_button">
                                             <i class="fa-solid fa-flag text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>
                                         <!--Report Modal -->
-                                        <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                                        <div id="reportModal"
+                                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
                                             <div class="bg-white rounded-lg shadow-lg w-96 p-6 relative">
                                                 <!-- Close Button -->
-                                                <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                <button id="closeModal"
+                                                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                     </svg>
                                                 </button>
 
                                                 <!-- Modal Header -->
-                                                <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">Báo cáo hình ảnh</h2>
-                                                <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center"><i class="fa-solid fa-triangle-exclamation text-6xl" style="color: #FFD43B;"></i></h2>
-                                                <h2 class="text-sm font-semibold text-gray-800 mb-2">Cho chúng tôi biết hình ảnh vi phạm điều gì?</h2>
+                                                <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">Báo cáo
+                                                    hình ảnh</h2>
+                                                <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center"><i
+                                                        class="fa-solid fa-triangle-exclamation text-6xl"
+                                                        style="color: #FFD43B;"></i></h2>
+                                                <h2 class="text-sm font-semibold text-gray-800 mb-2">Cho chúng tôi biết
+                                                    hình ảnh vi phạm điều gì?</h2>
                                                 <!-- Modal Content -->
                                                 <div class="space-y-4">
                                                     <div class="flex items-center space-x-2">
-                                                        <input type="checkbox" id="inappropriateContent" class="form-checkbox h-5 w-5 text-blue-500">
-                                                        <label for="inappropriateContent" class="text-gray-700">Hình ảnh này phản cảm hoặc không hợp lệ</label>
+                                                        <input type="checkbox" id="inappropriateContent"
+                                                            class="form-checkbox h-5 w-5 text-blue-500">
+                                                        <label for="inappropriateContent" class="text-gray-700">Hình ảnh
+                                                            này phản cảm hoặc không hợp lệ</label>
                                                     </div>
                                                 </div>
                                                 <!-- Modal Footer -->
                                                 <div class="mt-4 flex justify-end space-x-2">
-                                                    <button id="cancelReport" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:ring-2 focus:ring-gray-400">Hủy</button>
-                                                    <button id="submitReport" class="px-4 py-2 bg-indigo-700 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-indigo-400">Xác nhận</button>
+                                                    <button id="cancelReport"
+                                                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:ring-2 focus:ring-gray-400">Hủy</button>
+                                                    <button id="submitReport"
+                                                        class="px-4 py-2 bg-indigo-700 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-indigo-400">Xác
+                                                        nhận</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 saved_button">
-                                            <i class="fa-solid fa-bookmark text-gray-700 text-xl hover:text-indigo-700"></i>
-                                        </a>                                        
+                                        <a href="#"
+                                            class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 saved_button">
+                                            <i
+                                                class="fa-solid fa-bookmark text-gray-700 text-xl hover:text-indigo-700"></i>
+                                        </a>
                                     @endif
-                                    <a href="#" class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10" id="shareButton">
+                                    <a href="#"
+                                        class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10"
+                                        id="shareButton">
                                         <i class="fas fa-share text-gray-700 text-xl hover:text-indigo-700"></i>
                                     </a>
                                     <script>
-                                       $(document).ready(function() {
-                                            @if (Auth::user()->savedImg($image->id))
+                                        $(document).ready(function() {
+                                            @if (auth()->check() && Auth::user()->savedImg($image->id))
                                                 $('.saved_button').find('i')
                                                     .removeClass('text-gray-700')
                                                     .addClass('text-blue-700');
@@ -397,13 +433,12 @@ $count = count($listUserLiked);
                                                 e.preventDefault();
                                                 $('#reportModal').removeClass('hidden');
                                             })
-                                            $('#cancelReport, #closeModal').click(function () {
+                                            $('#cancelReport, #closeModal').click(function() {
                                                 $('#reportModal').addClass('hidden');
                                             });
-                                            $('#submitReport').click(function (e) {
-                                                let isInappropriate = $('#inappropriateContent').prop('checked'); 
-                                                if(!isInappropriate)
-                                                {
+                                            $('#submitReport').click(function(e) {
+                                                let isInappropriate = $('#inappropriateContent').prop('checked');
+                                                if (!isInappropriate) {
                                                     Swal.fire({
                                                         icon: 'warning',
                                                         iconColor: 'white',
@@ -416,22 +451,19 @@ $count = count($listUserLiked);
                                                         showConfirmButton: false,
                                                         background: '#EFBF4D',
                                                     })
-                                                }
-                                                else
-                                                {
+                                                } else {
                                                     var imageId = "{{ $image->id }}";
                                                     console.log(imageId);
                                                     $.ajax({
-                                                        url: "{{ route('reportimage') }}", 
-                                                        method: "POST", 
+                                                        url: "{{ route('reportimage') }}",
+                                                        method: "POST",
                                                         data: {
-                                                            _token: "{{ csrf_token() }}", 
-                                                            image_id: imageId 
+                                                            _token: "{{ csrf_token() }}",
+                                                            image_id: imageId
                                                         },
                                                         success: function(response) {
                                                             $('#reportModal').addClass('hidden');
-                                                            if(response.success)
-                                                            {
+                                                            if (response.success) {
                                                                 Swal.fire({
                                                                     icon: 'success',
                                                                     iconColor: 'white',
@@ -444,9 +476,7 @@ $count = count($listUserLiked);
                                                                     showConfirmButton: false,
                                                                     background: '#46DFB1',
                                                                 })
-                                                            }
-                                                            else
-                                                            {
+                                                            } else {
                                                                 Swal.fire({
                                                                     icon: 'error',
                                                                     iconColor: 'white',
@@ -465,16 +495,16 @@ $count = count($listUserLiked);
                                                 }
                                             });
                                             $('.saved_button').click(function(e) {
-                                                e.preventDefault(); 
+                                                e.preventDefault();
 
-                                                var $this = $(this); 
+                                                var $this = $(this);
 
                                                 $.ajax({
-                                                    url: "{{ route('savedimage') }}", 
-                                                    method: "POST", 
+                                                    url: "{{ route('savedimage') }}",
+                                                    method: "POST",
                                                     data: {
-                                                        _token: "{{ csrf_token() }}", 
-                                                        image_id: "{{ $image->id }}" 
+                                                        _token: "{{ csrf_token() }}",
+                                                        image_id: "{{ $image->id }}"
                                                     },
                                                     success: function(response) {
                                                         if (response.saved) {
@@ -516,8 +546,8 @@ $count = count($listUserLiked);
                                                     }
                                                 });
                                             });
-                                            $(document).ready(function () {
-                                                $('#shareButton').on('click', function (event) {
+                                            $(document).ready(function() {
+                                                $('#shareButton').on('click', function(event) {
                                                     event.preventDefault();
 
                                                     const postId = {{ $image->id }};
@@ -525,7 +555,7 @@ $count = count($listUserLiked);
                                                     $.ajax({
                                                         url: `/shareimage/${postId}/share`,
                                                         method: 'GET',
-                                                        success: function (data) {
+                                                        success: function(data) {
                                                             const content = `
                                                                 <div class="text-left space-y-4">
                                                                     <div>
@@ -568,7 +598,7 @@ $count = count($listUserLiked);
                                                                 showConfirmButton: false,
                                                             });
 
-                                                            $(document).on('click', '#copyButton', function () {
+                                                            $(document).on('click', '#copyButton', function() {
                                                                 const postLink = $('#postLink');
                                                                 postLink.select();
                                                                 navigator.clipboard.writeText(postLink.val());
@@ -589,13 +619,14 @@ $count = count($listUserLiked);
                                                                 });
                                                             });
                                                         },
-                                                        error: function () {
-                                                            Swal.fire('Có lỗi xảy ra', 'Không thể lấy dữ liệu bài viết.', 'error');
+                                                        error: function() {
+                                                            Swal.fire('Có lỗi xảy ra',
+                                                                'Không thể lấy dữ liệu bài viết.', 'error');
                                                         }
                                                     });
                                                 });
                                             });
-                                            $('.delete').on('click', function (event) {
+                                            $('.delete').on('click', function(event) {
                                                 event.preventDefault();
                                                 const postId = $(this).data('id');
                                                 Swal.fire({
@@ -620,28 +651,32 @@ $count = count($listUserLiked);
                             </div>
                             <hr class="mb-4 mt-3">
                             <!-- Number of likes -->
-                            @if($count == 0)
-                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Hãy là người đầu tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.</span>
+                            @if ($count == 0)
+                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Hãy là người đầu
+                                    tiên thích ảnh này <i class="fa-solid fa-heart" style="color: #ff5252;"></i>.</span>
                             @elseif ($count == 1)
-                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
-                                    @if($checkUserLikedImage != null) 
+                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng
+                                    thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :
+                                    @if ($checkUserLikedImage != null)
                                         Bạn
                                     @endif
                                 </span>
                             @elseif ($count <= 2 && $count > 0)
-                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
-                                @if($checkUserLikedImage != null) 
-                                    Bạn,
-                                @endif
+                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng
+                                    thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :
+                                    @if ($checkUserLikedImage != null)
+                                        Bạn,
+                                    @endif
                                     @foreach ($listUserLiked as $l)
-                                        @if(Auth::user()->id != $l->user_id)
+                                        @if (auth()->check() && Auth::user()->id != $l->user_id)
                                             {{ $l->user->username }}{{ $loop->last ? '.' : ', ' }}
                                         @endif
-                                    @endforeach 
+                                    @endforeach
                                 </span>
                             @else
-                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> : 
-                                    @if($checkUserLikedImage != null) 
+                                <span id="like-status" class="text-4xs text-gray-600 font-semibold mb-4">Mọi người cũng
+                                    thích <i class="fa-solid fa-heart" style="color: #ff5252;"></i> :
+                                    @if ($checkUserLikedImage != null)
                                         Bạn và {{ $count }} người khác.
                                     @else
                                         {{ $count }} người khác.
@@ -649,7 +684,7 @@ $count = count($listUserLiked);
                                 </span>
                             @endif
                             <!-- Comment -->
-                            <h3 class="font-semibold text-xl mb-2" id="commentCount">Bình luận ({{ $countComment }}) 
+                            <h3 class="font-semibold text-xl mb-2" id="commentCount">Bình luận ({{ $countComment }})
                                 @if ($countComment > 3)
                                     <!-- Want More -->
                                     <span id="loadMoreContainer" class="text-center">
@@ -657,13 +692,14 @@ $count = count($listUserLiked);
                                     </span>
                                 @endif
                             </h3>
-                            <div class="flex-grow flex items-center justify-center"> 
+                            <div class="flex-grow flex items-center justify-center">
                             </div>
                             <div id="comment" class="flex flex-col">
                                 <div class="space-y-2 mb-4">
                                     <div id="commentList" class="space-y-4 max-h-80 min-h-32">
-                                        @if($countComment == 0)
-                                            <p id="noCommentsMessage" class="text-gray-400 text-2xs">Chưa có bình luận nào...!</p>
+                                        @if ($countComment == 0)
+                                            <p id="noCommentsMessage" class="text-gray-400 text-2xs">Chưa có bình luận
+                                                nào...!</p>
                                         @endif
                                     </div>
                                 </div>
@@ -671,17 +707,21 @@ $count = count($listUserLiked);
                         </div>
                         <!-- Add Comment -->
                         <div class="flex items-center space-x-4 mt-2">
-                            <form id="commentForm" class="flex w-full" enctype="multipart/form-data" method="POST" action="{{ route('addcomment', $image->id) }}">
+                            <form id="commentForm" class="flex w-full" enctype="multipart/form-data" method="POST"
+                                action="{{ route('addcomment', $image->id) }}">
                                 @csrf
-                                <input type="text" id="addComment" name="comment" class="placeholder-gray-600 flex-grow px-4 py-2 text-gray-700 bg-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Thêm bình luận">
-                                <button type="submit" class="ml-4 pl-3 pr-4 py-2  text-white bg-indigo-500 rounded-full hover:bg-blue-600 focus:ring-2 focus:ring-blue-300">
+                                <input type="text" id="addComment" name="comment"
+                                    class="placeholder-gray-600 flex-grow px-4 py-2 text-gray-700 bg-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Thêm bình luận">
+                                <button type="submit"
+                                    class="ml-4 pl-3 pr-4 py-2  text-white bg-indigo-500 rounded-full hover:bg-blue-600 focus:ring-2 focus:ring-blue-300">
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </form>
                         </div>
                         <script>
                             $(document).ready(function() {
-                                var skip = 0; 
+                                var skip = 0;
                                 var idImage = '{{ $image->id }}';
 
                                 function loadComments() {
@@ -696,7 +736,7 @@ $count = count($listUserLiked);
                                                 var comments = response.comments;
 
                                                 if (comments.length === 0) {
-                                                    $('#loadMoreButton').hide(); 
+                                                    $('#loadMoreButton').hide();
                                                 }
 
                                                 $.each(comments, function(index, comment) {
@@ -710,15 +750,15 @@ $count = count($listUserLiked);
                                                                         <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
                                                                         ${(comment.user_id == '{{ Auth::user()->id }}') ?
                                                                         `<form class="edit-form hidden mt-2">
-                                                                            <input type="text" 
-                                                                                class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
-                                                                                value="${comment.content}" 
-                                                                                placeholder="Viết bình luận...">
-                                                                                <div class="flex justify-end mt-2 space-x-2">
-                                                                                    <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">Hủy</button>
-                                                                                    <button type="submit" class="save-edit px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">Lưu</button>
-                                                                                </div>
-                                                                            </form>`
+                                                                                                                                                    <input type="text" 
+                                                                                                                                                        class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
+                                                                                                                                                        value="${comment.content}" 
+                                                                                                                                                        placeholder="Viết bình luận...">
+                                                                                                                                                        <div class="flex justify-end mt-2 space-x-2">
+                                                                                                                                                            <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">Hủy</button>
+                                                                                                                                                            <button type="submit" class="save-edit px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">Lưu</button>
+                                                                                                                                                        </div>
+                                                                                                                                                    </form>`
                                                                         : ''}
                                                                         </div>
                                                                     <div class="flex items-center space-x-4 text-sm text-gray-500">
@@ -726,7 +766,7 @@ $count = count($listUserLiked);
                                                                         <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold" data-original-comment-id="${comment.id}">Phản hồi</button>
                                                                         ${(comment.user_id == '{{ Auth::user()->id }}') ?
                                                                             `<button class="hover:text-indigo-700 font-bold hover:font-semibold update-button" data-comment-id="${comment.id}">Chỉnh sửa</button>
-                                                                            <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
+                                                                                                                                                    <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
                                                                             : ''}
                                                                         ${(new Date(comment.updated_at).getTime() !== new Date(comment.created_at).getTime()) ? `<p class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</p>` : ''}
                                                                     </div>
@@ -796,7 +836,7 @@ $count = count($listUserLiked);
                                 $(document).on('click', '.delete-button', function() {
                                     var commentItem = $(this).closest('.comment-item');
                                     var commentId = $(this).data('comment-id');
-                                    
+
                                     Swal.fire({
                                         title: 'Bạn có chắc chắn?',
                                         text: "Bạn không thể hoàn tác hành động này!",
@@ -822,8 +862,10 @@ $count = count($listUserLiked);
                                                             'success'
                                                         );
                                                         commentItem.remove();
-                                                        var currentCount = parseInt($('#commentCount').text().match(/\d+/)[0]); 
-                                                        $('#commentCount').text(`Bình luận (${currentCount - 1})`);
+                                                        var currentCount = parseInt($('#commentCount')
+                                                            .text().match(/\d+/)[0]);
+                                                        $('#commentCount').text(
+                                                            `Bình luận (${currentCount - 1})`);
                                                         loadComments();
                                                     } else {
                                                         Swal.fire(
@@ -849,10 +891,10 @@ $count = count($listUserLiked);
 
                                 $('#commentForm').on('submit', function(e) {
                                     e.preventDefault();
-                                    
+
                                     const currentTime = Date.now();
                                     const timeSinceLastComment = currentTime - lastCommentTime;
-                                    
+
                                     if (timeSinceLastComment < COMMENT_COOLDOWN) {
                                         const remainingTime = Math.ceil((COMMENT_COOLDOWN - timeSinceLastComment) / 1000);
                                         Swal.fire({
@@ -864,10 +906,10 @@ $count = count($listUserLiked);
                                         });
                                         return;
                                     }
-                                    
+
                                     var comment = $('#addComment').val();
                                     var idImage = '{{ $image->id }}';
-                                    
+
                                     if (!comment) {
                                         Swal.fire({
                                             title: 'Lỗi',
@@ -885,15 +927,15 @@ $count = count($listUserLiked);
                                         enctype: 'multipart/form-data',
                                         data: {
                                             comment: comment,
-                                            _token: "{{ csrf_token() }}" 
+                                            _token: "{{ csrf_token() }}"
                                         },
                                         success: function(response) {
                                             if (response.success) {
                                                 console.log('Response:', response);
                                                 lastCommentTime = Date.now();
-                                                
+
                                                 const comment = response.comment;
-                                                
+
                                                 var newCommentHtml = `
                                                     <div class="comment-item space-y-2 relative" data-comment-id="${comment.id}" data-reply-count="${comment.replies_count}">
                                                         <div class="flex items-start space-x-4">
@@ -904,15 +946,15 @@ $count = count($listUserLiked);
                                                                     <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
                                                                     ${(comment.user_id == '{{ Auth::user()->id }}') ?
                                                                         `<form class="edit-form hidden mt-2">
-                                                                            <input type="text" 
-                                                                                class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
-                                                                                value="${comment.content}" 
-                                                                                placeholder="Viết bình luận...">
-                                                                                <div class="flex justify-end mt-2 space-x-2">
-                                                                                    <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">Hủy</button>
-                                                                                    <button type="submit" class="save-edit px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">Lưu</button>
-                                                                                </div>
-                                                                        </form>`
+                                                                                                                                                    <input type="text" 
+                                                                                                                                                        class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
+                                                                                                                                                        value="${comment.content}" 
+                                                                                                                                                        placeholder="Viết bình luận...">
+                                                                                                                                                        <div class="flex justify-end mt-2 space-x-2">
+                                                                                                                                                            <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">Hủy</button>
+                                                                                                                                                            <button type="submit" class="save-edit px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">Lưu</button>
+                                                                                                                                                        </div>
+                                                                                                                                                </form>`
                                                                     : ''}
                                                                 </div>
                                                                 <div class="flex items-center space-x-4 text-sm text-gray-500">
@@ -920,7 +962,7 @@ $count = count($listUserLiked);
                                                                     <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold" data-original-comment-id="${comment.id}">Phản hồi</button>
                                                                     ${(comment.user_id == '{{ Auth::user()->id }}') ?
                                                                         `<button class="hover:text-indigo-700 font-bold hover:font-semibold update-button" data-comment-id="${comment.id}">Chỉnh sửa</button>
-                                                                        <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
+                                                                                                                                                <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
                                                                     : ''}
                                                                     ${(new Date(comment.updated_at).getTime() !== new Date(comment.created_at).getTime()) ? 
                                                                         `<p class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</p>` : 
@@ -958,11 +1000,12 @@ $count = count($listUserLiked);
                                                         </div>
                                                     </div>
                                                 `;
-                                                
+
                                                 $('#commentList').prepend(newCommentHtml);
                                                 $('#addComment').val('');
                                                 $('#noCommentsMessage').remove();
-                                                var currentCount = parseInt($('#commentCount').text().match(/\d+/)[0]); 
+                                                var currentCount = parseInt($('#commentCount').text().match(/\d+/)[
+                                                    0]);
                                                 $('#commentCount').text(`Bình luận (${currentCount + 1})`);
                                             } else {
                                                 Swal.fire({
@@ -993,7 +1036,7 @@ $count = count($listUserLiked);
                                     var content = commentItem.find('.comment-content').text();
                                     var form = commentItem.find('.edit-form');
                                     var input = form.find('.edit-input');
-                                    
+
                                     commentItem.find('.comment-content').hide();
                                     form.removeClass('hidden');
                                     input.val(content).focus();
@@ -1002,7 +1045,7 @@ $count = count($listUserLiked);
                                 $(document).on('click', '.cancel-edit', function() {
                                     var form = $(this).closest('.edit-form');
                                     var commentItem = form.closest('.comment-item');
-                                    
+
                                     form.addClass('hidden');
                                     commentItem.find('.comment-content').show();
                                 });
@@ -1025,7 +1068,7 @@ $count = count($listUserLiked);
                                             if (response.success) {
                                                 commentItem.find('.comment-content').text(newContent).show();
                                                 form.addClass('hidden');
-                                                
+
                                                 Swal.fire({
                                                     icon: 'success',
                                                     title: 'Đã cập nhật bình luận',
@@ -1048,11 +1091,11 @@ $count = count($listUserLiked);
                                     e.preventDefault();
                                     const commentItem = $(this).closest('.comment-item, .reply-item');
                                     const replyForm = commentItem.find('.reply-form');
-                                    
+
                                     $('.reply-form').not(replyForm).addClass('hidden');
-                                    
+
                                     replyForm.toggleClass('hidden');
-                                    
+
                                     if (!replyForm.hasClass('hidden')) {
                                         replyForm.find('.reply-input').focus();
                                     }
@@ -1091,19 +1134,20 @@ $count = count($listUserLiked);
                                             if (response.success) {
                                                 console.log('Response:', response);
                                                 const replyHtml = createReplyHTML(response.reply);
-                                                
+
                                                 let repliesContainer = commentItem.find('.replies-container');
                                                 if (repliesContainer.length === 0) {
-                                                    commentItem.append('<div class="replies-container mt-2"></div>');
+                                                    commentItem.append(
+                                                        '<div class="replies-container mt-2"></div>');
                                                     repliesContainer = commentItem.find('.replies-container');
                                                 }
 
                                                 repliesContainer.prepend(replyHtml);
-                                                
+
                                                 repliesContainer.show();
-                                                
+
                                                 form.addClass('hidden').find('.reply-input').val('');
-                                    
+
                                                 Swal.fire({
                                                     icon: 'success',
                                                     title: 'Đã thêm phản hồi',
@@ -1121,41 +1165,48 @@ $count = count($listUserLiked);
                                         }
                                     });
                                 });
+
                                 function loadReplies(commentId, container, skip = 0) {
                                     $.ajax({
                                         url: `/api/getcomments/${commentId}/replies`,
                                         method: 'GET',
-                                        data: { skip: skip },
+                                        data: {
+                                            skip: skip
+                                        },
                                         success: function(response) {
                                             if (response.success) {
                                                 if (skip === 0) {
                                                     container.empty();
                                                 }
-                                                
+
                                                 container.find('.load-more-replies').remove();
-                                                
-                                                const repliesHtml = response.replies.map(reply => createReplyHTML(reply)).join('');
+
+                                                const repliesHtml = response.replies.map(reply => createReplyHTML(reply))
+                                                    .join('');
                                                 container.append(repliesHtml);
-                                                
+
                                                 if (response.hasMore) {
                                                     const loadMoreBtn = $(`
                                                         <button class="load-more-replies text-sm text-gray-400 font-bold hover:text-indigo-700 mt-2 w-full text-left">
                                                             <i class="fa-solid fa-arrow-right-arrow-left mr-2 text-gray-400"></i>Xem thêm phản hồi
                                                         </button>
                                                     `);
-                                                    
+
                                                     loadMoreBtn.on('click', function() {
-                                                        $(this).html('<i class="fas fa-spinner fa-spin mr-2"></i>Đang tải...');
+                                                        $(this).html(
+                                                            '<i class="fas fa-spinner fa-spin mr-2"></i>Đang tải...'
+                                                        );
                                                         $(this).prop('disabled', true);
-                                                        
+
                                                         loadReplies(commentId, container, skip + 3);
                                                     });
-                                                    
+
                                                     container.append(loadMoreBtn);
                                                 }
-                                                
+
                                                 if (skip > 0) {
-                                                    container.find('.reply-item').slice(-response.replies.length).hide().slideDown(300);
+                                                    container.find('.reply-item').slice(-response.replies.length).hide()
+                                                        .slideDown(300);
                                                 } else {
                                                     container.slideDown(300);
                                                 }
@@ -1176,7 +1227,7 @@ $count = count($listUserLiked);
                                     const commentItem = $(this).closest('.comment-item');
                                     const repliesContainer = commentItem.find('.replies-container');
                                     const commentId = commentItem.data('comment-id');
-                                    
+
                                     if (repliesContainer.is(':visible')) {
                                         repliesContainer.slideUp(function() {
                                             repliesContainer.empty();
@@ -1189,6 +1240,7 @@ $count = count($listUserLiked);
                                         repliesContainer.slideDown();
                                     }
                                 });
+
                                 function createReplyHTML(reply) {
                                     return `
                                         <div class="reply-item mt-2" data-reply-id="${reply.id}" data-original-comment-id="${reply.original_comment_id}">
@@ -1202,37 +1254,37 @@ $count = count($listUserLiked);
                                                         <div class="text-sm text-gray-700 mt-1">
                                                             <a href="#" class="text-blue-500">${reply.reply_reply.id ? (reply.reply_reply.id != reply.user.id ? '@' + reply.reply_reply.username : '') : (reply.comment_id.id ? (reply.comment_id.id != reply.user.id ? '@' + reply.comment_id.username : '') : '')}</a><span class="reply-content"> ${reply.content}</span>
                                                             ${reply.user.id == '{{ Auth::user()->id }}' ? `
-                                                            <form class="edit-reply-form hidden mt-2">
-                                                                <div class="flex items-start space-x-2">    
-                                                                    <img src="{{ Auth::user()->avatar_url }}" class="w-8 h-8 rounded-full">
-                                                                    <div class="flex-grow">
-                                                                        <div class="relative">
-                                                                            <input type="text" 
-                                                                                class="edit-reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                                                placeholder="Viết phản hồi...">
-                                                                        </div>
-                                                                        <span class="text-xs text-gray-400 font-semibold">Đang trả lời <b>${reply.user.username}</b></span>
-                                                                        <div class="flex justify-end mt-2 space-x-2">   
-                                                                            <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">
-                                                                                Hủy
-                                                                            </button>
-                                                                            <button type="submit" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600">
-                                                                                Chỉnh sửa
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        ` : ''}
+                                                                                                                                    <form class="edit-reply-form hidden mt-2">
+                                                                                                                                        <div class="flex items-start space-x-2">    
+                                                                                                                                            <img src="{{ Auth::user()->avatar_url }}" class="w-8 h-8 rounded-full">
+                                                                                                                                            <div class="flex-grow">
+                                                                                                                                                <div class="relative">
+                                                                                                                                                    <input type="text" 
+                                                                                                                                                        class="edit-reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                                                                                                        placeholder="Viết phản hồi...">
+                                                                                                                                                </div>
+                                                                                                                                                <span class="text-xs text-gray-400 font-semibold">Đang trả lời <b>${reply.user.username}</b></span>
+                                                                                                                                                <div class="flex justify-end mt-2 space-x-2">   
+                                                                                                                                                    <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">
+                                                                                                                                                        Hủy
+                                                                                                                                                    </button>
+                                                                                                                                                    <button type="submit" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600">
+                                                                                                                                                        Chỉnh sửa
+                                                                                                                                                    </button>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </form>
+                                                                                                                                ` : ''}
                                                         </div>
                                                     </div>
                                                     <div class="flex items-center space-x-4 text-sm text-gray-500">
                                                         <span class="font-semibold hover:text-indigo-700 hover:font-semibold">${reply.time_ago}</span>
                                                         <button class="reply-reply-button font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Phản hồi</button>
                                                         ${reply.user.id == '{{ Auth::user()->id }}' ? `
-                                                            <button class="edit-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Chỉnh sửa</button>
-                                                            <button class="delete-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-red-600">Xóa</button>
-                                                        ` : ''}
+                                                                                                                                    <button class="edit-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Chỉnh sửa</button>
+                                                                                                                                    <button class="delete-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-red-600">Xóa</button>
+                                                                                                                                ` : ''}
                                                         ${(new Date(reply.updated_at).getTime() !== new Date(reply.created_at).getTime()) ?  
                                                         `<span class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</span>`
                                                         : ''}
@@ -1275,6 +1327,7 @@ $count = count($listUserLiked);
                                         </div>
                                     `;
                                 }
+
                                 function deleteReply(replyId) {
                                     const $deleteBtn = $(`.reply-item[data-reply-id="${replyId}"] .delete-reply-reply`);
                                     $deleteBtn.prop('disabled', true);
@@ -1331,12 +1384,12 @@ $count = count($listUserLiked);
                                         }
                                     })
                                 });
-                                $(document).on('click', '.edit-reply-reply', function(e) {                                
+                                $(document).on('click', '.edit-reply-reply', function(e) {
                                     var replyItem = $(this).closest('.reply-item');
                                     var content = replyItem.find('.reply-content').text();
                                     var form = replyItem.find('.edit-reply-form');
                                     var input = form.find('.edit-reply-input');
-                                    
+
                                     replyItem.find('.reply-content').hide();
                                     form.removeClass('hidden');
                                     input.val(content).focus();
@@ -1345,7 +1398,7 @@ $count = count($listUserLiked);
                                 $(document).on('click', '.cancel-edit', function(e) {
                                     var form = $(this).closest('.edit-reply-form');
                                     var replyItem = form.closest('.reply-item');
-                                    
+
                                     form.addClass('hidden');
                                     replyItem.find('.reply-content').show();
                                 });
@@ -1368,7 +1421,7 @@ $count = count($listUserLiked);
                                             if (response.success) {
                                                 replyItem.find('.reply-content').text(newContent).show();
                                                 form.addClass('hidden');
-                                                
+
                                                 Swal.fire({
                                                     icon: 'success',
                                                     title: 'Đã cập nhật bình luận',
@@ -1390,11 +1443,11 @@ $count = count($listUserLiked);
                                     e.preventDefault();
                                     const commentItem = $(this).closest('.reply-item');
                                     const replyForm = commentItem.find('.reply-reply-form');
-                                    
+
                                     $('.reply-reply-form').not(replyForm).addClass('hidden');
-                                    
+
                                     replyForm.toggleClass('hidden');
-                                    
+
                                     if (!replyForm.hasClass('hidden')) {
                                         replyForm.find('.reply-reply-input').focus();
                                     }
@@ -1433,19 +1486,20 @@ $count = count($listUserLiked);
                                             if (response.success) {
                                                 console.log('Response:', response);
                                                 const replyHtml = createReplyHTML(response.reply);
-                                                
+
                                                 let repliesContainer = commentItem.find('.replies-container');
                                                 if (repliesContainer.length === 0) {
-                                                    commentItem.append('<div class="replies-container mt-2"></div>');
+                                                    commentItem.append(
+                                                        '<div class="replies-container mt-2"></div>');
                                                     repliesContainer = commentItem.find('.replies-container');
                                                 }
 
                                                 repliesContainer.prepend(replyHtml);
-                                                
+
                                                 repliesContainer.show();
-                                                
+
                                                 form.addClass('hidden').find('.reply-reply-input').val('');
-                                    
+
                                                 Swal.fire({
                                                     icon: 'success',
                                                     title: 'Đã thêm phản hồi',
@@ -1464,8 +1518,8 @@ $count = count($listUserLiked);
                                     });
                                 });
                             });
-                        </script>       
-                    </div>              
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>

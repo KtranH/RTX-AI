@@ -4,13 +4,18 @@
     <ul id="js-notification-main">
         @if (isset($user))
             @php
-                $data = \App\Models\Notification::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+                $data = \App\Models\Notification::where('user_id', Auth::id())
+                    ->orderBy('created_at', 'desc')
+                    ->limit(3)
+                    ->get();
             @endphp
             @foreach ($data as $item)
                 <li class="py-2 flex">
-                    <a href="#" class="flex items-center w-full hover:bg-gray-100 p-2 rounded">
+                    <a href="{{ json_decode($item->data)->url }}" data-id="{{ $item->id }}"
+                        onclick="readNotification(this, event)"
+                        class="flex items-center w-full hover:bg-gray-100 p-2 rounded {{ $item->is_read == 0 ? 'bg-red-100' : '' }}">
                         <img class="h-6 w-6 rounded-full ring-2 ring-white mr-2"
-                            src="{{ json_decode($item->data)->url ?? 'https://lh3.googleusercontent.com/a/ACg8ocLev1qQPI8GSu3HuQYV5frfYBAmMQX_Fej2vyRveWGMPofrZdar=s96-c' }}"
+                            src="{{ json_decode($item->data)->avatar_url ?? 'https://lh3.googleusercontent.com/a/ACg8ocLev1qQPI8GSu3HuQYV5frfYBAmMQX_Fej2vyRveWGMPofrZdar=s96-c' }}"
                             alt="">
                         <p class="font-semibold text-gray-700">{{ json_decode($item->data)->message ?? 'abc' }}</p>
                     </a>

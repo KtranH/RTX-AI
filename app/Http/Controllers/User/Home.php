@@ -33,4 +33,12 @@ class Home extends Controller
         });
         return response()->json($notifications);
     }
+
+    public function ApiReadNotification($notificationId)
+    {
+        $notification = Notification::find($notificationId);
+        $notification->update(['is_read' => 1]);
+        $notification->save();
+        return response()->json($notification);
+    }
 }

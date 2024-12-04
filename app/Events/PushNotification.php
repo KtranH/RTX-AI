@@ -14,17 +14,19 @@ class PushNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $idNotification;
     public $message;
     public $url;
     public $avatar_url;
     public $userId;
 
-    public function __construct(mixed $message, mixed $userId, mixed $url, mixed $avatar_url)
+    public function __construct(mixed $message, mixed $userId, mixed $url, mixed $avatar_url, mixed $idNotification)
     {
         $this->message = $message;
         $this->userId = $userId;
         $this->url = $url;
         $this->avatar_url = $avatar_url;
+        $this->idNotification = $idNotification;
     }
 
     public function broadcastWith()
@@ -32,7 +34,8 @@ class PushNotification implements ShouldBroadcast
         return [
             'message' => $this->message,
             'url' => $this->url,
-            'avatar_url' => $this->avatar_url
+            'avatar_url' => $this->avatar_url,
+            'idNotification' => $this->idNotification
         ];
     }
     public function broadcastOn()
