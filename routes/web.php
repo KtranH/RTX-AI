@@ -53,6 +53,7 @@ use Illuminate\Support\Facades\Session;
 Route::get('/', [Home::class, 'ShowHome'])->name("showhome");
 
 Route::get('/api/get-notification/{userId}', [Home::class, 'ApiNotification']);
+Route::get('/api/read-notification/{id}', [Home::class, 'ApiReadNotification']);
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -271,16 +271,23 @@ class Board extends Controller
         $user->followers()->attach(Auth::user()->id);
         $this->UpdateCountFollowing(Auth::user()->id);
         $this->UpdateCountFollowers($id);
-        Notification::create([
+        $tmp = Notification::create([
             'user_id' => $id,
             'type' => 'follow',
             'data' => json_encode([
-                'url' => $userFollow->avatar_url,
+                'avatar_url' => $userFollow->avatar_url,
                 'message' => "{$userFollow->username} vừa mới theo dõi bạn <3",
+                'url' => "/board/{$userFollow->id}",
             ]),
             'is_read' => 0,
         ]);
-        broadcast(new PushNotification("{$userFollow->username} vừa mới theo dõi bạn <3", $id, "http://127.0.0.1:8000/board/{$userFollow->id}",$userFollow->avatar_url));
+        broadcast(new PushNotification(
+            "{$userFollow->username} vừa mới theo dõi bạn <3",
+            $id,
+            "/board/{$userFollow->id}",
+            $userFollow->avatar_url,
+            $tmp->id
+        ));
         return response()->json(['success' => true]);
     }
     public function UnFollowUser(Request $request)

@@ -68,7 +68,21 @@
             display: none;
         }
     </style>
+
+    <script>
+        function readNotification(element, event) {
+            event.preventDefault();
+            const id = element.getAttribute('data-id');
+            const href = element.getAttribute('href');
+            fetch(`/api/read-notification/${id}`).then(response => response.json())
+                .then(data => {
+                    window.location.href = href;
+                });
+        }
+    </script>
 </head>
+
+
 
 <body class="{{ session('theme', 'theme-default') }}">
     <div style="height:80px;">
@@ -92,6 +106,8 @@
 
 @auth
     <script>
+        const notificationCount = document.querySelector('#notification-count');
+
         const toast = Swal.mixin({
             toast: true,
             position: 'bottom-left',
@@ -118,14 +134,21 @@
                 iconColor: 'white',
                 background: '#46DFB1'
             });
-            setHtml(data);
+            setHtml({
+                ...data,
+                is_read: 0
+            });
+            notificationCount.textContent = parseInt(notificationCount.textContent) + 1;
         });
 
         const html = (item) => `
                 <li class="py-2 flex">
-                    <a href="#" class="flex items-center w-full hover:bg-gray-100 p-2 rounded">
+                    <a 
+                        data-id="${item.idNotification}"
+                        onclick="readNotification(this, event)"
+                        href="${item.url}" class="flex items-center w-full hover:bg-gray-100 p-2 rounded ${item.is_read == 0? "bg-red-100": ""}">
                         <img class="h-6 w-6 rounded-full ring-2 ring-white mr-2"
-                            src="${item.url}" alt="">
+                            src="${item.avatar_url}" alt="">
                         <p class="font-semibold text-gray-700">${item.message}</p>
                     </a>
                 </li>
@@ -146,11 +169,12 @@
                 .then(data => {
                     if (data.data.length > 0) {
                         const _data = data.data;
+                        console.log(_data);
+
                         _data.forEach(item => {
                             const _item = {
-                                url: item.data.url ??
-                                    'https://lh3.googleusercontent.com/a/ACg8ocLev1qQPI8GSu3HuQYV5frfYBAmMQX_Fej2vyRveWGMPofrZdar=s96-c',
-                                message: item.data.message
+                                ...item.data,
+                                idNotification: item.id
                             };
                             setHtml(_item);
                         });
