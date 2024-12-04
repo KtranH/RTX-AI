@@ -13,6 +13,8 @@ use App\Http\Controllers\User\Account;
 use App\Http\Controllers\User\Home;
 use App\Http\Controllers\User\WorkFlow\G1;
 use App\Http\Controllers\User\WorkFlow\G2;
+use App\Http\Controllers\User\WorkFlow\G20;
+use App\Http\Controllers\User\WorkFlow\G21;
 use App\Http\Controllers\User\WorkFlow\G3;
 use App\Http\Controllers\User\WorkFlow\G8;
 use App\Http\Middleware\CheckCookieLogin;
@@ -30,6 +32,8 @@ use App\Http\Controllers\User\WorkFlow\G14;
 use App\Http\Controllers\User\WorkFlow\G15;
 use App\Http\Controllers\User\WorkFlow\G16;
 use App\Http\Controllers\User\WorkFlow\G17;
+use App\Http\Controllers\User\WorkFlow\G18;
+use App\Http\Controllers\User\WorkFlow\G19;
 use App\Http\Controllers\User\WorkFlow\G4;
 use App\Http\Controllers\User\WorkFlow\G5;
 use App\Http\Controllers\User\WorkFlow\G6;
@@ -454,13 +458,40 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::get('/resultofg17', [G17::class, 'get_imageG17'])->name("get_imageg17");
 
     //Show G18
-    Route::get('/g18', [G3::class, 'InputDataG3'])->name("g18");
+    Route::get('/g18', [G18::class, 'InputDataG18'])->name("g18");
+
+    //Create image G18
+    Route::post('/createg18', [G18::class, 'ShowImageG18'])->name("createg18");
+
+    //Show result G18
+    Route::get('/resultofg18', [G18::class, 'get_imageG18'])->name("get_imageg18");
 
     //Show G19
-    Route::get('/g19', [G3::class, 'InputDataG3'])->name("g19");
+    Route::get('/g19', [G19::class, 'InputDataG19'])->name("g19");
+
+    //Create image G19
+    Route::post('/createg19', [G19::class, 'ShowImageG19'])->name("createg19");
+
+    //Show result G19
+    Route::get('/resultofg19', [G19::class, 'get_imageG19'])->name("get_imageg19");
 
     //Show G20
-    Route::get('/g20', [G3::class, 'InputDataG3'])->name("g20");
+    Route::get('/g20', [G20::class, 'InputDataG20'])->name("g20");
+
+    //Create image G20
+    Route::post('/createg20', [G20::class, 'ShowImageG20'])->name("createg20");
+
+    //Show result G20
+    Route::get('/resultofg20', [G20::class, 'get_imageG20'])->name("get_imageg20");
+
+    //Show G21
+    Route::get('/g21', [G21::class, 'InputDataG21'])->name("g21");
+
+    //Create image G21
+    Route::post('/createg21', [G21::class, 'ShowImageG21'])->name("createg21");
+
+    //Show result G21
+    Route::get('/resultofg21', [G21::class, 'get_imageG21'])->name("get_imageg21");
 });
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 //ADMIN

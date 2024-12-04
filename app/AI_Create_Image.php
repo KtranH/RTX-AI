@@ -60,6 +60,7 @@ trait AI_Create_Image
     {
         $client = new Client();
         $response = $client->post($this->url, ['json' => ['prompt' => $process]]);
+        $time = Carbon::now();
         
         if ($response->getStatusCode() !== 200) return null;
 
@@ -72,6 +73,10 @@ trait AI_Create_Image
                 if (!empty($takeFileName)) {
                     return 'http://127.0.0.1:8188/api/view?filename=' . $takeFileName[$id]['outputs'][$numberOutput]['images'][0]['filename'];
                 }
+            }
+            else if($time->diffInSeconds(Carbon::now()) > 500)
+            {
+                return null;
             }
             else
             {
@@ -183,6 +188,16 @@ trait AI_Create_Image
             "Ảnh hình Realistic" => "Realistic",
         ];
         return $models[$model] ?? $model;
+    }
+    private function ChooseModel2($model)
+    {
+        $models = [
+            "Tạo ảnh phòng ngủ" => "JJsBedroom_XL.safetensors",
+            "Tạo ảnh phòng khách" => "JJsLivingRoom_XL.safetensors",
+            "Tạo ảnh phòng tắm" => "JJsBathroom_XL.safetensors",
+            "Tạo ảnh phòng bé" => "JJsKidsRoom_XL.safetensors",
+        ];
+       return $models[$model] ?? $model;
     }
     private function UploadImageR2($urlImage)
     {
