@@ -86,4 +86,26 @@ class AdminCategory extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
+    public function LockCategory(Request $request)
+    {
+        try {
+            $category = Category::findOrFail($request->id);
+            $category->is_deleted = 1;
+            $category->save();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+    public function UnlockCategory(Request $request)
+    {
+        try {
+            $category = Category::findOrFail($request->id);
+            $category->is_deleted = 0;
+            $category->save();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
 }

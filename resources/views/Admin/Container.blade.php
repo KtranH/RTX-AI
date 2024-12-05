@@ -8,6 +8,7 @@
     <meta property="og:image" content="{{ asset('images/imageWeb.png') }}">
     <meta property="og:title" content="RTX_AI: Sáng tạo và chia sẻ hình ảnh">
     <meta property="og:description" content="RTX_AI là một trang web cho phép người dùng tạo ra những hình ảnh bằng AI tạo sinh đẹp mắt và chia sẻ chúng với bạn bè và gia đình.">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Icon -->
     <link rel="icon" href="/assets/img/icon.png" type="image/png">
@@ -50,6 +51,7 @@
                 @include("Admin.Sidebar")
             </div>
             <div class="basis-[85%] h-full overflow-hidden p-2">
+                @include('sweetalert::alert')
                 @yield("Content")
             </div>
         </div>

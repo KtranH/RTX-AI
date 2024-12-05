@@ -12,7 +12,7 @@ class Explore extends Controller
 {
     public function ShowExplore(Request $request)
     {
-        $categories = Category::take(18)->get();
+        $categories = Category::where('is_deleted', '0')->take(18)->get();
 
         $suggestCategories = DB::table("category_photo")->select("photo_id", "category_id")->inRandomOrder()->limit(6)->get();
         for ($i = 0; $i < 6; $i++) {
@@ -133,6 +133,7 @@ class Explore extends Controller
 
         foreach (range('A', 'Z') as $letter) {
             $queryResult = DB::table('categories')
+                ->where('is_deleted', '0')
                 ->where(DB::raw('LOWER(SUBSTRING(name, 1, 1))'), strtolower($letter))
                 ->get();
 

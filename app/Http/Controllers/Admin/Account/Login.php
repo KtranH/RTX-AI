@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Account;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class Login extends Controller
 {
@@ -21,6 +22,11 @@ class Login extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
+            if(Auth::guard('admin')->user()->is_deleted == 1)
+            {
+                Auth::guard('admin')->logout();
+                return redirect()->back()->with('error', 'Tài khoản đã bị khóa');
+            }
             return redirect()->intended('admin');
         }
         else
@@ -31,6 +37,6 @@ class Login extends Controller
     public function Logout()
     {
         Auth::guard('admin')->logout();
-        return redirect()->route('showlogin');
+        return redirect()->route('admin.login');
     }
 }

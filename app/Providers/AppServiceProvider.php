@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\AdminRole;
 use App\Models\Notification;
 use App\Models\PostReview;
 use App\QueryDatabase;
@@ -37,6 +38,10 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('Admin.Sidebar', function ($view) {
             $photo = PostReview::where('status', 1)->count();
             return $view->with('countReview', $photo);
+        });
+        view()->composer('Admin.Account.Information', function ($view) {
+            $role = AdminRole::all();
+            return $view->with('role', $role);
         });
     }
 }

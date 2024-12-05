@@ -332,11 +332,11 @@
                                             <i class="fas fa-trash text-gray-700 text-xl hover:text-indigo-700"></i>
                                         </a>
                                         <script>
-                                            document.getElementById('delete').addEventListener('click', function(e) {
+                                            document.getElementById('delete').addEventListener('click', function (e) {
                                                 e.preventDefault();
                                                 Swal.fire({
                                                     title: 'Chắc chắn xóa ảnh?',
-                                                    text: "Ảnh sẽ bị xóa và không thể khôi phần một!",
+                                                    text: "Ảnh sẽ bị xóa và không thể khôi phục!",
                                                     icon: 'warning',
                                                     showCancelButton: true,
                                                     confirmButtonText: 'Tiếp tục',
@@ -346,25 +346,41 @@
                                                     if (result.isConfirmed) {
                                                         Swal.fire(
                                                             'Đã xóa!',
-                                                            'Ảnh không bị xóa.',
+                                                            'Ảnh đã bị xóa.',
                                                             'success'
                                                         );
                                                         setTimeout(() => {
                                                             Swal.close();
                                                         }, 2000);
+                                        
                                                         fetch('{{ route('deleteimage', $image->id) }}', {
-                                                                method: 'DELETE',
-                                                                headers: {
-                                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                                                }
-                                                            })
-                                                            .then() {
-                                                                window.location.href = "{{ route('showexplore') }}";
+                                                            method: 'DELETE',
+                                                            headers: {
+                                                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                                             }
+                                                        })
+                                                        .then(response => {
+                                                            if (response.ok) {
+                                                                window.location.href = "{{ route('showexplore') }}";
+                                                            } else {
+                                                                Swal.fire(
+                                                                    'Lỗi!',
+                                                                    'Không thể xóa ảnh.',
+                                                                    'error'
+                                                                );
+                                                            }
+                                                        })
+                                                        .catch(error => {
+                                                            Swal.fire(
+                                                                'Lỗi!',
+                                                                'Đã xảy ra lỗi trong quá trình xóa.',
+                                                                'error'
+                                                            );
+                                                        });
                                                     }
                                                 });
                                             });
-                                        </script>
+                                        </script>                                        
                                     @else
                                         <a href="#"
                                             class="bg-white p-2 rounded-full shadow-md flex items-center justify-center w-10 h-10 report_button">
@@ -750,23 +766,26 @@
                                                                         <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
                                                                         ${(comment.user_id == '{{ Auth::user()->id }}') ?
                                                                         `<form class="edit-form hidden mt-2">
-                                                                                                                                                    <input type="text" 
-                                                                                                                                                        class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
-                                                                                                                                                        value="${comment.content}" 
-                                                                                                                                                        placeholder="Viết bình luận...">
-                                                                                                                                                        <div class="flex justify-end mt-2 space-x-2">
-                                                                                                                                                            <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">Hủy</button>
-                                                                                                                                                            <button type="submit" class="save-edit px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">Lưu</button>
-                                                                                                                                                        </div>
-                                                                                                                                                    </form>`
+                                                                            <input type="text" 
+                                                                                class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
+                                                                                value="${comment.content}" 
+                                                                                placeholder="Viết bình luận...">
+                                                                            <div class="flex justify-end mt-2 space-x-2">
+                                                                                <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">Hủy</button>
+                                                                                <button type="submit" class="save-edit px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">Lưu</button>
+                                                                            </div>
+                                                                         </form>`
                                                                         : ''}
                                                                         </div>
                                                                     <div class="flex items-center space-x-4 text-sm text-gray-500">
                                                                         <p class="font-semibold hover:text-indigo-700 hover:font-semibold">${comment.time_ago}</p>
                                                                         <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold" data-original-comment-id="${comment.id}">Phản hồi</button>
+                                                                        @if(Auth::user()->id  == $image->album->user->id )
+                                                                            <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-comment-by-owner-button" data-comment-id="${comment.id}">Xóa</button>
+                                                                        @endif
                                                                         ${(comment.user_id == '{{ Auth::user()->id }}') ?
                                                                             `<button class="hover:text-indigo-700 font-bold hover:font-semibold update-button" data-comment-id="${comment.id}">Chỉnh sửa</button>
-                                                                                                                                                    <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
+                                                                             <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
                                                                             : ''}
                                                                         ${(new Date(comment.updated_at).getTime() !== new Date(comment.created_at).getTime()) ? `<p class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</p>` : ''}
                                                                     </div>
@@ -946,23 +965,26 @@
                                                                     <div class="text-sm text-gray-700 truncate hover:overflow-visible hover:whitespace-normal comment-content">${comment.content}</div>
                                                                     ${(comment.user_id == '{{ Auth::user()->id }}') ?
                                                                         `<form class="edit-form hidden mt-2">
-                                                                                                                                                    <input type="text" 
-                                                                                                                                                        class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
-                                                                                                                                                        value="${comment.content}" 
-                                                                                                                                                        placeholder="Viết bình luận...">
-                                                                                                                                                        <div class="flex justify-end mt-2 space-x-2">
-                                                                                                                                                            <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">Hủy</button>
-                                                                                                                                                            <button type="submit" class="save-edit px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">Lưu</button>
-                                                                                                                                                        </div>
-                                                                                                                                                </form>`
+                                                                            <input type="text" 
+                                                                                class="edit-input w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-gray-700 placeholder-gray-400"
+                                                                                    value="${comment.content}" 
+                                                                                    placeholder="Viết bình luận...">
+                                                                                <div class="flex justify-end mt-2 space-x-2">
+                                                                                    <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-md hover:bg-gray-100 transition duration-200">Hủy</button>
+                                                                                    <button type="submit" class="save-edit px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">Lưu</button>
+                                                                                </div>
+                                                                         </form>`
                                                                     : ''}
                                                                 </div>
                                                                 <div class="flex items-center space-x-4 text-sm text-gray-500">
                                                                     <p class="font-semibold hover:text-indigo-700 hover:font-semibold">${comment.time_ago}</p>
                                                                     <button class="reply-button font-bold hover:text-indigo-700 hover:font-bold" data-original-comment-id="${comment.id}">Phản hồi</button>
+                                                                    @if(Auth::user()->id  == $image->album->user->id )
+                                                                            <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-comment-by-owner-button" data-comment-id="${comment.id}">Xóa</button>
+                                                                    @endif
                                                                     ${(comment.user_id == '{{ Auth::user()->id }}') ?
                                                                         `<button class="hover:text-indigo-700 font-bold hover:font-semibold update-button" data-comment-id="${comment.id}">Chỉnh sửa</button>
-                                                                                                                                                <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
+                                                                         <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-button" data-comment-id="${comment.id}">Xóa</button>`
                                                                     : ''}
                                                                     ${(new Date(comment.updated_at).getTime() !== new Date(comment.created_at).getTime()) ? 
                                                                         `<p class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</p>` : 
@@ -1254,37 +1276,40 @@
                                                         <div class="text-sm text-gray-700 mt-1">
                                                             <a href="#" class="text-blue-500">${reply.reply_reply.id ? (reply.reply_reply.id != reply.user.id ? '@' + reply.reply_reply.username : '') : (reply.comment_id.id ? (reply.comment_id.id != reply.user.id ? '@' + reply.comment_id.username : '') : '')}</a><span class="reply-content"> ${reply.content}</span>
                                                             ${reply.user.id == '{{ Auth::user()->id }}' ? `
-                                                                                                                                    <form class="edit-reply-form hidden mt-2">
-                                                                                                                                        <div class="flex items-start space-x-2">    
-                                                                                                                                            <img src="{{ Auth::user()->avatar_url }}" class="w-8 h-8 rounded-full">
-                                                                                                                                            <div class="flex-grow">
-                                                                                                                                                <div class="relative">
-                                                                                                                                                    <input type="text" 
-                                                                                                                                                        class="edit-reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                                                                                                                        placeholder="Viết phản hồi...">
-                                                                                                                                                </div>
-                                                                                                                                                <span class="text-xs text-gray-400 font-semibold">Đang trả lời <b>${reply.user.username}</b></span>
-                                                                                                                                                <div class="flex justify-end mt-2 space-x-2">   
-                                                                                                                                                    <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">
-                                                                                                                                                        Hủy
-                                                                                                                                                    </button>
-                                                                                                                                                    <button type="submit" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600">
-                                                                                                                                                        Chỉnh sửa
-                                                                                                                                                    </button>
-                                                                                                                                                </div>
-                                                                                                                                            </div>
-                                                                                                                                        </div>
-                                                                                                                                    </form>
-                                                                                                                                ` : ''}
+                                                            <form class="edit-reply-form hidden mt-2">
+                                                                <div class="flex items-start space-x-2">    
+                                                                    <img src="{{ Auth::user()->avatar_url }}" class="w-8 h-8 rounded-full">
+                                                                <div class="flex-grow">
+                                                                    <div class="relative">
+                                                                        <input type="text" 
+                                                                            class="edit-reply-input w-full px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                            placeholder="Viết phản hồi...">
+                                                                    </div>
+                                                                <span class="text-xs text-gray-400 font-semibold">Đang trả lời <b>${reply.user.username}</b></span>
+                                                                <div class="flex justify-end mt-2 space-x-2">   
+                                                                        <button type="button" class="cancel-edit px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100">
+                                                                            Hủy
+                                                                        </button>
+                                                                        <button type="submit" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600">
+                                                                            Chỉnh sửa
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                            </form>
+                                                            ` : ''}
                                                         </div>
                                                     </div>
                                                     <div class="flex items-center space-x-4 text-sm text-gray-500">
                                                         <span class="font-semibold hover:text-indigo-700 hover:font-semibold">${reply.time_ago}</span>
                                                         <button class="reply-reply-button font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Phản hồi</button>
+                                                        @if(Auth::user()->id  == $image->album->user->id)
+                                                            <button class="hover:text-indigo-700 font-bold hover:font-semibold delete-reply-by-owner-button" data-reply-id="${reply.id}">Xóa</button>
+                                                        @endif
                                                         ${reply.user.id == '{{ Auth::user()->id }}' ? `
-                                                                                                                                    <button class="edit-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Chỉnh sửa</button>
-                                                                                                                                    <button class="delete-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-red-600">Xóa</button>
-                                                                                                                                ` : ''}
+                                                        <button class="edit-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-blue-600">Chỉnh sửa</button>
+                                                        <button class="delete-reply-reply font-bold hover:text-indigo-700 hover:font-bold hover:text-red-600">Xóa</button>
+                                                        ` : ''}
                                                         ${(new Date(reply.updated_at).getTime() !== new Date(reply.created_at).getTime()) ?  
                                                         `<span class="font-bold hover:text-indigo-700 hover:font-semibold">Đã chỉnh sửa</span>`
                                                         : ''}
@@ -1516,6 +1541,153 @@
                                             });
                                         }
                                     });
+                                });
+                                $(document).on('click', '.delete-comment-by-owner-button', function(e) {
+                                    e.preventDefault();
+                                    Swal.fire({
+                                        title: 'Chắc chắn xóa bình luận?',
+                                        text: "Bình luận sẽ bị xóa và không thể khôi phục!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Tiếp tục',
+                                        cancelButtonText: 'Hủy',
+                                        reverseButtons: true,
+                                    }).then((result) => {
+                                       if (result.isConfirmed) {
+                                            const idComment = $(this).data('comment-id');
+                                            const commentItem = $(this).closest('.comment-item');
+                                            $.ajax({
+                                                url: `/api/deletecomment/owner`,
+                                                method: 'DELETE',
+                                                data: {
+                                                    comment_id: idComment,
+                                                    _token: '{{ csrf_token() }}'
+                                                },
+                                                success: function(response) {
+                                                    if (response.success) {
+                                                        commentItem.remove();
+                                                        swal.fire({
+                                                            icon: 'success',
+                                                            iconColor: 'white',
+                                                            title: 'Thông báo',
+                                                            text: "Bình luận đã bị xóa",
+                                                            color: 'white',
+                                                            position: 'bottom-left',
+                                                            toast: true,
+                                                            timer: 3000,
+                                                            showConfirmButton: false,
+                                                            background: '#46DFB1'
+                                                        });
+
+                                                        const commentsCount = parseInt($('.comments-count').text()) - 1;
+                                                        $('.comments-count').text(commentsCount);
+                                                    }
+                                                    else
+                                                    {
+                                                        swal.fire({
+                                                            icon: 'error',
+                                                            iconColor: 'white',
+                                                            title: 'Thông báo',
+                                                            text: response.message,
+                                                            color: 'white',
+                                                            position: 'bottom-left',
+                                                            toast: true,
+                                                            timer: 3000,
+                                                            showConfirmButton: false,
+                                                            background: '#F04770'
+                                                        });
+                                                    }
+                                                },
+                                                error: function (xhr, status, error) {
+                                                    console.error(xhr.responseText);
+                                                    swal.fire({
+                                                        icon: 'error',
+                                                        iconColor: 'white',
+                                                        title: 'Lỗi',
+                                                        text: "Đã xảy ra lỗi khi xóa bình luận!",
+                                                        color: 'white',
+                                                        position: 'bottom-left',
+                                                        toast: true,
+                                                        timer: 3000,
+                                                        showConfirmButton: false,
+                                                        background: '#F04770'
+                                                    });
+                                                }
+                                            })
+                                        }
+                                    })
+                                });
+                                $(document).on('click', '.delete-reply-by-owner-button', function (e) {
+                                    e.preventDefault();
+                                    Swal.fire({
+                                        title: 'Chắc chắn xóa bình luận?',
+                                        text: "Bình luận sẽ bị xóa và không thể khôi phục!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Tiếp tục',
+                                        cancelButtonText: 'Hủy',
+                                        reverseButtons: true,
+                                    }).then((result) => {
+                                       if (result.isConfirmed) {
+                                            const idReply = $(this).data('reply-id');
+                                            const replyItem = $(this).closest('.reply-item');
+                                            $.ajax({
+                                                url: `/api/deletereplycomment/owner`,
+                                                method: 'DELETE',
+                                                data: {
+                                                    reply_id: idReply,
+                                                    _token: '{{ csrf_token() }}'
+                                                },
+                                                success: function(response) {
+                                                    if (response.success) {
+                                                        replyItem.remove();
+                                                        swal.fire({
+                                                            icon: 'success',
+                                                            iconColor: 'white',
+                                                            title: 'Thông báo',
+                                                            text: "Phản hồi đã bị xóa",
+                                                            color: 'white',
+                                                            position: 'bottom-left',
+                                                            toast: true,
+                                                            timer: 3000,
+                                                            showConfirmButton: false,
+                                                            background: '#46DFB1'
+                                                        });
+                                                    }
+                                                    else
+                                                    {
+                                                        swal.fire({
+                                                            icon: 'error',
+                                                            iconColor: 'white',
+                                                            title: 'Thông báo',
+                                                            text: response.message,
+                                                            color: 'white',
+                                                            position: 'bottom-left',
+                                                            toast: true,
+                                                            timer: 3000,
+                                                            showConfirmButton: false,
+                                                            background: '#F04770'
+                                                        });
+                                                    }
+                                                },
+                                                error: function (xhr, status, error) {
+                                                    console.error(xhr.responseText);
+                                                    swal.fire({
+                                                        icon: 'error',
+                                                        iconColor: 'white',
+                                                        title: 'Lỗi',
+                                                        text: "Đã xảy ra lỗi khi xóa phản hồi!",
+                                                        color: 'white',
+                                                        position: 'bottom-left',
+                                                        toast: true,
+                                                        timer: 3000,
+                                                        showConfirmButton: false,
+                                                        background: '#F04770'
+                                                    });
+                                                }
+                                            })
+                                        }
+                                    })
                                 });
                             });
                         </script>

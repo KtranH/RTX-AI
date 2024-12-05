@@ -5,10 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
+use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckCookieLogin
+class CheckRoleAdmin
 {
     /**
      * Handle an incoming request.
@@ -17,8 +17,10 @@ class CheckCookieLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
-            return redirect()->route('showlogin');
+        if(!Auth::guard('admin')->check() || Auth::guard('admin')->user()->adminRole->role_name != 'superadmin') 
+        {
+            Alert::toast('Bạn không có quyền truy cập vào đây', 'error')->autoClose(3000)->position('bottom-left')->timerProgressBar();
+            return redirect()->back();
         }
         return $next($request);
     }

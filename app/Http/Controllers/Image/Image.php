@@ -222,24 +222,26 @@ class Image extends Controller
                 $image = Photo::findOrFail($idImage);
 
                 $userIdPN = $image->album->user->id;
-                $tmp = Notification::create([
-                    'user_id' => $userIdPN,
-                    'type' => 'like',
-                    'data' => json_encode([
-                        'avatar_url' => $userAuth->avatar_url,
-                        'message' => "{$userAuth->username} vừa mới thích ảnh của bạn <3",
-                        'url' => "/image/{$idImage}"
-                    ]),
-                    'is_read' => 0,
-                ]);
-
-                broadcast(new PushNotification(
-                    "{$userAuth->username} Vừa mới thích ảnh của bạn <3",
-                    $userIdPN,
-                    "/image/{$idImage}",
-                    $userAuth->avatar_url,
-                    $tmp->id
-                ));
+                if($userIdPN != $UserID){
+                    $tmp = Notification::create([
+                        'user_id' => $userIdPN,
+                        'type' => 'like',
+                        'data' => json_encode([
+                            'avatar_url' => $userAuth->avatar_url,
+                            'message' => "{$userAuth->username} vừa mới thích ảnh của bạn <3",
+                            'url' => "/image/{$idImage}"
+                        ]),
+                        'is_read' => 0,
+                    ]);
+    
+                    broadcast(new PushNotification(
+                        "{$userAuth->username} Vừa mới thích ảnh của bạn <3",
+                        $userIdPN,
+                        "/image/{$idImage}",
+                        $userAuth->avatar_url,
+                        $tmp->id
+                    ));
+                }
                 return response()->json(['success' => true]);
             }
         } catch (\Exception $e) {
@@ -268,24 +270,26 @@ class Image extends Controller
             $comment->time_ago = $comment->created_at->diffForHumans(['locale' => 'vi']);
 
             $userAuth = Auth::user();
-            $tmp = Notification::create([
-                'user_id' => $comment->photo->album->user->id,
-                'type' => 'comment',
-                'data' => json_encode([
-                    'avatar_url' => $userAuth->avatar_url,
-                    'message' => "{$userAuth->username} vừa mới bình luận ảnh bạn <3",
-                    'url' => "/image/{$idImage}"
-                ])
-            ]);
-
-            broadcast(new PushNotification(
-                "{$userAuth->username} Vừa mới bình luận ảnh bạn <3",
-                $comment->photo->album->user->id,
-                "/image/{$idImage}",
-                $userAuth->avatar_url,
-                $tmp->id
-            ));
-
+            if($userAuth->id != $comment->photo->album->user->id){
+                $tmp = Notification::create([
+                    'user_id' => $comment->photo->album->user->id,
+                    'type' => 'comment',
+                    'data' => json_encode([
+                        'avatar_url' => $userAuth->avatar_url,
+                        'message' => "{$userAuth->username} vừa mới bình luận ảnh bạn <3",
+                        'url' => "/image/{$idImage}"
+                    ])
+                ]);
+    
+                broadcast(new PushNotification(
+                    "{$userAuth->username} Vừa mới bình luận ảnh bạn <3",
+                    $comment->photo->album->user->id,
+                    "/image/{$idImage}",
+                    $userAuth->avatar_url,
+                    $tmp->id
+                ));
+    
+            }
             return response()->json([
                 'success' => true,
                 'comment' => $comment
@@ -338,23 +342,26 @@ class Image extends Controller
         ];
 
         $userAuth = Auth::user();
-        $tmp = Notification::create([
-            'user_id' => $reply->comment->user->id,
-            'type' => 'reply',
-            'data' => json_encode([
-                'avatar_url' => $userAuth->avatar_url,
-                'message' => $userAuth->username . ' Đã phản hồi bình luận của bạn ',
-                'url' => "/image/{$reply->comment->photo_id}"
-            ])
-        ]);
-
-        broadcast(new PushNotification(
-            "{$userAuth->username} Vừa phản hồi bình luận của bạn <3",
-            $reply->comment->user->id,
-            "/image/{$reply->comment->photo_id} ",
-            $userAuth->avatar_url,
-            $tmp->id
-        ));
+        if($userAuth->id != $reply->comment->user_id)
+        {
+            $tmp = Notification::create([
+                'user_id' => $reply->comment->user->id,
+                'type' => 'reply',
+                'data' => json_encode([
+                    'avatar_url' => $userAuth->avatar_url,
+                    'message' => $userAuth->username . ' Đã phản hồi bình luận của bạn ',
+                    'url' => "/image/{$reply->comment->photo_id}"
+                ])
+            ]);
+    
+            broadcast(new PushNotification(
+                "{$userAuth->username} Vừa phản hồi bình luận của bạn <3",
+                $reply->comment->user->id,
+                "/image/{$reply->comment->photo_id} ",
+                $userAuth->avatar_url,
+                $tmp->id
+            ));
+        }
 
         return response()->json(['success' => true, 'reply' => $reply]);
     }
@@ -461,23 +468,25 @@ class Image extends Controller
         ];
 
         $userAuth = Auth::user();
-        $tmp = Notification::create([
-            'user_id' => $reply->parent->user->id,
-            'type' => 'reply',
-            'data' => json_encode([
-                'avatar_url' => $userAuth->avatar_url,
-                'message' => $userAuth->username . ' Đã phản hồi bình luận của bạn',
-                'url' => "/image/{$reply->comment->photo_id}"
-            ])
-        ]);
-
-        broadcast(new PushNotification(
-            "{$userAuth->username} Vừa phản hồi bình luận của bạn <3",
-            $reply->parent->user,
-            "/image/{$reply->comment->photo_id}",
-            $userAuth,
-            $tmp->id
-        ))->toOthers();
+        if($userAuth->id != $reply->parent->user->id){
+            $tmp = Notification::create([
+                'user_id' => $reply->parent->user->id,
+                'type' => 'reply',
+                'data' => json_encode([
+                    'avatar_url' => $userAuth->avatar_url,
+                    'message' => $userAuth->username . ' Đã phản hồi bình luận của bạn',
+                    'url' => "/image/{$reply->comment->photo_id}"
+                ])
+            ]);
+    
+            broadcast(new PushNotification(
+                "{$userAuth->username} Vừa phản hồi bình luận của bạn <3",
+                $reply->parent->user,
+                "/image/{$reply->comment->photo_id}",
+                $userAuth,
+                $tmp->id
+            ))->toOthers();
+        }
 
         return response()->json(['success' => true, 'reply' => $reply]);
     }
@@ -523,6 +532,30 @@ class Image extends Controller
             }
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+    public function DeleteCommentByOwner(Request $request)
+    {
+        try
+        {
+            $comment = Comment::findOrFail($request->get('comment_id'));
+            $comment->delete();
+            return response()->json(['success' => true]);
+        }
+        catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+    public function DeleteReplyByOwner(Request $request)
+    {
+        try
+        {
+            $reply = Reply::findOrFail($request->get('reply_id'));
+            $reply->delete();
+            return response()->json(['success' => true]);
+        }
+        catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }

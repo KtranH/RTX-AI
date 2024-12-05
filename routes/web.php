@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Account\Employee;
+use App\Http\Controllers\Admin\Account\Information;
 use App\Http\Controllers\Admin\Account\Login;
 use App\Http\Controllers\Admin\Essential\AdminHome;
 use App\Http\Controllers\Admin\Essential\HomeAdmin;
@@ -40,9 +42,11 @@ use App\Http\Controllers\User\WorkFlow\G6;
 use App\Http\Controllers\User\WorkFlow\G7;
 use App\Http\Controllers\User\WorkFlow\G9;
 use App\Http\Middleware\CheckLoginAdmin;
+use App\Http\Middleware\CheckRoleAdmin;
 use App\Http\Middleware\LimitContentUpdate;
 use App\Http\Middleware\LimitReport;
 use App\Http\Middleware\LimitUpdateAccountAccess;
+use App\Http\Middleware\LimitUpdateAccountAdmin;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -226,7 +230,7 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     Route::post('/reportimage', [Image::class, 'ReportImage'])->name("reportimage")->middleware(LimitReport::class);
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    //LOAD COMMENT, ADD COMMENT, EDIT COMMENT AND DELETE COMMENT, LOAD REPLY, ADD REPLY, EDIT REPLY AND DELETE REPLY
+    //LOAD COMMENT, ADD COMMENT, EDIT COMMENT AND DELETE COMMENT, LOAD REPLY, ADD REPLY, EDIT REPLY AND DELETE REPLY, DELETE COMMENT AND REPLY BY OWNER
 
     //Add comment
     Route::post('/addcomment/{idImage}', [Image::class, 'AddCommentInImage'])->name("addcomment");
@@ -254,6 +258,12 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Reply reply
     Route::post('/api/reply/{parentId}/replies', [Image::class, 'ReplyReply'])->name("replyreply");
+
+    //Delelet comment by owner
+    Route::delete('/api/deletecomment/owner', [Image::class, 'DeleteCommentByOwner'])->name("deletecommentbyowner");
+
+    //Delete reply by owner
+    Route::delete('/api/deletereplycomment/owner', [Image::class, 'DeleteReplyByOwner'])->name("deletereplybyowner");
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT
@@ -519,7 +529,7 @@ Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
     Route::get('/admin', [AdminHome::class, 'ShowHome'])->name('admin');
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    //CATEGORY, ADD CATEGORY, UPDATE CATEGORY, DELETE CATEGORY, SEARCH CATEGORY
+    //CATEGORY, ADD CATEGORY, UPDATE CATEGORY, DELETE CATEGORY, SEARCH CATEGORY, LOCK CATEGORY, UNLOCK CATEGORY
 
     //Manage Category
     Route::get('/admin/category', [AdminCategory::class, 'ShowCategory'])->name('admin.category');
@@ -535,6 +545,12 @@ Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
 
     //Update Category
     Route::put('/admin/updatecategory', [AdminCategory::class, 'UpdateCategory'])->name('admin.updatecategory');
+
+    //Lock Category
+    Route::put('/admin/lockcategory', [AdminCategory::class, 'LockCategory'])->name('admin.lockcategory');
+
+    //Unlock Category
+    Route::put('/admin/unlockcategory', [AdminCategory::class, 'UnlockCategory'])->name('admin.unlockcategory');
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
     //IMAGE, ACCEPT IMAGE, REJECT IMAGE, AI IMAGE, DELETE AI IMAGE
@@ -558,20 +574,40 @@ Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
     Route::put('/admin/rejectreport', [AdminImage::class, 'RejectReport'])->name('admin.rejectreport');
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    //ACOUNT ADMIN
+    //ACOUNT ADMIN, INFORMATION, EMPLOYEE, UPDATE INFORMATION, UPDATE PASSWORD, UPDATE AVATAR, DELETE EMPLOYEE, ACTIVE EMPLOYEE, INSERT EMPLOYEE, UPDATE EMPLOYEE
 
     //Account Information
-    Route::get('/admin/information', function () {
-        return view('Admin.Account.Information');
-    })->name('admin.information');
+    Route::get('/admin/information', [Information::class, 'ShowInformation'])->name('admin.information');
+
+    //Update Information
+    Route::put('/admin/updateinformation', [Information::class, 'UpdateInformation'])->name('admin.updateinformation')->middleware(LimitUpdateAccountAdmin::class);
+
+    //Update Password
+    Route::put('/admin/updatepassword', [Information::class, 'UpdatePassword'])->name('admin.updatepassword')->middleware(LimitUpdateAccountAdmin::class);
+
+    //Update Avatar
+    Route::post('/admin/updateavatar', [Information::class, 'UpdateAvatar'])->name('admin.updateavatar');
 
     //Account Employee
-    Route::get('/admin/employee', function () {
-        return view('Admin.Account.Employee');
-    })->name('admin.employee');
+    Route::get('/admin/employee', [Employee::class, 'ShowEmployee'])->name('admin.employee')->middleware(CheckRoleAdmin::class);
 
+    //Search Employee
+    Route::get('/admin/searchemployee', [Employee::class, 'SearchEmployee'])->name('admin.searchemployee');
+
+    //Deleted Employee
+    Route::put('/admin/deleteemployee', [Employee::class, 'DeletedEmployee'])->name('admin.deleteemployee');
+    
+    //Active Employee
+    Route::put('/admin/activeemployee', [Employee::class, 'ActiveEmployee'])->name('admin.activeemployee');
+
+    //Insert Employee
+    Route::post('/admin/insertemployee', [Employee::class, 'InsertEmployee'])->name('admin.insertemployee');
+
+    //Update Employee
+    Route::put('/admin/updateemployee', [Employee::class, 'UpdateEmployee'])->name('admin.updateemployee');
+    
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------
-    //AI
+    //AI IMAGE
     
     // Manage AI
     Route::get('/admin/ai', [AdminAI::class, 'ShowAI'])->name('admin.ai');

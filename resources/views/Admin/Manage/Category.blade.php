@@ -88,6 +88,21 @@
                                         <button data-id="{{$item->id}}" data-name="{{$item->name}}" data-description="{{$item->description}}" class="edit-button flex items-center bg-yellow-700 border-2 border-yellow-700 hover:bg-white hover:!text-yellow-700 rounded p-2 text-white text-lg font-medium">
                                             <i class="fa-solid fa-pen text-current text-xs"></i>
                                         </button>
+                                         @if ($item->is_deleted == 1)
+                                                <button data-id="{{ $item->id }}" class="unlock-button flex items-center bg-green-700 border-2 border-green-700 hover:bg-white hover:!text-green-700 rounded p-2 text-white text-lg font-medium">
+                                                    <i class="fa-solid fa-unlock text-current text-xs"></i>
+                                                </button>
+                                                <button data-id="{{ $item->id }}" class="hidden lock-button flex items-center bg-orange-700 border-2 border-orange-700 hover:bg-white hover:!text-orange-700 rounded p-2 text-white text-lg font-medium">
+                                                    <i class="lock-icon fa-solid fa-lock text-current text-xs"></i>
+                                                </button>
+                                            @else
+                                                <button data-id="{{ $item->id }}" class="lock-button flex items-center bg-orange-700 border-2 border-orange-700 hover:bg-white hover:!text-orange-700 rounded p-2 text-white text-lg font-medium">
+                                                    <i class="lock-icon fa-solid fa-lock text-current text-xs"></i>
+                                                </button>
+                                                <button data-id="{{ $item->id }}" class="hidden unlock-button flex items-center bg-green-700 border-2 border-green-700 hover:bg-white hover:!text-green-700 rounded p-2 text-white text-lg font-medium">
+                                                    <i class="fa-solid fa-unlock text-current text-xs"></i>
+                                                </button>
+                                            @endif
                                         <button data-id="{{$item->id}}" data-name="{{$item->name}}" data-description="{{$item->description}}" class="delete-button flex items-center bg-red-700 border-2 border-red-700 hover:bg-white hover:!text-red-700 rounded p-2 text-white text-lg font-medium">
                                             <i class="fa-solid fa-trash text-current text-xs"></i>
                                         </button>
@@ -153,6 +168,118 @@
                             });
                             return foundTr;
                         }
+                        //Function unlock
+                        function unlockCategory(id, row) {
+                            Swal.fire({
+                                icon: 'question',
+                                title: 'Mở khóa thể loại',
+                                text: 'Bạn có chắc muốn mở khóa thể loại này không?',
+                                showCancelButton: true,
+                                confirmButtonText: 'Xac Nhan',
+                                cancelButtonText: 'Huy Bo',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                reverseButtons: true
+                            }).then((result) => {
+                                $.ajax({
+                                    url: "/admin/unlockcategory",
+                                    type: "PUT",
+                                    data: {
+                                        id: id,
+                                        _token: "{{ csrf_token() }}"
+                                    },
+                                    success: function(response) {
+                                        if(response.success) 
+                                        {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                iconColor: 'white',
+                                                title: 'Mở khóa thành công',
+                                                color: 'white',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                toast: true,
+                                                position: 'bottom-left',
+                                                background: '#46DFB1'
+                                            });
+                                            row.find('.unlock-button').addClass('hidden');
+                                            row.find('.lock-button').removeClass('hidden');
+                                        }
+                                        else
+                                        {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                iconColor: 'white',
+                                                title: 'Có lỗi xảy ra',
+                                                text: response.message,
+                                                color: 'white',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                toast: true,
+                                                position: 'bottom-left',
+                                                background: '#F04770'
+                                            });
+                                        }
+                                    },
+                                })
+                            })
+                        }
+                        //Function lock
+                        function lockCategory(id, row) {
+                            Swal.fire({
+                                icon: 'question',
+                                title: 'Khóa thể loại',
+                                text: 'Bạn chắc muốn khoá thể loại này không?',
+                                showCancelButton: true,
+                                confirmButtonText: 'Xác Nhận',
+                                cancelButtonText: 'Hủy Bỏ',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                reverseButtons: true
+                            }).then((result) => {
+                                $.ajax({
+                                    url: "/admin/lockcategory",
+                                    type: "PUT",
+                                    data: {
+                                        id: id,
+                                        _token: "{{ csrf_token() }}"
+                                    },
+                                    success: function(response) {
+                                        if(response.success) 
+                                        {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                iconColor: 'white',
+                                                title: 'Đã khóa thể loại',
+                                                color: 'white',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                toast: true,
+                                                position: 'bottom-left',
+                                                background: '#46DFB1'
+                                            });
+                                            row.find('.lock-button').addClass('hidden');
+                                            row.find('.unlock-button').removeClass('hidden');
+                                        }
+                                        else
+                                        {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                iconColor: 'white',
+                                                title: 'Thông báo lỗi',
+                                                text: response.message,
+                                                color: 'white',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                toast: true,
+                                                position: 'bottom-left',
+                                                background: '#F04770'
+                                            });
+                                        }
+                                    }
+                                })
+                            })
+                        }
                         //Function delete 
                         function deleteCategory(id, row) {
                             Swal.fire({
@@ -209,6 +336,23 @@
                                 }
                             })
                         }
+
+                        //Unlock button
+                        $('.unlock-button').on('click', function(e) {
+                            e.preventDefault();
+                            const id = $(this).data('id');
+                            const row = $(this).closest('tr');
+                            unlockCategory(id, row);
+                        })
+
+                        //Lock button
+                        $('.lock-button').on('click', function(e) {
+                            e.preventDefault();
+                            const id = $(this).data('id');
+                            const row = $(this).closest('tr');
+                            lockCategory(id, row);
+                        })
+
                         //Update Button
                         $('#update-button').click(function(e) {
                             e.preventDefault();
@@ -357,6 +501,21 @@
                                                 $('#update-button').removeClass('hidden');
                                                 $('#return-button').removeClass('hidden');
                                             });
+
+                                            $('.unlock-button').off('click').on('click', function(e) {
+                                                e.preventDefault();
+                                                const id = $(this).data('id');
+                                                const row = $(this).closest('tr');
+                                                unlockCategory(id, row);
+                                            })
+                                            
+                                            $('.lock-button').off('click').on('click', function(e) {
+                                                e.preventDefault();
+                                                const id = $(this).data('id');
+                                                const row = $(this).closest('tr');
+                                                lockCategory(id, row);
+                                            })
+
                                             Swal.fire({
                                                 icon: 'success',
                                                 iconColor: 'white',

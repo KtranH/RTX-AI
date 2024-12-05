@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@include('sweetalert::alert')
 <!-- Icon -->
 <link rel="icon" href="/assets/img/icon.png" type="image/png">
 <title>RTX-ADMIN: Đăng Nhập</title>

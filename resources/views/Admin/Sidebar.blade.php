@@ -47,13 +47,13 @@
     <div class="flex flex-col space-y-2 p-2">
         <div class="flex flex-col space-y-2 pt-3">
             <a href="{{ route('admin.information') }}" class="flex flex-row items-center hover:bg-gray-200 hover:text-indigo-700 rounded-lg p-2 text-lg space-x-3">
-                <img src="{{ asset('images/default_avatar.jpg') }}" alt="Avatar" class="rounded-full w-10 h-10 border border-gray-400">
+                <img src="{{ Auth::guard('admin')->user()->avatar_url }}" alt="Avatar" id="avatar-sidebar" class="rounded-full w-10 h-10 border border-gray-400">
                 <div>
                     <div class="text-gray-400 text-xs">{{ Auth::guard('admin')->user()->adminRole->role_name }}</div>
-                    <div class="text-current">{{ Auth::guard('admin')->user()->username }}</div>
+                    <div class="text-current" id="username-sidebar">{{ Auth::guard('admin')->user()->username }}</div>
                 </div>
             </a>
-            <a href="{{ route('admin.logout') }}" class="flex flex-row items-center justify-center border-4 border-red-700 text-inherit hover:bg-red-700 hover:text-white rounded-lg p-2 text-lg space-x-2">
+            <a href="{{ route('admin.logout') }}" id="logout-sidebar" class="flex flex-row items-center justify-center border-4 border-red-700 text-inherit hover:bg-red-700 hover:text-white rounded-lg p-2 text-lg space-x-2">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <div>Đăng Xuất</div>
             </a>
@@ -87,6 +87,26 @@
             {
                 element.removeClass('bg-gray-200 text-indigo-700 font-bold');
             }
+        });
+
+        $('#logout-sidebar').on('click', function (e)
+        {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Đăng Xuất',
+                text: 'Bạn chắc chắn muốn đăng xuất?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xác Nhận',
+                cancelButtonText: 'Hủy Bỏ',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('admin.logout') }}";
+                }
+            });
         });
     });
 </script>
