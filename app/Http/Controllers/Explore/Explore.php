@@ -12,7 +12,7 @@ class Explore extends Controller
 {
     public function ShowExplore(Request $request)
     {
-        $categories = Category::take(18)->get();
+        $categories = Category::where('is_deleted', '0')->take(18)->get();
 
         $suggestCategories = DB::table("category_photo")->select("photo_id", "category_id")->inRandomOrder()->limit(6)->get();
         for ($i = 0; $i < 6; $i++) {
@@ -25,7 +25,35 @@ class Explore extends Controller
     public function indexApi(Request $request)
     {
         $currentUserId = auth()->id();
-        
+        $limit = $request->limit ?? 8;
+
+        // Take preferred categories
+        $preferredCategories = [];
+        if ($currentUserId) {
+            $preferredCategories = DB::table('preferences')
+                ->where('user_id', $currentUserId)
+                ->pluck('category_id')
+                ->toArray();
+        }
+
+        // Take 3 photos from followers
+        $priorityPhotoIds = [];
+        if ($currentUserId) {
+            $priorityPhotoIds = Photo::query()
+                ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
+                ->leftJoin('users', 'users.id', '=', 'albums.user_id')
+                ->leftJoin('follower_user', function ($join) use ($currentUserId) {
+                    $join->on('users.id', '=', 'follower_user.user_id')
+                        ->where('follower_user.follower_id', '=', $currentUserId);
+                })
+                ->whereNotNull('follower_user.user_id')
+                ->inRandomOrder()
+                ->limit(3)
+                ->pluck('photos.id')
+                ->toArray();
+        }
+
+        // Main query
         $query = Photo::query()
             ->leftJoin('albums', 'albums.id', '=', 'photos.album_id')
             ->leftJoin('users', 'users.id', '=', 'albums.user_id')
@@ -33,10 +61,13 @@ class Explore extends Controller
             ->join('category_photo', 'category_photo.photo_id', '=', 'photos.id')
             ->select('photos.*', 'users.avatar_url as avatar_user', 'users.username as name_user', 'users.id as user_id')
             ->with(['album.user'])
-            ->withCount('likes');
+            ->withCount('likes')
+            ->where('albums.is_private', false)
+            ->where('photos.is_deleted', false);
 
+        // Add priority photos
         if ($currentUserId) {
-            $query->leftJoin('follower_user', function($join) use ($currentUserId) {
+            $query->leftJoin('follower_user', function ($join) use ($currentUserId) {
                 $join->on('users.id', '=', 'follower_user.user_id')
                     ->where('follower_user.follower_id', '=', $currentUserId);
             })
@@ -45,6 +76,8 @@ class Explore extends Controller
                 ELSE 0 
             END as is_following'));
         }
+
+        // Query search
         if ($request->has('q')) {
             $searchTerm = $request->q;
             $query->where(function ($query) use ($searchTerm) {
@@ -53,24 +86,45 @@ class Explore extends Controller
                         $query->where('name', $searchTerm);
                     })
                     ->orWhereHas('album.user', function ($query) use ($searchTerm) {
-                        $query->where('username', $searchTerm);
+                        $query->where('username', 'like', '%' . $searchTerm . '%');
                     });
             });
         }
 
+        // Query category
         if ($request->has('category')) {
             $query->where('category_photo.category_id', $request->category);
         }
+
+        // Query order
         if ($currentUserId) {
             $query->orderByRaw('CASE 
-                WHEN follower_user.user_id IS NOT NULL THEN 0 
-                ELSE 1 
+                WHEN photos.id IN (' . implode(',', $priorityPhotoIds ?: [0]) . ') THEN 0
+                WHEN category_photo.category_id IN (' . implode(',', $preferredCategories ?: [0]) . ') THEN 1
+                ELSE 2 
             END')
-            ->orderBy('photos.created_at', 'desc');
+            ->orderByRaw('CASE 
+                WHEN albums.user_id = ? THEN 1
+                ELSE 0 
+            END', [$currentUserId])
+            ->orderByRaw('RAND() * 
+                CASE 
+                    WHEN photos.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 2
+                    WHEN photos.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1.5
+                    ELSE 1
+                END'
+            );
         } else {
-            $query->inRandomOrder();
+            $query->orderByRaw('RAND() * 
+                CASE 
+                    WHEN photos.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 2
+                    WHEN photos.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1.5
+                    ELSE 1
+                END'
+            );
         }
-        $photos = $query->paginate($request->limit ?? 8);
+
+        $photos = $query->paginate($limit);
         return response()->json($photos);
     }
     public function MoreCategory()
@@ -79,6 +133,7 @@ class Explore extends Controller
 
         foreach (range('A', 'Z') as $letter) {
             $queryResult = DB::table('categories')
+                ->where('is_deleted', '0')
                 ->where(DB::raw('LOWER(SUBSTRING(name, 1, 1))'), strtolower($letter))
                 ->get();
 

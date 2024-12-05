@@ -67,7 +67,7 @@ class Account extends Controller
     {
         $request->validate([
             'input-name' => 'required|string|max:255',
-            'input-email' => 'required|string|email|max:255|unique:users',
+            'input-email' => 'required|string|email|max:255',
             'input-pass' => 'required|string|min:8',
             'input-pass2' => 'required|string|min:8',
         ], [
@@ -76,7 +76,6 @@ class Account extends Controller
             'input-email.required' => 'Vui lòng nhập email',
             'input-email.email' => 'Email phải là email',
             'input-email.max' => 'Email phải nhỏ hơn 255 ký tự',
-            'input-email.unique' => 'Email đã tồn tại',
             'input-pass.required' => 'Vui lòng nhập Password',
             'input-pass.min' => 'Password phải nhiều hơn 8 ký tự',
             'input-pass2.required' => 'Vui lòng nhập lại Password',
@@ -192,10 +191,10 @@ class Account extends Controller
             'username.max' => 'Tên người dùng không được quá 255 ký tự',
         ]);
 
-        $user = User::where("email", Cookie::get("token_account"))->first();
+        $user = User::where("email", Auth::user()->email)->first();
         if ($user) {
             $user->username = $request->input("username");
-            if ($image = $request->file("avatar_url")) {
+            if ($image = $request->file("avatar")) {
                 $filename = time() . '.' . $image->getClientOriginalExtension();
                 Storage::disk('r2')->put("AvatarUser/{$user->email}/{$filename}", file_get_contents($image));
                 Storage::disk('r2')->delete(str_replace($this->urlR2, "", $user->avatar_url));

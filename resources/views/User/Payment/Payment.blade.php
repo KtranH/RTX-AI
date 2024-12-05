@@ -11,27 +11,29 @@
           <div class="mx-auto max-w-5xl">
             <h2 class="text-2xl font-semibold text-gray-900 dark:text-black">Xác nhận thanh toán</h2>
             <div class="mt-8 lg:flex lg:items-start lg:gap-12">
-              <form action="#" class="w-full rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800 lg:max-w-xl lg:p-8">
+              <form action="{{ route("showpaymentsuccess") }}" method="POST" class="w-full rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800 lg:max-w-xl lg:p-8">
+                @csrf
+                @method('PATCH')
                 <div class="mb-6 grid grid-cols-2 gap-4">
                   <div class="col-span-2 sm:col-span-1">
-                    <label for="full_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-black">Full name (as displayed on card)*</label>
+                    <label for="full_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-black">Họ tên (Được hiển thị trên thẻ)*</label>
                     <input type="text" id="full_name" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Bonnie Green" required>
                   </div>
                   <div class="col-span-2 sm:col-span-1">
-                    <label for="card-number-input" class="mb-2 block text-sm font-medium text-gray-900 dark:text-black">Card number*</label>
-                    <input type="text" id="card-number-input" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pe-10 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="xxxx-xxxx-xxxx-xxxx" pattern="^4[0-9]{12}(?:[0-9]{3})?$" required>
+                    <label for="card-number-input" class="mb-2 block text-sm font-medium text-gray-900 dark:text-black">Số thẻ*</label>
+                    <input type="text" id="card-number-input" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pe-10 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="xxxx-xxxx-xxxx-xxxx" pattern="^[0-9]{16}(?:[0-9]{3})?$" required>
                   </div>
                   <div>
-                    <label for="card-expiration-input" class="mb-2 block text-sm font-medium text-gray-900 dark:text-black">Card expiration*</label>
+                    <label for="card-expiration-input" class="mb-2 block text-sm font-medium text-gray-900 dark:text-black">Ngày hết hạn*</label>
                     <div class="relative">
-                      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-                        <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                          <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
-                        </svg>
-                      </div>
-                      <input datepicker datepicker-format="mm/yy" id="card-expiration-input" type="text" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-9 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" placeholder="12/23" required>
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                            <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <input datepicker datepicker-format="mm/yy" id="card-expiration-input" type="text" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-9 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:text-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-text-gray-400 dark:focus:border-blue-500 dark:focus:ring-2 dark:focus:ring-blue-500 dark:focus:text-blue-400" placeholder="12/23" required>
                     </div>
-                  </div>
+                  </div>                
                   <div>
                     <label for="cvv-input" class="mb-2 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-black">
                       CVV*
@@ -54,25 +56,21 @@
                 <div class="space-y-4 rounded-lg border border-gray-100 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
                   <div class="space-y-2">
                     <dl class="flex items-center justify-between gap-4">
-                      <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Original price</dt>
-                      <dd class="text-base font-medium text-gray-900 dark:text-white">$6,592.00</dd>
+                      <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Giá gốc</dt>
+                      <dd class="text-base font-medium text-gray-900 dark:text-white">500.000đ</dd>
                     </dl>
                     <dl class="flex items-center justify-between gap-4">
-                      <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Savings</dt>
-                      <dd class="text-base font-medium text-green-500">-$299.00</dd>
+                      <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Giảm giá</dt>
+                      <dd class="text-base font-medium text-green-500">0.0</dd>
                     </dl>
                     <dl class="flex items-center justify-between gap-4">
-                      <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Store Pickup</dt>
-                      <dd class="text-base font-medium text-gray-900 dark:text-white">$99</dd>
-                    </dl>
-                    <dl class="flex items-center justify-between gap-4">
-                      <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Tax</dt>
-                      <dd class="text-base font-medium text-gray-900 dark:text-white">$799</dd>
+                      <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Thuế</dt>
+                      <dd class="text-base font-medium text-gray-900 dark:text-white">50.000đ</dd>
                     </dl>
                   </div>
                   <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
-                    <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
-                    <dd class="text-base font-bold text-gray-900 dark:text-white">$7,191.00</dd>
+                    <dt class="text-base font-bold text-gray-900 dark:text-white">Tổng</dt>
+                    <dd class="text-base font-bold text-gray-900 dark:text-white">550.000đ</dd>
                   </dl>
                 </div>
                 <div class="mt-6 flex items-center justify-center gap-8">

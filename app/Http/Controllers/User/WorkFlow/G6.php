@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\WorkFlow;
 
 use App\AI_Create_Image;
 use App\Http\Controllers\Controller;
+use App\Models\WorkFlow;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -22,7 +23,7 @@ class G6 extends Controller
     {
         ini_set("max_execution_time", 3600);
 
-        if($this->checkTimes(1) == false)
+        if($this->checkTimes(WorkFlow::findOrFail(6)->Price) == false)
         {
             return response()->json(['success' => false, 'message' => 'Bạn đã hết lượt tạo ảnh, vui lòng mua thêm lượt hoặc đợi ngày mai']);
         }
@@ -33,14 +34,6 @@ class G6 extends Controller
 
         $translated = $this->Translate2English($prompt);
         
-        $process = json_decode(file_get_contents(storage_path('app/Check_Text.json')), true);
-        $process["1"]["inputs"]["prompt"] = '"' . $translated . '"' . $this->check_text;
-
-        if (stripos($this->check_prompt($process), "No") === false) {
-            Session::flash("SensitiveWord", "checked");
-            return response()->json(['success' => false, 'message' => 'Mô tả của bạn chứa từ khóa nhạy cảm! Không thể tạo ảnh']);
-        }
-
         $process = json_decode(file_get_contents(storage_path('app/G6.json')), true);
         $process["22"]["inputs"]["text_a"] = $translated;
         $process["19"]["inputs"]["noise_seed"] = $seed;
@@ -50,6 +43,7 @@ class G6 extends Controller
         try {
             $takeImageUrl = $this->UploadImageR2($imageUrl);
             $url = $this->urlR2 . "AIimages/{$Email}/{$takeImageUrl}";
+            $this->storeImageHistory($url);
             Cookie::queue("url", $url);
             Cookie::queue("seed", $seed);
             Cookie::queue("model", $request->input("model"));

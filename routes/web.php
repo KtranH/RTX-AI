@@ -1,5 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\Account\Employee;
+use App\Http\Controllers\Admin\Account\Information;
+use App\Http\Controllers\Admin\Account\Login;
+use App\Http\Controllers\Admin\Essential\AdminHome;
+use App\Http\Controllers\Admin\Essential\HomeAdmin;
+use App\Http\Controllers\Admin\Manage\AdminAI;
+use App\Http\Controllers\Admin\Manage\AdminCategory;
+use App\Http\Controllers\Admin\Manage\AdminImage;
 use App\Http\Controllers\Mail\SendCodeRestPass;
 use App\Http\Controllers\Mail\SendEmail;
 use App\Http\Controllers\Settings\Settings;
@@ -7,6 +15,8 @@ use App\Http\Controllers\User\Account;
 use App\Http\Controllers\User\Home;
 use App\Http\Controllers\User\WorkFlow\G1;
 use App\Http\Controllers\User\WorkFlow\G2;
+use App\Http\Controllers\User\WorkFlow\G20;
+use App\Http\Controllers\User\WorkFlow\G21;
 use App\Http\Controllers\User\WorkFlow\G3;
 use App\Http\Controllers\User\WorkFlow\G8;
 use App\Http\Middleware\CheckCookieLogin;
@@ -16,31 +26,47 @@ use App\Http\Controllers\Image\Image;
 use App\Http\Controllers\Creativity\Creativity;
 use App\Http\Controllers\Explore\Explore;
 use App\Http\Controllers\Payment\Payment;
+use App\Http\Controllers\User\WorkFlow\G10;
+use App\Http\Controllers\User\WorkFlow\G11;
+use App\Http\Controllers\User\WorkFlow\G12;
+use App\Http\Controllers\User\WorkFlow\G13;
+use App\Http\Controllers\User\WorkFlow\G14;
+use App\Http\Controllers\User\WorkFlow\G15;
+use App\Http\Controllers\User\WorkFlow\G16;
+use App\Http\Controllers\User\WorkFlow\G17;
+use App\Http\Controllers\User\WorkFlow\G18;
+use App\Http\Controllers\User\WorkFlow\G19;
 use App\Http\Controllers\User\WorkFlow\G4;
 use App\Http\Controllers\User\WorkFlow\G5;
 use App\Http\Controllers\User\WorkFlow\G6;
 use App\Http\Controllers\User\WorkFlow\G7;
+use App\Http\Controllers\User\WorkFlow\G9;
+use App\Http\Middleware\CheckLoginAdmin;
+use App\Http\Middleware\CheckRoleAdmin;
 use App\Http\Middleware\LimitContentUpdate;
+use App\Http\Middleware\LimitReport;
 use App\Http\Middleware\LimitUpdateAccountAccess;
+use App\Http\Middleware\LimitUpdateAccountAdmin;
 use App\Http\Middleware\VerifyTurnstileCaptcha;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-//Route::get('/ai', function () {
-   // return view('generate_image');
-//});
-//Route::post('/generate-image', [ImageController::class, 'generateImage']);
-
-//------------------------------------------------------------------------DONT HAVE TO LOGIN FIRST----------------------------------------------------------------------------------------
-
-//--------------------------------------HOME------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//DONT HAVE TO LOGIN FIRST
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//HOME
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //Access home page
 Route::get('/', [Home::class, 'ShowHome'])->name("showhome");
 
-//------------------------------------------------------------------------------
+Route::get('/api/get-notification/{userId}', [Home::class, 'ApiNotification']);
+Route::get('/api/read-notification/{id}', [Home::class, 'ApiReadNotification']);
 
-//--------------------------------------LOGIN, SIGN UP, LOGIN BY GOOGLE, LOGOUT------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//LOGIN, SIGN UP, LOGIN BY GOOGLE, LOGOUT
 
 //Access login page
 Route::get('/login', [Account::class, 'ShowLogin'])->name("showlogin")->middleware(VerifyTurnstileCaptcha::class);
@@ -63,9 +89,10 @@ Route::get('/logout', [Account::class, 'Logout'])->name("logout");
 //Active sign up account
 Route::post('/signupaccount', [Account::class, 'NewAccount'])->name("newaccount");
 
-//---------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//--------------------------------------VERIFY EMAIL, FORGET PASSWORD, CHECK CODE TO CHANGE PASSWORD, RESEND EMAIL, CHECK CODE TO VERIFY EMAIL------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//VERIFY EMAIL, FORGET PASSWORD, CHECK CODE TO CHANGE PASSWORD, RESEND EMAIL, CHECK CODE TO VERIFY EMAIL
 
 //Send email
 Route::get('/sendemail', [SendEmail::class, 'SendEmail'])->name("sendemail");
@@ -80,7 +107,8 @@ Route::get('/resendemail', [SendEmail::class, 'ReSendEmail'])->name("resendemail
 Route::get('/showauthemail', [SendEmail::class, 'ShowAuth'])->name("showauth");
 
 //Show auth email
-Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode")->middleware(ThrottleRequests::class . ':2,1');;
+Route::post('/checkcode', [SendEmail::class, 'CheckCode'])->name("checkcode")->middleware(ThrottleRequests::class . ':2,1');
+;
 
 //Forget password page
 Route::get('/forgetpass', [Account::class, 'ForgetPass'])->name("forgetpass")->middleware(VerifyTurnstileCaptcha::class);
@@ -94,9 +122,10 @@ Route::get('/inputcodetochangepass', [SendCodeRestPass::class, 'InputCodeToChang
 //Check code to change password
 Route::patch('/checkcodetochangepass', [SendCodeRestPass::class, 'CheckCodeToChangePass'])->name("checkcodetochangepass")->middleware(ThrottleRequests::class . ':2,1');
 
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//--------------------------------------EXPLORE, CATEGORIES IMAGE, GENAI--------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//EXPLORE, CATEGORIES IMAGE, GENAI
 
 //Access creativity
 Route::get('/creativity', [Creativity::class, 'ShowCreativity'])->name("showcreativity");
@@ -111,20 +140,20 @@ Route::get('/morecategories', [Explore::class, 'MoreCategory'])->name("morecateg
 //Show All Workflow
 Route::get('/showallworkflow', [Image::class, 'ShowWorkFlow'])->name("showworkflow");
 
-//-------------------------------------------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-//-------------------------------------------------------------------------------HAVE TO LOGIN FIRST------------------------------------------------------------------------------------------
-
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//HAVE TO LOGIN FIRST
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 Route::middleware([CheckCookieLogin::class])->group(function () {
 
-    //-----------------------------------------------------------------BOARD----------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //BOARD, FOLLOW USER, UNFOLLOW USER
 
     //Access board page
     Route::get('/board/{id?}', [Board::class, 'ShowBoard'])->name("showboard");
-    
+
     //Change board tab
     Route::get('/board/{tab}', [Board::class, 'ShowBoard'])->name('changeboard');
     Route::get('/api/board', [Board::class, 'ShowBoardApi'])->name('ShowBoardApi');
@@ -137,18 +166,18 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Unfollow user
     Route::delete('/unfollow', [Board::class, 'UnFollowUser'])->name("unfollowuser");
 
-    //--------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-    //--------------------------------------------------------------ALBUM, ADD IMAGE TO ALBUM, DELETE ALBUM, UPDATE ALBUM--------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //ALBUM, ADD IMAGE TO ALBUM, DELETE ALBUM, UPDATE ALBUM, PRIVATE ALBUM
 
     //Access album page
     Route::get('/album/{id}', [Board::class, 'ShowAlbum'])->name("showalbum");
     Route::get('/api/album/{id}', [Board::class, 'ShowAlbumApi'])->name("ShowAlbumApi");
- 
+
     //Access album creation page
     Route::get('/create_album', [Board::class, 'CreateAlbum'])->name("createalbum");
- 
+
     //Access album edit page
     Route::get('/edit_album/{id}', [Board::class, 'EditAlbum'])->name("editalbum");
 
@@ -157,16 +186,15 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Update album
     Route::put('/updatealbum/{id}', [Board::class, 'UpdateAlbum'])->name("updatealbum")->middleware(LimitContentUpdate::class);
- 
+
     //Delete album
     Route::delete('/deletealbum/{id}', [Board::class, 'DeleteAlbum'])->name("deletealbum");
 
     //Private album
     Route::post('/privatealbum', [Board::class, 'PrivateAlbum'])->name("privatealbum");
 
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    //-------------------------------------------------------------IMAGE, ADD IMAGE, UPDATE IMAGE, DELETE IMAGE, SET FEATURE IMAGE, LIKE IMAGE----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //IMAGE, ADD IMAGE, UPDATE IMAGE, DELETE IMAGE, SET FEATURE IMAGE, LIKE IMAGE, SAVED IMAGE, SHARE IMAGE
 
     //Access image page
     Route::get('/image/{id}', [Image::class, 'ShowImage'])->name("showimage");
@@ -195,13 +223,18 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Saved image
     Route::post('/savedimage', [Image::class, 'SavedImage'])->name("savedimage");
 
-    //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Share image
+    Route::get('/shareimage/{id}/share', [Image::class, 'ShareImage'])->name("shareimage");
 
-    //----------------------------------------------------------------------------LOAD COMMENT, ADD COMMENT, EDIT COMMENT AND DELETE COMMENT--------------------------------------------------------------------------------------------
+    //Report image
+    Route::post('/reportimage', [Image::class, 'ReportImage'])->name("reportimage")->middleware(LimitReport::class);
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //LOAD COMMENT, ADD COMMENT, EDIT COMMENT AND DELETE COMMENT, LOAD REPLY, ADD REPLY, EDIT REPLY AND DELETE REPLY, DELETE COMMENT AND REPLY BY OWNER
 
     //Add comment
     Route::post('/addcomment/{idImage}', [Image::class, 'AddCommentInImage'])->name("addcomment");
-    
+
     //Load more comment
     Route::get('/loadmorecomment/{idImage}', [Image::class, 'ShowCommentAPI'])->name("loadmorecomment");
 
@@ -219,14 +252,21 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Delete reply
     Route::delete('/api/deletereply/{id}', [Image::class, 'DeleteReply'])->name("deletereply");
-    
+
     //Update reply
     Route::patch('/api/updatereply/{id}', [Image::class, 'UpdateReply'])->name("updatereply");
 
     //Reply reply
     Route::post('/api/reply/{parentId}/replies', [Image::class, 'ReplyReply'])->name("replyreply");
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //----------------------------------------------------------------------------ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT-----------------------------------------------------------------------------
+
+    //Delelet comment by owner
+    Route::delete('/api/deletecomment/owner', [Image::class, 'DeleteCommentByOwner'])->name("deletecommentbyowner");
+
+    //Delete reply by owner
+    Route::delete('/api/deletereplycomment/owner', [Image::class, 'DeleteReplyByOwner'])->name("deletereplybyowner");
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //ACCOUNT, CHANGE PASSWORD, UPDATE ACCOUNT
 
     //Access account page
     Route::get('/account', [Account::class, 'ShowAccount'])->name("showaccount");
@@ -240,9 +280,9 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
     //Update account
     Route::put('/updateaccount', [Account::class, 'UpdateAccount'])->name("updateaccount")->middleware(LimitUpdateAccountAccess::class);
 
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //THEME
 
-    //--------------------------------------THEME---------------------------------------------
     //Change theme
     Route::post('/save-theme', function (Illuminate\Http\Request $request) {
         $theme = $request->input('theme');
@@ -250,31 +290,39 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
         return response()->json(['status' => 'success']);
     });
-    //-----------------------------------------------------------------------------------------
 
-    //----------------------------------------------------------------------------PAYMENT-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //PAYMENT, PRICING
 
-    // Access Payment
+    //Access Payment
     Route::get('/payment/{price}', [Payment::class, 'ShowPayment'])->name("showpayment");
 
-    // Access Pricing
+    //Access Pricing
     Route::get('/pricing', function () {
         return view('User.Payment.Pricing');
     })->name('showpricing');
 
-    //----------------------------------------------------------------------------SETTINGS-----------------------------------------------------------------------------
-    
-    // Access Settings
-    Route::get('/settings', action: function () {
-        return view('User.Settings.Settings');
-    })->name('showsettings');
+    //Payment Success
+    Route::patch('/payment/success', [Payment::class, 'ShowPaymentSuccess'])->name("showpaymentsuccess");
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //SETTINGS
+
+    //Access Settings
+    Route::get('/settings', [Settings::class, 'Index'])->name("showsettings");
+    Route::get('/api/settings/liked', [Settings::class, 'apiDataLiked'])->name("apiDataLiked");
+    Route::get('/api/settings/album', [Settings::class, 'apiDataAlbum'])->name("apiDataAlbum");
+    Route::get('/api/settings/follow', [Settings::class, 'apiDataFollow'])->name("apiDataFollow");
 
     //Change Settings Tab
     Route::get('/settings/{tab}', [Settings::class, 'ShowSettings'])->name('changesettings');
 
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Update Preferences
+    Route::post('/updatepreferences', [Settings::class, 'StorePreferences'])->name("updatepreferences");
 
-    //-------------------------------------------------------------------------------WORKFLOW---------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //WORKFLOW
+
     //Show G1
     Route::get('/g1', [G1::class, 'InputDataG1'])->name("g1");
 
@@ -349,44 +397,225 @@ Route::middleware([CheckCookieLogin::class])->group(function () {
 
     //Show result G8
     Route::get('/resultofg8', [G8::class, 'get_imageG8'])->name("get_imageg8");
-    
+
     //Show G9
-    Route::get('/g9', [G3::class, 'InputDataG3'])->name("g9");
+    Route::get('/g9', [G9::class, 'InputDataG9'])->name("g9");
+
+    //Create image G9
+    Route::post('/createg9', [G9::class, 'ShowImageG9'])->name("createg9");
+
+    //Show result G9
+    Route::get('/resultofg9', [G9::class, 'get_imageG9'])->name("get_imageg9");
 
     //Show G10
-    Route::get('/g10', [G3::class, 'InputDataG3'])->name("g10");
+    Route::get('/g10', [G10::class, 'InputDataG10'])->name("g10");
+
+    //Create image G10
+    Route::post('/createg10', [G10::class, 'ShowImageG10'])->name("createg10");
+
+    //Show result G10
+    Route::get('/resultofg10', [G10::class, 'get_imageG10'])->name("get_imageg10");
 
     //Show G11
-    Route::get('/g11', [G3::class, 'InputDataG3'])->name("g11");
+    Route::get('/g11', [G11::class, 'InputDataG11'])->name("g11");
+
+    //Create image G11
+    Route::post('/createg11', [G11::class, 'ShowImageG11'])->name("createg11");
+
+    //Show result G11
+    Route::get('/resultofg11', [G11::class, 'get_imageG11'])->name("get_imageg11");
 
     //Show G12
-    Route::get('/g12', [G3::class, 'InputDataG3'])->name("g12");
+    Route::get('/g12', [G12::class, 'InputDataG12'])->name("g12");
 
     //Show G13
-    Route::get('/g13', [G3::class, 'InputDataG3'])->name("g13");
+    Route::get('/g13', [G13::class, 'InputDataG13'])->name("g13");
+
+    //Create image G13
+    Route::post('/createg13', [G13::class, 'ShowImageG13'])->name("createg13");
+
+    //Show result G13
+    Route::get('/resultofg13', [G13::class, 'get_imageG13'])->name("get_imageg13");
 
     //Show G14
-    Route::get('/g14', [G3::class, 'InputDataG3'])->name("g14");
+    Route::get('/g14', [G14::class, 'InputDataG14'])->name("g14");
+
+    //Create image G14
+    Route::post('/createg14', [G14::class, 'ShowImageG14'])->name("createg14");
+
+    //Show result G14
+    Route::get('/resultofg14', [G14::class, 'get_imageG14'])->name("get_imageg14");
 
     //Show G15
-    Route::get('/g15', [G3::class, 'InputDataG3'])->name("g15");
+    Route::get('/g15', [G15::class, 'InputDataG15'])->name("g15");
 
     //Show G16
-    Route::get('/g16', [G3::class, 'InputDataG3'])->name("g16");
+    Route::get('/g16', [G16::class, 'InputDataG16'])->name("g16");
+
+    //Create image G16
+    Route::post('/createg16', [G16::class, 'ShowImageG16'])->name("createg16");
+
+    //Show result G16
+    Route::get('/resultofg16', [G16::class, 'get_imageG16'])->name("get_imageg16");
 
     //Show G17
-    Route::get('/g17', [G3::class, 'InputDataG3'])->name("g17");
+    Route::get('/g17', [G17::class, 'InputDataG17'])->name("g17");
+
+    //Create image G17
+    Route::post('/createg17', [G17::class, 'ShowImageG17'])->name("createg17");
+
+    //Show result G17
+    Route::get('/resultofg17', [G17::class, 'get_imageG17'])->name("get_imageg17");
 
     //Show G18
-    Route::get('/g18', [G3::class, 'InputDataG3'])->name("g18");
+    Route::get('/g18', [G18::class, 'InputDataG18'])->name("g18");
+
+    //Create image G18
+    Route::post('/createg18', [G18::class, 'ShowImageG18'])->name("createg18");
+
+    //Show result G18
+    Route::get('/resultofg18', [G18::class, 'get_imageG18'])->name("get_imageg18");
 
     //Show G19
-    Route::get('/g19', [G3::class, 'InputDataG3'])->name("g19");
+    Route::get('/g19', [G19::class, 'InputDataG19'])->name("g19");
+
+    //Create image G19
+    Route::post('/createg19', [G19::class, 'ShowImageG19'])->name("createg19");
+
+    //Show result G19
+    Route::get('/resultofg19', [G19::class, 'get_imageG19'])->name("get_imageg19");
 
     //Show G20
-    Route::get('/g20', [G3::class, 'InputDataG3'])->name("g20");
+    Route::get('/g20', [G20::class, 'InputDataG20'])->name("g20");
 
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Create image G20
+    Route::post('/createg20', [G20::class, 'ShowImageG20'])->name("createg20");
+
+    //Show result G20
+    Route::get('/resultofg20', [G20::class, 'get_imageG20'])->name("get_imageg20");
+
+    //Show G21
+    Route::get('/g21', [G21::class, 'InputDataG21'])->name("g21");
+
+    //Create image G21
+    Route::post('/createg21', [G21::class, 'ShowImageG21'])->name("createg21");
+
+    //Show result G21
+    Route::get('/resultofg21', [G21::class, 'get_imageG21'])->name("get_imageg21");
+});
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//ADMIN
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------
+//LOGIN, LOGOUT
+
+//Form Login Admin
+Route::get('/admin/login', [Login::class, 'ShowLogin'])->name('admin.login');
+
+//Login Admin
+Route::post('/admin/login', [Login::class, 'Login'])->name('admin.login.account');
+
+//Logout Admin
+Route::get('/admin/logout', [Login::class, 'Logout'])->name('admin.logout');
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Route::group(['middleware' => [CheckLoginAdmin::class]], function () {
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //HOME
+
+    //Home Admin
+    Route::get('/admin', [AdminHome::class, 'ShowHome'])->name('admin');
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //CATEGORY, ADD CATEGORY, UPDATE CATEGORY, DELETE CATEGORY, SEARCH CATEGORY, LOCK CATEGORY, UNLOCK CATEGORY
+
+    //Manage Category
+    Route::get('/admin/category', [AdminCategory::class, 'ShowCategory'])->name('admin.category');
+
+    //Add Category
+    Route::post('/admin/addcategory', [AdminCategory::class, 'AddCategory'])->name('admin.addcategory');
+
+    //Delete Category
+    Route::delete('/admin/deletecategory', [AdminCategory::class, 'DeleteCategory'])->name('admin.deletecategory');
+
+    //Search Category
+    Route::get('/admin/searchcategory', [AdminCategory::class, 'SearchCategory'])->name('admin.searchcategory');
+
+    //Update Category
+    Route::put('/admin/updatecategory', [AdminCategory::class, 'UpdateCategory'])->name('admin.updatecategory');
+
+    //Lock Category
+    Route::put('/admin/lockcategory', [AdminCategory::class, 'LockCategory'])->name('admin.lockcategory');
+
+    //Unlock Category
+    Route::put('/admin/unlockcategory', [AdminCategory::class, 'UnlockCategory'])->name('admin.unlockcategory');
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //IMAGE, ACCEPT IMAGE, REJECT IMAGE, AI IMAGE, DELETE AI IMAGE
+
+    //Manage Image
+    Route::get('/admin/image', [AdminImage::class, 'ShowImage'])->name('admin.image');
+
+    //Review Image
+    Route::get('/api/admin/image', [AdminImage::class, 'ImageAPI'])->name('admin.image.api');
+
+    //Accept Image
+    Route::get('/api/admin/acceptimage', [AdminImage::class, 'imageAcceptAPI'])->name('admin.acceptimage');
+
+    //Reject Image
+    Route::get('/api/admin/rejectimage', [AdminImage::class, 'imageRejectAPI'])->name('admin.rejectimage');
+
+    //Approved Report
+    Route::put('/admin/approvedreport', [AdminImage::class, 'ApprovedReport'])->name('admin.approvedreport');
+
+    //Reject Report
+    Route::put('/admin/rejectreport', [AdminImage::class, 'RejectReport'])->name('admin.rejectreport');
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //ACOUNT ADMIN, INFORMATION, EMPLOYEE, UPDATE INFORMATION, UPDATE PASSWORD, UPDATE AVATAR, DELETE EMPLOYEE, ACTIVE EMPLOYEE, INSERT EMPLOYEE, UPDATE EMPLOYEE
+
+    //Account Information
+    Route::get('/admin/information', [Information::class, 'ShowInformation'])->name('admin.information');
+
+    //Update Information
+    Route::put('/admin/updateinformation', [Information::class, 'UpdateInformation'])->name('admin.updateinformation')->middleware(LimitUpdateAccountAdmin::class);
+
+    //Update Password
+    Route::put('/admin/updatepassword', [Information::class, 'UpdatePassword'])->name('admin.updatepassword')->middleware(LimitUpdateAccountAdmin::class);
+
+    //Update Avatar
+    Route::post('/admin/updateavatar', [Information::class, 'UpdateAvatar'])->name('admin.updateavatar');
+
+    //Account Employee
+    Route::get('/admin/employee', [Employee::class, 'ShowEmployee'])->name('admin.employee')->middleware(CheckRoleAdmin::class);
+
+    //Search Employee
+    Route::get('/admin/searchemployee', [Employee::class, 'SearchEmployee'])->name('admin.searchemployee');
+
+    //Deleted Employee
+    Route::put('/admin/deleteemployee', [Employee::class, 'DeletedEmployee'])->name('admin.deleteemployee');
+    
+    //Active Employee
+    Route::put('/admin/activeemployee', [Employee::class, 'ActiveEmployee'])->name('admin.activeemployee');
+
+    //Insert Employee
+    Route::post('/admin/insertemployee', [Employee::class, 'InsertEmployee'])->name('admin.insertemployee');
+
+    //Update Employee
+    Route::put('/admin/updateemployee', [Employee::class, 'UpdateEmployee'])->name('admin.updateemployee');
+    
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+    //AI IMAGE
+    
+    // Manage AI
+    Route::get('/admin/ai', [AdminAI::class, 'ShowAI'])->name('admin.ai');
+
+    //Image AI
+    Route::get('/api/admin/imageai', [AdminAI::class, 'ImageAI'])->name('admin.imageai');
+    
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 });
 
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------

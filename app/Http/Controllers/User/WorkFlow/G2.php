@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\WorkFlow;
 
 use App\AI_Create_Image;
 use App\Http\Controllers\Controller;
+use App\Models\WorkFlow;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -16,13 +17,13 @@ class G2 extends Controller
      use AI_Create_Image;
      public function InputDataG2()
      {
-         return $this->InputData(2);
+        return $this->InputData(2);
      }
      public function ShowImageG2(Request $request)
      {
-         ini_set("max_execution_time", 3600);
+        ini_set("max_execution_time", 3600);
 
-        if($this->checkTimes(2) == false)
+        if($this->checkTimes(WorkFlow::findOrFail(2)->Price) == false)
         {
             return response()->json(['success' => false, 'message' => 'Bạn đã hết lượt tạo ảnh, vui lòng mua thêm lượt hoặc đợi ngày mai']);
         }
@@ -38,13 +39,6 @@ class G2 extends Controller
 
          $translated = $this->Translate2English($request->input("prompt"));
          $seed = $request->input("seed");
-         $process = json_decode(file_get_contents(storage_path('app/Check_Text.json')), true);
-         $process["1"]["inputs"]["prompt"] = '"' . $translated . '"' . $this->check_text;
-
-         if (stripos($this->check_prompt($process), "No") === false) {
-             Session::flash("SensitiveWord", "checked");
-             return response()->json(['success' => false, 'message' => 'Mô tả của bạn chứa từ khóa nhạy cảm! Không thể tạo ảnh']);
-         }
 
          $process = json_decode(file_get_contents(storage_path('app/G2.json')), true);
          $model = $this->ChooseModel($request->input("model"));
@@ -66,6 +60,7 @@ class G2 extends Controller
              $imageUrl = $this->get_image_result($process, 14);
              $takeImageUrl = $this->UploadImageR2($imageUrl);
              $url = $this->urlR2 . "AIimages/{$email}/{$takeImageUrl}";
+             $this->storeImageHistory($url);
              Cookie::queue("url", $url);
              Cookie::queue("seed", $seed);
              Cookie::queue("model", $request->input("model"));

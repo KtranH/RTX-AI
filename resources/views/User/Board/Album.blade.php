@@ -211,22 +211,28 @@
                         if (data.success) {
                             Swal.fire({
                                 icon: 'success',
+                                iconColor: 'white',
                                 title: 'Đã cập nhật ảnh nổi bật',
+                                color: 'white',
                                 showConfirmButton: false,
                                 timer: 3000,
                                 toast: true,
                                 position: 'bottom-left',
+                                background: '#46DFB1'
                             });
                         } 
                         else {
                             Swal.fire({
                                 icon: 'error',
+                                iconColor: 'white',
                                 title: 'Có lỗi xảy ra',
                                 text: 'Không thể cập nhật ảnh nổi bật',
+                                color: 'white',
                                 showConfirmButton: false,
                                 timer: 3000,
                                 toast: true,
                                 position: 'bottom-left',
+                                background: '#F04770'
                             });
                         }
                         if (data.is_feature) {
@@ -242,12 +248,15 @@
                         console.error("Error updating feature:", error);
                         Swal.fire({
                             icon: 'error',
+                            iconColor: 'white',
                             title: 'Lỗi kết nối',
                             text: 'Không thể gửi yêu cầu đến server',
+                            color: 'white',
                             showConfirmButton: false,
                             timer: 3000,
                             toast: true,
                             position: 'bottom-left',
+                            background: 'red'
                         });
                     });
                 }

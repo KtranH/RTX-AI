@@ -288,7 +288,24 @@
     <button title="Sign In" type="submit" class="sign-in_btn">
       <span>Đăng ký</span>
     </button>
-  
+    <script>
+      $(document).ready(function() {
+        $('.sign-in_btn').click(function(e) {
+          e.preventDefault(); 
+          
+          const $button = $(this);
+          const $form = $button.closest('form');
+          
+          $button.find('span').text('Đang xử lý...');
+          $button.prop('disabled', true);
+          
+          
+          setTimeout(function() {
+            $form.submit(); 
+          }, 100);
+        });
+      });
+    </script>
     <div class="separator">
       <hr class="line">
       <span>Hoặc</span>
