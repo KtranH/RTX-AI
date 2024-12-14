@@ -102,7 +102,7 @@
     <!-- Library -->
     <div class="flex items-center justify-center">
         <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
-            <div class="mt-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-2" id="main-content">
+            <div class="mt-2 columns-1 sm:columns-2 md:columns-3 lg:columns-4 space-y-4" id="main-content">
             </div>
         </div>
     </div>
@@ -288,18 +288,17 @@
         let html = '';
         photos.forEach(photo => {
             html += `
-            <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-3 row-span-1 relative group mt-2 mr-2">
-                <a href="/image/${photo.id}">
-                    <div class="aspect-square">
+                <div class="relative group">
+                    <a href="/image/${photo.id}">
                         <img src="${photo.url}" loading="lazy" alt="Image 1" class="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-15" style="border-radius: 30px;">
-                    </div>
-                    <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div class="mt-2 text-left px-2 py-1">
-                            <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
-                            <div class="text-sm text-gray-500 h-20 overflow-hidden truncate">${photo.description}</div>
+                        <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="mt-2 text-left px-2 py-1">
+                                <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
+                                <div class="text-sm text-gray-500 h-20 overflow-hidden truncate">${photo.description}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex space-x-3 account-mobile mt-4 mb-1">
+                    </a>
+                    <div class="flex space-x-3 mx-2 my-4">
                         <div class="flex justify-start">
                             <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white avatar" src="${photo.avatar_user}" alt="">
                             <div>
@@ -311,9 +310,8 @@
                             <span><i class="fas fa-heart text-red-500 text-xl hover:text-[#a000ff]"></i> <span class="font-bold">${photo.likes_count}</span></span>
                         </div>
                     </div>
-                </a>
-            </div>
-        `;
+                </div>
+            `;
         });
         if (loadData) {
             mainContent.innerHTML = html;
