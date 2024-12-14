@@ -13,4 +13,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('delete:imageAI')->daily();
-Schedule::command('update:times')->hourly();
+Schedule::command('update:times')->everyMinute();
