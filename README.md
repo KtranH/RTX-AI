@@ -7,7 +7,7 @@
 2. **🎨 Generate unique AI images** from 21 different features powered by Stability AI models.
 3. **🔍 Manage and explore content** with a smooth user experience, thanks to modern integrated technologies.
 
-https://www.facebook.com/20c2147d-4d7f-4616-a0a8-4d65cae1ee78
+blob:https://www.facebook.com/20c2147d-4d7f-4616-a0a8-4d65cae1ee78
 
 ## Key Features
 ### 1. Social Networking Features
