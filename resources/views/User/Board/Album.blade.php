@@ -83,7 +83,7 @@
         <div class="flex items-center justify-center">
             <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                 <div class="font-bold text-3xl">Thư Viện</div>
-                <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="main-content">
+                <div class="mt-2 columns-1 sm:columns-2 md:columns-3 lg:columns-4 space-y-4" id="main-content">
                 </div>
             </div>
         </div>
@@ -139,9 +139,7 @@
                     html += `
                         <div class="relative group">
                             <a href="/image/${photo.id}">
-                                <div class="aspect-square">
-                                    <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                </div>
+                                <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                 <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                     <div class="mt-2 text-left px-2 py-1">
                                         <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>

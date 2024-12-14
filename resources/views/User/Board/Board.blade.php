@@ -654,10 +654,7 @@
             <div id="gallery-section_board" class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">
                     <div class="font-bold text-3xl text-left">Thư viện</div>
-                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
-                        id="photo-container">
-
-                    </div>
+                    <div class="mt-2 columns-1 sm:columns-2 md:columns-3 lg:columns-4 space-y-4" id="photo-container"></div>
 
                     <div id="loading" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
 
@@ -687,9 +684,7 @@
                                         const photoHTML = `
                                             <div class="relative group">
                                                 <a href="/image/${photo.id}">
-                                                    <div class="aspect-square">
-                                                        <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                                    </div>
+                                                    <img src="${photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                                     <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                                         <div class="mt-2 text-left px-2 py-1">
                                                             <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.title}</div>
@@ -758,7 +753,7 @@
             <div id="saved-section_board" class="flex items-center justify-center">
                 <div class="w-full max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-16 mt-2">            
                     <h2 class="font-bold text-3xl text-left">Danh sách ảnh đã lưu lại</h2>
-                    <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"id="saved-container">
+                    <div class="mt-2 columns-1 sm:columns-2 md:columns-3 lg:columns-4 space-y-4"id="saved-container">
                     </div>
                     <div id="loading_saved_image" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
                     <script>
@@ -783,9 +778,7 @@
                                         const photoHTML = `
                                            <div class="relative group">
                                                 <a href="/image/${photo.photo.id}">
-                                                    <div class="aspect-square">
-                                                        <img src="${photo.photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
-                                                    </div>
+                                                    <img src="${photo.photo.url}" loading="lazy" alt="Image" class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-15">
                                                     <div class="absolute inset-0 flex flex-col justify-between opacity-0 group-hover:opacity-100 group-hover:!opacity-100 transition-opacity duration-300">
                                                         <div class="mt-2 text-left px-2 py-1">
                                                             <div class="font-semibold text-lg truncate group-hover:text-[#000000]">${photo.photo.title}</div>
@@ -838,7 +831,7 @@
                         <p class="text-gray-500 text-2xs text-left mt-2">Lưu ý chúng tôi chỉ lưu ảnh được tạo ra bởi AI trong
                             10 ngày!
                         </p>
-                        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2" id="AI-content"></div>
+                        <div class="mt-2 columns-1 sm:columns-2 md:columns-3 lg:columns-4 space-y-4" id="AI-content"></div>
                         <div id="loading_AI_Image" class="text-center my-4" style="display: none;">Đang tải thêm ảnh...</div>
                         <script>
                             var pageAI = 1;
@@ -857,11 +850,9 @@
                                         data.photos.forEach(photo => {
                                             const photoHTML = `
                                             <div class="relative group">
-                                                <div class="aspect-square">
-                                                    <img src="${photo.url}" loading="lazy" alt="AI Generated Image"
-                                                        class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-50"
-                                                        style="cursor: pointer;" onclick="openImageModal('${photo.url}')">
-                                                </div>
+                                                <img src="${photo.url}" loading="lazy" alt="AI Generated Image"
+                                                    class="w-full h-full rounded-2xl object-cover transition-opacity duration-300 group-hover:opacity-50"
+                                                    style="cursor: pointer;" onclick="openImageModal('${photo.url}')">
                                             </div>`;
                                             photoContainer.insertAdjacentHTML('beforeend', photoHTML);
                                         });
