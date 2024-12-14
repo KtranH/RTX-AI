@@ -1,13 +1,13 @@
-# Introduction to "AI-PinArt"
+# Introduction to "RTX-AI"
 
 ## Overview
-"**AI-PinArt**" is a web platform inspired by Pinterest, allowing users to:
+"**RTX-AI**" is a web platform inspired by Pinterest, allowing users to:
 
 1. **📌 Share and store creative images** in the form of boards.
 2. **🎨 Generate unique AI images** from 21 different features powered by Stability AI models.
 3. **🔍 Manage and explore content** with a smooth user experience, thanks to modern integrated technologies.
 
-blob:https://www.facebook.com/20c2147d-4d7f-4616-a0a8-4d65cae1ee78
+![RTX-AI](https://scontent.fsgn5-5.fna.fbcdn.net/v/t1.15752-9/462575903_1283238346250827_8596100562243281027_n.png?_nc_cat=108&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeH2p4XXXaA7dQzCODxY_fXAOThvQswc5Yk5OG9CzBzliVRuwN9LRNH0bhLvFSD_QJ7IfvdL9a-FwRGyf4nv6UK6&_nc_ohc=cyOTPqzfQ2YQ7kNvgFePL8o&_nc_zt=23&_nc_ht=scontent.fsgn5-5.fna&oh=03_Q7cD1QGW-dpZvdLMjhPPp5uIFjm9OjAuKTiVM9ZBdLOqbYzQJg&oe=678509EA)
 
 ## Key Features
 ### 1. Social Networking Features
@@ -63,4 +63,4 @@ The system is built on the MVC (Model-View-Controller) architecture to ensure:
 - **💬 Enhance interaction:** Develop chat or community group features.
 
 ---
-The "AI-PinArt" website perfectly combines art and technology, promising to deliver a unique and convenient creative experience for users.
+The "RTX-AI" website perfectly combines art and technology, promising to deliver a unique and convenient creative experience for users.
